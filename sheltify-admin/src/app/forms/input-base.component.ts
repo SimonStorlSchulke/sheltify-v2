@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { ModalService } from 'src/app/services/modal.service';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   template: '',
@@ -9,9 +9,9 @@ export class InputBaseComponent {
   public explanation = input<string>();
   public label = input.required<string>();
 
-  constructor(protected modalService: ModalService) {}
+  constructor(private alertService: AlertService) {}
 
   public showExplanation() {
-    this.modalService.openAlert(this.label(), this.explanation()!)
+    this.alertService.openAlert(this.label(), this.explanation()!)
   }
 }

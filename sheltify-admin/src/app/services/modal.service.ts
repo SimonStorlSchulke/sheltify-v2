@@ -42,25 +42,24 @@ export class ModalService {
     return dialogRef;
   }
 
-  public openAlert(title: string, message: string, buttons: AlertButtonName[] = ['ok']): void {
-    this.open(AlertComponent, {
-        title,
-        message,
-        buttons,
-      }, 'modal-alert'
-    )
-  }
 
 
   public async openFinishable<TValue, TComponent extends Finishable<TValue>>(
-    component: Type<TComponent>
+    component: Type<TComponent>,
+    inputs?: Partial<TComponent>,
+    cssClass = 'modal-lg'
   ): Promise<TComponent extends FinishableDialog<infer TValue> ? TValue : never> {
-    const ref = this.dialog.open(component, {
-      panelClass: 'modal-lg',
+    const dialogRef = this.dialog.open(component, {
+      panelClass: cssClass,
     });
-    const instance = ref.componentInstance;
+
+    if (inputs) {
+      Object.assign(dialogRef.componentInstance as any, inputs);
+    }
+
+    const instance = dialogRef.componentInstance;
     const result = await firstValueFrom(instance!.finish);
-    ref.close();
+    dialogRef.close();
     return result as any;
   }
 }

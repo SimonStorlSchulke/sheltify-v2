@@ -14,7 +14,7 @@
             <div class="section-titlebar sui flex-x p-1 ai-center">
               <ng-icon title="Sektion verschieben" (click)="enterMoveMode(iRow, iColumn, section)" class="drag-handle sui" name="bootstrapGripVertical" size="22px"/>
               <b class="sui grow-1">{{ section.SectionType }}</b>
-              <ng-icon name="bootstrapX" size="24px"/>
+              <ng-icon class="x" (click)="deleteSection(iRow, iColumn)" name="bootstrapX" size="24px"/>
             </div>
             <div class="sui p-2">
 
