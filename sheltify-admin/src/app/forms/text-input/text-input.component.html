@@ -1,0 +1,12 @@
+<div class="sui flex-x ai-center gap-2">
+  <label [for]="name()">{{label()}}</label>
+  @if(explanation()) {
+    <button class="small secondary questionmark" (click)="showExplanation()">?</button>
+  }
+</div>
+
+@if(long()) {
+  <textarea [id]="name()" [name]="name()" type="text" [value]="twoWayModel()" (input)="onInput($event)" [placeholder]="placeholder() ?? ''"></textarea>
+} @else {
+  <input [id]="name()" [name]="name()" type="text" [value]="twoWayModel()" (input)="onInput($event)" [placeholder]="placeholder() ?? ''">
+}

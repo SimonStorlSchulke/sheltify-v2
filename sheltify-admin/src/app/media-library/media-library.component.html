@@ -1,0 +1,53 @@
+<h1>Medien</h1>
+
+@if (images$() | async; as images) {
+  <div
+    appFileDrop (filesDropped)="onFilesDropped($event)"
+    (filesHovered)="onFilesHovered($event)"
+    class="sui flex-x gap-3"
+  >
+    <div class="sui flex-y gap-4 grow-1">
+      <div class="tag-selector">
+        <ng-select [(ngModel)]="selectedTags" [multiple]="true" placeholder="...tags auswählen">
+          @for (tag of tagsService.availableTags(); track tag.ID) {
+            <ng-option [value]="tag.ID">
+              <app-tag [tag]="tag"/>
+            </ng-option>
+          }
+        </ng-select>
+        <br>
+        <button (click)="deleteSelectedImages()">Löschen</button>
+
+      </div>
+      <div class="sui flex-x gap-3 wrap list dropzone" [class.files-hovered]="filesHovered()" [class.with-picker]="true">
+        @for (image of images; track image.ID) {
+          @let editedImage = editedImages().get(image.ID);
+          <app-media-entry
+            (click)="toggleSelect(image.ID, $event, images)"
+            [media]="editedImage ?? image"
+            [selected]="selectedImageIds().has(image.ID)"
+            [active]="activeImageId() == image.ID"
+          />
+        }
+      </div>
+
+      <div class="sui flex-x gap-2 jc-end">
+        <button>Open</button>
+        <button>Open</button>
+        <button>Open</button>
+      </div>
+
+    </div>
+
+    @let selection = ({images: images, active: activeImageId(), selected: selectedImageIds()} | mediaSelection);
+    <div class="sidebar">
+      @if (selection.selected!.length == 1) {
+        @let image = editedImages().get(selection.active?.ID ?? "") ?? selection.active;
+        <app-image-editor [image]="image!" (editedImage)="addEditedImage($event)" (createdTag)="onTagAdded($event, image!)"/>
+      } @else if (selection.selected!.length > 0) {
+        <h2>{{ selectedImageIds().size }} Elemente</h2>
+      }
+    </div>
+
+  </div>
+}

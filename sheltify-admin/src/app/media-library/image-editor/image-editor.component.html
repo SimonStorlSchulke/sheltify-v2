@@ -1,0 +1,51 @@
+<div class="img-container" [class.focus-mode]="editFocusMode">
+  <img
+    (click)="setFocusPoint($event)"
+    [cmsImage]="image()"
+  >
+  <div
+    class="crosshair"
+    [style.top]="image().FocusY * 100 + '%'"
+    [style.left]="image().FocusX * 100 + '%'"
+  ></div>
+
+</div>
+  <div class="sui flex-x">
+    <button class="secondary" (click)="rotateImage(-1)">r-</button>
+    <button
+      (click)="editFocusPoint()"
+      title="Der Fokuspunkt bestimmt, zu welchem Punkt hingezoomt wird, wenn aufgrund des Seitenverhältnisses ein Teil des Bildes abgeschnitten wird."
+      class="primary small secondary focus-button">
+      Fokuspunkt setzen
+    </button>
+    <button class="secondary" (click)="rotateImage(1)">r+</button>
+  </div>
+
+<div class="sui flex-y gap-2 grow-1">
+  <div class="meta sui flex-y">
+    <span>Hochgeladen: {{ image().CreatedAt | date }}</span>
+    <span>Dateiname: {{ image().OriginalFileName }}</span>
+    <span>Größe: {{ getSizeString(image().LargestAvailableSize) }}</span>
+  </div>
+  <app-text-input name="title" label="Titel"
+                  [twoWayModel]="image().Title" (twoWayModelChange)="image().Title = $event"/>
+
+  <app-text-input name="title" label="Beschreibung" [long]="true" explanation="Wird z.B. in Gallerien unter dem Bild angezeigt"
+                  [twoWayModel]="image().Description" (twoWayModelChange)="image().Description = $event"/>
+
+  <span class="tags-label">tags</span>
+  <span class="sui flex-x gap-2">
+      <div class="tag-selector sui flex-x">
+        <ng-select [(ngModel)]="selectedTags" [multiple]="true" placeholder="...tags auswählen">
+          @for (tag of tagsService.availableTags(); track tag.ID) {
+            <ng-option [value]="tag.ID">
+              <app-tag [tag]="tag"/>
+            </ng-option>
+          }
+        </ng-select>
+        <button id="open-tag-manager" class="secondary" (click)="editTags()">+</button>
+      </div>
+  </span>
+</div>
+
+<button class="primary sui w-100" (click)="updateMedia()">speichern</button>

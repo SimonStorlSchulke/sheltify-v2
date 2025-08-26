@@ -1,0 +1,23 @@
+.modal-lg,
+.modal-alert,
+.modal-fullscreen {
+  background: #fff;
+  padding: 16px;
+
+  & :focus {
+    outline: none;
+  }
+}
+
+.modal-lg {
+}
+
+.modal-alert {
+  align-self: start;
+  margin-top: 5dvh;
+}
+
+.modal-fullscreen {
+  width: 100dvw !important;
+  height: 100vh !important;
+}

@@ -1,0 +1,15 @@
+meta {
+  name: delete animal
+  type: http
+  seq: 7
+}
+
+delete {
+  url: http://localhost:3000/api/animals?ids=53,54,55,56,57,58,59,60,61,61
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ids: 53,54,55,56,57,58,59,60,61,61
+}

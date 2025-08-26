@@ -1,0 +1,23 @@
+meta {
+  name: delete file
+  type: http
+  seq: 9
+}
+
+delete {
+  url: http://localhost:3000/admin/api/media/4885635e-d067-4db4-a199-a126046f937b
+  body: none
+  auth: inherit
+}
+
+body:multipart-form {
+  file: @file(/home/simon/Desktop/Screenshot_20250316_153238.jpg)
+  FocusX: 0.5
+  FocusY: 0.5
+  Description: Äääh.. ein Hund, der hart chillt 2.
+  Name: Hund 2
+}
+
+body:file {
+  file: @file(/home/simon/Desktop/vases_3.png) @contentType(image/png)
+}

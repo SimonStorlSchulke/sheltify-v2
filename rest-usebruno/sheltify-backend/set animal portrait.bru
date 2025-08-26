@@ -1,0 +1,22 @@
+meta {
+  name: set animal portrait
+  type: http
+  seq: 13
+}
+
+patch {
+  url: http://localhost:3000/api/mfg/animals/66/set-portrait?mediaId=2df94799-bb90-45f0-a59a-ae8254b43567
+  body: json
+  auth: inherit
+}
+
+params:query {
+  mediaId: 2df94799-bb90-45f0-a59a-ae8254b43567
+}
+
+body:json {
+  {
+    "name": "Lolitaa",
+    "castrated": true
+  }
+}

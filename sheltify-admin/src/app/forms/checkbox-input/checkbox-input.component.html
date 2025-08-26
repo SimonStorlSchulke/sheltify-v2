@@ -1,0 +1,18 @@
+<div class="sui flex-x ai-center gap-2">
+  <label [for]="name()">{{label()}}</label>
+  @if(explanation()) {
+    <button class="small secondary questionmark" (click)="showExplanation()">?</button>
+  }
+</div>
+<div class="button-group">
+  <button
+    [class]="twoWayModel() ? 'primary' : 'secondary'"
+    (click)="onInput(true)">
+    Ja
+  </button>
+  <button
+    [class]="twoWayModel() ? 'secondary' : 'primary'"
+    (click)="onInput(false)">
+    Nein
+  </button>
+</div>

@@ -1,0 +1,26 @@
+meta {
+  name: register
+  type: http
+  seq: 15
+}
+
+post {
+  url: http://localhost:3000/register
+  body: multipartForm
+  auth: inherit
+}
+
+body:json {
+  {
+    "Name": "Baeniato",
+    "Gender": "Male",
+    "Castrated": false,
+    "Birthday": "2021-03-29T15:04:05Z",
+    "TenantID": "mfg"
+  }
+}
+
+body:multipart-form {
+  username: i bims
+  password: lololololol
+}

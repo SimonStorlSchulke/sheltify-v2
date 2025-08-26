@@ -1,0 +1,21 @@
+meta {
+  name: create animal copy
+  type: http
+  seq: 14
+}
+
+post {
+  url: 192.168.0.119:3000/api/mfg/animals
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "Name": "Baeniato",
+    "Gender": "Male",
+    "Castrated": false,
+    "Birthday": "2021-03-29T15:04:05Z",
+    "TenantID": "mfg"
+  }
+}

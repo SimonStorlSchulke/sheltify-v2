@@ -1,0 +1,7 @@
+@use "colors" as *;
+:host {
+  background-color: $neutral150;
+  padding: 6px 12px;
+  color: $neutral700;
+  height: 36px;
+}

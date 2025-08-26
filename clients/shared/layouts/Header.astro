@@ -1,0 +1,15 @@
+---
+import { cms } from "@shared/cms";
+import type { SiteMapItem } from "@shared/types/sitemap";
+
+const siteMap: SiteMapItem[] = await cms.siteMap;
+---
+
+{
+    siteMap.map((a) => (
+        <div>
+            {a.title}
+            {a.url}
+        </div>
+    ))
+}

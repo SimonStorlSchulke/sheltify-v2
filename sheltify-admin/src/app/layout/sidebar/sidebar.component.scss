@@ -1,0 +1,16 @@
+@use "colors" as *;
+
+.sidebar {
+  min-width: 150px;
+
+}
+
+a {
+  padding: 12px 16px;
+  font-weight: bold;
+  &.active {
+    background: linear-gradient(90deg, $primary 4px, #fff 4px);
+    color: $primary;
+  }
+}
+

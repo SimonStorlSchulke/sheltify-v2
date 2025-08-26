@@ -1,0 +1,24 @@
+meta {
+  name: upload file
+  type: http
+  seq: 8
+}
+
+post {
+  url: http://localhost:3000/admin/api/media
+  body: multipartForm
+  auth: inherit
+}
+
+body:multipart-form {
+  file: @file(/home/simon/Pictures/Screenshots/Screenshot_20250727_183653.png)
+  FocusX: 0.5
+  FocusY: 0.5
+  Description: ein katz
+  Title: Katze
+  TenantID: mfg
+}
+
+body:file {
+  file: @file(/home/simon/Desktop/vases_3.png) @contentType(image/png)
+}

@@ -10,7 +10,7 @@ export type AnimalKind = {
 export type AnimalStatusName = "in-spaichingen" | "in-bulgarien" | "vermittlungshilfe" | "zuhause-gefunden" | "vermisst" | "fundtier";
 
 // New CMS types
-export type CmsTypes = {
+export type CmsAnimal = {
   ID?: number;
   CreatedAt?: Date;
   UpdatedAt?: Date;
@@ -50,6 +50,7 @@ export type CmsImage = {
   MediaTags: CmsTag[]
   TenantID: string,
   Tenant?: any //TODO
+  RotationSteps: 0 | 1 | 2 | 3 // each step is 90 degrees clockwise
 }
 
 export type CmsTag = {

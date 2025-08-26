@@ -1,0 +1,26 @@
+@use 'colors' as *;
+
+.icon {
+  width: 28px;
+  height: 28px;
+  display: inline-block;
+  text-align: center;
+  border-radius: 50%;
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  color: #fff;
+  font-size: 20px;
+}
+.alert-info .icon {
+  outline: 3px solid $primary;
+  color: $primary;
+}
+.alert-warning .icon {
+  outline: 3px solid $warning;
+  color: $warning;
+}
+.alert-error .icon {
+  outline: 3px solid $error;
+  color: $error;
+}

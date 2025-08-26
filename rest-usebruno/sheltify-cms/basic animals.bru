@@ -1,0 +1,18 @@
+meta {
+  name: basic animals
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{l}}animals?pagination[pageSize]=500&populate[0]=thumbnail&populate[1]=animal_article&filters[createdBy][username][$eq]=hhg
+  body: none
+  auth: none
+}
+
+params:query {
+  pagination[pageSize]: 500
+  populate[0]: thumbnail
+  populate[1]: animal_article
+  filters[createdBy][username][$eq]: hhg
+}

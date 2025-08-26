@@ -1,0 +1,18 @@
+meta {
+  name: add tags to media
+  type: http
+  seq: 11
+}
+
+post {
+  url: http://localhost:3000/admin/api/tags/add-to-media
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "MediaId": "1d25992c-3e5f-43ba-a244-afeda3d5e2c0",
+    "TagNames": ["Benito", "Lola"]
+  }
+}

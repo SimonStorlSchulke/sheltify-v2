@@ -1,0 +1,15 @@
+
+@if(animal(); as animal) {
+  <h1>{{animal.Name}}</h1>
+  <form class="sui flex-y gap-3">
+    <app-text-input name="name" label="Name" [(twoWayModel)]="animal.Name" />
+    <app-text-input name="description" label="Beschreibung" [long]="true"
+                    [(twoWayModel)]="animal.Description"
+                    explanation="Kurzer Text, der im Steckbrief oben unter jedem Tier angezeigt wird"/>
+    <app-checkbox-input name="castrated" label="Kastriert" [(twoWayModel)]="animal.Castrated"/>
+  </form>
+  <br>
+  <button (click)="save()">Save</button>
+} @else {
+  404 Tier nicht gefunden
+}

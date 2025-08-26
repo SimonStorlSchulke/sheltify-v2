@@ -1,0 +1,34 @@
+@use "colors" as *;
+.list {
+  height: calc(100dvh - 280px);
+  overflow-y: auto;
+  align-content: baseline;
+
+  &.with-picker {
+    height: calc(100dvh - 355px);
+  }
+}
+
+
+.dropzone {
+  position: relative;
+  &.files-hovered {
+    outline: 3px dashed $primary;
+
+    &::before {
+      content: "Bilder hochladen";
+      position: fixed;
+      background: $primary;
+      color: #fff;
+      padding: 2px 4px;
+    }
+  }
+}
+
+.sidebar {
+  min-width: 450px;
+  background: $neutral100;
+  border-radius: 8px;
+  padding: 16px;
+  right: 10px;
+}

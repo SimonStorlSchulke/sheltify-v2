@@ -1,0 +1,60 @@
+@use "colors" as *;
+
+.animals {
+
+  table {
+    border-collapse: collapse;
+    th {
+      padding: 5px 8px;
+      text-align: left;
+      background-color: $primary-h2;
+      color: white;
+    }
+
+    td {
+      padding: 4px 8px;
+    }
+
+  }
+
+  .entry {
+    cursor: pointer;
+    background: $neutral100;
+    &:nth-child(3n){background-color: $neutral100;}
+    &:nth-child(3n - 1){background-color: $neutral150;}
+    &:nth-child(3n - 2){background-color: $neutral200;}
+
+    &:hover {
+      background-color: $primary-bg;
+
+      img {
+        width: 80px;
+        height: 80px;
+        transform: translateY(-20px) translateX(-20px);
+      }
+    }
+
+    .img-wrapper {
+      max-width: 48px;
+      height: 48px;
+    }
+
+    img {
+      width: 48px;
+      height: 48px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid $primary;
+      transition: width 0.5s, height 0.5s, transform 0.5s;
+      position: absolute;
+
+    }
+  }
+}
+
+.partial-table {
+  .td-created,
+  .td-modified, {
+    display: none;
+  }
+}

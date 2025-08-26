@@ -1,0 +1,29 @@
+<div class="sui flex-y gap-3 alert-{{type}} relative">
+  <b class="title">{{ title }}
+    <span class="icon">
+      @switch (type) {
+        @case ('info') {
+          i
+        }
+        @case ('warning') {
+          !
+        }
+        @case ('error') {
+          !
+        }
+      }
+    </span>
+  </b>
+  <span>{{ message }}</span>
+
+  <div class="sui flex-x jc-end gap-2">
+    @for (button of buttons; track button) {
+      <button
+        (click)="onButtonClicked(button)"
+        [class]="button == 'ja' || button == 'ok' ? 'primary' : 'secondary'">
+        {{ button }}
+      </button>
+    }
+  </div>
+
+</div>

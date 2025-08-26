@@ -1,0 +1,9 @@
+@for $i from 1 through 20 {
+  $percentage: ($i * 5);
+  .bg-grey-#{$i * 50} {
+    background: hsl(0, 0%, ($i * 5));
+  }
+  .color-grey-#{$i * 50} {
+    color: hsl(0, 0%, ($i * 5));
+  }
+}

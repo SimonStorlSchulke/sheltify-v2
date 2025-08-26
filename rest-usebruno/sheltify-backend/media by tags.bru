@@ -1,0 +1,19 @@
+meta {
+  name: media by tags
+  type: http
+  seq: 12
+}
+
+get {
+  url: http://localhost:3000/api/mfg/media?tags=lola,benito
+  body: none
+  auth: inherit
+}
+
+params:query {
+  tags: lola,benito
+}
+
+settings {
+  encodeUrl: true
+}

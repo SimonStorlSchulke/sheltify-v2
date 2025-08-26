@@ -1,0 +1,17 @@
+meta {
+  name: animals
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{l}}animals?pagination[pageSize]=500&populate[0]=thumbnail&populate[1]=animal_article&
+  body: none
+  auth: inherit
+}
+
+params:query {
+  pagination[pageSize]: 500
+  populate[0]: thumbnail
+  populate[1]: animal_article
+}

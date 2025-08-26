@@ -1,0 +1,50 @@
+@let editorOpened = selectedAnimal() !== null || newAnimalMode;
+<div class="sui flex-x gap-3">
+  <div class="sui flex-y gap-3">
+    <div class="sui flex-x">
+      <h1>Tiere</h1>
+      <div class="sui grow-1"></div>
+      <button (click)="newAnimal()">Neues Tier</button>
+      <button (click)="test()">Medialibrary</button>
+    </div>
+
+    <div class="animals sui flex-x ai-start wrap gap-5">
+      @if ($animals | async; as animals) {
+        <table [class.partial-table]="editorOpened">
+          <thead>
+          <tr>
+            <th class="td-image">Bild</th>
+            <th class="td-name">Name</th>
+            <th class="td-born">Geboren</th>
+            <th class="td-created">erstellt</th>
+            <th class="td-modified">modifiziert</th>
+            <th class="td-buttons"></th>
+          </tr>
+          </thead>
+          <tbody>
+            @for (animal of animals.results; track $index) {
+              <tr class="entry" (click)="toAnimal(animal.ID ?? 0)">
+                <td class="td-image">
+                  @if (animal.Portrait) {
+                    <div class="img-wrapper"><img [cmsImage]="animal.Portrait" cmsImageSize="thumbnail"></div>
+                  }
+                </td>
+                <td class="td-name">{{ animal.Name }}</td>
+                <td class="td-born">{{ animal.Birthday | date: 'dd.MM.yyyy' }}</td>
+                <td class="td-created">{{ animal.CreatedAt | date: 'dd.MM.yyyy' }}</td>
+                <td class="td-modified">{{ animal.UpdatedAt | date: 'dd.MM.yyyy' }}</td>
+                <td>
+                  <button class="secondary">Löschen</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+
+    </div>
+  </div>
+  @if (editorOpened) {
+    <app-animal-editor class="sui grow-1" [animal]="selectedAnimal()" [newAnimalMode]="newAnimalMode"/>
+  }
+</div>

@@ -1,0 +1,17 @@
+meta {
+  name: home
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{l}}about-page?populate[hero][populate]=*&populate[1]=article&populate[article][populate]=*
+  body: none
+  auth: inherit
+}
+
+params:query {
+  populate[hero][populate]: *
+  populate[1]: article
+  populate[article][populate]: *
+}

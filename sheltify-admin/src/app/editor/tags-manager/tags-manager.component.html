@@ -1,0 +1,17 @@
+<div class="sui flex-y gap-3">
+  <h2>Tags verwalten</h2>
+
+  <div class="sui flex-x ai-end new-tag">
+    <app-text-input #newTagName name="new-tag" label="Neuer Tag" placeholder="...Name & Farbe eingeben"/>
+    <input #newTagColor type="color" value="#aaeeff" name="color" id="color">
+    <button (click)="createTag(newTagName.twoWayModel(), newTagColor.value); newTagName.twoWayModel.set('')" class="secondary small">+ Hinzufügen</button>
+  </div>
+
+  <div class="sui flex-y gap-2" id="tags-list">
+      @for (tag of tagsService.availableTags(); track tag.ID) {
+        <div class="sui flex-x gap-2 ai-center"><button (click)="deleteTag(tag.ID)" class="small">X</button><app-tag [tag]="tag"/></div>
+      }
+  </div>
+
+  <button (click)="close()">Ok</button>
+</div>

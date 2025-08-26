@@ -1,0 +1,25 @@
+@use "colors" as *;
+.new-tag {
+  #color {
+    height: 44px;
+    border: none;
+    outline: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  app-text-input {
+    width: 220px;
+  }
+
+  button {
+    height: 43px;
+  }
+}
+
+#tags-list {
+  max-height: calc(100dvh - 500px);
+  min-height: calc(100dvh - 800px);
+  overflow-y: auto;
+}

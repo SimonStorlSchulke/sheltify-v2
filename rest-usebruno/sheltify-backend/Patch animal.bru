@@ -1,0 +1,18 @@
+meta {
+  name: Patch animal
+  type: http
+  seq: 6
+}
+
+patch {
+  url: http://localhost:3000/api/animals/18
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Lolitaa",
+    "castrated": true
+  }
+}

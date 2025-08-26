@@ -1,0 +1,20 @@
+meta {
+  name: get animal article
+  type: http
+  seq: 5
+}
+
+get {
+  url: http://localhost:3000/api/animalarticle/MakI
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Kevin",
+    "gender": "Male",
+    "castrated": true,
+    "birthday": "2023-03-29T15:04:05Z"
+  }
+}

@@ -1,10 +1,13 @@
 ---
-import { cms } from '@shared/cms';
+import { cms } from "@shared/cms";
+import Header from "@shared/layouts/Header.astro";
+import Layout from "@shared/layouts/Layout.astro";
 const animals = await cms.animals;
 ---
 
 <h1>MFT!</h1>
 
-{animals.map(a => <div>
-	{a.name}
-</div>)}
+<Layout>
+	<Header />
+	{animals.map((a) => <div>{a.name}</div>)}
+</Layout>

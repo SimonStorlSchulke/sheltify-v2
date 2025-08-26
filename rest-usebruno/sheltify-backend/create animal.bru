@@ -1,0 +1,20 @@
+meta {
+  name: create animal
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:3000/admin/api/animals
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "Name": "hhgs dog 3",
+    "Gender": "Male",
+    "Castrated": false,
+    "Birthday": "2018-03-29T15:04:05Z"
+  }
+}

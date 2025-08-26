@@ -1,0 +1,44 @@
+@use "colors" as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 160px;
+  height: 140px;
+  max-height: 140px;
+  background-color: $neutral150;
+  border-radius: 4px;
+  user-select: none;
+  outline-offset: -1px;
+
+  span {
+    user-select: text;
+    color: $neutral900;
+    text-align: center;
+    line-height: 1.0rem;
+    font-size: 0.9rem;
+    padding: 0.2rem 0.5rem;
+    width: 130px;
+    display: -webkit-box;
+    word-wrap: break-word;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    height: 2.2rem;
+  }
+
+  &.selected {
+    background-color: $primary-h4;
+    outline: 1px solid $primary-h3;
+  }
+
+  &.active {
+    background-color: $primary-h3;
+    outline: 1px solid $primary;
+  }
+
+  img {
+    height: calc(100% - 2.5rem);
+  }
+}
