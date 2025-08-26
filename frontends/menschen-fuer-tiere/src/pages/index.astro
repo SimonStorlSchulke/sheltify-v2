@@ -1,0 +1,13 @@
+---
+import { cms } from '@lib/src/access';
+import  AnimalCard from '@lib/src/layouts/AnimalCard.astro';
+import Layout from 'src/layouts/Layout.astro';
+
+const animals = await cms.animals;
+---
+
+<Layout>
+	{animals.map(a => <div>
+		<AnimalCard animal={a}/>
+	</div>)} 
+</Layout>

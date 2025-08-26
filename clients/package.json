@@ -1,0 +1,17 @@
+{
+  "name": "clients",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "build:mft": "astro build --config sites/mft/astro.config.mjs",
+    "build:hhg": "astro build --config sites/hhg/astro.config.mjs"
+  },
+  "dependencies": {
+    "astro": "^5.12.5",
+    "sass": "^1.89.2"
+  }
+}

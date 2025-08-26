@@ -1,0 +1,10 @@
+---
+import { cms } from '@shared/cms';
+const animals = await cms.animals;
+---
+
+<h1>MFT!</h1>
+
+{animals.map(a => <div>
+	{a.name}
+</div>)}
