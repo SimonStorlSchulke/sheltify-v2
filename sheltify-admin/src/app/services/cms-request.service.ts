@@ -58,7 +58,7 @@ export class CmsRequestService {
   }
 
   public saveAnimal(animal: CmsAnimal): Observable<CmsAnimal> {
-    return this.patch<CmsAnimal>(`animals`, animal)
+    return this.patch<CmsAnimal>(`animals`, animal);
   }
 
   public deleteAnimals(ids: number[]) {
@@ -87,7 +87,7 @@ export class CmsRequestService {
   }
 
   public uploadScaledImage(files: { size: string, blob: Blob}[], fileName: string, commaSeparatedTags: string) {
-    const url = decodeURIComponent(CmsRequestService.adminApiUrl + 'media/scaled');
+    const url = CmsRequestService.adminApiUrl + 'media/scaled';
     const tenantId = this.authService.getTenantID();
     const data = new FormData();
 
@@ -115,8 +115,7 @@ export class CmsRequestService {
   }
 
   public deleteImage(id: string): Observable<void> {
-    const url = decodeURIComponent(CmsRequestService.adminApiUrl + 'media/' + id);
-    return this.delete(url);
+    return this.delete(CmsRequestService.adminApiUrl + 'media/' + id);
   }
 
   private get<T>(path: string): Observable<T> {

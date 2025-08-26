@@ -42,6 +42,9 @@
         &.jc-space-evenly {
             justify-content: space-evenly;
         }
+        &.jc-stretch {
+            justify-content: stretch;
+        }
 
         &.wrap {
             flex-wrap: wrap;

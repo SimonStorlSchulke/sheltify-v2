@@ -1,0 +1,64 @@
+@use "colors" as *;
+
+:host {
+  border: 1px solid $neutral400 ;
+}
+
+
+.article-row {
+  //border: 2px dashed $neutral400;
+
+  &:not(:first-of-type) {
+    border-top: none;
+  }
+}
+
+.article-column {
+  background-color: #fff;
+  box-shadow: 2px 4px 12px #0004;
+}
+
+.section-titlebar {
+  background-color: $neutral200;
+  b {
+    font-size: 0.9rem;
+  }
+}
+
+.drag-handle {
+  cursor: move;
+
+  &:hover {
+    color: $primary;
+  }
+}
+
+.dragMode {
+  .move-to-column,
+  .move-to-row {
+    background: $primary-h3;
+    outline-offset: -2px;
+  }
+
+  .move-to-column,
+  .move-to-row, {
+    &:hover {
+      cursor: pointer;
+      background: $primary;
+    }
+  }
+}
+
+.move-to-column {
+  width: 34px;
+  color: #fff;
+  font-size: 10px;
+  padding: 12px;
+}
+
+.move-to-row {
+  height: 34px;
+  color: #fff;
+  font-size: 10px;
+  padding: 12px;
+}

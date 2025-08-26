@@ -1,0 +1,37 @@
+<div class="article sui flex-y grow-1" [class.dragMode]="movedItem()">
+  <div (click)="moveToNewRow(0)" class="move-to-row"></div>
+  @for (row of article().Rows; track $index) {
+    @let iRow = $index;
+    <div class="article-row sui flex-x jc-stretch">
+      <div (click)="moveToColumn(iRow,0)" class="move-to-column"></div>
+      @for (section of row.Sections; track $index) {
+        @let iColumn = $index;
+
+        <div class="sui flex-y grow-1">
+
+          <div class="article-column sui grow-1">
+
+            <div class="section-titlebar sui flex-x p-1 ai-center">
+              <ng-icon title="Sektion verschieben" (click)="enterMoveMode(iRow, iColumn, section)" class="drag-handle sui" name="bootstrapGripVertical" size="22px"/>
+              <b class="sui grow-1">{{ section.SectionType }}</b>
+              <ng-icon name="bootstrapX" size="24px"/>
+            </div>
+            <div class="sui p-2">
+
+              @switch (section.SectionType) {
+                @case ("TextSection") {
+                  <app-text-section-editor/>
+                }
+              }
+            </div>
+          </div>
+
+        </div>
+        <div (click)="moveToColumn(iRow, iColumn + 1)" class="move-to-column"></div>
+      }
+    </div>
+    <div (click)="moveToNewRow(iRow + 1)" class="move-to-row"></div>
+  }
+</div>
+
+

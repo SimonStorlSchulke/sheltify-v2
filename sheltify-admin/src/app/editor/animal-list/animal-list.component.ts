@@ -56,7 +56,6 @@ export class AnimalListComponent {
 
   public onSavedAnimal(animal: CmsAnimal | null) {
     if (animal) {
-      console.log(animal);
       //TODO wenn deployed: gucken ob das wirklich sinnvoll ist oder ob ein einfacher reload besser wäre.
       // structurecClone hier sinnvoll? Wenns fehlt wird liste bei jeder änderung geupdated, auch wenn nicht gespeichert wurde...
       this.editedAnimals.update(map => map.set(animal.ID!, structuredClone(animal)));
