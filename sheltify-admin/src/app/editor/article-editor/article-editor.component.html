@@ -11,10 +11,10 @@
 
           <div class="article-column sui grow-1">
 
-            <div class="section-titlebar sui flex-x p-1 ai-center">
-              <ng-icon title="Sektion verschieben" (click)="enterMoveMode(iRow, iColumn, section)" class="drag-handle sui" name="bootstrapGripVertical" size="22px"/>
-              <b class="sui grow-1">{{ section.SectionType }}</b>
-              <ng-icon class="x" (click)="deleteSection(iRow, iColumn)" name="bootstrapX" size="24px"/>
+            <div class="section-titlebar sui flex-x px-1 gap-2 ai-center">
+              <b class="sui grow-1 py-1">{{ section.SectionType }}</b>
+              <button (click)="enterMoveMode(iRow, iColumn, section)"  class="move-button small">verschieben</button>
+              <ng-icon class="x" (click)="deleteSection(iRow, iColumn)" name="bootstrapX" size="22px"/>
             </div>
             <div class="sui p-2">
 
