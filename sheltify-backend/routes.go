@@ -31,8 +31,8 @@ func publicRoutes(r *chi.Mux) {
 }
 
 func adminRoutes(r *chi.Mux) {
-	r.Post("/animals", handlers.CreateAnimal)
-	r.Patch("/animals/{id}", handlers.UpdateAnimalById)
+	r.Post("/animals", handlers.SaveAnimal)
+	r.Patch("/animals", handlers.SaveAnimal)
 	r.Delete("/animals", handlers.DeleteAnimalsByIds)
 	r.Patch("/animals/{id}/set-portrait", handlers.SetAnimalPortrait)
 

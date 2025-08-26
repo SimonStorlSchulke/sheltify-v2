@@ -19,6 +19,8 @@
     "@angular/platform-browser": "^19.2.6",
     "@angular/platform-browser-dynamic": "^19.2.6",
     "@angular/router": "^19.2.6",
+    "@ng-icons/bootstrap-icons": "^32.1.0",
+    "@ng-icons/core": "^31.4.0",
     "@ng-select/ng-select": "^14.9.0",
     "ngx-editor": "^18.0.0",
     "ngx-file-drop": "^16.0.0",

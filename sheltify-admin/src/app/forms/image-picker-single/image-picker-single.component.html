@@ -1,0 +1,16 @@
+<div class="sui flex-x ai-center gap-2">
+  <label [for]="name()">{{label()}}</label>
+  @if(explanation()) {
+    <button class="small secondary questionmark" (click)="showExplanation()">?</button>
+  }
+</div>
+<div (click)="pickImage()" class="img-container">
+  @if(twoWayModel()) {
+    <img [cmsImage]="twoWayModel()!">
+  } @else {
+    <div class="sui flex-x jc-center ai-center h-100">
+      <ng-icon name="bootstrapCardImage" size="2rem" color="#888"/>
+    </div>
+  }
+</div>
+

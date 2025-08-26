@@ -1,0 +1,34 @@
+@use "colors" as *;
+
+.img-container {
+  background: $neutral100;
+  height: 220px;
+  width: 220px;
+  cursor: pointer;
+
+  &:not(:has(img)) {
+    outline: 2px dashed $neutral400;
+  }
+
+  &:hover {
+    outline: 2px dashed $primary-h1;
+    ng-icon {
+      color: $primary-h1;
+    }
+  }
+
+  display: flex;
+  justify-content: center;
+
+  img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+  }
+}
+
+.medialibrary-wrapper {
+  position: fixed;
+  background: #fff;
+
+}

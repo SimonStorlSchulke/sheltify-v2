@@ -57,12 +57,12 @@ export class CmsRequestService {
     return this.get<CmsAnimal>(`${CmsRequestService.publicApiUrl}${tenantId}/animals/${id}`)
   }
 
-  public createAnimal(animal: CmsAnimal): Observable<CmsAnimal> {
-    return this.post<CmsAnimal>(`animals`, animal)
+  public saveAnimal(animal: CmsAnimal): Observable<CmsAnimal> {
+    return this.patch<CmsAnimal>(`animals`, animal)
   }
 
-  public updateAnimal(animal: CmsAnimal): Observable<CmsAnimal> {
-    return this.patch<CmsAnimal>(`animals/${animal.ID}`, animal)
+  public deleteAnimals(ids: number[]) {
+    return this.delete<CmsAnimal>(`${CmsRequestService.adminApiUrl}animals?ids=${ids.join(',')}`)
   }
 
   public createTag(tag: Omit<CmsTag, "ID">): Observable<CmsTag> {

@@ -1,11 +1,10 @@
 @let editorOpened = selectedAnimal() !== null || newAnimalMode;
-<div class="sui flex-x gap-3">
+<div class="sui flex-x gap-5">
   <div class="sui flex-y gap-3">
     <div class="sui flex-x">
       <h1>Tiere</h1>
       <div class="sui grow-1"></div>
       <button (click)="newAnimal()">Neues Tier</button>
-      <button (click)="test()">Medialibrary</button>
     </div>
 
     <div class="animals sui flex-x ai-start wrap gap-5">
@@ -22,8 +21,10 @@
           </tr>
           </thead>
           <tbody>
-            @for (animal of animals.results; track $index) {
-              <tr class="entry" (click)="toAnimal(animal.ID ?? 0)">
+            @for (cmsAnimal of animals.results; track $index) {
+              @let animal = editedAnimals().get(cmsAnimal.ID ?? 0) ?? cmsAnimal;
+
+              <tr class="entry" [class.selected]="selectedAnimal()?.ID == animal.ID" (click)="toAnimal(animal.ID ?? 0)">
                 <td class="td-image">
                   @if (animal.Portrait) {
                     <div class="img-wrapper"><img [cmsImage]="animal.Portrait" cmsImageSize="thumbnail"></div>
@@ -34,7 +35,7 @@
                 <td class="td-created">{{ animal.CreatedAt | date: 'dd.MM.yyyy' }}</td>
                 <td class="td-modified">{{ animal.UpdatedAt | date: 'dd.MM.yyyy' }}</td>
                 <td>
-                  <button class="secondary">Löschen</button>
+                  <button (click)="deleteAnimals([animal.ID!])" class="secondary">Löschen</button>
                 </td>
               </tr>
             }
@@ -45,6 +46,6 @@
     </div>
   </div>
   @if (editorOpened) {
-    <app-animal-editor class="sui grow-1" [animal]="selectedAnimal()" [newAnimalMode]="newAnimalMode"/>
+    <app-animal-editor class="sui grow-1" [animal]="selectedAnimal()" (saved)="onSavedAnimal($event)" [newAnimalMode]="newAnimalMode"/>
   }
 </div>

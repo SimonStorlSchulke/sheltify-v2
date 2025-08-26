@@ -1,6 +1,6 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, computed, inject, OnInit, output, Pipe, PipeTransform, Signal, signal } from '@angular/core';
-import { lastValueFrom, map, Observable } from 'rxjs';
+import { lastValueFrom, map, Observable, Subject } from 'rxjs';
 import { CmsImage, CmsTag } from 'src/app/cms-types/cms-types';
 import { LoaderService } from 'src/app/layout/loader/loader.service';
 import { FileDropDirective } from 'src/app/media-library/file-drop.directive';
@@ -9,6 +9,7 @@ import { MediaEntryComponent } from 'src/app/media-library/media-entry/media-ent
 import { AuthService } from 'src/app/services/auth.service';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { ImageConverterService } from 'src/app/services/image-converter.service';
+import { FinishableDialog } from 'src/app/services/modal.service';
 import { TagsService } from 'src/app/services/tags.service';
 import { TagComponent } from 'src/app/ui/tag/tag.component';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
@@ -40,7 +41,7 @@ class MediaSelectionPipe implements PipeTransform {
   templateUrl: './media-library.component.html',
   styleUrl: './media-library.component.scss'
 })
-export class MediaLibraryComponent implements OnInit {
+export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implements OnInit {
   public selectedTags = signal<number[]>([]);
   public activeImageId = signal<string>("");
   public selectedImageIds = signal(new Set<string>());
@@ -74,6 +75,7 @@ export class MediaLibraryComponent implements OnInit {
     private imageConverterSv: ImageConverterService,
     public tagsService: TagsService,
   ) {
+    super();
   }
 
 
@@ -141,6 +143,12 @@ export class MediaLibraryComponent implements OnInit {
   onTagAdded(tag: CmsTag, image: CmsImage) {
     this.tagsService.availableTags.update(tags => [...tags, tag])
     image.MediaTags.push(tag)
+  }
+
+  pickImages(selectedIds: Set<string>, images: CmsImage[]) {
+    // TODO: Auch aktuell NICHT angezeigte Bilder auswählbar machen?
+    const selectedImages = Array.from(images).filter(img => selectedIds.has(img.ID));
+    this.finishSubject.next(selectedImages)
   }
 }
 

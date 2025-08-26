@@ -1,8 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
-import { lastValueFrom } from 'rxjs';
+import { firstValueFrom, lastValueFrom, startWith, Subject, switchMap } from 'rxjs';
 import { CmsAnimal } from 'src/app/cms-types/cms-types';
-import { MediaLibraryComponent } from 'src/app/media-library/media-library.component';
-import { ModalService } from 'src/app/services/modal.service';
 import { CmsImageDirective } from 'src/app/ui/cms-image.directive';
 import { AnimalEditorComponent } from '../../editor/animal-editor/animal-editor.component';
 import { CmsRequestService } from '../../services/cms-request.service';
@@ -21,9 +19,16 @@ import { AsyncPipe, DatePipe } from '@angular/common';
 })
 export class AnimalListComponent {
   private cmsRequestService = inject(CmsRequestService);
-  $animals = this.cmsRequestService.getTenantsAnimals();
+
+  private reloadAnimals$ = new Subject<void>();
+
+  $animals = this.reloadAnimals$.pipe(
+    startWith(void 0), // trigger initial load
+    switchMap(() => this.cmsRequestService.getTenantsAnimals())
+  );
+
+  editedAnimals = signal(new Map<number, CmsAnimal>([]));
   public newAnimalMode = false;
-  private modalSv = inject(ModalService);
 
   selectedAnimal = signal<CmsAnimal | null>(null)
 
@@ -32,11 +37,7 @@ export class AnimalListComponent {
     this.selectedAnimal.set(animal);
   }
 
-  test() {
-    this.modalSv.open(MediaLibraryComponent, {}, 'modal-fullscreen')
-  }
-
-  newAnimal() {
+  public newAnimal() {
     this.selectedAnimal.set({
       Birthday: "2018-03-29T15:04:05Z",
       Castrated: false,
@@ -51,5 +52,21 @@ export class AnimalListComponent {
       Name: "Neues Tier",
       Description: ""
     });
+  }
+
+  public onSavedAnimal(animal: CmsAnimal | null) {
+    if (animal) {
+      console.log(animal);
+      //TODO wenn deployed: gucken ob das wirklich sinnvoll ist oder ob ein einfacher reload besser wäre.
+      // structurecClone hier sinnvoll? Wenns fehlt wird liste bei jeder änderung geupdated, auch wenn nicht gespeichert wurde...
+      this.editedAnimals.update(map => map.set(animal.ID!, structuredClone(animal)));
+      this.selectedAnimal.set(animal);
+      this.reloadAnimals$.next();
+    }
+  }
+
+  public async deleteAnimals(ids: number[]) {
+    await firstValueFrom(this.cmsRequestService.deleteAnimals(ids));
+    this.reloadAnimals$.next();
   }
 }

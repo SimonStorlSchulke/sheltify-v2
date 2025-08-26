@@ -1,5 +1,5 @@
-import { Component, input, model } from '@angular/core';
-import { ModalService } from 'src/app/services/modal.service';
+import { Component, model } from '@angular/core';
+import { InputBaseComponent } from 'src/app/forms/input-base.component';
 
 @Component({
   selector: 'app-checkbox-input',
@@ -7,20 +7,10 @@ import { ModalService } from 'src/app/services/modal.service';
   templateUrl: './checkbox-input.component.html',
   styleUrls: ['../form-base.component.scss']
 })
-export class CheckboxInputComponent {
-  public name = input.required<string>();
-  public explanation = input<string>();
-  public label = input.required<string>();
+export class CheckboxInputComponent extends InputBaseComponent{
   public twoWayModel = model<boolean>(false);
-
-  constructor(private modalService: ModalService) {
-  }
 
   public onInput(checked: boolean): void {
     this.twoWayModel.set(checked);
-  }
-
-  public showExplanation() {
-    this.modalService.openAlert(this.label(), this.explanation()!)
   }
 }

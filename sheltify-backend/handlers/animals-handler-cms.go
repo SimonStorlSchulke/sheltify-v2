@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"sheltify-new-backend/repository"
@@ -21,25 +20,17 @@ func CreateAnimal(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func UpdateAnimalById(w http.ResponseWriter, r *http.Request) {
-	//TODO get logged in tenant and error if tenant doesn't own animal
-
-	// Extract animal ID from the request (assuming it's in the URL)
-	id, err := idFromParameter(w, r)
-	if err != nil {
+func SaveAnimal(w http.ResponseWriter, r *http.Request) {
+	animal := validateRequestBody[*shtypes.Animal](w, r)
+	if animal.Portrait != nil {
+		animal.PortraitID = &animal.Portrait.ID //TODO.. ugly
+	}
+	if animal == nil {
 		return
 	}
 
-	var updates map[string]interface{}
-	if err := json.NewDecoder(r.Body).Decode(&updates); err != nil {
-		badRequestResponse(w, "Invalid JSON")
-		return
-	}
-	updates["Portrait"] = nil // Ensure we don't update the portrait unintentionally
-
-	// Call repository function to update the animal
-	if animal, err := repository.UpdateAnimalById(id, updates); err != nil {
-		internalServerErrorResponse(w, "Could not update animal")
+	if repository.SaveAnimal(animal) != nil {
+		internalServerErrorResponse(w, "Could not update media")
 	} else {
 		okResponse(w, animal)
 	}

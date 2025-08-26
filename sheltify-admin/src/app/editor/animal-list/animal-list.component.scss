@@ -26,16 +26,10 @@
 
     &:hover {
       background-color: $primary-bg;
-
-      img {
-        width: 80px;
-        height: 80px;
-        transform: translateY(-20px) translateX(-20px);
-      }
     }
 
     .img-wrapper {
-      max-width: 48px;
+      width: 50px;
       height: 48px;
     }
 
@@ -48,6 +42,11 @@
       transition: width 0.5s, height 0.5s, transform 0.5s;
       position: absolute;
 
+    }
+
+    &.selected {
+      outline: 3px solid $primary;
+      outline-offset: -3px;
     }
   }
 }
