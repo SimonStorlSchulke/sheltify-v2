@@ -185,7 +185,6 @@ func processImage(inputPath, outputDir, name, label string, width uint, aspectRa
 }
 
 func AddTagToMedia(mediaID string, tagNames []string) error {
-	// Example implementation: Replace with actual database logic.
 	mediaFile, err := repository.GetMediaFileMetaById(mediaID)
 	if err != nil {
 		return err

@@ -1,0 +1,8 @@
+<div class="sui flex-x ai-center gap-2">
+  <label [for]="name()">{{label()}}</label>
+  @if(explanation()) {
+    <button class="small secondary questionmark" (click)="showExplanation()">?</button>
+  }
+</div>
+<input [id]="name()" [name]="name()" type="date" [value]="dateOnly()" (input)="onInput($event)">
+

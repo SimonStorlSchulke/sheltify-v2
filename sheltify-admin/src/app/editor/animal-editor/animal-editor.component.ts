@@ -4,6 +4,7 @@ import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { CmsAnimal } from 'src/app/cms-types/cms-types';
 import { ArticleEditorComponent } from 'src/app/editor/article-editor/article-editor.component';
 import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-input.component';
+import { DatePickerComponent } from 'src/app/forms/date-picker/date-picker.component';
 import { ImagePickerSingleComponent } from 'src/app/forms/image-picker-single/image-picker-single.component';
 import { randomColor } from 'src/app/services/color-utils';
 import { TextInputComponent } from '../../forms/text-input/text-input.component';
@@ -17,6 +18,7 @@ import { CmsRequestService } from '../../services/cms-request.service';
     CheckboxInputComponent,
     ImagePickerSingleComponent,
     ArticleEditorComponent,
+    DatePickerComponent,
   ],
   templateUrl: './animal-editor.component.html',
   styleUrl: './animal-editor.component.scss'

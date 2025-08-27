@@ -30,7 +30,7 @@ func SaveAnimal(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if repository.SaveAnimal(animal) != nil {
-		internalServerErrorResponse(w, "Could not update media")
+		internalServerErrorResponse(w, "Could not save animal")
 	} else {
 		okResponse(w, animal)
 	}
@@ -42,38 +42,11 @@ func DeleteAnimalsByIds(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	failedForIds := make([]int, 0)
-	for _, id := range ids {
-		err = repository.DeleteAnimal(id)
-		if err != nil {
-			failedForIds = append(failedForIds, id)
-		}
-	}
+	err = repository.DeleteAnimalsByIds(ids)
 
-	if len(failedForIds) == 0 {
+	if err == nil {
 		emptyOkResponse(w)
 	} else {
-		internalServerErrorResponse(w, fmt.Sprint("Failed deleting ids", failedForIds))
+		internalServerErrorResponse(w, fmt.Sprint("Failed deleting animals by ids:", ids))
 	}
-}
-
-func SetAnimalPortrait(w http.ResponseWriter, r *http.Request) {
-	animalId, err := idFromParameter(w, r)
-	if err != nil {
-		return
-	}
-
-	mediaId := r.URL.Query().Get("mediaId")
-	if mediaId == "" {
-		badRequestResponse(w, "mediaId must be provided")
-		return
-	}
-
-	err = services.SetAnimalPortrait(animalId, mediaId)
-	if err != nil {
-		internalServerErrorResponse(w, "Failed to set animal portrait")
-		return
-	}
-
-	okResponse(w, "Animal portrait updated successfully")
 }

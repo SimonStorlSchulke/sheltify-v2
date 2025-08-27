@@ -233,19 +233,6 @@ type AddTagToMediaRequest struct {
 	TagNames []string
 }
 
-func AddTagToMedia(w http.ResponseWriter, r *http.Request) {
-	request := parseRequestBody[AddTagToMediaRequest](w, r)
-	if request == nil {
-		return
-	}
-
-	if services.AddTagToMedia(request.MediaId, request.TagNames) != nil {
-		internalServerErrorResponse(w, "Could not add mediatag to media")
-	} else {
-		emptyOkResponse(w)
-	}
-}
-
 func SaveMedia(w http.ResponseWriter, r *http.Request) {
 	media := validateRequestBody[*shtypes.MediaFile](w, r)
 

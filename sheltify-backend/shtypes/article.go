@@ -4,30 +4,28 @@ import "gorm.io/gorm"
 
 type Article struct {
 	gorm.Model
-	Rows []*ArticleRow `gorm:"foreignKey:ArticleID"`
+	Structure ArticleStructure `gorm:"serializer:json"`
+}
+
+type ArticleStructure struct {
+	Rows []*ArticleRow
 }
 
 type ArticleRow struct {
-	gorm.Model
-	ArticleID uint
-	Position  int                  //for ordering
-	Sections  []*ArticleSectionRef `gorm:"foreignKey:ArticleRowID"`
+	Sections []*ArticleSectionRef
 }
 
 type ArticleSectionRef struct {
-	gorm.Model
-	ArticleRowID uint
-	SectionID    uint
-	SectionType  string
-	Position     int //for ordering
+	SectionType string
+	SectionID   uint
 }
 
-type TextSection struct {
+type SectionText struct {
 	gorm.Model
 	HtmlContent string
 }
 
-type MediaSection struct {
+type SectionMedia struct {
 	gorm.Model
-	MediaFiles []*MediaFile `gorm:"many2many:media_section_files;"`
+	MediaFiles []*MediaFile `gorm:"many2many:section_media_files;"`
 }

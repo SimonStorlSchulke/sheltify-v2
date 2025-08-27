@@ -39,7 +39,7 @@ export class AnimalListComponent {
 
   public newAnimal() {
     this.selectedAnimal.set({
-      Birthday: "2018-03-29T15:04:05Z",
+      Birthday: "2018-03-29T15:04:05Z", //TODO
       Castrated: false,
       Gender: "male",
       Health: '',

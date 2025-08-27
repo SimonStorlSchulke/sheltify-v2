@@ -21,7 +21,7 @@ export type CmsArticleSectionRef = {
   SectionID?: number;
   SectionType?: string;  // could be "text" | "media"
   Position?: number;
-};
+}
 
 export type CmsTextSection = {
   ID: number;

@@ -34,15 +34,14 @@ func adminRoutes(r *chi.Mux) {
 	r.Post("/animals", handlers.SaveAnimal)
 	r.Patch("/animals", handlers.SaveAnimal)
 	r.Delete("/animals", handlers.DeleteAnimalsByIds)
-	r.Patch("/animals/{id}/set-portrait", handlers.SetAnimalPortrait)
 
 	r.Post("/media", handlers.UploadMedia)
 	r.Post("/media/scaled", handlers.UploadScaledWebps)
-	r.Post("/tags", handlers.CreateTag)
-	r.Delete("/tags/{id}", handlers.DeleteTag)
-	r.Post("/tags/add-to-media", handlers.AddTagToMedia)
 	r.Patch("/media", handlers.SaveMedia)
-	r.Delete("/media/{id}", handlers.DeleteMedia)
+	r.Delete("/media/{id}", handlers.DeleteMedia) //Todo make into DeletebyIds like DeleteAnimalsByIds
+
+	r.Post("/tags", handlers.CreateTag)
+	r.Delete("/tags/{id}", handlers.DeleteTag) //Todo make into DeletebyIds like DeleteAnimalsByIds
 
 	r.Get("/logout", handlers.Logout)
 	r.Get("/relogin", handlers.Relogin)
