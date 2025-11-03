@@ -1,0 +1,25 @@
+meta {
+  name: create user
+  type: http
+  seq: 20
+}
+
+post {
+  url: http://localhost:3000/admin/api/register
+  body: multipartForm
+  auth: inherit
+}
+
+body:json {
+  {
+    "Name": "hhgs dog 3",
+    "Gender": "Male",
+    "Castrated": false,
+    "Birthday": "2018-03-29T15:04:05Z"
+  }
+}
+
+body:multipart-form {
+  username: snhg
+  password: musikvereinbiengen
+}

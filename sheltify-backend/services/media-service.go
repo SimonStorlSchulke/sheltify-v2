@@ -3,6 +3,9 @@ package services
 import (
 	"errors"
 	"fmt"
+	"image"
+	_ "image/gif" // Register GIF decoder
+	"image/jpeg"
 	"io"
 	"log"
 	"mime/multipart"
@@ -13,7 +16,7 @@ import (
 	"strings"
 	"sync"
 
-	"gopkg.in/gographics/imagick.v3/imagick"
+	"golang.org/x/image/draw"
 )
 
 func StoreMultiPartFile(multiPartFile multipart.File, savePath string) error {
@@ -23,19 +26,18 @@ func StoreMultiPartFile(multiPartFile multipart.File, savePath string) error {
 	}
 
 	err = os.MkdirAll("uploads", os.ModePerm)
-
 	if err != nil {
 		return err
 	}
 
 	storedFile, err := os.Create(savePath)
-	defer storedFile.Close()
-
-	_, err = storedFile.Write(fileBytes)
 	if err != nil {
 		return err
 	}
-	return nil
+	defer storedFile.Close()
+
+	_, err = storedFile.Write(fileBytes)
+	return err
 }
 
 func DeleteMedia(id string) {
@@ -80,29 +82,30 @@ func GenerateImageSizes(media *shtypes.MediaFile, thumbnailOnly bool) error {
 	fmt.Println("Generating image sizes for media:", media.ID)
 	mediaFilePath := filepath.Join("uploads", media.ID+filepath.Ext(media.OriginalFileName))
 
-	if _, err := os.Stat(mediaFilePath); os.IsNotExist(err) {
-		log.Fatalf("Error: File %s not found", mediaFilePath)
+	file, err := os.Open(mediaFilePath)
+	if err != nil {
+		return fmt.Errorf("failed to open image: %w", err)
 	}
+	defer file.Close()
+
+	srcImg, format, err := image.Decode(file)
+	if err != nil {
+		return fmt.Errorf("failed to decode image: %w", err)
+	}
+
+	bounds := srcImg.Bounds()
+	origWidth := bounds.Dx()
+	origHeight := bounds.Dy()
+	aspectRatio := float64(origHeight) / float64(origWidth)
 
 	baseName := filepath.Base(mediaFilePath)
 	ext := filepath.Ext(baseName)
 	name := baseName[0 : len(baseName)-len(ext)]
 
-	mw := imagick.NewMagickWand()
-	err := mw.ReadImage(mediaFilePath)
-	if err != nil {
-		log.Fatalf("Failed to read input image: %v", err)
-	}
-	origWidth := mw.GetImageWidth()
-	origHeight := mw.GetImageHeight()
-	aspectRatio := float64(origHeight) / float64(origWidth)
-	mw.Destroy()
-
 	var sizes []struct {
 		Label string
 		Width uint
 	}
-
 	if thumbnailOnly {
 		sizes = []struct {
 			Label string
@@ -113,71 +116,60 @@ func GenerateImageSizes(media *shtypes.MediaFile, thumbnailOnly bool) error {
 	}
 
 	for _, size := range sizes {
-		if origWidth >= size.Width {
+		if origWidth >= int(size.Width) {
 			media.LargestAvailableSize = size.Label
-		}
-	}
-
-	for _, size := range sizes {
-		if origWidth < size.Width {
-			continue
-		}
-		log.Printf("Processing %s: original width %d, target width %d\n", size.Label, origWidth, size.Width)
-		if err := processImage(mediaFilePath, "uploads", name, size.Label, size.Width, aspectRatio); err != nil {
-			log.Printf("Error processing %s: %v\n", size.Label, err)
 		}
 	}
 
 	var wg sync.WaitGroup
 	for _, size := range sizes {
+		if origWidth < int(size.Width) {
+			continue
+		}
+
 		wg.Add(1)
 		go func(label string, width uint) {
 			defer wg.Done()
-			if err := processImage(mediaFilePath, "uploads", name, label, width, aspectRatio); err != nil {
+			if err := processImageStandard(srcImg, format, "uploads", name, label, width, aspectRatio); err != nil {
 				log.Printf("Error processing %s: %v\n", label, err)
 			}
 		}(size.Label, size.Width)
 	}
 
+	wg.Wait()
+
 	err = repository.SetSizesGenerated(media)
 	if err != nil {
 		return err
 	}
+
 	if !thumbnailOnly {
 		os.Remove(mediaFilePath)
 	}
+
 	fmt.Println("Image processing completed successfully.")
 	return nil
 }
 
-func processImage(inputPath, outputDir, name, label string, width uint, aspectRatio float64) error {
-	mw := imagick.NewMagickWand()
-	defer mw.Destroy()
+func processImageStandard(src image.Image, format, outputDir, name, label string, width uint, aspectRatio float64) error {
+	height := int(float64(width) * aspectRatio)
+	dst := image.NewRGBA(image.Rect(0, 0, int(width), height))
 
-	// Read the input image
-	err := mw.ReadImage(inputPath)
+	// Use high-quality resampling from the Go standard x/image/draw package
+	draw.CatmullRom.Scale(dst, dst.Bounds(), src, src.Bounds(), draw.Over, nil)
+
+	outputPath := filepath.Join(outputDir, fmt.Sprintf("%s_%s.jpg", name, label))
+	outFile, err := os.Create(outputPath)
 	if err != nil {
-		return fmt.Errorf("failed to read image: %w", err)
+		return fmt.Errorf("failed to create output file: %w", err)
 	}
+	defer outFile.Close()
 
-	height := uint(float64(width) * aspectRatio)
-
-	err = mw.ResizeImage(width, height, imagick.FILTER_LANCZOS)
+	// Always save as JPEG
+	opts := jpeg.Options{Quality: 92}
+	err = jpeg.Encode(outFile, dst, &opts)
 	if err != nil {
-		return fmt.Errorf("failed to resize image to %s: %w", label, err)
-	}
-
-	// Set format to WebP
-	mw.SetImageFormat("webp")
-	mw.SetOption("webp:lossless", "false")
-	mw.SetOption("webp:method", "6")
-	mw.SetOption("webp:alpha-quality", "75")
-	mw.SetImageCompressionQuality(92)
-
-	outputPath := filepath.Join(outputDir, fmt.Sprintf("%s_%s.webp", name, label))
-	err = mw.WriteImage(outputPath)
-	if err != nil {
-		return fmt.Errorf("failed to save %s image: %w", label, err)
+		return fmt.Errorf("failed to encode %s image: %w", label, err)
 	}
 
 	fmt.Printf("Saved: %s\n", outputPath)
@@ -194,8 +186,9 @@ func AddTagToMedia(mediaID string, tagNames []string) error {
 	for _, tagName := range tagNames {
 		tag, _ := repository.GetTagByName(tagName)
 		if tag == nil {
-			repository.CreateTag(&shtypes.Tag{Name: tagName, TenantID: "mfg"})
-			tags = append(tags, tag)
+			newTag := &shtypes.Tag{Name: tagName, TenantID: "mfg"}
+			repository.CreateTag(newTag)
+			tags = append(tags, newTag)
 		} else {
 			tags = append(tags, tag)
 		}
@@ -204,7 +197,6 @@ func AddTagToMedia(mediaID string, tagNames []string) error {
 	mediaFile.MediaTags = append(mediaFile.MediaTags, tags...)
 
 	err = repository.SaveMedia(mediaFile)
-
 	if err != nil {
 		return errors.New("failed to update media file with new tag")
 	}

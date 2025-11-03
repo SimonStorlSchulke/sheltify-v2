@@ -25,14 +25,6 @@
   }
 }
 
-.drag-handle {
-  cursor: move;
-
-  &:hover {
-    color: $primary;
-  }
-}
-
 .dragMode {
   .move-to-column,
   .move-to-row {

@@ -1,4 +1,11 @@
 @use "colors" as *;
+
+
+:host {
+  min-width: 80dvw;
+  display: block;
+}
+
 .list {
   height: calc(100dvh - 280px);
   overflow-y: auto;
@@ -26,7 +33,7 @@
 }
 
 .sidebar {
-  min-width: 450px;
+  width: 450px;
   background: $neutral100;
   border-radius: 8px;
   padding: 16px;

@@ -9,7 +9,6 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
-	"gopkg.in/gographics/imagick.v3/imagick"
 )
 
 func main() {
@@ -21,14 +20,12 @@ func main() {
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
 		ExposedHeaders:   []string{"Link"},
 		AllowCredentials: true,
-		MaxAge:           300, // Maximum value not ignored by any of major browsers
+		MaxAge:           300,
 	}))
 	initRoutes(r)
 	workDir, _ := os.Getwd()
 	filesDir := http.Dir(filepath.Join(workDir, "uploads"))
 	handlers.FileServer(r, "/api/uploads", filesDir)
 
-	imagick.Initialize()
-	defer imagick.Terminate()
 	http.ListenAndServe(":3000", r)
 }
