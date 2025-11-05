@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"fmt"
-	"log"
 	"mime/multipart"
 	"net/http"
 	"path/filepath"
@@ -35,78 +34,6 @@ func GetTenantsMediaByTags(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	okResponse(w, medias)
-}
-
-func UploadMedia(w http.ResponseWriter, r *http.Request) {
-
-	// upload 25 MB max
-	r.ParseMultipartForm(25 << 20)
-	uploadedFile, handler, err := r.FormFile("file")
-	if err != nil {
-		internalServerErrorResponse(w, err.Error())
-		return
-	}
-	defer uploadedFile.Close()
-
-	uuid := uuid.NewString()
-	extension := filepath.Ext(handler.Filename)
-	filename := uuid + extension
-	savePath := filepath.Join("uploads", filename)
-
-	focusX, err1 := strconv.ParseFloat(r.FormValue("FocusX"), 32)
-	focusY, err2 := strconv.ParseFloat(r.FormValue("FocusY"), 32)
-
-	if err1 != nil || err2 != nil {
-		badRequestResponse(w, "FocusX and FocusY must be numbers")
-		return
-	}
-
-	entity := shtypes.MediaFile{
-		ID:               uuid,
-		OriginalFileName: handler.Filename,
-		Title:            r.FormValue("Title"),
-		Description:      r.FormValue("Description"),
-		FocusX:           float32(focusX),
-		FocusY:           float32(focusY),
-		TenantID:         r.FormValue("TenantID"),
-	}
-
-	errMessage := entity.Validate()
-	if errMessage != "" {
-		badRequestResponse(w, errMessage)
-		return
-	}
-
-	err = repository.CreateMediaFileMeta(&entity)
-	if err != nil {
-		internalServerErrorResponse(w, "Failed to store Metadata")
-		return
-	}
-
-	err = services.StoreMultiPartFile(uploadedFile, savePath)
-	if err != nil {
-		internalServerErrorResponse(w, err.Error())
-		repository.DeleteMediaFileMeta(uuid)
-		return
-	}
-
-	//
-	if err := services.GenerateImageSizes(&entity, true); err != nil {
-		log.Printf("failed to generate thumbnail for %s: %v", entity.ID, err)
-	}
-
-	createdResponse(w, entity)
-
-	go func(ent shtypes.MediaFile) {
-		defer func() {
-			if r := recover(); r != nil {
-				log.Printf("panic in GenerateImageSizes: %v", r)
-			}
-		}()
-		if err := services.GenerateImageSizes(&ent, false); err != nil {
-			log.Printf("failed to generate image sizes for %s: %v", ent.ID, err)
-		}
-	}(entity)
 }
 
 func UploadScaledWebps(w http.ResponseWriter, r *http.Request) {

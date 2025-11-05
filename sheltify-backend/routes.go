@@ -35,7 +35,6 @@ func adminRoutes(r *chi.Mux) {
 	r.Patch("/animals", handlers.SaveAnimal)
 	r.Delete("/animals", handlers.DeleteAnimalsByIds)
 
-	r.Post("/media", handlers.UploadMedia)
 	r.Post("/media/scaled", handlers.UploadScaledWebps)
 	r.Patch("/media", handlers.SaveMedia)
 	r.Delete("/media/{id}", handlers.DeleteMedia) //Todo make into DeletebyIds like DeleteAnimalsByIds
