@@ -26,7 +26,6 @@ func init() {
 	dbPassword := os.Getenv("DB_PASSWORD")
 
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Europe/Berlin", dbHost, dbUser, dbPassword, dbName, dbPort)
-	//dsn := "host=localhost user=backend password=87weuhfriwj3nrkmf dbname=sheltify port=5432 sslmode=disable TimeZone=Asia/Shanghai"
 	fmt.Println(dsn)
 	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
 		PrepareStmt: true,
@@ -37,5 +36,4 @@ func init() {
 	}
 
 	migrations.Migrate(db)
-	//TODO use db-user with less privileges for everything but migrations
 }

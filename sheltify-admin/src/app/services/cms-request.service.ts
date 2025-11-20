@@ -21,9 +21,7 @@ export type EntryResult<T> = {
   meta: EntryMetaData,
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class CmsRequestService {
 
   private authService = inject(AuthService);
@@ -39,7 +37,6 @@ export class CmsRequestService {
       timeout: 10000,
       headers: {
         'Content-Type': contentType,
-        Authorization: `Bearer ${this.authService.bearer}`,
       },
       withCredentials: true,
     };
@@ -58,7 +55,11 @@ export class CmsRequestService {
   }
 
   public saveAnimal(animal: CmsAnimal): Observable<CmsAnimal> {
-    return this.patch<CmsAnimal>(`animals`, animal);
+    if (animal.ID) {
+      return this.patch<CmsAnimal>(`animals`, animal);
+    } else {
+      return this.post<CmsAnimal>(`animals`, animal);
+    }
   }
 
   public deleteAnimals(ids: number[]) {
@@ -104,9 +105,7 @@ export class CmsRequestService {
     data.append('Tags', commaSeparatedTags);
 
     const options = {
-      headers: {
-        Authorization: `Bearer ${this.authService.bearer}`,
-      },
+      headers: {},
       withCredentials: true,
     }
 
@@ -158,14 +157,12 @@ export class CmsRequestService {
           next: () => {
             timerSub.unsubscribe();
             timerSub = timer(loadTimerMs).subscribe(() => {
-              this.loaderSv.unsetLoading(loaderText);
               if(message != "") {
                 this.toastrSv.success(new URL(url).pathname, message)
               }
             });
           },
           error: (e) => {
-            this.loaderSv.unsetLoading(loaderText);
             console.log(e.error);
             this.toastrSv.error(
               e.error.replace("\n", "<br>"),
@@ -173,7 +170,10 @@ export class CmsRequestService {
               {enableHtml: true, timeOut: 2500}
             );
             timerSub.unsubscribe();
-          }
+          },
+          finalize: () => {
+            this.loaderSv.unsetLoading(loaderText);
+          },
         })
       );
     }

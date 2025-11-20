@@ -69,11 +69,11 @@ export class ArticleEditorComponent {
     this.movedItem.set({row, column, sectionRef})
   }
 
-  public exitMoveMode() {
+  public exitMoveMode(): void {
     this.movedItem.set(null)
   }
 
-  public moveToNewRow(row: number) {
+  public moveToNewRow(row: number): void {
     const movedItem = this.movedItem()!;
     const article = this.article();
     const newRow: CmsArticleRow = {
@@ -85,19 +85,19 @@ export class ArticleEditorComponent {
     this.exitMoveMode();
   }
 
-  public moveToColumn(row: number, column: number) {
+  public moveToColumn(row: number, column: number): void {
     const movedItem = this.movedItem()!;
     const article = this.article();
     const newRow = article.Rows[row];
 
-    article.Rows[movedItem.row].Sections.splice(movedItem.column, 1)
+    article.Rows[movedItem.row].Sections.splice(movedItem.column, 1);
 
     newRow.Sections.splice(column, 0, movedItem.sectionRef);
     this.cleanupEmptyRows(article);
     this.exitMoveMode();
   }
 
-  public async deleteSection(row: number, column: number) {
+  public async deleteSection(row: number, column: number): Promise<void> {
     const answer = await this.alertService.openAlert("Sektion wirklich entfernen?", "", ["nein", "ja"])
     if(answer == 'ja') {
       const article = this.article();
@@ -106,7 +106,7 @@ export class ArticleEditorComponent {
     }
   }
 
-  private cleanupEmptyRows(article: CmsArticle) {
+  private cleanupEmptyRows(article: CmsArticle): void {
     article.Rows = article.Rows.filter((row: CmsArticleRow) => row.Sections.length > 0)
     this.article.set(article);
   }

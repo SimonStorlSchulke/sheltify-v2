@@ -18,5 +18,6 @@ func Migrate(db *gorm.DB) {
 		&shtypes.ArticleSectionRef{},
 		&shtypes.SectionText{},
 		&shtypes.SectionMedia{},
+		&shtypes.LogEntry{},
 	)
 }

@@ -5,6 +5,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"path/filepath"
+	"sheltify-new-backend/logger"
 	"sheltify-new-backend/repository"
 	"sheltify-new-backend/services"
 	"sheltify-new-backend/shtypes"
@@ -30,7 +31,7 @@ func GetTenantsMediaByTags(w http.ResponseWriter, r *http.Request) {
 		medias, err = repository.GetTenantsMediaFilesByTags(tags, tenant)
 	}
 	if err != nil {
-		internalServerErrorResponse(w, err.Error())
+		internalServerErrorResponse(w, r, err.Error())
 		return
 	}
 	okResponse(w, medias)
@@ -71,19 +72,19 @@ func UploadScaledWebps(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err1 != nil || err2 != nil {
-		badRequestResponse(w, "FocusX and FocusY must be numbers")
+		badRequestResponse(w, r, "FocusX and FocusY must be numbers")
 		return
 	}
 
 	errMessage := entity.Validate()
 	if errMessage != "" {
-		badRequestResponse(w, errMessage)
+		badRequestResponse(w, r, errMessage)
 		return
 	}
 
 	err := repository.CreateMediaFileMeta(&entity)
 	if err != nil {
-		internalServerErrorResponse(w, "Failed to store Metadata")
+		internalServerErrorResponse(w, r, "Failed to store Metadata")
 		return
 	}
 
@@ -102,12 +103,12 @@ func UploadScaledWebps(w http.ResponseWriter, r *http.Request) {
 
 		err = services.StoreMultiPartFile(uploadedFile, savePath)
 		if err != nil {
-			internalServerErrorResponse(w, err.Error())
+			internalServerErrorResponse(w, r, err.Error())
 			repository.DeleteMediaFileMeta(uuid)
 			return
 		}
 	}
-
+	logger.Created(r, "IMAGE", uuid)
 	createdResponse(w, entity)
 }
 
@@ -115,42 +116,50 @@ func DeleteMedia(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
 	if id == "" {
-		badRequestResponse(w, "media id must be provided")
+		badRequestResponse(w, r, "media id must be provided")
 		return
 	}
+	logger.Deleted(r, "IMAGE", id)
 	services.DeleteMedia(id)
 }
 
 func GetAllTags(w http.ResponseWriter, r *http.Request) {
 	tags, err := repository.GetAllTags()
 	if err != nil {
-		internalServerErrorResponse(w, "Could not retrieve tags")
+		internalServerErrorResponse(w, r, "Could not retrieve tags")
 		return
 	}
 	okResponse(w, tags)
 }
 
 func CreateTag(w http.ResponseWriter, r *http.Request) {
-	tag := validateRequestBody[*shtypes.Tag](w, r)
+	tag, err := validateRequestBody[*shtypes.Tag](w, r)
+	if err != nil {
+		return
+	}
 	if repository.CreateTag(tag) != nil {
-		internalServerErrorResponse(w, "Could not create mediatag")
+		internalServerErrorResponse(w, r, "Could not create mediatag")
 	} else {
+		logger.Saved(r, "TAG", tag.Name)
 		createdResponse(w, tag)
 	}
 }
 
 func DeleteTag(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
-	user := services.UserFromContext(r)
+	user := services.UserFromRequest(r)
 
 	if id == "" {
-		badRequestResponse(w, "tag id must be provided")
+		badRequestResponse(w, r, "tag id must be provided")
 		return
 	}
 
 	if err := repository.DeleteTag(id, *user.TenantID); err != nil {
-		internalServerErrorResponse(w, "Could not delete tag")
+		logger.RequestError(r, "TAG", id, err)
+		internalServerErrorResponse(w, r, "Could not delete tag")
 	} else {
+		logger.RequestError(r, "TAG", id, fmt.Errorf("aaaah!"))
+		logger.Deleted(r, "TAG", id)
 		emptyOkResponse(w)
 	}
 }
@@ -161,9 +170,8 @@ type AddTagToMediaRequest struct {
 }
 
 func SaveMedia(w http.ResponseWriter, r *http.Request) {
-	media := validateRequestBody[*shtypes.MediaFile](w, r)
-
-	if media == nil {
+	media, err := validateRequestBody[*shtypes.MediaFile](w, r)
+	if err != nil {
 		return
 	}
 
@@ -175,8 +183,9 @@ func SaveMedia(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if repository.SaveMedia(media) != nil {
-		internalServerErrorResponse(w, "Could not update media")
+		internalServerErrorResponse(w, r, "Could not update media")
 	} else {
+		logger.Saved(r, "Media Metadata", media.ID)
 		okResponse(w, media)
 	}
 }

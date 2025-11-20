@@ -35,10 +35,12 @@
   .move-to-column,
   .move-to-row, {
     &:hover {
-      cursor: pointer;
       background: $primary;
+      cursor: crosshair !important;
     }
   }
+
+  cursor: crosshair !important;
 }
 
 .move-to-column {

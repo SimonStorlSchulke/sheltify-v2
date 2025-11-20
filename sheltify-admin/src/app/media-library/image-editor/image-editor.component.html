@@ -1,13 +1,17 @@
 <div class="img-container" [class.focus-mode]="editFocusMode">
-  <img
-    (click)="setFocusPoint($event)"
-    [cmsImage]="image()"
-  >
-  <div
-    class="crosshair"
-    [style.top]="image().FocusY * 100 + '%'"
-    [style.left]="image().FocusX * 100 + '%'"
-  ></div>
+  <div class="img-crosshair-wrapper">
+
+    <img
+      (click)="setFocusPoint($event)"
+      [cmsImage]="image()"
+      [useFocusPoint]="false"
+    >
+    <div
+      class="crosshair"
+      [style.top]="image().FocusY * 100 + '%'"
+      [style.left]="image().FocusX * 100 + '%'"
+    ></div>
+  </div>
 
 </div>
   <div class="sui flex-x">

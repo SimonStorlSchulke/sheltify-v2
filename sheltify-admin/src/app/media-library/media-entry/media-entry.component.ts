@@ -6,7 +6,6 @@ import { CmsImagePipe } from 'src/app/ui/cms-image.pipe';
 @Component({
   selector: 'app-media-entry',
   imports: [
-    CmsImagePipe,
     CmsImageDirective
   ],
   templateUrl: './media-entry.component.html',

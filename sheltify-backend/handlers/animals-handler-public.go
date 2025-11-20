@@ -24,12 +24,10 @@ func GetAnimalById(w http.ResponseWriter, r *http.Request) {
 func GetTenantsAnimalById(w http.ResponseWriter, r *http.Request) {
 	id, err := idFromParameter(w, r)
 	if err != nil {
-		badRequestResponse(w, "Invalid animal ID")
 		return
 	}
 	tenant, err := tenantFromParameter(w, r)
 	if err != nil {
-		badRequestResponse(w, "Invalid tenant")
 		return
 	}
 

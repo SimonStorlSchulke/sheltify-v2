@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"sheltify-new-backend/logger"
 	"strconv"
 	"strings"
 
@@ -14,7 +15,7 @@ func idFromParameter(w http.ResponseWriter, r *http.Request) (int, error) {
 	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 
 	if err != nil {
-		http.Error(w, "id must be an integer", http.StatusBadRequest)
+		badRequestResponse(w, r, "id must be an integer")
 		return -1, err
 	}
 	return id, nil
@@ -30,7 +31,7 @@ func idsFromQuery(w http.ResponseWriter, r *http.Request) ([]int, error) {
 	for i, idString := range idStrings {
 		id, err := strconv.Atoi(idString)
 		if err != nil {
-			http.Error(w, "ids queryparam needs to be a comma-separated string of ids (eg. /api/animals?ids=1,2,3)", http.StatusBadRequest)
+			badRequestResponse(w, r, "ids queryparam needs to be a comma-separated string of ids (eg. /api/animals?ids=1,2,3)")
 			return nil, err
 		}
 		ids[i] = id
@@ -42,7 +43,7 @@ func tenantFromParameter(w http.ResponseWriter, r *http.Request) (string, error)
 	tenant := chi.URLParam(r, "tenant")
 
 	if tenant == "" {
-		http.Error(w, "tenant must be provided (api/{tenant Identifier}/...)", http.StatusBadRequest)
+		badRequestResponse(w, r, "tenant must be provided (api/{tenant Identifier}/...)")
 		return "", errors.New("tenant not provided")
 	}
 	return tenant, nil
@@ -60,15 +61,18 @@ func createdResponse(w http.ResponseWriter, content any) {
 	jsonResponse(w, http.StatusCreated, content)
 }
 
-func badRequestResponse(w http.ResponseWriter, why string) {
+func badRequestResponse(w http.ResponseWriter, r *http.Request, why string) {
+	logger.Warn(r, why)
 	http.Error(w, why, http.StatusBadRequest)
 }
 
-func forbiddenResponse(w http.ResponseWriter, why string) {
+func forbiddenResponse(w http.ResponseWriter, r *http.Request, why string) {
+	logger.Warn(r, why)
 	http.Error(w, why, http.StatusForbidden)
 }
 
-func internalServerErrorResponse(w http.ResponseWriter, why string) {
+func internalServerErrorResponse(w http.ResponseWriter, r *http.Request, why string) {
+	logger.Error(r, why)
 	http.Error(w, why, http.StatusInternalServerError)
 }
 

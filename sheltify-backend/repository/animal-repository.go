@@ -45,11 +45,11 @@ func SaveAnimal(animal *shtypes.Animal) error {
 	return nil
 }
 
-func CreateAnimal(animal *shtypes.Animal) error {
+func CreateAnimal(animal *shtypes.Animal) (uint, error) {
 	if err := db.Create(&animal).Error; err != nil {
-		return err
+		return 0, err
 	}
-	return nil
+	return animal.ID, nil
 }
 
 func DeleteAnimalsByIds(ids []int) error {

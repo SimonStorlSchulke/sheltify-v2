@@ -3,7 +3,6 @@ package services
 import (
 	"errors"
 	"fmt"
-	_ "image/gif" // Register GIF decoder
 	"io"
 	"mime/multipart"
 	"os"
@@ -60,16 +59,6 @@ func DeleteUploadsWithPrefix(prefix string) error {
 
 func GetTenantsMediaFilesByTags(tags []string, tenant string) ([]shtypes.MediaFile, error) {
 	return repository.GetTenantsMediaFilesByTags(tags, tenant)
-}
-
-var imageSizes = []struct {
-	Label string
-	Width uint
-}{
-	{"small", 320},
-	{"medium", 640},
-	{"large", 1280},
-	{"xlarge", 1920},
 }
 
 func AddTagToMedia(mediaID string, tagNames []string) error {

@@ -21,14 +21,8 @@ func RegisterUser(w http.ResponseWriter, userId string, password string) *shtype
 		return nil
 	}
 
-	existingUser, err := repository.GetUser(userId)
-
-	hashedPassword, err := HashPassword(password)
-	if err != nil {
-		log.Fatalf("failed to create password hash for password %s", password)
-		http.Error(w, "failed to create user", http.StatusInternalServerError)
-		return nil
-	}
+	existingUser, _ := repository.GetUser(userId)
+	hashedPassword, _ := HashPassword(password)
 
 	if existingUser != nil {
 		http.Error(w, "username already in use", http.StatusBadRequest)
@@ -154,7 +148,7 @@ func Authorize(r *http.Request) (*shtypes.User, error) {
 	return user, nil
 }
 
-func UserFromContext(r *http.Request) *shtypes.User {
+func UserFromRequest(r *http.Request) *shtypes.User {
 	userValue := r.Context().Value("user")
 	if userValue == nil {
 		return nil

@@ -14,11 +14,20 @@
     min-height: 300px;
     position: relative;
     align-self: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .img-crosshair-wrapper {
+      width: fit-content;
+      height: fit-content;
+      position: relative;
+    }
 
     img {
-      width: fit-content;
-      height: 300px;
-      object-fit: contain;
+      width: auto;
+      height: auto;
+      max-height: 300px;
     }
 
     &.focus-mode img {

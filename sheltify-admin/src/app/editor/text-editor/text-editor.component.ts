@@ -1,8 +1,7 @@
-import { Component, inject, importProvidersFrom } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgxEditorModule } from 'ngx-editor';
 import { Editor } from 'ngx-editor';
 import { FormsModule } from '@angular/forms';
-import { Schema, NodeSpec } from 'prosemirror-model';
 import { schema } from 'ngx-editor/schema';
 
 @Component({
@@ -27,7 +26,6 @@ export class TextEditorComponent {
       inputRules: true,
     });
   }
-
 
   parse() {
     console.log(this.html);

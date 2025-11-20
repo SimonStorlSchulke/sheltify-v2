@@ -31,7 +31,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 func Logout(w http.ResponseWriter, r *http.Request) {
 
-	user := services.UserFromContext(r)
+	user := services.UserFromRequest(r)
 
 	if user == nil {
 		http.Error(w, "User not found in context", http.StatusUnauthorized)
@@ -44,7 +44,7 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 }
 
 func Relogin(w http.ResponseWriter, r *http.Request) {
-	user := services.UserFromContext(r)
+	user := services.UserFromRequest(r)
 
 	if user == nil {
 		http.Error(w, "no logged in user found", http.StatusUnauthorized)
