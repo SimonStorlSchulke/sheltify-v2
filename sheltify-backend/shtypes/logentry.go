@@ -21,10 +21,20 @@ type LogEntry struct {
 }
 
 func (l LogEntry) ToString() string {
-	timeStr := time.Now().Format("2006/01/02 - 15:04:05")
+	str :=
+		fmt.Sprintf("%s %s | Path: %s | Operation: %s | Message: %s | Tenant: %s | User: %s",
+			time.Now().Format("2006/01/02 - 15:04:05"),
+			l.Level,
+			l.Path,
+			l.Operation,
+			l.Message,
+			l.Tenant,
+			l.HashedUser,
+		)
+
 	if l.Attributes != nil {
-		return fmt.Sprintf("%s - %s: %s %s %s [Tenant: %s, User: %s, Attributes: %v]", timeStr, l.Level, l.Path, l.Operation, l.Message, l.Tenant, l.HashedUser, l.Attributes)
-	} else {
-		return fmt.Sprintf("%s - %s: %s %s %s [Tenant: %s, User: %s]", timeStr, l.Level, l.Path, l.Operation, l.Message, l.Tenant, l.HashedUser)
+		str += fmt.Sprintf(" | Attributes: %v", l.Attributes)
 	}
+
+	return str
 }

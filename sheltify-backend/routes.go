@@ -44,4 +44,7 @@ func adminRoutes(r *chi.Mux) {
 
 	r.Get("/logout", handlers.Logout)
 	r.Get("/relogin", handlers.Relogin)
+
+	r.Post("/article", handlers.SaveArticle)
+	r.Get("/article/{id}", handlers.GetArticle)
 }

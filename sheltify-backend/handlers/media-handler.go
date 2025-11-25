@@ -108,7 +108,7 @@ func UploadScaledWebps(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	logger.Created(r, "IMAGE", uuid)
+	logger.Created(r, uuid)
 	createdResponse(w, entity)
 }
 
@@ -119,7 +119,7 @@ func DeleteMedia(w http.ResponseWriter, r *http.Request) {
 		badRequestResponse(w, r, "media id must be provided")
 		return
 	}
-	logger.Deleted(r, "IMAGE", id)
+	logger.Deleted(r, id)
 	services.DeleteMedia(id)
 }
 
@@ -140,7 +140,7 @@ func CreateTag(w http.ResponseWriter, r *http.Request) {
 	if repository.CreateTag(tag) != nil {
 		internalServerErrorResponse(w, r, "Could not create mediatag")
 	} else {
-		logger.Saved(r, "TAG", tag.Name)
+		logger.Saved(r, tag.Name)
 		createdResponse(w, tag)
 	}
 }
@@ -155,11 +155,10 @@ func DeleteTag(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := repository.DeleteTag(id, *user.TenantID); err != nil {
-		logger.RequestError(r, "TAG", id, err)
+		logger.RequestError(r, id, err)
 		internalServerErrorResponse(w, r, "Could not delete tag")
 	} else {
-		logger.RequestError(r, "TAG", id, fmt.Errorf("aaaah!"))
-		logger.Deleted(r, "TAG", id)
+		logger.Deleted(r, id)
 		emptyOkResponse(w)
 	}
 }
@@ -185,7 +184,7 @@ func SaveMedia(w http.ResponseWriter, r *http.Request) {
 	if repository.SaveMedia(media) != nil {
 		internalServerErrorResponse(w, r, "Could not update media")
 	} else {
-		logger.Saved(r, "Media Metadata", media.ID)
+		logger.Saved(r, media.ID)
 		okResponse(w, media)
 	}
 }

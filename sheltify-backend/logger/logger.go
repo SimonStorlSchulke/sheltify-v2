@@ -7,75 +7,61 @@ import (
 	"net/http"
 	"sheltify-new-backend/repository"
 	"sheltify-new-backend/shtypes"
-	"strconv"
 )
 
-func RequestError(r *http.Request, dataType string, whichOne string, err error) {
-	Audited(r, shtypes.LogEntry{
-		Level:   "error",
-		Message: "with " + dataType + " " + whichOne + ": " + err.Error(),
+func RequestError(r *http.Request, whichOne any, err error) shtypes.LogEntry {
+	return Audited(r, shtypes.LogEntry{
+		Level:   "ERROR",
+		Message: fmt.Sprintf("with %v: %s", whichOne, err.Error()),
 	})
 }
 
-func Deleted(r *http.Request, dataType string, whichOne string) {
-	Audited(r, shtypes.LogEntry{
-		Level:   "info",
-		Message: dataType + " " + whichOne,
+func Deleted(r *http.Request, whichOne any) shtypes.LogEntry {
+	return Audited(r, shtypes.LogEntry{
+		Level:     "INFO",
+		Operation: "DELETE",
+		Message:   fmt.Sprintf("%v", whichOne),
 	})
 }
 
-func Created(r *http.Request, dataType string, whichOne string) {
-	Audited(r, shtypes.LogEntry{
-		Level:   "info",
-		Message: dataType + " " + whichOne,
+func Created(r *http.Request, whichOne any) shtypes.LogEntry {
+	return Audited(r, shtypes.LogEntry{
+		Level:     "INFO",
+		Operation: "CREATE",
+		Message:   fmt.Sprintf("%v", whichOne),
 	})
 }
 
-func Saved(r *http.Request, dataType string, whichOne string) {
-	Audited(r, shtypes.LogEntry{
-		Level:   "info",
-		Message: dataType + " " + whichOne,
+func Saved(r *http.Request, whichOne any) shtypes.LogEntry {
+	return Audited(r, shtypes.LogEntry{
+		Level:     "INFO",
+		Operation: "UPDATE",
+		Message:   fmt.Sprintf("%v", whichOne),
 	})
 }
 
-func Info(r *http.Request, message string) {
-	Audited(r, shtypes.LogEntry{
-		Level:   "info",
+func Info(r *http.Request, message string) shtypes.LogEntry {
+	return Audited(r, shtypes.LogEntry{
+		Level:   "INFO",
 		Message: message,
 	})
 }
 
-func Warn(r *http.Request, message string) {
-	Audited(r, shtypes.LogEntry{
-		Level:   "warn",
+func Warn(r *http.Request, message string) shtypes.LogEntry {
+	return Audited(r, shtypes.LogEntry{
+		Level:   "WARN",
 		Message: message,
 	})
 }
 
-func Error(r *http.Request, message string) {
-	Audited(r, shtypes.LogEntry{
-		Level:   "error",
+func Error(r *http.Request, message string) shtypes.LogEntry {
+	return Audited(r, shtypes.LogEntry{
+		Level:   "ERROR",
 		Message: message,
 	})
 }
 
-func Int(integer int) string {
-	return strconv.Itoa(integer)
-}
-
-func Ints(array []int) string {
-	b := ""
-	for _, v := range array {
-		if len(b) > 0 {
-			b += ","
-		}
-		b += strconv.Itoa(v)
-	}
-
-	return "[" + b + "]"
-}
-
-func Audited(r *http.Request, entry shtypes.LogEntry) {
+func Audited(r *http.Request, entry shtypes.LogEntry) shtypes.LogEntry {
 	user := UserFromRequest(r)
 	entry.HashedUser = shortHash(user.ID)
 	entry.Tenant = *user.TenantID
@@ -85,11 +71,7 @@ func Audited(r *http.Request, entry shtypes.LogEntry) {
 	}
 	fmt.Println(entry.ToString())
 	repository.CreateLog(&entry)
-}
-
-func Entry(entry shtypes.LogEntry) {
-	fmt.Println(entry.ToString())
-	repository.CreateLog(&entry)
+	return entry
 }
 
 func UserFromRequest(r *http.Request) *shtypes.User {

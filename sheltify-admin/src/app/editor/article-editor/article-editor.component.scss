@@ -15,7 +15,7 @@
 
 .article-column {
   background-color: #fff;
-  box-shadow: 2px 4px 12px #0004;
+  box-shadow: 2px 4px 12px #0002;
 }
 
 .section-titlebar {
@@ -23,6 +23,23 @@
   b {
     font-size: 0.9rem;
   }
+}
+
+.move-to-column,
+.move-to-row {
+  cursor: pointer;
+
+
+  &:hover {
+    background-image: url("/assets/icons/plus.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 24px;
+    opacity: 0.4;
+    outline: 2px dashed mix($primary, transparent, 50%);
+  }
+
+  outline-offset: -2px;
 }
 
 .dragMode {

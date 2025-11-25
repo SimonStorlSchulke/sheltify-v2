@@ -40,7 +40,7 @@
   <span class="tags-label">tags</span>
   <span class="sui flex-x gap-2">
       <div class="tag-selector sui flex-x">
-        <ng-select [(ngModel)]="selectedTags" [multiple]="true" placeholder="...tags auswählen">
+        <ng-select [notFoundText]="'keine'" [(ngModel)]="selectedTags" [multiple]="true" placeholder="...Tags auswählen">
           @for (tag of tagsService.availableTags(); track tag.ID) {
             <ng-option [value]="tag.ID">
               <app-tag [tag]="tag"/>
@@ -52,4 +52,4 @@
   </span>
 </div>
 
-<button class="primary sui w-100" (click)="updateMedia()">speichern</button>
+<button class="primary sui w-100" (click)="updateMedia()">Speichern</button>

@@ -1,0 +1,5 @@
+<div class="sui flex-y gap-2">
+  @for (sectionType of SectionTypes; track sectionType) {
+    <button (click)="finishWith(sectionType)">{{sectionType}}</button>
+  }
+</div>

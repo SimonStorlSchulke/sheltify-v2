@@ -4,7 +4,16 @@ import "gorm.io/gorm"
 
 type Article struct {
 	gorm.Model
+	TenantID  string
 	Structure ArticleStructure `gorm:"serializer:json"`
+}
+
+func (a *Article) Validate() string {
+	return ""
+}
+
+func (a *Article) SetTenantId(id string) {
+	a.TenantID = id
 }
 
 type ArticleStructure struct {

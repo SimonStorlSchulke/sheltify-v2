@@ -52,10 +52,13 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
   public images$: Signal<Observable<CmsImage[]>> = computed(() => {
     const tenant = this.authSv.getTenantID();
     const selected = this.selectedTags();
+
     this.refreshImages();
+
     const tags = this.tagsService.availableTags()
       .filter(tag => selected.includes(tag.ID))
       .map(tag => tag.Name);
+
     return this.cmsRequestSv.getMediaByTags(tags, tenant).pipe(
       map(images => images.sort((a, b) => {
         if (a.Title == b.Title) return a.ID < b.ID ? -1 : 1

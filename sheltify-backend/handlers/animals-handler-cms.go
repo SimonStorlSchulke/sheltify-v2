@@ -19,9 +19,9 @@ func SaveAnimal(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if repository.SaveAnimal(animal) != nil {
-		internalServerErrorResponse(w, r, "Could not save animal")
+		internalServerErrorResponse(w, r, fmt.Sprintf("Could not save animal: %v", animal.ID))
 	} else {
-		logger.Saved(r, "Animal", fmt.Sprintf("%v", animal.ID))
+		logger.Saved(r, animal.ID)
 		okResponse(w, animal)
 	}
 }
@@ -35,9 +35,9 @@ func DeleteAnimalsByIds(w http.ResponseWriter, r *http.Request) {
 	err = repository.DeleteAnimalsByIds(ids)
 
 	if err == nil {
-		logger.Deleted(r, "Animals", logger.Ints(ids))
+		logger.Deleted(r, ids)
 		emptyOkResponse(w)
 	} else {
-		internalServerErrorResponse(w, r, fmt.Sprint("Failed deleting animals by ids:", ids))
+		internalServerErrorResponse(w, r, fmt.Sprintf("Failed deleting animals by ids: %v", ids))
 	}
 }

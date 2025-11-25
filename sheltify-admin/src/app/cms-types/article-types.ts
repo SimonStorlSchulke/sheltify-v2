@@ -1,11 +1,18 @@
 import { CmsImage } from 'src/app/cms-types/cms-types';
 
+export const SectionTypes = ["title", "text", "video", "image"];
+
+export type SectionType = (typeof SectionTypes)[number];
+
 export type CmsArticle = {
   ID?: number;
   CreatedAt?: string;
   UpdatedAt?: string;
   DeletedAt?: string | null;
-  Rows: CmsArticleRow[];
+  TenantID: string;
+  Structure: {
+    Rows: CmsArticleRow[];
+  }
 };
 
 export type CmsArticleRow = {
@@ -19,16 +26,16 @@ export type CmsArticleSectionRef = {
   ID?: number;
   ArticleRowID?: number;
   SectionID?: number;
-  SectionType?: string;  // could be "text" | "media"
+  SectionType?: SectionType;  // could be "text" | "media"
   Position?: number;
 }
 
 export type CmsTextSection = {
-  ID: number;
+  ID?: number;
   HtmlContent: string;
 };
 
 export type CmsMediaSection = {
-  ID: number;
+  ID?: number;
   MediaFiles: CmsImage[];
 };

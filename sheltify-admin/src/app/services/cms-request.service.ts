@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { CmsArticle } from 'src/app/cms-types/article-types';
 import { CmsAnimal, CmsImage, CmsTag } from 'src/app/cms-types/cms-types';
 import { LoaderService } from 'src/app/layout/loader/loader.service';
 import { AuthService } from './auth.service';
@@ -21,7 +22,7 @@ export type EntryResult<T> = {
   meta: EntryMetaData,
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class CmsRequestService {
 
   private authService = inject(AuthService);
@@ -37,6 +38,7 @@ export class CmsRequestService {
       timeout: 10000,
       headers: {
         'Content-Type': contentType,
+        Authorization: `Bearer ${this.authService.bearer}`,
       },
       withCredentials: true,
     };
@@ -83,11 +85,19 @@ export class CmsRequestService {
     return this.get<CmsImage[]>(`${CmsRequestService.publicApiUrl}${tenantId}/media?tags=` + tags.join(','));
   }
 
+  public getArticle(id: number) {
+    return this.get<CmsArticle>(`article/${id}`)
+  }
+  public saveArticle( article: CmsArticle) {
+    return this.post<CmsArticle>(`article`, article)
+  }
+
   public async updateMedia(image: CmsImage): Promise<CmsImage> {
     return lastValueFrom(this.patch<CmsImage>(`media`, image));
   }
 
-  public uploadScaledImage(files: { size: string, blob: Blob}[], fileName: string, commaSeparatedTags: string) {
+
+  public uploadScaledImage(files: { size: string, blob: Blob }[], fileName: string, commaSeparatedTags: string) {
     const url = CmsRequestService.adminApiUrl + 'media/scaled';
     const tenantId = this.authService.getTenantID();
     const data = new FormData();
@@ -105,7 +115,9 @@ export class CmsRequestService {
     data.append('Tags', commaSeparatedTags);
 
     const options = {
-      headers: {},
+      headers: {
+        Authorization: `Bearer ${this.authService.bearer}`,
+      },
       withCredentials: true,
     }
 
@@ -149,18 +161,18 @@ export class CmsRequestService {
     const loadTimerMs = 300;
     return (source: Observable<T>): Observable<T> => {
       const loaderText = (new URL(url).pathname);
-      let timerSub = timer(loadTimerMs).subscribe(() => {
-        this.loaderSv.setLoading(loaderText);
-      });
+
+      let timerSub = timer(loadTimerMs)
+        .subscribe({
+          next: () => this.loaderSv.setLoading(loaderText),
+        });
+
       return source.pipe(
         tap({
           next: () => {
-            timerSub.unsubscribe();
-            timerSub = timer(loadTimerMs).subscribe(() => {
-              if(message != "") {
+              if (message != "") {
                 this.toastrSv.success(new URL(url).pathname, message)
               }
-            });
           },
           error: (e) => {
             console.log(e.error);
@@ -169,10 +181,10 @@ export class CmsRequestService {
               "Fehler",
               {enableHtml: true, timeOut: 2500}
             );
-            timerSub.unsubscribe();
           },
           finalize: () => {
-            this.loaderSv.unsetLoading(loaderText);
+            this.loaderSv.unsetLoading(loaderText)
+            timerSub.unsubscribe();
           },
         })
       );
