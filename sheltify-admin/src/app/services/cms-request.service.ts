@@ -51,6 +51,13 @@ export class CmsRequestService {
     })));
   }
 
+  public getAnimalsByArticleId(articleId: number): Observable<CollectionResult<CmsAnimal>> {
+    const tenantId = this.authService.getTenantID();
+    return this.get<CmsAnimal[]>(`${CmsRequestService.publicApiUrl}${tenantId}/animals/by-article/${articleId}`).pipe(map(response => ({
+      results: response,
+    })));
+  }
+
   public getTenantsAnimal(id: number): Observable<CmsAnimal> {
     const tenantId = this.authService.getTenantID();
     return this.get<CmsAnimal>(`${CmsRequestService.publicApiUrl}${tenantId}/animals/${id}`)
@@ -86,11 +93,24 @@ export class CmsRequestService {
   }
 
   public getArticle(id: number) {
-    return this.get<CmsArticle>(`article/${id}`)
+    const tenantId = this.authService.getTenantID();
+    return this.get<CmsArticle>(`${CmsRequestService.publicApiUrl}${tenantId}/article/${id}`)
   }
+
   public saveArticle( article: CmsArticle) {
+    return this.post<CmsArticle>(`article`, article);
+  }
+
+  public getArticleSection(sectionType: string, id: number) {
+    const tenantId = this.authService.getTenantID();
+    return this.get<any>(`${CmsRequestService.publicApiUrl}${tenantId}/article-section/${id}?sectionType=${sectionType}`)
+  }
+/*
+
+  public saveArticleSection(sectionType: string) {
     return this.post<CmsArticle>(`article`, article)
   }
+*/
 
   public async updateMedia(image: CmsImage): Promise<CmsImage> {
     return lastValueFrom(this.patch<CmsImage>(`media`, image));

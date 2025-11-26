@@ -13,6 +13,15 @@ func GetAnimal(id int) (*shtypes.Animal, error) {
 	return &animal, nil
 }
 
+func GetAnimalsByArticleId(id int) (*shtypes.Animal, error) {
+	var animal shtypes.Animal
+	// populate AnimalArticle like this:
+	if err := db.Preload("Portrait").Where("article_id = ?", id).First(&animal).Error; err != nil {
+		return nil, err
+	}
+	return &animal, nil
+}
+
 func GetTenantsAnimal(id int, tenant string) (*shtypes.Animal, error) {
 	var animal shtypes.Animal
 	if err := db.Where("tenant_id = ?", tenant).First(&animal, id).Error; err != nil {

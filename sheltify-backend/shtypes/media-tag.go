@@ -1,15 +1,9 @@
 package shtypes
 
-import (
-	"gorm.io/gorm"
-)
-
 type Tag struct {
-	gorm.Model
+	ShType
 	Name       string
 	MediaFiles []*MediaFile `gorm:"many2many:media_file_tags;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	TenantID   string
-	Tenant     *Tenant
 	Color      string
 }
 

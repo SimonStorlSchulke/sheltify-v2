@@ -54,4 +54,9 @@ export class AnimalEditorComponent {
     const savedAnimal = await lastValueFrom(this.cmsRequestService.saveAnimal(this.animal()!))
     this.saved.emit(savedAnimal);
   }
+
+  protected setArticleId(id: number) {
+    this.animal()!.ArticleID = id;
+    this.save();
+  }
 }

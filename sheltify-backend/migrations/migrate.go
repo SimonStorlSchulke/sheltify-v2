@@ -9,7 +9,6 @@ import (
 func Migrate(db *gorm.DB) {
 	db.AutoMigrate(
 		&shtypes.Animal{},
-		&shtypes.AnimalArticle{},
 		&shtypes.MediaFile{},
 		&shtypes.Tag{},
 		&shtypes.User{},

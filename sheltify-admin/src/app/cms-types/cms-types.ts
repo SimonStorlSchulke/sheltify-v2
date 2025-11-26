@@ -1,3 +1,4 @@
+import { CmsArticle } from 'src/app/cms-types/article-types';
 
 
 export type AnimalKind = {
@@ -25,8 +26,8 @@ export type CmsAnimal = {
   Status: string;
   Health: string;
   Priority: number;
-  AnimalArticleID?: number;
-  //AnimalArticle?: AnimalArticle;
+  ArticleID?: number;
+  Article?: CmsArticle;
   PortraitID?: string;
   Portrait?: CmsImage;
   TenantID: string;

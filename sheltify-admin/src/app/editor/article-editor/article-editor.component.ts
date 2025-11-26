@@ -1,4 +1,4 @@
-import { Component, input, resource, signal } from '@angular/core';
+import { Component, effect, input, OnInit, output, resource, signal } from '@angular/core';
 import { bootstrapGripVertical, bootstrapX, bootstrapPlus } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lastValueFrom } from 'rxjs';
@@ -27,26 +27,27 @@ const testArticle: CmsArticle = {
 })
 export class ArticleEditorComponent {
 
-  articleId = input<number>();
+  articleId = input.required<number>();
 
-/*  articleResource = resource({
-    // Define a reactive computation.
-    // The params value recomputes whenever any read signals change.
-    params: () => ({id: this.articleId()}),
-    // Define an async loader that retrieves data.
-    // The resource calls this function every time the `params` value changes.
-    loader: ({params, abortSignal}) => lastValueFrom(this.cmsRequestService.getArticle(params.id)),
-  });*/
+  articleIdSaved = output<number>();
 
   article = signal<CmsArticle>(testArticle);
   movedItem = signal<{row: number, column: number, sectionRef: CmsArticleSectionRef} | null>(null);
 
   constructor(private readonly modalService: ModalService, private readonly alertService: AlertService, private readonly cmsRequestService: CmsRequestService) {
+    effect(async() => {
+      console.log("a", this.articleId())
+      if( !this.articleId() || this.articleId() == -1) return;
+      const article = await lastValueFrom(this.cmsRequestService.getArticle(this.articleId()));
+
+      const articlesAnimals = await lastValueFrom(this.cmsRequestService.getAnimalsByArticleId(this.articleId()))
+      console.log(articlesAnimals)
+
+      this.article.set(article);
+    });
   }
 
-  ngOnInit(){
 
-  }
 
   public enterMoveMode(row: number, column: number, sectionRef: CmsArticleSectionRef) {
     this.movedItem.set({row, column, sectionRef})
@@ -79,9 +80,8 @@ export class ArticleEditorComponent {
 
 
   public async save() {
-    console.log(this.article());
-    const d = await lastValueFrom(this.cmsRequestService.saveArticle(this.article()));
-    console.log(d)
+    const savedArticle = await lastValueFrom(this.cmsRequestService.saveArticle(this.article()));
+    this.articleIdSaved.emit(savedArticle!.ID!);
   }
 
   private createEmptySection(sectionType: SectionType): CmsArticleSectionRef {

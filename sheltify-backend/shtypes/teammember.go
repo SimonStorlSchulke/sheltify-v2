@@ -1,11 +1,7 @@
 package shtypes
 
-import (
-	"gorm.io/gorm"
-)
-
 type TeamMember struct {
-	gorm.Model
+	ShType
 	Name        string
 	Role        string
 	Description string
@@ -14,8 +10,6 @@ type TeamMember struct {
 	Priority    int
 	PortraitID  *string
 	Portrait    *MediaFile
-	TenantID    string
-	Tenant      *Tenant
 }
 
 func (a *TeamMember) Validate() string {

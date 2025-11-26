@@ -1,11 +1,7 @@
 package shtypes
 
-import (
-	"gorm.io/gorm"
-)
-
 type MediaFile struct {
-	gorm.Model
+	ShType
 	ID                   string `gorm:"primaryKey"`
 	ExternalLink         string
 	OriginalFileName     string
@@ -16,9 +12,7 @@ type MediaFile struct {
 	SizesGenerated       bool
 	LargestAvailableSize string
 	MediaTags            []*Tag `gorm:"many2many:media_file_tags;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	TenantID             string
-	Tenant               *Tenant
-	RotationSteps        int8 // 0-3, each step is 90 degrees clockwise
+	RotationSteps        int8   // 0-3, each step is 90 degrees clockwise
 }
 
 func (m *MediaFile) Validate() string {

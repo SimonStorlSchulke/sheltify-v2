@@ -1,19 +1,12 @@
 package shtypes
 
-import "gorm.io/gorm"
-
 type Article struct {
-	gorm.Model
-	TenantID  string
+	ShType
 	Structure ArticleStructure `gorm:"serializer:json"`
 }
 
 func (a *Article) Validate() string {
 	return ""
-}
-
-func (a *Article) SetTenantId(id string) {
-	a.TenantID = id
 }
 
 type ArticleStructure struct {
@@ -30,11 +23,12 @@ type ArticleSectionRef struct {
 }
 
 type SectionText struct {
-	gorm.Model
+	ShType
 	HtmlContent string
 }
 
 type SectionMedia struct {
-	gorm.Model
+	ShType
+	TenantID   string
 	MediaFiles []*MediaFile `gorm:"many2many:section_media_files;"`
 }

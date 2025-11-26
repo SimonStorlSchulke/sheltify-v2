@@ -42,6 +42,8 @@ func UploadScaledWebps(w http.ResponseWriter, r *http.Request) {
 	// upload 50 MB max
 	r.ParseMultipartForm(50 << 20)
 
+	user := services.UserFromRequest(r)
+
 	uploadedFiles := []multipart.File{}
 
 	sizeNames := []string{"thumbnail", "small", "medium", "large", "xlarge"}
@@ -58,8 +60,9 @@ func UploadScaledWebps(w http.ResponseWriter, r *http.Request) {
 		Description:      r.FormValue("Description"),
 		FocusX:           float32(focusX),
 		FocusY:           float32(focusY),
-		TenantID:         r.FormValue("TenantID"),
 	}
+
+	entity.TenantID = r.FormValue("TenantID")
 
 	for _, sizeLabel := range sizeNames {
 		uploadedFile, _, err := r.FormFile(sizeLabel)
@@ -92,7 +95,7 @@ func UploadScaledWebps(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Tags received:", tagsStr)
 	if tagsStr != "" {
 		tags := strings.Split(tagsStr, ",")
-		services.AddTagToMedia(uuid, tags)
+		services.AddTagToMedia(uuid, tags, user.TenantID)
 	}
 
 	for i, uploadedFile := range uploadedFiles {
@@ -154,7 +157,7 @@ func DeleteTag(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := repository.DeleteTag(id, *user.TenantID); err != nil {
+	if err := repository.DeleteTag(id, user.TenantID); err != nil {
 		logger.RequestError(r, id, err)
 		internalServerErrorResponse(w, r, "Could not delete tag")
 	} else {
@@ -174,10 +177,14 @@ func SaveMedia(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	user := services.UserFromRequest(r)
+
 	for _, tag := range media.MediaTags {
 		tagEntity, _ := repository.GetTagByName(tag.Name)
 		if tagEntity == nil {
-			repository.CreateTag(&shtypes.Tag{Name: tag.Name, TenantID: "mfg"})
+			tag := shtypes.Tag{Name: tag.Name}
+			tag.TenantID = user.TenantID
+			repository.CreateTag(&tag)
 		}
 	}
 

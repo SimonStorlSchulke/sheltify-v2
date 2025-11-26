@@ -21,6 +21,21 @@ func GetAnimalById(w http.ResponseWriter, r *http.Request) {
 	okResponse(w, animal)
 }
 
+func GetAnimalsByArticleId(w http.ResponseWriter, r *http.Request) {
+	id, err := idFromParameter(w, r)
+	if err != nil {
+		return
+	}
+
+	animal, err := repository.GetAnimalsByArticleId(id)
+
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	okResponse(w, animal)
+}
+
 func GetTenantsAnimalById(w http.ResponseWriter, r *http.Request) {
 	id, err := idFromParameter(w, r)
 	if err != nil {

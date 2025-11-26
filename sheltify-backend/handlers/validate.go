@@ -16,7 +16,7 @@ func validateRequestBody[K shtypes.Validatable](w http.ResponseWriter, r *http.R
 
 	user := services.UserFromRequest(r)
 
-	if user == nil || user.TenantID == nil || *user.TenantID == "" {
+	if user == nil || user.TenantID == "" {
 		forbiddenResponse(w, r, "users tenant could not be determined")
 		return zero, errorContentValidation
 	}
@@ -32,6 +32,6 @@ func validateRequestBody[K shtypes.Validatable](w http.ResponseWriter, r *http.R
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	content.SetTenantId(*user.TenantID)
+	content.SetTenantId(user.TenantID)
 	return content, nil
 }

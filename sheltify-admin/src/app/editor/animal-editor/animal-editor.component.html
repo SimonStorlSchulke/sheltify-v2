@@ -17,7 +17,7 @@
 
   <hr class="sui my-3">
   <h2>Artikel</h2>
-  <app-article-editor [articleId]="animal.AnimalArticleID" class="sui flex-y grow-1 mt-2"/>
+  <app-article-editor [articleId]="animal.ArticleID ?? -1" (articleIdSaved)="setArticleId($event)" class="sui flex-y grow-1 mt-2"/>
 
 
 } @else {

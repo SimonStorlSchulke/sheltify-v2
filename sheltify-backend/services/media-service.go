@@ -61,7 +61,7 @@ func GetTenantsMediaFilesByTags(tags []string, tenant string) ([]shtypes.MediaFi
 	return repository.GetTenantsMediaFilesByTags(tags, tenant)
 }
 
-func AddTagToMedia(mediaID string, tagNames []string) error {
+func AddTagToMedia(mediaID string, tagNames []string, tenant string) error {
 	mediaFile, err := repository.GetMediaFileMetaById(mediaID)
 	if err != nil {
 		return err
@@ -71,7 +71,8 @@ func AddTagToMedia(mediaID string, tagNames []string) error {
 	for _, tagName := range tagNames {
 		tag, _ := repository.GetTagByName(tagName)
 		if tag == nil {
-			newTag := &shtypes.Tag{Name: tagName, TenantID: "mfg"}
+			newTag := &shtypes.Tag{Name: tagName}
+			newTag.TenantID = tenant
 			repository.CreateTag(newTag)
 			tags = append(tags, newTag)
 		} else {

@@ -2,12 +2,10 @@ package shtypes
 
 import (
 	"time"
-
-	"gorm.io/gorm"
 )
 
 type Animal struct {
-	gorm.Model
+	ShType
 	Name             string
 	Birthday         *time.Time
 	WeightKg         uint
@@ -19,12 +17,10 @@ type Animal struct {
 	Status           string //TODO possible values could be tenant specific?
 	Health           string
 	Priority         int
-	AnimalArticleID  *uint
-	AnimalArticle    *AnimalArticle
+	ArticleID        *uint
+	Article          *Article `gorm:"->"`
 	PortraitID       *string
 	Portrait         *MediaFile `gorm:"->"`
-	TenantID         string
-	Tenant           *Tenant
 }
 
 func (a *Animal) Validate() string {
