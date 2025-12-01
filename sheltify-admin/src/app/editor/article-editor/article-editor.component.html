@@ -16,7 +16,7 @@
             <div class="article-column sui grow-1">
 
               <div class="section-titlebar sui flex-x px-1 gap-2 ai-center">
-                <b class="sui grow-1 py-1">{{ section.SectionType }}</b>
+                <b class="sui grow-1 py-1">{{ sectionLabels.get(section.SectionType) }}</b>
                 <button (mousedown)="enterMoveMode(iRow, iColumn, section)" class="move-button small">verschieben</button>
                 <ng-icon class="x" (click)="deleteSection(iRow, iColumn)" name="bootstrapX" size="22px"/>
               </div>

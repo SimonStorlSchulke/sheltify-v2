@@ -2,7 +2,7 @@ import { Component, effect, input, output, signal } from '@angular/core';
 import { bootstrapGripVertical, bootstrapX, bootstrapPlus } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lastValueFrom } from 'rxjs';
-import { CmsArticle, CmsArticleRow, Section } from 'src/app/cms-types/article-types';
+import { CmsArticle, CmsArticleRow, Section, SectionType } from 'src/app/cms-types/article-types';
 import { createEmptySection } from 'src/app/editor/article-editor/article-section.factory';
 import { PickNewSectionComponent } from 'src/app/editor/article-editor/pick-new-section/pick-new-section.component';
 import { SectionEditorImagesComponent } from 'src/app/editor/article-editor/section-editor-images/section-editor-images.component';
@@ -35,6 +35,13 @@ export class ArticleEditorComponent {
 
   article = signal<CmsArticle | undefined>(emptyArticle);
   movedItem = signal<{row: number, column: number, sectionRef: Section} | null>(null);
+
+  sectionLabels = new Map<SectionType, string>([
+    ['title', 'Titel'],
+    ['text', 'Text'],
+    ['image', 'Bilder'],
+    ['video', 'Video'],
+  ])
 
   constructor(private readonly modalService: ModalService, private readonly alertService: AlertService, private readonly cmsRequestService: CmsRequestService) {
     effect(async() => {
