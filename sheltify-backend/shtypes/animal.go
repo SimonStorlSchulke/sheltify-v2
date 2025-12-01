@@ -5,7 +5,7 @@ import (
 )
 
 type Animal struct {
-	ShType
+	CmsType
 	Name             string
 	Birthday         *time.Time
 	WeightKg         uint

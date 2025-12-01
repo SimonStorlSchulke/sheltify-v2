@@ -2,6 +2,7 @@ package shtypes
 
 import (
 	"fmt"
+	"regexp"
 	"slices"
 )
 
@@ -59,4 +60,17 @@ func valIsInList(fieldName string, fieldValue string, list []string) string {
 		return fmt.Sprintf("%s muss einer folgender Werte sein: %v\n", fieldName, list)
 	}
 	return ""
+}
+
+func valMatchesRegex(fieldName string, fieldValue string, regex string, regexDescription string) string {
+	matched, err := regexp.MatchString(regex, fieldValue)
+	if err != nil || !matched {
+		return fmt.Sprintf("%s %s\n", fieldName, regexDescription)
+	}
+	return ""
+}
+
+func valIsValidPath(fieldName string, fieldValue string) string {
+	regex := `^/[a-zA-Z0-9/_-]*$`
+	return valMatchesRegex(fieldName, fieldValue, regex, "muss eine gültige URL sein (muss mit / beginnen und nur Kleinbuchstaben, Zahlen, '-', '_' und '/' enthalten)")
 }

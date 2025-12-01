@@ -2,36 +2,42 @@
 
 <div class="sui flex-y grow-1" [class.dragMode]="movedItem()">
   <div (click)="addSectionAtNewRow(0)" (mouseup)="moveToNewRow(0)" class="move-to-row"></div>
-  @for (row of article().Structure.Rows; track $index) {
-    @let iRow = $index;
-    <div class="article-row sui flex-x jc-stretch">
-      <div (mouseup)="moveToColumn(iRow,0)" (click)="addSectionAt(iRow, 0)" class="move-to-column"></div>
-      @for (section of row.Sections; track $index) {
-        @let iColumn = $index;
 
-        <div class="sui flex-y grow-1">
+  @if(article(); as article) {
+    @for (row of article.Structure.Rows; track $index) {
+      @let iRow = $index;
+      <div class="article-row sui flex-x jc-stretch">
+        <div (mouseup)="moveToColumn(iRow,0)" (click)="addSectionAt(iRow, 0)" class="move-to-column"></div>
+        @for (section of row.Sections; track $index) {
+          @let iColumn = $index;
 
-          <div class="article-column sui grow-1">
+          <div class="sui flex-y grow-1">
 
-            <div class="section-titlebar sui flex-x px-1 gap-2 ai-center">
-              <b class="sui grow-1 py-1">{{ section.SectionType }}</b>
-              <button (mousedown)="enterMoveMode(iRow, iColumn, section)" class="move-button small">verschieben</button>
-              <ng-icon class="x" (click)="deleteSection(iRow, iColumn)" name="bootstrapX" size="22px"/>
-            </div>
-            <div class="sui p-2">
+            <div class="article-column sui grow-1">
 
-              @switch (section.SectionType) {
-                @case ("text") {
-                  <app-text-section-editor/>
+              <div class="section-titlebar sui flex-x px-1 gap-2 ai-center">
+                <b class="sui grow-1 py-1">{{ section.SectionType }}</b>
+                <button (mousedown)="enterMoveMode(iRow, iColumn, section)" class="move-button small">verschieben</button>
+                <ng-icon class="x" (click)="deleteSection(iRow, iColumn)" name="bootstrapX" size="22px"/>
+              </div>
+              <div class="sui p-2">
+
+                @switch (section.SectionType) {
+                  @case ('text') {
+                    <app-section-editor-text [section]="section"/>
+                  }
+                  @case ('image') {
+                    <app-section-editor-images [section]="section"/>
+                  }
                 }
-              }
+              </div>
             </div>
-          </div>
 
-        </div>
-        <div (mouseup)="moveToColumn(iRow, iColumn + 1)" (click)="addSectionAt(iRow, iColumn + 1)" class="move-to-column"></div>
-      }
-    </div>
-    <div (click)="addSectionAtNewRow(iRow + 1)" (mouseup)="moveToNewRow(iRow + 1)" class="move-to-row"></div>
+          </div>
+          <div (mouseup)="moveToColumn(iRow, iColumn + 1)" (click)="addSectionAt(iRow, iColumn + 1)" class="move-to-column"></div>
+        }
+      </div>
+      <div (click)="addSectionAtNewRow(iRow + 1)" (mouseup)="moveToNewRow(iRow + 1)" class="move-to-row"></div>
+    }
   }
 </div>

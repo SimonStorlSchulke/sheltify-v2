@@ -32,6 +32,15 @@ button:not(.unstyled) {
         }
     }
 
+    &.alert {
+        background-color: $alert;
+        color: #fff;
+
+        &:hover {
+            background-color: $alert-h1;
+        }
+    }
+
     &.cto, &.call-to-action {
         background-color: $cto;
         color: #fff;

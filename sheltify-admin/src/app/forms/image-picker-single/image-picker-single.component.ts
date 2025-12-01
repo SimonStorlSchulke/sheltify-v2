@@ -9,7 +9,7 @@ import { bootstrapCardImage } from '@ng-icons/bootstrap-icons'
 
 @Component({
   selector: 'app-image-picker-single',
-  imports: [CmsImageDirective, NgIcon, MediaLibraryComponent],
+  imports: [CmsImageDirective, NgIcon],
   providers: [provideIcons({bootstrapCardImage})],
   templateUrl: './image-picker-single.component.html',
   styleUrls: ['../form-base.component.scss', './image-picker-single.component.scss']
@@ -17,12 +17,9 @@ import { bootstrapCardImage } from '@ng-icons/bootstrap-icons'
 export class ImagePickerSingleComponent extends InputBaseComponent {
   public twoWayModel = model<CmsImage>();
 
-  picking = signal(false);
-
-  modalService = inject(ModalService);
+  private modalService = inject(ModalService);
 
   public async pickImage() {
-    this.picking.set(true);
     const portraits = await this.modalService.openFinishable<CmsImage[], MediaLibraryComponent>(MediaLibraryComponent);
     console.log(portraits[0])
     this.twoWayModel.set(portraits[0]);

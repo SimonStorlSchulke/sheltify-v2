@@ -1,6 +1,6 @@
 import { CmsImage } from 'src/app/cms-types/cms-types';
 
-export const SectionTypes = ["title", "text", "video", "image"];
+export const SectionTypes = ["title", "text", "video", "image"] as const;
 
 export type SectionType = (typeof SectionTypes)[number];
 
@@ -16,26 +16,39 @@ export type CmsArticle = {
 };
 
 export type CmsArticleRow = {
-  ID?: number;
-  ArticleID?: number;
-  Position?: number;
-  Sections: CmsArticleSectionRef[];
+  Sections: Section[];
 };
 
-export type CmsArticleSectionRef = {
-  ID?: number;
-  ArticleRowID?: number;
-  SectionID?: number;
-  SectionType?: SectionType;  // could be "text" | "media"
-  Position?: number;
-}
+export type Section =
+  | SectionText
+  | SectionImages
+  | SectionTitle
+  | SectionVideo
 
-export type CmsTextSection = {
-  ID?: number;
-  HtmlContent: string;
+export type SectionText = {
+  SectionType: 'text',
+  Content: {
+    Html: string;
+  },
 };
 
-export type CmsMediaSection = {
-  ID?: number;
-  MediaFiles: CmsImage[];
+export type SectionImages = {
+  SectionType: 'image',
+  Content: {
+    MediaFiles: CmsImage[];
+  },
+};
+
+export type SectionTitle = {
+  SectionType: 'title',
+  Content: {
+    Text: string,
+  },
+};
+
+export type SectionVideo= {
+  SectionType: 'video',
+  Content: {
+
+  },
 };

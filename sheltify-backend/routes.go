@@ -28,7 +28,6 @@ func publicRoutes(r *chi.Mux) {
 	r.Get("/{tenant}/media", handlers.GetTenantsMediaByTags)
 	r.Get("/{tenant}/tags", handlers.GetAllTags)
 	r.Get("/{tenant}/article/{id}", handlers.GetArticle)
-	r.Get("/{tenant}/article-section/{id}", handlers.GetArticleSectionByTypeAndId)
 }
 
 func adminRoutes(r *chi.Mux) {
@@ -47,4 +46,5 @@ func adminRoutes(r *chi.Mux) {
 	r.Get("/relogin", handlers.Relogin)
 
 	r.Post("/article", handlers.SaveArticle)
+	r.Patch("/article", handlers.SaveArticle)
 }

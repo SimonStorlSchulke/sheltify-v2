@@ -13,12 +13,12 @@ export abstract class FinishableDialog<TValue> implements Finishable<TValue>, On
   protected readonly finishSubject = new Subject<TValue>();
   readonly finish = this.finishSubject.asObservable();
 
-  protected finishWith(value: TValue): void {
+  protected finishWith(value: TValue) {
     this.finishSubject.next(value);
     this.finishSubject.complete();
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy() {
     this.finishSubject.complete();
   }
 }

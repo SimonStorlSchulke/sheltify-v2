@@ -1,9 +1,9 @@
 package shtypes
 
 type Tag struct {
-	ShType
+	CmsType
 	Name       string
-	MediaFiles []*MediaFile `gorm:"many2many:media_file_tags;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	MediaFiles []*MediaFile `gorm:"many2many:media_file_tags;OnDelete:SET NULL;"`
 	Color      string
 }
 

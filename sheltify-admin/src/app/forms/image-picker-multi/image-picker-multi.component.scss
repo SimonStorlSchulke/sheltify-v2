@@ -1,0 +1,55 @@
+@use "colors" as *;
+
+.img-wrapper {
+  background: $neutral100;
+  cursor: pointer;
+
+  .img-container {
+    position: relative;
+
+    .buttons {
+      position: absolute;
+      bottom: 0;
+      display: none;
+      opacity: 80%;
+    }
+
+    &:hover .buttons {
+      display: flex;
+      button {
+        font-size: 1.2rem;
+        border-radius: 0;
+      }
+    }
+  }
+
+  img {
+    height: 128px;
+    width: 128px;
+  }
+
+  &:not(:has(img)) {
+    outline: 2px dashed $neutral400;
+  }
+
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+  }
+}
+
+.add-image {
+  height: 128px;
+  width: 128px;
+}
+
+.medialibrary-wrapper {
+  position: fixed;
+  background: #fff;
+
+}

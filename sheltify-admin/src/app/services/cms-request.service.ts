@@ -64,11 +64,7 @@ export class CmsRequestService {
   }
 
   public saveAnimal(animal: CmsAnimal): Observable<CmsAnimal> {
-    if (animal.ID) {
-      return this.patch<CmsAnimal>(`animals`, animal);
-    } else {
-      return this.post<CmsAnimal>(`animals`, animal);
-    }
+    return this.postOrPatch('animals', animal);
   }
 
   public deleteAnimals(ids: number[]) {
@@ -98,24 +94,12 @@ export class CmsRequestService {
   }
 
   public saveArticle( article: CmsArticle) {
-    return this.post<CmsArticle>(`article`, article);
+    return this.postOrPatch<CmsArticle>(`article`, article);
   }
-
-  public getArticleSection(sectionType: string, id: number) {
-    const tenantId = this.authService.getTenantID();
-    return this.get<any>(`${CmsRequestService.publicApiUrl}${tenantId}/article-section/${id}?sectionType=${sectionType}`)
-  }
-/*
-
-  public saveArticleSection(sectionType: string) {
-    return this.post<CmsArticle>(`article`, article)
-  }
-*/
 
   public async updateMedia(image: CmsImage): Promise<CmsImage> {
     return lastValueFrom(this.patch<CmsImage>(`media`, image));
   }
-
 
   public uploadScaledImage(files: { size: string, blob: Blob }[], fileName: string, commaSeparatedTags: string) {
     const url = CmsRequestService.adminApiUrl + 'media/scaled';
@@ -172,6 +156,15 @@ export class CmsRequestService {
     const url = decodeURIComponent(CmsRequestService.adminApiUrl + path);
     return this.httpClient.patch<T>(url, body, this.options())
       .pipe(this.handleRequest(url, 'Speichern erfolgreich'));
+  }
+
+  /** uses PATCH if data has ID, else PATCH */
+  public postOrPatch<T>(path: string, data: { ID?: number | string }): Observable<T> {
+    if (data.ID) {
+      return this.patch<T>(path, data);
+    } else {
+      return this.post<T>(path, data);
+    }
   }
 
   private handleRequest<T>(

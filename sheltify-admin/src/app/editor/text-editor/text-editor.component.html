@@ -1,9 +1,8 @@
 <div class="NgxEditor__Wrapper">
   <ngx-editor-menu [editor]="editor"> </ngx-editor-menu>
-  <ngx-editor [editor]="editor" [(ngModel)]="html" [disabled]="false" [placeholder]="'Text eingeben...'"></ngx-editor>
+  <ngx-editor
+    [editor]="editor"
+    [ngModel]="html"
+    (ngModelChange)="onChange($event)"
+    [placeholder]="'Text eingeben...'"/>
 </div>
-<br>
-<button>+</button>
-<br>
-<br>
-<button (click)="parse()">parse</button>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, effect, model, OnInit, output } from '@angular/core';
 import { NgxEditorModule } from 'ngx-editor';
 import { Editor } from 'ngx-editor';
 import { FormsModule } from '@angular/forms';
@@ -10,10 +10,13 @@ import { schema } from 'ngx-editor/schema';
     templateUrl: './text-editor.component.html',
     styleUrl: './text-editor.component.scss'
 })
-export class TextEditorComponent {
+export class TextEditorComponent implements OnInit {
   editor: Editor;
-  html = '';
 
+  htmlModel = model<string>('');
+  html: string = "";
+
+  htmlInput = output<string>();
 
   constructor() {
     this.editor = new Editor({
@@ -27,8 +30,13 @@ export class TextEditorComponent {
     });
   }
 
-  parse() {
-    console.log(this.html);
+  public ngOnInit() {
+    this.html = this.htmlModel();
   }
 
+  public onChange(value: string) {
+    this.html = value;
+    this.htmlModel.set(value);
+    this.htmlInput.emit(value);
+  }
 }

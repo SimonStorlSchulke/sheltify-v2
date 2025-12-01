@@ -1,7 +1,7 @@
 package shtypes
 
 type User struct {
-	ShType
+	CmsType
 	ID             string `gorm:"primaryKey"`
 	HashedPassword string
 	SessionToken   *string

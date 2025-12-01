@@ -2,16 +2,16 @@ package shtypes
 
 import "gorm.io/gorm"
 
-type ShType struct {
+type CmsType struct {
 	gorm.Model
 	TenantID string
 	Tenant   *Tenant
 }
 
-func (m *ShType) SetTenantId(id string) {
+func (m *CmsType) SetTenantId(id string) {
 	m.TenantID = id
 }
 
-func (a *ShType) Validate() string {
+func (a *CmsType) Validate() string {
 	return ""
 }

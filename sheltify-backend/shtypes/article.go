@@ -1,7 +1,7 @@
 package shtypes
 
 type Article struct {
-	ShType
+	CmsType
 	Structure ArticleStructure `gorm:"serializer:json"`
 }
 
@@ -14,21 +14,10 @@ type ArticleStructure struct {
 }
 
 type ArticleRow struct {
-	Sections []*ArticleSectionRef
+	Sections []*ArticleSection
 }
 
-type ArticleSectionRef struct {
+type ArticleSection struct {
 	SectionType string
-	SectionID   uint
-}
-
-type SectionText struct {
-	ShType
-	HtmlContent string
-}
-
-type SectionMedia struct {
-	ShType
-	TenantID   string
-	MediaFiles []*MediaFile `gorm:"many2many:section_media_files;"`
+	Content     interface{}
 }

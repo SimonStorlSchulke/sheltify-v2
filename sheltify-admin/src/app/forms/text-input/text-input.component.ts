@@ -12,7 +12,7 @@ export class TextInputComponent extends InputBaseComponent {
   public long = input<boolean>(false);
   public twoWayModel = model<string>('');
 
-  public onInput(event: Event): void {
+  public onInput(event: Event) {
     this.twoWayModel.set((event.target as HTMLInputElement).value);
   }
 

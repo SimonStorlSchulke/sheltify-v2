@@ -14,7 +14,7 @@ export class LoginComponent {
   private toastrService = inject(ToastrService);
   private router = inject(Router);
 
-  onLogin(username: string, password: string): void {
+  onLogin(username: string, password: string) {
     this.authService.login(username, password).subscribe({
       next: (response) => {
         this.toastrService.success("Logged in as " + response.ID);

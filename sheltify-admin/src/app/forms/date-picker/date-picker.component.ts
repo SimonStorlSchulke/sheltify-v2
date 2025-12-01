@@ -16,7 +16,7 @@ export class DatePickerComponent extends InputBaseComponent {
     return this.twoWayModelISOString()?.split('T')[0]
   })
 
-  public onInput(event: Event): void {
+  public onInput(event: Event) {
     const date = new Date((event.target as any).value);
     this.twoWayModel.set(date);
     this.twoWayModelISOString.set(this.getDateString(date));

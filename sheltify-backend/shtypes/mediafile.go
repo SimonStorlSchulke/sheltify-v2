@@ -1,7 +1,7 @@
 package shtypes
 
 type MediaFile struct {
-	ShType
+	CmsType
 	ID                   string `gorm:"primaryKey"`
 	ExternalLink         string
 	OriginalFileName     string
@@ -11,7 +11,7 @@ type MediaFile struct {
 	FocusY               float32
 	SizesGenerated       bool
 	LargestAvailableSize string
-	MediaTags            []*Tag `gorm:"many2many:media_file_tags;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	MediaTags            []*Tag `gorm:"many2many:media_file_tags;OnDelete:SET NULL;"`
 	RotationSteps        int8   // 0-3, each step is 90 degrees clockwise
 }
 

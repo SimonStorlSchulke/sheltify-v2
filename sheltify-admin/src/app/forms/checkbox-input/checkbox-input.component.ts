@@ -10,7 +10,7 @@ import { InputBaseComponent } from 'src/app/forms/input-base.component';
 export class CheckboxInputComponent extends InputBaseComponent{
   public twoWayModel = model<boolean>(false);
 
-  public onInput(checked: boolean): void {
+  public onInput(checked: boolean) {
     this.twoWayModel.set(checked);
   }
 }

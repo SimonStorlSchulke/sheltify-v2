@@ -1,10 +1,7 @@
 package repository
 
 import (
-	"fmt"
 	"sheltify-new-backend/shtypes"
-
-	"gorm.io/gorm"
 )
 
 func GetArticleById(id int) (*shtypes.Article, error) {
@@ -13,36 +10,6 @@ func GetArticleById(id int) (*shtypes.Article, error) {
 		return nil, err
 	}
 	return &article, nil
-}
-
-func GetArticleSectionByTypeAndId(sectionType string, sectionID int) (gorm.Model, error) {
-	var section gorm.Model
-	var err error
-
-	switch sectionType {
-	case "text":
-		err = db.First(&section, sectionID).Error
-	case "media":
-		err = db.First(&section, sectionID).Error
-	}
-
-	fmt.Println(section)
-	return section, err
-}
-
-func SaveArticleSectionByType(sectionType string, sectionID int) (gorm.Model, error) {
-	var section gorm.Model
-	var err error
-
-	switch sectionType {
-	case "text":
-		err = db.First(&section, sectionID).Error
-	case "media":
-		err = db.First(&section, sectionID).Error
-	}
-
-	fmt.Println(section)
-	return section, err
 }
 
 func SaveArticle(article *shtypes.Article) error {

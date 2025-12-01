@@ -1,7 +1,7 @@
 package shtypes
 
 type TeamMember struct {
-	ShType
+	CmsType
 	Name        string
 	Role        string
 	Description string
