@@ -1,4 +1,4 @@
-<div class="sui flex-y gap-3 alert-{{type}} relative">
+<div class="sui flex-y gap-2 alert-{{type}} relative">
   <b class="title">{{ title }}
     <span class="icon">
       @switch (type) {
@@ -16,7 +16,7 @@
   </b>
   <span>{{ message }}</span>
 
-  <div class="sui flex-x jc-end gap-2">
+  <div class="sui flex-x jc-end gap-1">
     @for (button of buttons; track button) {
       <button
         (click)="onButtonClicked(button)"

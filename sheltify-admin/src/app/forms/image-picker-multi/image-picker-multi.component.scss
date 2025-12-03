@@ -28,10 +28,6 @@
     width: 128px;
   }
 
-  &:not(:has(img)) {
-    outline: 2px dashed $neutral400;
-  }
-
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;

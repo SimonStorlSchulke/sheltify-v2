@@ -7,6 +7,8 @@ export function createEmptySection(SectionType: SectionType): Section {
         SectionType,
         Content: {
           Text: '',
+          Type: 'h1',
+          Anchor: '',
         }
       };
     case 'text':
@@ -29,8 +31,20 @@ export function createEmptySection(SectionType: SectionType): Section {
           MediaFiles: [],
         }
       };
+    case 'animal-list':
+      return {
+        SectionType,
+        Content: {
+          AnimalKind: undefined,
+          MaxNumber: undefined,
+          AgeRange: [undefined, undefined],
+          SizeRange: [undefined, undefined],
+          Gender: 'both',
+          InGermany: undefined,
+        }
+      };
     default:
-      assertUnreachable(SectionType)
+      assertUnreachable(SectionType);
   }
 }
 

@@ -1,8 +1,7 @@
-
 @if(animal(); as animal) {
-  <div class="sui flex-x gap-4">
+  <div class="sui flex-x gap-3">
     <app-image-picker-single label="Portrait" name="imagePicker" [(twoWayModel)]="animal.Portrait"/>
-    <form class="sui flex-y gap-3">
+    <form class="sui flex-y gap-2">
       <app-text-input name="name" label="Name" [(twoWayModel)]="animal.Name" />
       <app-text-input name="description" label="Beschreibung" [long]="true"
                       [(twoWayModel)]="animal.Description"
@@ -12,8 +11,6 @@
     </form>
   </div>
   <br>
-
-  <button (click)="save()">Speichern</button>
 
   <hr class="sui my-3">
   <h2>Artikel</h2>

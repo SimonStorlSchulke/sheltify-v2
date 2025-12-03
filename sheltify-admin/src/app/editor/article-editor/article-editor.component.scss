@@ -1,7 +1,7 @@
 @use "colors" as *;
 
 :host {
-  border: 1px solid $neutral400 ;
+  border: 1px solid $neutral400;
 }
 
 
@@ -15,12 +15,13 @@
 
 .article-column {
   background-color: #fff;
-  box-shadow: 2px 4px 12px #0002;
+  outline: 1px solid #eee;
 }
 
 .section-titlebar {
-  background-color: $neutral200;
   b {
+    opacity: 0;
+    color: $primary;
     font-size: 0.9rem;
   }
 }
@@ -90,8 +91,45 @@
 .x {
   cursor: pointer;
   border-radius: 50%;
+
   &:hover {
     background: $error;
     color: #fff;
+  }
+}
+
+.section-content {
+  .section-editor {
+    display: none;
+  }
+
+  .section-preview {
+    margin-top: -50px;
+    min-height: calc(100% + 50px);
+    pointer-events: none;
+  }
+}
+
+.article-column:not(.edit-mode) {
+  cursor: pointer;
+  &:hover {
+    outline: 2px solid $primary-h2;
+  }
+}
+
+.article-column.edit-mode {
+  outline: 2px solid $primary;
+  .section-editor {
+    display: block;
+  }
+
+  .section-titlebar {
+    b {
+      opacity: 1;
+    }
+  }
+
+  .section-preview {
+    display: none;
   }
 }

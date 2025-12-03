@@ -4,9 +4,9 @@
   <div
     appFileDrop (filesDropped)="onFilesDropped($event)"
     (filesHovered)="onFilesHovered($event)"
-    class="sui flex-x gap-3"
+    class="sui flex-x gap-2"
   >
-    <div class="sui flex-y gap-4 grow-1">
+    <div class="sui flex-y gap-3 grow-1">
       <div class="tag-selector">
         <ng-select [(ngModel)]="selectedTags" [multiple]="true" placeholder="...tags auswählen">
           @for (tag of tagsService.availableTags(); track tag.ID) {
@@ -19,7 +19,7 @@
         <button (click)="deleteSelectedImages()">Löschen</button>
 
       </div>
-      <div class="sui flex-x gap-3 wrap list dropzone" [class.files-hovered]="filesHovered()" [class.with-picker]="true">
+      <div class="sui flex-x gap-2 wrap list dropzone" [class.files-hovered]="filesHovered()" [class.with-picker]="true">
         @for (image of images; track image.ID) {
           @let editedImage = editedImages().get(image.ID);
           <app-media-entry
@@ -31,7 +31,7 @@
         }
       </div>
 
-      <div class="sui flex-x gap-2 jc-end">
+      <div class="sui flex-x gap-1 jc-end">
         <button [disabled]="selectedImageIds().size == 0" class="primary" (click)="pickImages(selectedImageIds(), images)">Auswählen</button>
       </div>
 

@@ -1,13 +1,17 @@
 import { Component, effect, input, output, signal } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { bootstrapGripVertical, bootstrapX, bootstrapPlus } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lastValueFrom } from 'rxjs';
 import { CmsArticle, CmsArticleRow, Section, SectionType } from 'src/app/cms-types/article-types';
 import { createEmptySection } from 'src/app/editor/article-editor/article-section.factory';
 import { PickNewSectionComponent } from 'src/app/editor/article-editor/pick-new-section/pick-new-section.component';
+import { SectionEditorAnimalListComponent } from 'src/app/editor/article-editor/section-editor-animal-list/section-editor-animal-list.component';
 import { SectionEditorImagesComponent } from 'src/app/editor/article-editor/section-editor-images/section-editor-images.component';
+import { SectionEditorTitleComponent } from 'src/app/editor/article-editor/section-editor-title/section-editor-title.component';
 import { SectionEditorTextComponent } from 'src/app/editor/article-editor/text-section-editor/section-editor-text.component';
 import { AlertService } from 'src/app/services/alert.service';
+import { renderArticleSection } from 'src/app/services/article-renderer';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { ModalService } from 'src/app/services/modal.service';
 
@@ -22,7 +26,7 @@ const emptyArticle: CmsArticle = {
 
 @Component({
   selector: 'app-article-editor',
-  imports: [SectionEditorTextComponent, NgIcon, SectionEditorImagesComponent],
+  imports: [SectionEditorTextComponent, NgIcon, SectionEditorImagesComponent, SectionEditorTitleComponent, SectionEditorAnimalListComponent],
   providers: [provideIcons({bootstrapGripVertical, bootstrapX, bootstrapPlus})],
   templateUrl: './article-editor.component.html',
   styleUrl: './article-editor.component.scss'
@@ -41,11 +45,20 @@ export class ArticleEditorComponent {
     ['text', 'Text'],
     ['image', 'Bilder'],
     ['video', 'Video'],
+    ['animal-list', 'Tierliste (statisch)'],
   ])
 
-  constructor(private readonly modalService: ModalService, private readonly alertService: AlertService, private readonly cmsRequestService: CmsRequestService) {
+  constructor(
+    private modalService: ModalService,
+    private alertService: AlertService,
+    private cmsRequestService: CmsRequestService,
+    private domSanitizer: DomSanitizer,
+    ) {
     effect(async() => {
-      if( !this.articleId() || this.articleId() == -1) return;
+      if( !this.articleId() || this.articleId() == -1) {
+        this.article.set(emptyArticle);
+        return;
+      }
       this.article.set({Structure: {Rows: []}, TenantID: ''});
       const article = await lastValueFrom(this.cmsRequestService.getArticle(this.articleId()));
 
@@ -129,7 +142,6 @@ export class ArticleEditorComponent {
       article.Structure.Rows[movedItem.row].Sections.splice(movedItem.column, 1);
     }
 
-
     newRow.Sections.splice(column, 0, movedItem.sectionRef);
     this.cleanupEmptyRows(article);
     this.exitMoveMode();
@@ -150,6 +162,14 @@ export class ArticleEditorComponent {
     this.article.set(article);
   }
 
+  public renderSection(section: Section): SafeHtml {
+    return this.domSanitizer.bypassSecurityTrustHtml(renderArticleSection(section))
+  }
 
+
+  protected editSection(articleColumn: HTMLDivElement) {
+    document.querySelectorAll('.article-column').forEach(el => el.classList.remove('edit-mode'));
+    articleColumn.classList.add('edit-mode');
+  }
 }
 

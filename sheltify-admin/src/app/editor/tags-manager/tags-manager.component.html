@@ -1,4 +1,4 @@
-<div class="sui flex-y gap-3">
+<div class="sui flex-y gap-2">
   <h2>Tags verwalten</h2>
 
   <div class="sui flex-x ai-end new-tag">
@@ -7,9 +7,9 @@
     <button (click)="createTag(newTagName.twoWayModel(), newTagColor.value); newTagName.twoWayModel.set('')" class="secondary small">+ Hinzufügen</button>
   </div>
 
-  <div class="sui flex-y gap-2" id="tags-list">
+  <div class="sui flex-y gap-1" id="tags-list">
       @for (tag of tagsService.availableTags(); track tag.ID) {
-        <div class="sui flex-x gap-2 ai-center"><button (click)="deleteTag(tag.ID)" class="small">X</button><app-tag [tag]="tag"/></div>
+        <div class="sui flex-x gap-1 ai-center"><button (click)="deleteTag(tag.ID)" class="small">X</button><app-tag [tag]="tag"/></div>
       }
   </div>
 

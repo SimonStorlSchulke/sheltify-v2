@@ -25,7 +25,7 @@
     <button class="secondary" (click)="rotateImage(1)">r+</button>
   </div>
 
-<div class="sui flex-y gap-2 grow-1">
+<div class="sui flex-y gap-1 grow-1">
   <div class="meta sui flex-y">
     <span>Hochgeladen: {{ image().CreatedAt | date }}</span>
     <span>Dateiname: {{ image().OriginalFileName }}</span>
@@ -38,7 +38,7 @@
                   [twoWayModel]="image().Description" (twoWayModelChange)="image().Description = $event"/>
 
   <span class="tags-label">tags</span>
-  <span class="sui flex-x gap-2">
+  <span class="sui flex-x gap-1">
       <div class="tag-selector sui flex-x">
         <ng-select [notFoundText]="'keine'" [(ngModel)]="selectedTags" [multiple]="true" placeholder="...Tags auswählen">
           @for (tag of tagsService.availableTags(); track tag.ID) {

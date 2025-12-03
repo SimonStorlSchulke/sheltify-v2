@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom, lastValueFrom, startWith, Subject, switchMap } from 'rxjs';
 import { CmsAnimal } from 'src/app/cms-types/cms-types';
 import { CmsImageDirective } from 'src/app/ui/cms-image.directive';
@@ -22,6 +23,9 @@ export class AnimalListComponent {
 
   private reloadAnimals$ = new Subject<void>();
 
+  private activatedRoute = inject(ActivatedRoute);
+  private router = inject(Router);
+
   $animals = this.reloadAnimals$.pipe(
     startWith(void 0), // trigger initial load
     switchMap(() => this.cmsRequestService.getTenantsAnimals())
@@ -30,11 +34,21 @@ export class AnimalListComponent {
   editedAnimals = signal(new Map<number, CmsAnimal>([]));
   public newAnimalMode = false;
 
-  selectedAnimal = signal<CmsAnimal | null>(null)
+  selectedAnimal = signal<CmsAnimal | null>(null);
+
+  ngOnInit() {
+    const id = this.activatedRoute.snapshot.paramMap.get('id');
+
+    if(id != null) {
+      this.toAnimal(parseInt(id));
+    }
+  }
 
   async toAnimal(id: number) {
     const animal = await lastValueFrom(this.cmsRequestService.getTenantsAnimal(id));
     this.selectedAnimal.set(animal);
+
+    this.router.navigate(['/tiere', id]);
   }
 
   public newAnimal() {

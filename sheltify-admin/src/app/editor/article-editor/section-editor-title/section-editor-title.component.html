@@ -1,0 +1,36 @@
+<div class="sui flex-x wrap gap-1">
+  <app-text-input
+    class="sui grow-1"
+    name="title"
+    label="Titel"
+    [(twoWayModel)]="section().Content.Text"
+  />
+  <div class="sui flex-x gap-1">
+    <div class="sui flex-y label-container">
+      <div class="sui flex-x ai-center gap-1">
+        <label>Größe</label>
+      </div>
+
+      <ng-select class="type-selector" [clearable]="false" [(ngModel)]="section().Content.Type">
+        <ng-option value="h1">
+          <h1>Überschrift 1</h1>
+        </ng-option>
+        <ng-option value="h2">
+          <h2>Überschrift 2</h2>
+        </ng-option>
+        <ng-option value="h3">
+          <h3>Überschrift 3</h3>
+        </ng-option>
+        <ng-option value="h4">
+          <h4>Überschrift 4</h4>
+        </ng-option>
+      </ng-select>
+    </div>
+
+  </div>
+  <app-text-input
+    name="title" label="Anker"
+    explanation="wenn ein Anker angegeben wird, kann dieser auf der Seite angeklickt werden (#) und kopiert damit den Link direkt zu diesem Abschnitt in die Zwischenablage."
+    [(twoWayModel)]="section().Content.Anchor"
+  />
+</div>

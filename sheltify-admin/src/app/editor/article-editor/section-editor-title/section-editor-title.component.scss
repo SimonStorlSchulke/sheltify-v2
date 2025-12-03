@@ -1,0 +1,17 @@
+::ng-deep.ng-select-container {
+  border: 2px solid #aaa !important;
+  height: 44px !important;
+
+  &:focus-within {
+    background-color: #dfeefe !important;
+    border: 2px solid #2268bd !important;
+  }
+}
+
+.label-container {
+  gap: 4px;
+}
+
+.type-selector {
+  width: 250px;
+}

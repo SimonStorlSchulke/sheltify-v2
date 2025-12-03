@@ -1,0 +1,11 @@
+---
+import type { CmsAnimal } from '@shared/types/cms-types.ts';
+interface Props {
+  animal: CmsAnimal,
+}
+const {animal} = Astro.props;
+---
+
+<div class="animal-card">
+  <b>{animal.Name}</b>
+</div>

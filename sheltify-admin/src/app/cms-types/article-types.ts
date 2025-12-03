@@ -1,6 +1,6 @@
 import { CmsImage } from 'src/app/cms-types/cms-types';
 
-export const SectionTypes = ["title", "text", "video", "image"] as const;
+export const SectionTypes = ["title", "text", "video", "image", "animal-list"] as const;
 
 export type SectionType = (typeof SectionTypes)[number];
 
@@ -24,6 +24,7 @@ export type Section =
   | SectionImages
   | SectionTitle
   | SectionVideo
+  | SectionAnimalList
 
 export type SectionText = {
   SectionType: 'text',
@@ -43,6 +44,20 @@ export type SectionTitle = {
   SectionType: 'title',
   Content: {
     Text: string,
+    Type: 'h1' | 'h2' | 'h3' | 'h4',
+    Anchor: string,
+  },
+};
+
+export type SectionAnimalList = {
+  SectionType: 'animal-list',
+  Content: {
+    AnimalKind: string | undefined,
+    MaxNumber: number | undefined,
+    AgeRange: [number | undefined, number | undefined],
+    SizeRange: [number | undefined, number | undefined],
+    Gender: 'male' | 'female' | 'both',
+    InGermany: boolean | undefined,
   },
 };
 

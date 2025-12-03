@@ -10,8 +10,9 @@ func GetUser(id string) (*shtypes.User, error) {
 	return &user, nil
 }
 
-func CreateUser(id string, hasedPassword string) (*shtypes.User, error) {
+func CreateUser(id string, hasedPassword string, tenant string) (*shtypes.User, error) {
 	user := shtypes.User{ID: id, HashedPassword: hasedPassword}
+	user.SetTenantId(tenant)
 
 	if err := db.Create(&user).Error; err != nil {
 		return nil, err

@@ -8,8 +8,9 @@ import (
 func Register(w http.ResponseWriter, r *http.Request) {
 	userId := r.FormValue("username")
 	password := r.FormValue("password")
+	tenant := r.FormValue("tenant")
 
-	user := services.RegisterUser(w, userId, password)
+	user := services.RegisterUser(w, userId, password, tenant)
 	if user == nil {
 		return
 	}
