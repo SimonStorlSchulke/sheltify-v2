@@ -1,20 +1,22 @@
-@if(animal(); as animal) {
-  <div class="sui flex-x gap-3">
-    <app-image-picker-single label="Portrait" name="imagePicker" [(twoWayModel)]="animal.Portrait"/>
-    <form class="sui flex-y gap-2">
-      <app-text-input name="name" label="Name" [(twoWayModel)]="animal.Name" />
-      <app-text-input name="description" label="Beschreibung" [long]="true"
-                      [(twoWayModel)]="animal.Description"
-                      explanation="Kurzer Text, der im Steckbrief oben unter jedem Tier angezeigt wird"/>
-      <app-checkbox-input name="castrated" label="Kastriert" [(twoWayModel)]="animal.Castrated"/>
-      <app-date-picker name="birthday" label="Geboren ca." [(twoWayModelISOString)]="animal.Birthday"/>
-    </form>
-  </div>
-  <br>
+@if (animal(); as animal) {
+  <div class="article-editor-container">
+    <div class="sui flex-x gap-3">
+      <app-image-picker-single label="Portrait" name="imagePicker" [(twoWayModel)]="animal.Portrait"/>
+      <form class="sui flex-y gap-2">
+        <app-text-input name="name" label="Name" [(twoWayModel)]="animal.Name"/>
+        <app-text-input name="description" label="Beschreibung" [long]="true"
+                        [(twoWayModel)]="animal.Description"
+                        explanation="Kurzer Text, der im Steckbrief oben unter jedem Tier angezeigt wird"/>
+        <app-checkbox-input name="castrated" label="Kastriert" [(twoWayModel)]="animal.Castrated"/>
+        <app-date-picker name="birthday" label="Geboren ca." [(twoWayModelISOString)]="animal.Birthday"/>
+      </form>
+    </div>
+    <br>
 
-  <hr class="sui my-3">
-  <h2>Artikel</h2>
-  <app-article-editor [articleId]="animal.ArticleID ?? -1" (articleIdSaved)="setArticleId($event)" class="sui flex-y grow-1 mt-2"/>
+    <hr class="sui my-3">
+
+    <app-article-editor [articleId]="animal.ArticleID ?? -1" (articleIdSaved)="setArticleId($event)" class="sui flex-y grow-1 mt-2"/>
+  </div>
 
 
 } @else {

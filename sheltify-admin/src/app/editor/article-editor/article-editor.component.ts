@@ -1,4 +1,4 @@
-import { Component, effect, input, output, signal } from '@angular/core';
+import { Component, effect, HostListener, input, output, Renderer2, signal } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { bootstrapGripVertical, bootstrapX, bootstrapPlus } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -11,7 +11,7 @@ import { SectionEditorImagesComponent } from 'src/app/editor/article-editor/sect
 import { SectionEditorTitleComponent } from 'src/app/editor/article-editor/section-editor-title/section-editor-title.component';
 import { SectionEditorTextComponent } from 'src/app/editor/article-editor/text-section-editor/section-editor-text.component';
 import { AlertService } from 'src/app/services/alert.service';
-import { renderArticleSection } from 'src/app/services/article-renderer';
+import { createArticleStyle, renderArticleSection } from 'src/app/services/article-renderer';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { ModalService } from 'src/app/services/modal.service';
 
@@ -53,7 +53,11 @@ export class ArticleEditorComponent {
     private alertService: AlertService,
     private cmsRequestService: CmsRequestService,
     private domSanitizer: DomSanitizer,
+    private renderer: Renderer2,
     ) {
+
+    this.addGlobalStyle();
+
     effect(async() => {
       if( !this.articleId() || this.articleId() == -1) {
         this.article.set(emptyArticle);
@@ -98,6 +102,12 @@ export class ArticleEditorComponent {
     article.Structure.Rows.splice(row, 0, newRow);
     this.cleanupEmptyRows(article);
     this.exitMoveMode();
+  }
+
+  addGlobalStyle(css: string = createArticleStyle()) {
+    const styleEl = this.renderer.createElement('style');
+    this.renderer.setProperty(styleEl, 'textContent', css);
+    this.renderer.appendChild(document.head, styleEl);
   }
 
 
@@ -167,9 +177,15 @@ export class ArticleEditorComponent {
   }
 
 
-  protected editSection(articleColumn: HTMLDivElement) {
+  protected editSection(event: MouseEvent, articleColumn: HTMLDivElement) {
+    event.stopPropagation();
     document.querySelectorAll('.article-column').forEach(el => el.classList.remove('edit-mode'));
     articleColumn.classList.add('edit-mode');
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickout(_: any) {
+    document.querySelectorAll('.article-column').forEach(el => el.classList.remove('edit-mode'));
   }
 }
 

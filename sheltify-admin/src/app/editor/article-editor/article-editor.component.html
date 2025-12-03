@@ -12,7 +12,7 @@
           @let iColumn = $index;
           @let numSections = row.Sections.length;
           @let gapsWidth = 34 * (numSections + 1);
-          <div [style]="'width: calc(' + (100 / numSections) + '% - ' + gapsWidth + 'px)' "  class="sui flex-y grow-1" (click)="editSection(articleColumn)" >
+          <div [style]="'width: calc(' + (100 / numSections) + '% - ' + gapsWidth + 'px)' "  class="sui flex-y grow-1" (click)="editSection($event, articleColumn)" >
 
             <div #articleColumn class="article-column sui grow-1">
 
@@ -21,7 +21,7 @@
                 <button (mousedown)="enterMoveMode(iRow, iColumn, section)" class="move-button small">verschieben</button>
                 <ng-icon class="x" (click)="deleteSection(iRow, iColumn)" name="bootstrapX" size="22px"/>
               </div>
-              <div class="section-content sui p-1">
+              <div class="section-content">
                 <div class="section-preview" [innerHTML]="renderSection(section)"></div>
                 <div class="section-editor">
                   @switch (section.SectionType) {
@@ -50,3 +50,4 @@
     }
   }
 </div>
+

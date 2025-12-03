@@ -1,5 +1,11 @@
 @use "colors" as *;
 
+.panel-container {
+  background: $neutral100;
+  margin: -32px;
+  padding: 32px;
+}
+
 .animals {
 
   table {
