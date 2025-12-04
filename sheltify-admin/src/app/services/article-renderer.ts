@@ -40,14 +40,16 @@ export const sectionLabels = new Map<SectionType, string>([
 
 function renderAnimalList(section: SectionAnimalList) {
   let html = '';
-  for (let i = 0; i < (section.Content.MaxNumber ?? 5); i++) {
+
+  for (const animal of section.TempFoundAnimals ?? []) {
     html += `<div class="animal-card">
-    <img src="/assets/icons/plus.svg">
+    <img src="${animal.Portrait ? getImageFormatUrl(animal.Portrait, 'small') : '/assets/icons/plus.svg'}">
     <div class="sui flex-x center ai-center name-row">
-      <span class="sui text-oswald text-secondary text-center p-1 px-2">Beispieltier</span>
+      <span class="sui text-oswald text-secondary text-center p-1 px-2">${animal.Name}</span>
     </div>
 </div>`
   }
+
   return html;
 }
 

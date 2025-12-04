@@ -7,19 +7,18 @@ import { AuthService } from './auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, timer, tap, OperatorFunction, lastValueFrom } from 'rxjs';
 
-export type EntryMetaData = {
-  availableStatus: {
-    //todo
-  }
-}
 
 export type CollectionResult<T> = {
   results: T[] | null,
 }
 
-export type EntryResult<T> = {
-  data: T,
-  meta: EntryMetaData,
+export type AnimalsFilter = {
+  AnimalKind: string | undefined,
+  MaxNumber: number | undefined,
+  AgeRange: [number | undefined, number | undefined],
+  SizeRange: [number | undefined, number | undefined],
+  Gender: 'male' | 'female' | 'both',
+  InGermany: boolean | undefined,
 }
 
 @Injectable({providedIn: 'root'})
@@ -46,9 +45,12 @@ export class CmsRequestService {
 
   public getTenantsAnimals(): Observable<CollectionResult<CmsAnimal>> {
     const tenantId = this.authService.getTenantID();
-    return this.get<CmsAnimal[]>(`${CmsRequestService.publicApiUrl}${tenantId}/animals`).pipe(map(response => ({
-      results: response,
-    })));
+    return this.get<CmsAnimal[]>(`${CmsRequestService.publicApiUrl}${tenantId}/animals`).pipe(map(response => {
+      response.sort((a, b) => a.Name.localeCompare(b.Name));
+      return {
+        results: response,
+      }
+    }));
   }
 
   public getAnimalsByArticleId(articleId: number): Observable<CollectionResult<CmsAnimal>> {
@@ -61,6 +63,23 @@ export class CmsRequestService {
   public getTenantsAnimal(id: number): Observable<CmsAnimal> {
     const tenantId = this.authService.getTenantID();
     return this.get<CmsAnimal>(`${CmsRequestService.publicApiUrl}${tenantId}/animals/${id}`)
+  }
+
+  public getFilteredAnimals(filter: AnimalsFilter): Observable<CmsAnimal[]> {
+    const tenantId = this.authService.getTenantID();
+    let query = ``;
+
+    if(filter.AnimalKind) query += `kind=${filter.AnimalKind}&`;
+    if(filter.MaxNumber) query += `maxNumber=${filter.MaxNumber}&`;
+    if(filter.AgeRange[0]) query += `ageMin=${filter.AgeRange[0]}&`;
+    if(filter.AgeRange[1]) query += `ageMax=${filter.AgeRange[1]}&`;
+    if(filter.SizeRange[0]) query += `sizeMin=${filter.SizeRange[0]}&`;
+    if(filter.SizeRange[1]) query += `sizeMax=${filter.SizeRange[1]}&`;
+    if(filter.Gender != 'both') query += `gender=${filter.Gender}&`;
+
+    console.log(query);
+
+    return this.get<CmsAnimal[]>(`${CmsRequestService.publicApiUrl}${tenantId}/animals/filtered?${query}`);
   }
 
   public saveAnimal(animal: CmsAnimal): Observable<CmsAnimal> {

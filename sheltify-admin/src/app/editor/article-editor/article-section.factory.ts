@@ -48,7 +48,8 @@ export function createEmptySection(SectionType: SectionType): Section {
           SizeRange: [undefined, undefined],
           Gender: 'both',
           InGermany: undefined,
-        }
+        },
+        TempFoundAnimals: [],
       };
     default:
       assertUnreachable(SectionType);

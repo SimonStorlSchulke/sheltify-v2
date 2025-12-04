@@ -1,4 +1,4 @@
-<div class="sui flex-y gap-2">
+<div class="sui flex-y gap-2" (input)="onInput.next()">
 
   <app-number-input
     name="amount" label="Maximal angezeigte Anzahl (freilassen für alle)"
@@ -25,6 +25,6 @@
       male: 'männlich',
       female: 'weiblich',
     }"
+    (onInputChange)="onInput.next()"
     [(twoWayModel)]="section().Content.Gender"/>
-
 </div>

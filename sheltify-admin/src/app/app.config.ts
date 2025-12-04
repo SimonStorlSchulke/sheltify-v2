@@ -20,7 +20,6 @@ export const appConfig: ApplicationConfig = {
       languages: {
         html: () => import('highlight.js/lib/languages/xml.js'),
       },
-      themePath: 'path-to-theme.css' // Optional, useful for dynamic theme changes
     }),
     provideAnimations(),
     importProvidersFrom(NgxEditorModule.forRoot({

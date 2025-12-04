@@ -16,11 +16,12 @@ import { InputBaseComponent } from 'src/app/forms/input-base.component';
 export class SelectInputComponent extends InputBaseComponent {
   public placeholder = input<string>();
   public twoWayModel = model<string>('');
+  public onInputChange = output<string>();
   public options = input.required<string[]>();
   public optionTranslations = input<Record<string, string> | undefined>(undefined);
   public clearable = input<boolean>(true);
 
-  public onInput(event: Event) {
-    this.twoWayModel.set((event.target as HTMLInputElement).value);
+  public onInput() {
+    this.onInputChange.emit(this.twoWayModel());
   }
 }

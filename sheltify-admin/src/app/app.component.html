@@ -1,11 +1,12 @@
-
-<div class="sui flex-x">
-  <app-loader/>
-  <app-sidebar/>
-  <div class="sui flex-y grow-1">
-    <main class="sui grow-1 p-2">
-      <router-outlet/>
-    </main>
-    <app-footer/>
+<div class="sui flex-y">
+  <div class="sui flex-x"  style="height: calc(100dvh - 36px)">
+    <app-loader/>
+    <app-sidebar/>
+    <div class="sui flex-y grow-1">
+      <main class="sui grow-1 p-2">
+        <router-outlet/>
+      </main>
+    </div>
   </div>
+  <app-footer/>
 </div>

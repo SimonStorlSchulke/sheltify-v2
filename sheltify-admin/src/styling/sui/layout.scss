@@ -85,10 +85,10 @@
     }
 
     &.wrapper {
-        width: min(1250px, calc(100dvw - 64px));
-        max-width: 100%;
-        margin-left: auto;
-        margin-right: auto;
+        width: clamp(250px, calc(100dvw - 64px), 1250px);
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .w-100 {
