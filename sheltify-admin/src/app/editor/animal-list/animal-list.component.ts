@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom, lastValueFrom, startWith, Subject, switchMap } from 'rxjs';
 import { CmsAnimal } from 'src/app/cms-types/cms-types';
@@ -18,7 +18,7 @@ import { AsyncPipe, DatePipe } from '@angular/common';
   templateUrl: './animal-list.component.html',
   styleUrl: './animal-list.component.scss'
 })
-export class AnimalListComponent {
+export class AnimalListComponent implements OnInit {
   private cmsRequestService = inject(CmsRequestService);
 
   private reloadAnimals$ = new Subject<void>();
@@ -27,7 +27,7 @@ export class AnimalListComponent {
   private router = inject(Router);
 
   $animals = this.reloadAnimals$.pipe(
-    startWith(void 0), // trigger initial load
+    startWith(void 0),
     switchMap(() => this.cmsRequestService.getTenantsAnimals())
   );
 

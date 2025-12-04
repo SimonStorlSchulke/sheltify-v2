@@ -2,13 +2,14 @@ import type { CmsAnimal } from '@shared/types/cms-types.ts';
 
 export class SheltifyAccess {
 
+  constructor(private tenant: string) {}
+
   private readonly headers = {
     "Content-Type": "application/json",
   };
 
   public get apiBaseUrl() {
-    const tenant = import.meta.env.TENANT;
-    return `http://localhost:3000/api/${tenant}/`;
+    return `http://localhost:3000/api/${this.tenant}/`;
   }
 
   public get animals(): Promise<CmsAnimal[]> {
@@ -33,4 +34,4 @@ export class SheltifyAccess {
   }
 }
 
-export const cms = new SheltifyAccess();
+export const cms = new SheltifyAccess(import.meta.env.TENANT);

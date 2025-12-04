@@ -1,5 +1,6 @@
 import { ApplicationConfig, provideZoneChangeDetection, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { provideHighlightOptions } from 'ngx-highlightjs';
 
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
@@ -13,6 +14,14 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(),
     provideToastr(),
+    provideHighlightOptions({
+      coreLibraryLoader: () => import('highlight.js/lib/core'),
+      lineNumbersLoader: () => import('ngx-highlightjs/line-numbers'), // Optional, add line numbers if needed
+      languages: {
+        html: () => import('highlight.js/lib/languages/xml.js'),
+      },
+      themePath: 'path-to-theme.css' // Optional, useful for dynamic theme changes
+    }),
     provideAnimations(),
     importProvidersFrom(NgxEditorModule.forRoot({
       locals: {

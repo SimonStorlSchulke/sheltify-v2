@@ -1,10 +1,6 @@
-import { Section, SectionImages, SectionType } from 'src/app/cms-types/article-types';
+import { Section, SectionAnimalList, SectionImages, SectionType } from 'src/app/cms-types/article-types';
 import { CmsImage, CmsImagesSize } from 'src/app/cms-types/cms-types';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
-
-export class ArticleRenderer {
-  //TODO move here
-}
 
 export function renderArticleSection(section: Section) {
   let contentHtml = '';
@@ -19,11 +15,40 @@ export function renderArticleSection(section: Section) {
     case 'image':
       contentHtml = renderImageSection(section);
       break;
+    case 'html':
+      contentHtml = section.Content.Html;
+      break;
+    case 'animal-list':
+      contentHtml = renderAnimalList(section);
+      break;
     default:
-      contentHtml = 'Vorschau noch nicht implementiert';
+      contentHtml = 'Vorschau noch nicht implementiert für ' + section.SectionType;
   }
 
   return `<div class="section-container ${section.SectionType}">${contentHtml}</div>`;
+}
+
+export const sectionLabels = new Map<SectionType, string>([
+  ['title', 'Titelsektion'],
+  ['text', 'Textsektion'],
+  ['image', 'Bildersektion'],
+  ['video', 'Videosektion'],
+  ['html', 'HTML'],
+  ['animal-list', 'Tierliste (statisch)'],
+])
+
+
+function renderAnimalList(section: SectionAnimalList) {
+  let html = '';
+  for (let i = 0; i < (section.Content.MaxNumber ?? 5); i++) {
+    html += `<div class="animal-card">
+    <img src="/assets/icons/plus.svg">
+    <div class="sui flex-x center ai-center name-row">
+      <span class="sui text-oswald text-secondary text-center p-1 px-2">Beispieltier</span>
+    </div>
+</div>`
+  }
+  return html;
 }
 
 
@@ -62,7 +87,6 @@ export function createArticleStyle() {
   for (const [sectionType, sectionStyle] of defaultSectionStyles) {
     style += `&.${sectionType} {${sectionStyle}}`;
   }
-  console.log(style)
   return style;
 }
 
@@ -100,12 +124,73 @@ const defaultImagesStyle = `
   object-fit: cover;
   object-position: center 30%;
 }
-
 `;
+
+const defaultAnimalListStyle = `
+display: flex;
+flex-wrap: wrap;
+gap: 48px;
+justify-content: center;
+
+.animal-card {
+  width: 260px;
+  height: 290px;
+  transition: transform 0.23s, box-shadow 0.4s;
+  display: block;
+  background-color: #eee;
+  position: relative;
+  color: inherit;
+  border-radius: 6px;
+  overflow: hidden;
+}
+ .animal-card img {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+}
+ .animal-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 16px #000 6;
+}
+ .animal-card .name-row {
+  padding-left: 0.5rem;
+  padding-top: 0.3rem;
+  font-size: 1.85rem;
+  display: flex;
+  justify-content: center;
+}
+ .animal-card .gender-icon {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+ .animal-card .bubbles {
+  position: absolute;
+  bottom: 68px;
+  left: 12px;
+  display: flex;
+  padding: 0;
+  flex-direction: column;
+  gap: 8px;
+  align-items: start;
+  font-family: oswald, system-ui;
+  color: #fff;
+}
+ .animal-card .bubbles span {
+  background-color: #66f;
+  border-radius: 40px;
+  padding: 2px 8px;
+  font-size: 1rem;
+  font-weight: 100;
+}
+ .animal-card .bubbles span.emergency {
+  background-color: #f77;
+}
+`
 
 const defaultSectionStyles = new Map<SectionType, string>([
   ['title', defaultTitleStyle],
   ['image', defaultImagesStyle],
+  ['animal-list', defaultAnimalListStyle],
 ]);
 
 export function getImageFormatUrl(image: CmsImage, requestedSize: CmsImagesSize): string {

@@ -1,0 +1,13 @@
+<div #wrapper class="editor-wrapper">
+  <!-- Highlighted code (not editable) -->
+  <pre class="highlight-layer">
+    <code [highlight]="section().Content.Html" language="html"></code>
+  </pre>
+
+  <!-- Transparent editable layer -->
+  <textarea #textarea class="edit-layer"
+            [(ngModel)]="section().Content.Html"
+            (input)="onInput($event)"
+            spellcheck="false">
+  </textarea>
+</div>

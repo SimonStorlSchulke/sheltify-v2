@@ -12,7 +12,7 @@
           @let iColumn = $index;
           @let numSections = row.Sections.length;
           @let gapsWidth = 34 * (numSections + 1);
-          <div [style]="'width: calc(' + (100 / numSections) + '% - ' + gapsWidth + 'px)' "  class="sui flex-y grow-1" (click)="editSection($event, articleColumn)" >
+          <div [style]="'width: calc(' + (100 / numSections) + '% - ' + gapsWidth + 'px)' "  class="sui flex-y grow-1" (click)="editSection(articleColumn, $event)" >
 
             <div #articleColumn class="article-column sui grow-1">
 
@@ -36,6 +36,9 @@
                     }
                     @case ('animal-list') {
                       <app-section-editor-animal-list [section]="section"/>
+                    }
+                    @case ('html') {
+                      <app-section-editor-html [section]="section"/>
                     }
                   }
                 </div>

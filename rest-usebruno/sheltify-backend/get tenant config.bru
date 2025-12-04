@@ -1,0 +1,15 @@
+meta {
+  name: get tenant config
+  type: http
+  seq: 21
+}
+
+get {
+  url: http://localhost:3000/api/snhg/animals/filtered?sizeMax=2
+  body: json
+  auth: inherit
+}
+
+params:query {
+  sizeMax: 2
+}

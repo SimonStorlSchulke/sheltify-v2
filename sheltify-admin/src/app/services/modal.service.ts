@@ -5,16 +5,21 @@ import { firstValueFrom, Observable, Subject } from 'rxjs';
 import { AlertButtonName, AlertComponent } from 'src/app/ui/alert/alert.component';
 
 export interface Finishable<TValue> {
-  finish: Observable<TValue>;
+  finish: Observable<TValue | undefined>;
 }
 
 @Directive()
 export abstract class FinishableDialog<TValue> implements Finishable<TValue>, OnDestroy {
-  protected readonly finishSubject = new Subject<TValue>();
+  protected readonly finishSubject = new Subject<TValue | undefined>();
   readonly finish = this.finishSubject.asObservable();
 
   protected finishWith(value: TValue) {
     this.finishSubject.next(value);
+    this.finishSubject.complete();
+  }
+
+  protected cancel() {
+    this.finishSubject.next(undefined);
     this.finishSubject.complete();
   }
 

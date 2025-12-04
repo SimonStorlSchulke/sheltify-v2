@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"sheltify-new-backend/repository"
+	"sheltify-new-backend/services"
 )
 
 func GetAnimalById(w http.ResponseWriter, r *http.Request) {
@@ -19,6 +20,22 @@ func GetAnimalById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	okResponse(w, animal)
+}
+
+func GetFilteredAnimals(w http.ResponseWriter, r *http.Request) {
+	tenant, err := tenantFromParameter(w, r)
+	if err != nil {
+		return
+	}
+
+	animalsFilter := services.BuildAnimalsFilterFromQuery(r)
+	animals, err := repository.GetFilteredAnimals(animalsFilter, tenant)
+
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	okResponse(w, animals)
 }
 
 func GetAnimalsByArticleId(w http.ResponseWriter, r *http.Request) {

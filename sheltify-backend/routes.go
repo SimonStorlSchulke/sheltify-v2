@@ -22,12 +22,14 @@ func initRoutes(r *chi.Mux) {
 
 func publicRoutes(r *chi.Mux) {
 	r.Get("/{tenant}/animals/{id}", handlers.GetAnimalById)
+	r.Get("/{tenant}/animals/filtered", handlers.GetFilteredAnimals)
 	r.Get("/{tenant}/animals/by-article/{id}", handlers.GetAnimalsByArticleId)
 	r.Get("/{tenant}/animals", handlers.GetTenantsAnimals)
 
 	r.Get("/{tenant}/media", handlers.GetTenantsMediaByTags)
 	r.Get("/{tenant}/tags", handlers.GetAllTags)
 	r.Get("/{tenant}/article/{id}", handlers.GetArticle)
+	r.Get("/{tenant}/configuration", handlers.GetTenantConfiguration)
 }
 
 func adminRoutes(r *chi.Mux) {
@@ -47,4 +49,6 @@ func adminRoutes(r *chi.Mux) {
 
 	r.Post("/article", handlers.SaveArticle)
 	r.Patch("/article", handlers.SaveArticle)
+
+	r.Patch("/configuration", handlers.SaveTenantConfiguration)
 }

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { SectionType, SectionTypes } from 'src/app/cms-types/article-types';
+import { sectionLabels } from 'src/app/services/article-renderer';
 import { FinishableDialog } from 'src/app/services/modal.service';
 
 @Component({
@@ -10,4 +11,5 @@ import { FinishableDialog } from 'src/app/services/modal.service';
 })
 export class PickNewSectionComponent extends FinishableDialog<SectionType>{
   public SectionTypes = SectionTypes;
+  public sectionLabels = sectionLabels;
 }

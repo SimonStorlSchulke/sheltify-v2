@@ -31,6 +31,13 @@ export function createEmptySection(SectionType: SectionType): Section {
           MediaFiles: [],
         }
       };
+    case 'html':
+      return {
+        SectionType,
+        Content: {
+          Html: '',
+        }
+      };
     case 'animal-list':
       return {
         SectionType,
@@ -49,6 +56,6 @@ export function createEmptySection(SectionType: SectionType): Section {
 }
 
 
-function assertUnreachable(x: never): never {
+function assertUnreachable(_: never): never {
   throw new Error("Didn't expect to get here");
 }

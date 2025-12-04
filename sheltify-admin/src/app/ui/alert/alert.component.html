@@ -19,9 +19,12 @@
   <div class="sui flex-x jc-end gap-1">
     @for (button of buttons; track button) {
       <button
+        #btn
         (click)="onButtonClicked(button)"
+        [autofocus]="button == 'ok' || button == 'ja'"
         [class]="button == 'ja' || button == 'ok' ? 'primary' : 'secondary'">
         {{ button }}
+        {{ button == 'ok' || button == 'ja' ? btn.focus() : '' }}
       </button>
     }
   </div>

@@ -1,0 +1,16 @@
+<div class="sui flex-x ai-center gap-1">
+  <label [for]="name()">{{label()}}</label>
+  @if(explanation()) {
+    <button class="small secondary questionmark" (click)="showExplanation()">?</button>
+  }
+</div>
+<div class="button-group">
+
+  @for (option of options(); track option) {
+    <button
+      [class]="twoWayModel() == option ? 'primary' : 'secondary'"
+      (click)="onInput(option)">
+      {{ optionTranslations()[$index] ?? option }}
+    </button>
+  }
+</div>

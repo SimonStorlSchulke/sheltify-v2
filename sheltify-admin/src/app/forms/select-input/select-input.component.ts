@@ -17,7 +17,7 @@ export class SelectInputComponent extends InputBaseComponent {
   public placeholder = input<string>();
   public twoWayModel = model<string>('');
   public options = input.required<string[]>();
-  public optionTranslations = input<Record<string, string>>();
+  public optionTranslations = input<Record<string, string> | undefined>(undefined);
   public clearable = input<boolean>(true);
 
   public onInput(event: Event) {
