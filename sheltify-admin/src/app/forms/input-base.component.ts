@@ -5,7 +5,7 @@ import { AlertService } from 'src/app/services/alert.service';
   template: '',
 })
 export class InputBaseComponent {
-  public name = input.required<string>();
+  public idName = input.required<string>();
   public explanation = input<string>();
   public label = input.required<string>();
 

@@ -1,5 +1,6 @@
 .article-editor-container {
   max-height: calc(100dvh - 100px);
+  height: calc(100dvh - 100px);
   overflow: auto;
   max-width: 1300px;
 }

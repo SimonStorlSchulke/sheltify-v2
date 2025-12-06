@@ -1,24 +1,24 @@
 <div class="sui flex-y gap-2" (input)="onInput.next()">
 
   <app-number-input
-    name="amount" label="Maximal angezeigte Anzahl (freilassen für alle)"
+    idName="amount" label="Maximal angezeigte Anzahl (freilassen für alle)"
     [(twoWayModel)]="section().Content.MaxNumber"
   />
 
   <app-range-input
-    name="age" label="Alter in Jahren"
+    idName="age" label="Alter in Jahren"
     [stepSize]="0.25"
     explanation="von x bis y Jahre (von / bis kann auch leer sein um Alter in eine Richtung offen zu lassen)"
     [(twoWayModel)]="section().Content.AgeRange"
   />
   <app-range-input
-    name="size" label="Größe in cm"
+    idName="size" label="Größe in cm"
     explanation="von x bis y cm (von / bis kann auch leer sein um Alter in eine Richtung offen zu lassen)"
     [(twoWayModel)]="section().Content.SizeRange"
   />
 
   <app-select-input
-    name="gender" label="Geschlecht"
+    idName="gender" label="Geschlecht"
     [options]="['both', 'male', 'female']"
     [optionTranslations]="{
       both: 'beide',

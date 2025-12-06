@@ -51,6 +51,10 @@ export function createEmptySection(SectionType: SectionType): Section {
         },
         TempFoundAnimals: [],
       };
+    case 'separator-x':
+      return {
+        SectionType,
+      };
     default:
       assertUnreachable(SectionType);
   }

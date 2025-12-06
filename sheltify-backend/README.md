@@ -10,4 +10,3 @@ docker run --name=sheltify-db -e POSTGRES_PASSWORD=1212 -e PGPORT=5434 -d -p 543
 dann im docker terminal:
 `psql -U postgres`  
 `CREATE DATABASE sheltify_db;`
-

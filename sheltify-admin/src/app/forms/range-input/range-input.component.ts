@@ -15,7 +15,7 @@ export class RangeInputComponent extends InputBaseComponent {
 
   public onInput(event: Event, minOrMax: 0 | 1) {
     const numberString = (event.target as HTMLInputElement).value;
-    const value = numberString ? parseInt(numberString) : undefined;
+    const value = numberString ? parseFloat(numberString) : undefined;
     this.twoWayModel.update((values) => {
       values[minOrMax] = value;
       return [...values];

@@ -7,8 +7,7 @@ import (
 
 type TenantConfiguration struct {
 	gorm.Model
-	TenantID string `gorm:"uniqueIndex"` // ensures one-to-one
-
+	TenantID                  string         `gorm:"uniqueIndex"` // ensures one-to-one
 	AnimalKinds               datatypes.JSON `gorm:"type:json"`
 	DefaultAnimalKind         string
 	CmsShowAnimalKindSelector bool
@@ -24,10 +23,10 @@ type TenantConfiguration struct {
 	LinkYoutube               string
 }
 
-func (m *TenantConfiguration) SetTenantId(id string) {
-	m.TenantID = id
+func (c *TenantConfiguration) SetTenantId(id string) {
+	c.TenantID = id
 }
 
-func (a *TenantConfiguration) Validate() string {
+func (c *TenantConfiguration) Validate() string {
 	return ""
 }

@@ -7,7 +7,7 @@ import { InputBaseComponent } from 'src/app/forms/input-base.component';
   templateUrl: './checkbox-input.component.html',
   styleUrls: ['../form-base.component.scss']
 })
-export class CheckboxInputComponent extends InputBaseComponent{
+export class CheckboxInputComponent extends InputBaseComponent {
   public twoWayModel = model<boolean>(false);
 
   public onInput(checked: boolean) {

@@ -1,4 +1,4 @@
-import { Section, SectionAnimalList, SectionImages, SectionType } from 'src/app/cms-types/article-types';
+import { Section, SectionAnimalList, SectionImages, SectionTitle, SectionType } from 'src/app/cms-types/article-types';
 import { CmsImage, CmsImagesSize } from 'src/app/cms-types/cms-types';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 
@@ -10,7 +10,7 @@ export function renderArticleSection(section: Section) {
       contentHtml = section.Content.Html;
       break;
     case 'title':
-      contentHtml = `<${section.Content.Type}>${section.Content.Text}</${section.Content.Type}>`;
+      contentHtml = renderTitleSection(section);
       break;
     case 'image':
       contentHtml = renderImageSection(section);
@@ -20,6 +20,9 @@ export function renderArticleSection(section: Section) {
       break;
     case 'animal-list':
       contentHtml = renderAnimalList(section);
+      break;
+    case 'separator-x':
+      contentHtml = `<hr>`;
       break;
     default:
       contentHtml = 'Vorschau noch nicht implementiert für ' + section.SectionType;
@@ -35,7 +38,24 @@ export const sectionLabels = new Map<SectionType, string>([
   ['video', 'Videosektion'],
   ['html', 'HTML'],
   ['animal-list', 'Tierliste (statisch)'],
-])
+  ['separator-x', 'Trenner'],
+]);
+
+function renderTitleSection(section: SectionTitle) {
+  const c = section.Content;
+  let html = c.Anchor ? `
+  <${c.Type} class="title" id="${c.Anchor}">
+    <span class="title-text"">${c.Text}</span>
+    <a class="title-hashtag">#</a>
+  </${c.Type}>`
+  :
+  `<${c.Type}>${c.Text}</${c.Type}>`
+
+  if(c.Underline) {
+    html += `<hr>`;
+  }
+  return html;
+}
 
 
 function renderAnimalList(section: SectionAnimalList) {
@@ -99,9 +119,24 @@ const defaultGeneralArticleStyle = `
 
 const defaultTitleStyle = `
 h1 {font-size: 3.8rem;}
-  h2 {font-size: 2.8rem;}
-  h3 {font-size: 1.85rem;}
-  h4 {font-size: 1.55rem;}
+h2 {font-size: 2.8rem;}
+h3 {font-size: 1.85rem;}
+h4 {font-size: 1.55rem;}
+
+hr {
+  margin: 12px 0;
+  border: none;
+  border-top: 2px solid #bbb;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+}
+
+.title .title-text {
+  flex-grow: 1;
+}
 `;
 
 const defaultImagesStyle = `
@@ -189,10 +224,19 @@ justify-content: center;
 }
 `
 
+const defaultSeparatorStyle = `
+hr {
+  margin: 28px 0;
+  border: none;
+  border-top: 2px solid #bbb;
+}
+`;
+
 const defaultSectionStyles = new Map<SectionType, string>([
   ['title', defaultTitleStyle],
   ['image', defaultImagesStyle],
   ['animal-list', defaultAnimalListStyle],
+  ['separator-x', defaultSeparatorStyle],
 ]);
 
 export function getImageFormatUrl(image: CmsImage, requestedSize: CmsImagesSize): string {

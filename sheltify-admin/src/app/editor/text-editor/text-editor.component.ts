@@ -3,6 +3,7 @@ import { NgxEditorModule } from 'ngx-editor';
 import { Editor } from 'ngx-editor';
 import { FormsModule } from '@angular/forms';
 import { schema } from 'ngx-editor/schema';
+import { Plugin } from 'prosemirror-state'
 
 @Component({
     selector: 'app-text-editor',
@@ -28,6 +29,19 @@ export class TextEditorComponent implements OnInit {
       keyboardShortcuts: true,
       inputRules: true,
     });
+
+    const plainTextOnlyPaste = new Plugin({
+     props: {
+         transformPastedHTML(html: string): string {
+              const doc = new DOMParser().parseFromString(
+                     html,
+                    "text/html");
+             return doc.body.textContent || "";
+         }
+     }
+ });
+ 
+ this.editor = new Editor({ plugins: [plainTextOnlyPaste] });
   }
 
   public ngOnInit() {

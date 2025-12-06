@@ -63,6 +63,9 @@ func Error(r *http.Request, message string) shtypes.LogEntry {
 
 func Audited(r *http.Request, entry shtypes.LogEntry) shtypes.LogEntry {
 	user := UserFromRequest(r)
+	if user == nil {
+		return entry
+	}
 	entry.HashedUser = shortHash(user.ID)
 	entry.Tenant = user.TenantID
 	entry.Path = r.URL.Path

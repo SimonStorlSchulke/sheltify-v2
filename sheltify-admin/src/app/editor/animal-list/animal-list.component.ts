@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom, lastValueFrom, startWith, Subject, switchMap } from 'rxjs';
 import { CmsAnimal } from 'src/app/cms-types/cms-types';
@@ -16,7 +16,8 @@ import { AsyncPipe, DatePipe } from '@angular/common';
     CmsImageDirective,
   ],
   templateUrl: './animal-list.component.html',
-  styleUrl: './animal-list.component.scss'
+  styleUrl: './animal-list.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AnimalListComponent implements OnInit {
   private cmsRequestService = inject(CmsRequestService);
@@ -52,6 +53,7 @@ export class AnimalListComponent implements OnInit {
   }
 
   public newAnimal() {
+    // TODO most data should be undefined at start
     this.selectedAnimal.set({
       Birthday: "2018-03-29T15:04:05Z", //TODO
       Castrated: false,

@@ -1,4 +1,4 @@
-import { Component, input, inject, model, output } from '@angular/core';
+import { Component, input, inject, model, output, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { CmsAnimal } from 'src/app/cms-types/cms-types';
@@ -25,7 +25,8 @@ import { CmsRequestService } from '../../services/cms-request.service';
     NumberInputComponent,
   ],
   templateUrl: './animal-editor.component.html',
-  styleUrl: './animal-editor.component.scss'
+  styleUrl: './animal-editor.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AnimalEditorComponent {
 

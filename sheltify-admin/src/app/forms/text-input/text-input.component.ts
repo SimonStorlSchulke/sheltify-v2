@@ -10,6 +10,7 @@ import { InputBaseComponent } from 'src/app/forms/input-base.component';
 export class TextInputComponent extends InputBaseComponent {
   public placeholder = input<string>();
   public long = input<boolean>(false);
+  public isEmail = input<boolean>(false);
   public twoWayModel = model<string>('');
 
   public onInput(event: Event) {

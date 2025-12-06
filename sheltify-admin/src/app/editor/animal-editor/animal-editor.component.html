@@ -2,21 +2,21 @@
 @if (animal(); as animal) {
   <div class="article-editor-container sui">
     <div class="sui flex-x gap-3 grow-1">
-      <app-image-picker-single label="Portrait" name="imagePicker" [(twoWayModel)]="animal.Portrait"/>
+      <app-image-picker-single label="Portrait" idName="imagePicker" [(twoWayModel)]="animal.Portrait"/>
       <form class="sui flex-y gap-2 grow-1 pr-1">
         <div [class]="rowClass">
-          <app-text-input class="sui grow-1" name="name" label="Name" [(twoWayModel)]="animal.Name"/>
-          <app-radio-buttons-input name="gender" label="Geschlecht" [options]="['male', 'female']" [optionTranslations]="['Männlich', 'Weiblich']" [(twoWayModel)]="animal.Gender"/>
+          <app-text-input class="sui grow-1" idName="name" label="Name" [(twoWayModel)]="animal.Name"/>
+          <app-radio-buttons-input idName="gender" label="Geschlecht" [options]="['male', 'female']" [optionTranslations]="['Männlich', 'Weiblich']" [(twoWayModel)]="animal.Gender"/>
         </div>
         <app-text-input
-          class="description" name="description" label="Beschreibung" [long]="true"
+          class="description" idName="description" label="Beschreibung" [long]="true"
           [(twoWayModel)]="animal.Description"
           explanation="Kurzer Text, der im Steckbrief oben unter jedem Tier angezeigt wird"/>
         <div [class]="rowClass">
 
-        <app-checkbox-input name="castrated" label="Kastriert" [(twoWayModel)]="animal.Castrated"/>
-        <app-date-picker name="birthday" label="Geboren ca." [(twoWayModelISOString)]="animal.Birthday"/>
-        <app-number-input name="size" label="Schulterhöhe in cm" [(twoWayModel)]="animal.ShoulderHeightCm"/>
+        <app-checkbox-input idName="castrated" label="Kastriert" [(twoWayModel)]="animal.Castrated"/>
+        <app-date-picker idName="birthday" label="Geboren ca." [(twoWayModelISOString)]="animal.Birthday"/>
+        <app-number-input idName="size" label="Schulterhöhe in cm" [(twoWayModel)]="animal.ShoulderHeightCm"/>
         </div>
       </form>
     </div>

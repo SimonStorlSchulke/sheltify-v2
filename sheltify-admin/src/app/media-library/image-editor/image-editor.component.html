@@ -31,10 +31,10 @@
     <span>Dateiname: {{ image().OriginalFileName }}</span>
     <span>Größe: {{ getSizeString(image().LargestAvailableSize) }}</span>
   </div>
-  <app-text-input name="title" label="Titel"
+  <app-text-input idName="title" label="Titel"
                   [twoWayModel]="image().Title" (twoWayModelChange)="image().Title = $event"/>
 
-  <app-text-input name="title" label="Beschreibung" [long]="true" explanation="Wird z.B. in Gallerien unter dem Bild angezeigt"
+  <app-text-input idName="title" label="Beschreibung" [long]="true" explanation="Wird z.B. in Gallerien unter dem Bild angezeigt"
                   [twoWayModel]="image().Description" (twoWayModelChange)="image().Description = $event"/>
 
   <span class="tags-label">tags</span>

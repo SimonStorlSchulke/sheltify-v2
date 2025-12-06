@@ -1,6 +1,6 @@
 ---
-import Header from "@shared/layouts/Header.astro";
 import Layout from "@shared/layouts/Layout.astro";
+import { cms } from '@shared/cms/sheltify-access';
 
 const animals = await cms.animals;
 ---
@@ -8,6 +8,5 @@ const animals = await cms.animals;
 <h1>MFT!</h1>
 
 <Layout>
-	<Header />
-	{animals.map((a) => <div>{a.name}</div>)}
+	{animals.map((a) => <div>{a.Name}</div>)}
 </Layout>

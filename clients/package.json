@@ -3,6 +3,9 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
+    "snhg": "astro dev --root ./sites/snhg --port 4201",
+    "mft": "astro dev --root ./sites/mft --port 4201",
+    "hhg": "astro dev --root ./sites/hhg --port 4201",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",

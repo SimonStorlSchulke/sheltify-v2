@@ -59,3 +59,19 @@ export type CmsTag = {
   Name: string,
   Color: string,
 }
+
+export type CmsTenantConfiguration = {
+  AnimalKinds: string[],
+  DefaultAnimalKind: string,
+  CmsShowAnimalKindSelector: boolean,
+  Address: string,
+  PhoneNumber: string,
+  Email: string,
+  ArticleCss: string,
+  IBAN: string,
+  LinkPaypal: string,
+  LinkFacebook: string,
+  LinkInstagram: string,
+  LinkTiktok: string,
+  LinkYoutube: string,
+}

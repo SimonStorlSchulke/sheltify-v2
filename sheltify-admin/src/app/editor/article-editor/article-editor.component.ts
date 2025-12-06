@@ -1,9 +1,9 @@
-import { Component, effect, HostListener, input, output, Renderer2, signal } from '@angular/core';
+import { Component, computed, effect, HostListener, input, output, Pipe, Renderer2, signal, untracked } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { bootstrapGripVertical, bootstrapX, bootstrapPlus } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lastValueFrom } from 'rxjs';
-import { CmsArticle, CmsArticleRow, Section, SectionType } from 'src/app/cms-types/article-types';
+import { CmsArticle, CmsArticleRow, Section } from 'src/app/cms-types/article-types';
 import { createEmptySection } from 'src/app/editor/article-editor/article-section.factory';
 import { PickNewSectionComponent } from 'src/app/editor/article-editor/pick-new-section/pick-new-section.component';
 import { SectionEditorAnimalListComponent } from 'src/app/editor/article-editor/section-editor-animal-list/section-editor-animal-list.component';
@@ -15,22 +15,17 @@ import { AlertService } from 'src/app/services/alert.service';
 import { createArticleStyle, renderArticleSection, sectionLabels } from 'src/app/services/article-renderer';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { ModalService } from 'src/app/services/modal.service';
+import { bootstrapEye } from '@ng-icons/bootstrap-icons';
 
-const emptyArticle: CmsArticle = {
-  Structure: {
-    Rows: [
-      {Sections: []},
-    ],
-  },
-  TenantID: "snhg"
-}
+const emptyArticle: CmsArticle = {Structure: {Rows: []}, TenantID: ''};
 
 @Component({
   selector: 'app-article-editor',
   imports: [SectionEditorTextComponent, NgIcon, SectionEditorImagesComponent, SectionEditorTitleComponent, SectionEditorAnimalListComponent, SectionEditorHtmlComponent],
-  providers: [provideIcons({bootstrapGripVertical, bootstrapX, bootstrapPlus})],
+  providers: [provideIcons({bootstrapGripVertical, bootstrapX, bootstrapPlus, bootstrapEye})],
   templateUrl: './article-editor.component.html',
-  styleUrl: './article-editor.component.scss'
+  styleUrl: './article-editor.component.scss',
+  //changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArticleEditorComponent {
 
@@ -40,6 +35,8 @@ export class ArticleEditorComponent {
 
   article = signal<CmsArticle | undefined>(emptyArticle);
   movedItem = signal<{ row: number, column: number, sectionRef: Section } | null>(null);
+
+  isPreviewMode = signal<boolean>(false);
 
   sectionLabels = sectionLabels;
 
@@ -54,16 +51,9 @@ export class ArticleEditorComponent {
     this.addGlobalStyle();
 
     effect(async () => {
-      if (!this.articleId() || this.articleId() == -1) {
-        this.article.set(emptyArticle);
-        return;
-      }
-      this.article.set({Structure: {Rows: []}, TenantID: ''});
-      const article = await lastValueFrom(this.cmsRequestService.getArticle(this.articleId()));
-
-      const articlesAnimals = await lastValueFrom(this.cmsRequestService.getAnimalsByArticleId(this.articleId()))
-      console.log(articlesAnimals)
-
+      const articleId = this.articleId();
+      if (!articleId || articleId == -1) return;
+      const article = await lastValueFrom(this.cmsRequestService.getArticle(articleId));
       this.article.set(article);
     });
   }
@@ -73,30 +63,35 @@ export class ArticleEditorComponent {
   }
 
   public async addSectionAt(row: number, column: number) {
-    if (!this.article()) return;
+    if (!this.article() || this.isPreviewMode()) return;
     if (this.movedItem()) return;
     const sectionType = await this.modalService.openFinishable(PickNewSectionComponent);
-    if(!sectionType) return;
-    const sectionRef: Section = createEmptySection(sectionType);
-    const article = this.article()!;
-    const newRow = article.Structure.Rows[row];
-    newRow.Sections.splice(column, 0, sectionRef);
-    this.exitMoveMode();
+    if (!sectionType) return;
 
-    setTimeout(() => {
-      const rowElement = document.querySelectorAll('.article-row')[row];
-      const sectionElement = rowElement.querySelectorAll<HTMLDivElement>('.article-column')[column];
-      this.editSection(sectionElement)
-    }, 0);
+    const sectionRef: Section = createEmptySection(sectionType);
+
+    const article = this.article()!;
+    const newRef = article.Structure.Rows[row];
+    newRef.Sections.splice(column, 0, sectionRef);
+
+    this.exitMoveMode();
+    setTimeout(() => this.editSectionAtPosition(row, column), 0);
+  }
+
+  private editSectionAtPosition(row: number, column: number) {
+    const rowElement = document.querySelectorAll('.article-row')[row];
+    const sectionElement = rowElement.querySelectorAll<HTMLDivElement>('.article-column')[column];
+    this.editSection(sectionElement)
   }
 
   public async addSectionAtNewRow(row: number) {
-    if (!this.article()) return;
+    if (!this.article() || this.isPreviewMode()) return;
     if (this.movedItem()) return;
     const article = this.article()!;
 
     const sectionType = await this.modalService.openFinishable(PickNewSectionComponent);
-    if(!sectionType) return;
+    if (!sectionType) return;
+
     const sectionRef = createEmptySection(sectionType);
     const newRow: CmsArticleRow = {
       Sections: [sectionRef]
@@ -104,13 +99,9 @@ export class ArticleEditorComponent {
 
     article.Structure.Rows.splice(row, 0, newRow);
     this.cleanupEmptyRows(article);
-    this.exitMoveMode();
 
-    setTimeout(() => {
-      const rowElement = document.querySelectorAll('.article-row')[row];
-      const sectionElement = rowElement.querySelectorAll<HTMLDivElement>('.article-column')[0];
-      this.editSection(sectionElement)
-    }, 0);
+    this.exitMoveMode();
+    setTimeout(() => this.editSectionAtPosition(row, 0), 0);
   }
 
   addGlobalStyle(css: string = createArticleStyle()) {
@@ -130,6 +121,7 @@ export class ArticleEditorComponent {
   public exitMoveMode() {
     setTimeout(() => {
       this.movedItem.set(null)
+    this.triggerRerender();
     }, 0);
   }
 
@@ -181,19 +173,34 @@ export class ArticleEditorComponent {
     this.article.set(article);
   }
 
-  public renderSection(section: Section): SafeHtml {
-    return this.domSanitizer.bypassSecurityTrustHtml(renderArticleSection(section))
-  }
-
   protected editSection(articleColumn: HTMLDivElement, mouseEvent?: MouseEvent) {
+    if (this.isPreviewMode()) return;
     mouseEvent?.stopPropagation();
     document.querySelectorAll('.article-column').forEach(el => el.classList.remove('edit-mode'));
     articleColumn.classList.add('edit-mode');
   }
 
   @HostListener('document:click', ['$event'])
-  clickout(_: any) {
+  deselectSections(_: any) {
+    const wasInEditMode = !!document.querySelector('.article-column.edit-mode');
     document.querySelectorAll('.article-column').forEach(el => el.classList.remove('edit-mode'));
+    if(wasInEditMode) {
+      this.triggerRerender();
+    }
   }
-}
 
+  public triggerRerender() {
+    this.triggerRerenderVal.update(v => v + 1);
+  }
+
+
+  triggerRerenderVal = signal(0);
+  renderedSections = computed(() => {
+    this.triggerRerenderVal();
+    const article = this.article();
+    return article?.Structure.Rows.map(r =>
+      r.Sections.map(s => this.domSanitizer.bypassSecurityTrustHtml(renderArticleSection(s)))
+    );
+  });
+
+}

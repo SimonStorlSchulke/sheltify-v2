@@ -1,5 +1,5 @@
 <div class="sui flex-x ai-center gap-1">
-  <label [for]="name()">{{label()}}</label>
+  <label [for]="idName()">{{label()}}</label>
   @if(explanation()) {
     <button class="small secondary questionmark" (click)="showExplanation()">?</button>
   }
@@ -8,10 +8,10 @@
 <div class="sui flex-x gap-2">
   <div class="sui flex-x gap-1 ai-center">
     <span>von</span>
-    <input [step]="stepSize()" [min]="min()" [max]="max()" style="width: 64px" [id]="name()" [name]="name()" type="number" [value]="twoWayModel()[0]" (input)="onInput($event, 0)">
+    <input [step]="stepSize()" [min]="min()" [max]="max()" style="width: 64px" [id]="idName()" [name]="idName()" type="number" [value]="twoWayModel()[0]" (input)="onInput($event, 0)">
   </div>
   <div class="sui flex-x gap-1 ai-center">
     <span>bis</span>
-    <input [step]="stepSize()" [min]="min()" [max]="max()" style="width: 64px" [id]="name()" [name]="name()" type="number" [value]="twoWayModel()[1]" (input)="onInput($event, 1)">
+    <input [step]="stepSize()" [min]="min()" [max]="max()" style="width: 64px" [id]="idName()" [name]="idName()" type="number" [value]="twoWayModel()[1]" (input)="onInput($event, 1)">
   </div>
 </div>

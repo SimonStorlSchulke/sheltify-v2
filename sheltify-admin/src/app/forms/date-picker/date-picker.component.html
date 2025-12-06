@@ -1,8 +1,8 @@
 <div class="sui flex-x ai-center gap-1">
-  <label [for]="name()">{{label()}}</label>
+  <label [for]="idName()">{{label()}}</label>
   @if(explanation()) {
     <button class="small secondary questionmark" (click)="showExplanation()">?</button>
   }
 </div>
-<input [id]="name()" [name]="name()" type="date" [value]="dateOnly()" (input)="onInput($event)">
+<input [id]="idName()" [name]="idName()" type="date" [value]="dateOnly()" (input)="onInput($event)">
 

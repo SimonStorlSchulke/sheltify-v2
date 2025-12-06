@@ -1,7 +1,7 @@
 <div class="sui flex-x wrap gap-1">
   <app-text-input
     class="sui grow-1"
-    name="title"
+    idName="title"
     label="Titel"
     [(twoWayModel)]="section().Content.Text"
   />
@@ -25,11 +25,13 @@
           <h4>Überschrift 4</h4>
         </ng-option>
       </ng-select>
+
+      <app-checkbox-input idName="underlined" label="Unterstrichen" [(twoWayModel)]="section().Content.Underline!"/>
     </div>
 
   </div>
   <app-text-input
-    name="title" label="Anker"
+    idName="title" label="Anker"
     explanation="wenn ein Anker angegeben wird, kann dieser auf der Seite angeklickt werden (#) und kopiert damit den Link direkt zu diesem Abschnitt in die Zwischenablage."
     [(twoWayModel)]="section().Content.Anchor"
   />

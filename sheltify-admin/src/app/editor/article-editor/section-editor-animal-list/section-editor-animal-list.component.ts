@@ -1,4 +1,4 @@
-import { Component, input, OnDestroy, OnInit } from '@angular/core';
+import { Component, input, OnDestroy, OnInit, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { debounceTime, firstValueFrom, Subject, Subscription } from 'rxjs';
 import { SectionAnimalList } from 'src/app/cms-types/article-types';
@@ -20,6 +20,7 @@ import { CmsRequestService } from 'src/app/services/cms-request.service';
 })
 export class SectionEditorAnimalListComponent implements OnInit, OnDestroy {
   section = input.required<SectionAnimalList>();
+  triggerRerender = output<void>();
 
   onInput = new Subject<void>();
 
@@ -37,6 +38,7 @@ export class SectionEditorAnimalListComponent implements OnInit, OnDestroy {
 
   async updateAnimals() {
     this.section().TempFoundAnimals = await firstValueFrom(this.cmsRequestService.getFilteredAnimals(this.section().Content));
+    this.triggerRerender.emit();
   }
 
   public ngOnDestroy() {

@@ -31,6 +31,7 @@ func GetTenantsMediaByTags(w http.ResponseWriter, r *http.Request) {
 		medias, err = repository.GetTenantsMediaFilesByTags(tags, tenant)
 	}
 	if err != nil {
+		//TODO - throws if multiple tags with same name exist (which shouldn't be possible in the first place)
 		internalServerErrorResponse(w, r, err.Error())
 		return
 	}

@@ -1,4 +1,4 @@
-import { CmsImage } from 'src/app/cms-types/cms-types';
+import type { CmsImage } from '@shared/types/cms-types.ts';
 
 export const SectionTypes = ["title", "text", "video", "image"] as const;
 
@@ -24,6 +24,8 @@ export type Section =
   | SectionImages
   | SectionTitle
   | SectionVideo
+  | SectionSeparatorY
+  | SectionSeparatorX
 
 export type SectionText = {
   SectionType: 'text',
@@ -48,9 +50,17 @@ export type SectionTitle = {
   },
 };
 
-export type SectionVideo= {
+export type SectionVideo = {
   SectionType: 'video',
   Content: {
 
   },
+};
+
+export type SectionSeparatorX = {
+  SectionType: 'separator-x'
+};
+
+export type SectionSeparatorY = {
+  SectionType: 'separator-y'
 };

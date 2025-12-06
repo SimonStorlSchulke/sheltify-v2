@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { CmsArticle } from 'src/app/cms-types/article-types';
-import { CmsAnimal, CmsImage, CmsTag } from 'src/app/cms-types/cms-types';
+import { CmsAnimal, CmsImage, CmsTag, CmsTenantConfiguration } from 'src/app/cms-types/cms-types';
 import { LoaderService } from 'src/app/layout/loader/loader.service';
 import { AuthService } from './auth.service';
 import { HttpClient } from '@angular/common/http';
@@ -43,6 +43,15 @@ export class CmsRequestService {
     };
   }
 
+  public getTenantConfiguration(): Observable<CmsTenantConfiguration> {
+    const tenantId = this.authService.getTenantID();
+    return this.get<CmsTenantConfiguration>(`${CmsRequestService.publicApiUrl}${tenantId}/configuration`);
+  }
+
+  public saveTenantConfiguration(config: CmsTenantConfiguration): Observable<CmsTenantConfiguration> {
+    return this.patch<CmsTenantConfiguration>('configuration', config);
+  }
+
   public getTenantsAnimals(): Observable<CollectionResult<CmsAnimal>> {
     const tenantId = this.authService.getTenantID();
     return this.get<CmsAnimal[]>(`${CmsRequestService.publicApiUrl}${tenantId}/animals`).pipe(map(response => {
@@ -77,8 +86,6 @@ export class CmsRequestService {
     if(filter.SizeRange[1]) query += `sizeMax=${filter.SizeRange[1]}&`;
     if(filter.Gender != 'both') query += `gender=${filter.Gender}&`;
 
-    console.log(query);
-
     return this.get<CmsAnimal[]>(`${CmsRequestService.publicApiUrl}${tenantId}/animals/filtered?${query}`);
   }
 
@@ -87,7 +94,7 @@ export class CmsRequestService {
   }
 
   public deleteAnimals(ids: number[]) {
-    return this.delete<CmsAnimal>(`${CmsRequestService.adminApiUrl}animals?ids=${ids.join(',')}`)
+    return this.delete<CmsAnimal>(`animals?ids=${ids.join(',')}`)
   }
 
   public createTag(tag: Omit<CmsTag, "ID">): Observable<CmsTag> {
@@ -100,7 +107,7 @@ export class CmsRequestService {
   }
 
   public deleteTag(id: number): Observable<void> {
-    return this.delete(`${CmsRequestService.adminApiUrl}tags/` + id)
+    return this.delete(`tags/` + id)
   }
 
   public getMediaByTags(tags: string[], tenantId: string): Observable<CmsImage[]> {
@@ -159,7 +166,7 @@ export class CmsRequestService {
   }
 
   private delete<T>(path: string): Observable<T> {
-    const url = decodeURIComponent(path);
+    const url = decodeURIComponent(CmsRequestService.adminApiUrl + path);
     return this.httpClient.delete<T>(url, this.options())
       .pipe(this.handleRequest(url, 'Löschen erfolgreich'));
   }
@@ -209,7 +216,7 @@ export class CmsRequestService {
           error: (e) => {
             console.log(e.error);
             this.toastrSv.error(
-              e.error.replace("\n", "<br>"),
+              e.error.replace ? e.error.replace("\n", "<br>") : '',
               "Fehler",
               {enableHtml: true, timeOut: 2500}
             );
