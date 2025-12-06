@@ -1,11 +1,14 @@
 package shtypes
 
 import (
+	"github.com/google/uuid"
 	"gorm.io/datatypes"
+	"gorm.io/gorm"
 )
 
 type TenantConfiguration struct {
-	CmsType
+	gorm.Model
+	ID                        string `gorm:"primaryKey;type:char(36)"`
 	TenantID                  string `gorm:"uniqueIndex"` // ensures one-to-one
 	CmsShowAnimalKindSelector bool
 	Address                   string
@@ -22,6 +25,31 @@ type TenantConfiguration struct {
 	DefaultAnimalKind         string
 
 	AnimalFilterConfigForAnimalKind map[string]AnimalFilterConfiguration `gorm:"serializer:json"`
+}
+
+func (m *TenantConfiguration) SetTenantId(id string) {
+	if m.TenantID == "" {
+		m.TenantID = id
+	}
+}
+
+func (m *TenantConfiguration) GetTenantId() string {
+	return m.TenantID
+}
+
+func (m *TenantConfiguration) Validate() string {
+	return ""
+}
+
+func (m *TenantConfiguration) GetUUId() string {
+	return m.ID
+}
+
+func (c *TenantConfiguration) BeforeCreate(tx *gorm.DB) (err error) {
+	if c.ID == "" {
+		c.ID = uuid.NewString()
+	}
+	return nil
 }
 
 type AnimalFilterConfiguration struct {

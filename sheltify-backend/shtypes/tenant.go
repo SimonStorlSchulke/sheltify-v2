@@ -11,7 +11,7 @@ type Tenant struct {
 	gorm.Model
 	ID            string `gorm:"primaryKey"`
 	Name          string
-	Configuration TenantConfiguration `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Configuration TenantConfiguration `gorm:"foreignKey:TenantID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
 func (t *Tenant) BeforeSave(tx *gorm.DB) error {
