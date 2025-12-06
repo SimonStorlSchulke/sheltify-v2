@@ -1,12 +1,11 @@
-import { CmsAnimal, CmsImage } from 'src/app/cms-types/cms-types';
+import { CmsAnimal, CmsImage, CmsType } from 'src/app/cms-types/cms-types';
 import { AnimalsFilter } from 'src/app/services/cms-request.service';
 
 export const SectionTypes = ["title", "text", "video", "image", "animal-list", "html", "separator-x"] as const;
 
 export type SectionType = (typeof SectionTypes)[number];
 
-export type CmsArticle = {
-  ID?: number;
+export type CmsArticle = CmsType & {
   CreatedAt?: string;
   UpdatedAt?: string;
   DeletedAt?: string | null;

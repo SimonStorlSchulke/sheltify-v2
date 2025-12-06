@@ -2,7 +2,6 @@ package shtypes
 
 type MediaFile struct {
 	CmsType
-	ID                   string `gorm:"primaryKey"`
 	ExternalLink         string
 	OriginalFileName     string
 	Title                string

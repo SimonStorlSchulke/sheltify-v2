@@ -10,7 +10,6 @@ import (
 
 type LogEntry struct {
 	gorm.Model
-	ID         uint `gorm:"primaryKey"`
 	Level      string
 	Operation  string
 	Path       string

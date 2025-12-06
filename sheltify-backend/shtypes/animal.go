@@ -17,7 +17,7 @@ type Animal struct {
 	Status           string //TODO possible values could be tenant specific?
 	Health           string
 	Priority         int
-	ArticleID        *uint
+	ArticleID        *string
 	Article          *Article `gorm:"->"`
 	PortraitID       *string
 	Portrait         *MediaFile `gorm:"->"`

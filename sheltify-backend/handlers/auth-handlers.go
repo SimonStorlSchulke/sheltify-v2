@@ -6,11 +6,12 @@ import (
 )
 
 func Register(w http.ResponseWriter, r *http.Request) {
-	userId := r.FormValue("username")
+	userName := r.FormValue("username")
+	email := r.FormValue("email")
 	password := r.FormValue("password")
 	tenant := r.FormValue("tenant")
 
-	user := services.RegisterUser(w, userId, password, tenant)
+	user := services.RegisterUser(w, userName, email, password, tenant)
 	if user == nil {
 		return
 	}
@@ -19,10 +20,10 @@ func Register(w http.ResponseWriter, r *http.Request) {
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	userId := r.FormValue("username")
+	userName := r.FormValue("username")
 	password := r.FormValue("password")
 
-	user := services.Login(w, userId, password)
+	user := services.Login(w, userName, password)
 
 	if user == nil {
 		return

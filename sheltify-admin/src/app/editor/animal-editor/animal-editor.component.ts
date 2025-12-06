@@ -60,7 +60,7 @@ export class AnimalEditorComponent {
     this.saved.emit(savedAnimal);
   }
 
-  protected setArticleId(id: number) {
+  protected setArticleId(id: string) {
     this.animal()!.ArticleID = id;
     this.save();
   }

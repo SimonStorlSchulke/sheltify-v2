@@ -9,35 +9,29 @@ import (
 	"sheltify-new-backend/repository"
 	"sheltify-new-backend/services"
 	"sheltify-new-backend/shtypes"
-	"strconv"
 	"strings"
 
 	"github.com/go-chi/chi/v5"
 )
 
-func idFromParameter(w http.ResponseWriter, r *http.Request) (int, error) {
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+func idFromParameter(w http.ResponseWriter, r *http.Request) (string, error) {
+	id := chi.URLParam(r, "id")
 
-	if err != nil {
-		badRequestResponse(w, r, "id must be an integer")
-		return -1, err
+	if id == "nil" {
+		badRequestResponse(w, r, "id must be provided")
+		return "", errors.New("id not provided")
 	}
 	return id, nil
 }
 
 // returns list of ids from comma separated queryparameter (?ids=1,2,3,4)
-func idsFromQuery(w http.ResponseWriter, r *http.Request) ([]int, error) {
+func idsFromQuery(w http.ResponseWriter, r *http.Request) ([]string, error) {
 	idsStringParam := r.URL.Query().Get("ids")
 
 	idStrings := strings.Split(idsStringParam, ",")
 
-	ids := make([]int, len(idStrings))
-	for i, idString := range idStrings {
-		id, err := strconv.Atoi(idString)
-		if err != nil {
-			badRequestResponse(w, r, "ids queryparam needs to be a comma-separated string of ids (eg. /api/animals?ids=1,2,3)")
-			return nil, err
-		}
+	ids := make([]string, len(idStrings))
+	for i, id := range idStrings {
 		ids[i] = id
 	}
 	return ids, nil
@@ -107,7 +101,7 @@ func DefaultGetById[T any](w http.ResponseWriter, r *http.Request, out *T, prelo
 	if err != nil {
 		return
 	}
-	if err := repository.DefaultGetById(id, tenant, out, preloads...); err != nil {
+	if err := repository.DefaultGetByID(id, tenant, out, preloads...); err != nil {
 		http.NotFound(w, r)
 		return
 	}
@@ -126,17 +120,17 @@ func DefaultGetByField[T any](w http.ResponseWriter, r *http.Request, field stri
 	okResponse(w, out)
 }
 
-func DefaultDeleteByIds[T shtypes.Validatable](w http.ResponseWriter, r *http.Request) []int {
+func DefaultDeleteByIds[T shtypes.Validatable](w http.ResponseWriter, r *http.Request) []string {
 	user := services.UserFromRequest(r)
 	if user.TenantID == "" {
-		return []int{}
+		return []string{}
 	}
 	ids, err := idsFromQuery(w, r)
 	if err != nil {
-		return []int{}
+		return []string{}
 	}
 
-	err = repository.DefaultDeleteByIds[T](ids, user.TenantID)
+	err = repository.DefaultDeleteByIDS[T](ids, user.TenantID)
 	if err == nil {
 		logger.Deleted(r, ids)
 		emptyOkResponse(w)
@@ -144,5 +138,5 @@ func DefaultDeleteByIds[T shtypes.Validatable](w http.ResponseWriter, r *http.Re
 	} else {
 		internalServerErrorResponse(w, r, fmt.Sprintf("Failed deleting by ids: %v", ids))
 	}
-	return []int{}
+	return []string{}
 }

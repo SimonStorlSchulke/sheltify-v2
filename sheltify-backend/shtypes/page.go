@@ -5,7 +5,7 @@ type Page struct {
 	Title       string
 	Path        string
 	Description string
-	ArticleID   *uint
+	ArticleID   *string
 	Article     *Article
 }
 

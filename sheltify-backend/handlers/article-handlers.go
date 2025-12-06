@@ -9,19 +9,8 @@ import (
 )
 
 func GetArticle(w http.ResponseWriter, r *http.Request) {
-	id, err := idFromParameter(w, r)
-	if err != nil {
-		return
-	}
-
-	article, err := repository.GetArticleById(id)
-
-	if err != nil {
-		http.NotFound(w, r)
-		return
-	}
-
-	okResponse(w, article)
+	var article shtypes.Article
+	DefaultGetById(w, r, &article)
 }
 
 func SaveArticle(w http.ResponseWriter, r *http.Request) {

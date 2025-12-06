@@ -22,9 +22,9 @@
           </thead>
           <tbody>
             @for (cmsAnimal of animals.results; track $index) {
-              @let animal = editedAnimals().get(cmsAnimal.ID ?? 0) ?? cmsAnimal;
+              @let animal = editedAnimals().get(cmsAnimal.ID ?? '') ?? cmsAnimal;
 
-              <tr class="entry" [class.selected]="selectedAnimal()?.ID == animal.ID" (click)="toAnimal(animal.ID ?? 0)">
+              <tr class="entry" [class.selected]="selectedAnimal()?.ID == animal.ID" (click)="toAnimal(animal.ID ?? '')">
                 <td class="td-image">
                   @if (animal.Portrait) {
                     <div class="img-wrapper"><img [cmsImage]="animal.Portrait" cmsImageSize="thumbnail"></div>

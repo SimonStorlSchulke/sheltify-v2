@@ -11,7 +11,3 @@ func (m *Tag) Validate() string {
 	return valNotEmpty("Name", m.Name) +
 		valMaxLength("Name", m.Name, 32)
 }
-
-func (t *Tag) SetTenantId(id string) {
-	t.TenantID = id
-}

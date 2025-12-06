@@ -32,7 +32,7 @@ export class AnimalListComponent implements OnInit {
     switchMap(() => this.cmsRequestService.getTenantsAnimals())
   );
 
-  editedAnimals = signal(new Map<number, CmsAnimal>([]));
+  editedAnimals = signal(new Map<string, CmsAnimal>([]));
   public newAnimalMode = false;
 
   selectedAnimal = signal<CmsAnimal | null>(null);
@@ -41,11 +41,11 @@ export class AnimalListComponent implements OnInit {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
 
     if(id != null) {
-      this.toAnimal(parseInt(id));
+      this.toAnimal(id);
     }
   }
 
-  async toAnimal(id: number) {
+  async toAnimal(id: string) {
     const animal = await lastValueFrom(this.cmsRequestService.getTenantsAnimal(id));
     this.selectedAnimal.set(animal);
 
@@ -55,6 +55,7 @@ export class AnimalListComponent implements OnInit {
   public newAnimal() {
     // TODO most data should be undefined at start
     this.selectedAnimal.set({
+      ID: '', //TODO - passt das so?
       Birthday: "2018-03-29T15:04:05Z", //TODO
       Castrated: false,
       Gender: "male",
@@ -80,7 +81,7 @@ export class AnimalListComponent implements OnInit {
     }
   }
 
-  public async deleteAnimals(ids: number[]) {
+  public async deleteAnimals(ids: string[]) {
     await firstValueFrom(this.cmsRequestService.deleteAnimals(ids));
     this.reloadAnimals$.next();
   }

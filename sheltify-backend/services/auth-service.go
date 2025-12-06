@@ -14,22 +14,28 @@ import (
 
 const BCRYPT_COST = 10
 
-func RegisterUser(w http.ResponseWriter, userId string, password string, tenant string) *shtypes.User {
-	if len(userId) < 3 || len(password) < 8 {
+func RegisterUser(w http.ResponseWriter, userName string, email string, password string, tenant string) *shtypes.User {
+	if len(userName) < 3 || len(password) < 8 {
 		err := http.StatusNotAcceptable
 		http.Error(w, "username or password don't meet the requirements", err)
 		return nil
 	}
 
-	existingUser, _ := repository.GetUser(userId)
-	hashedPassword, _ := HashPassword(password)
+	alreadyExists, err := repository.UserAlreadyExistsForTenantAndEmail(email, tenant)
 
-	if existingUser != nil {
-		http.Error(w, "username already in use", http.StatusBadRequest)
+	if err != nil {
+		http.Error(w, "failed to check for existing user", http.StatusInternalServerError)
 		return nil
 	}
 
-	user, err := repository.CreateUser(userId, hashedPassword, tenant)
+	if alreadyExists {
+		http.Error(w, "user with given email already exists for tenant", http.StatusConflict)
+		return nil
+	}
+
+	hashedPassword, _ := HashPassword(password)
+
+	user, err := repository.CreateUser(userName, email, hashedPassword, tenant)
 
 	if err != nil {
 		http.Error(w, "failed to create user", http.StatusBadRequest)
@@ -38,8 +44,8 @@ func RegisterUser(w http.ResponseWriter, userId string, password string, tenant 
 	return user
 }
 
-func Login(w http.ResponseWriter, userId string, password string) *shtypes.User {
-	user, err := repository.GetUser(userId)
+func Login(w http.ResponseWriter, userName string, password string) *shtypes.User {
+	user, err := repository.GetUserByName(userName)
 
 	if err != nil || !CheckPassword(user.HashedPassword, password) {
 		http.Error(w, "login credentials incorrect", http.StatusForbidden)
@@ -49,7 +55,7 @@ func Login(w http.ResponseWriter, userId string, password string) *shtypes.User 
 	sessionToken := GenerateToken(32)
 	csrfToken := GenerateToken(32)
 
-	Set24hCookie(w, "user_id", userId, false)
+	Set24hCookie(w, "user_name", user.Name, false)
 	Set24hCookie(w, "session_token", sessionToken, true)
 	Set24hCookie(w, "csrf_token", csrfToken, false)
 
@@ -69,8 +75,8 @@ func Login(w http.ResponseWriter, userId string, password string) *shtypes.User 
 }
 
 func Logout(w http.ResponseWriter, user *shtypes.User) error {
-	user, err := repository.GetUser(user.ID)
-	ClearCookie(w, "user_id", false)
+	user, err := repository.GetUserByName(user.Name)
+	ClearCookie(w, "user_name", false)
 	ClearCookie(w, "session_token", true)
 	ClearCookie(w, "csrf_token", false)
 
@@ -124,8 +130,8 @@ func ClearCookie(w http.ResponseWriter, name string, httpOnly bool) {
 }
 
 func Authorize(r *http.Request) (*shtypes.User, error) {
-	userId, err := r.Cookie("user_id")
-	if err != nil || userId.Value == "" {
+	userName, err := r.Cookie("user_name")
+	if err != nil || userName.Value == "" {
 		return nil, AuthError
 	}
 	sessionToken, err := r.Cookie("session_token")
@@ -138,7 +144,7 @@ func Authorize(r *http.Request) (*shtypes.User, error) {
 		return nil, AuthError
 	}
 
-	user, err := repository.GetUser(userId.Value)
+	user, err := repository.GetUserByName(userName.Value)
 
 	if err != nil ||
 		user.SessionToken == nil || *user.SessionToken != sessionToken.Value ||

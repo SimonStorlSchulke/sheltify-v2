@@ -29,6 +29,7 @@ export class TenantConfigurationComponent implements OnInit {
     } catch (error) {
       console.log('did not find tenant configuration, creating default');
       this.options.set({
+        ID: '',
         Address: '',
         ArticleCss: '',
         CmsShowAnimalKindSelector: true,

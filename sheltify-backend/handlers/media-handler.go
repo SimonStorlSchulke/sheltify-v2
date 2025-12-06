@@ -49,13 +49,12 @@ func UploadScaledWebps(w http.ResponseWriter, r *http.Request) {
 
 	sizeNames := []string{"thumbnail", "small", "medium", "large", "xlarge"}
 
-	uuid := uuid.NewString()
+	uuid := uuid.NewString() //TODO can I avoid doing this manually here?
 
 	focusX, err1 := strconv.ParseFloat(r.FormValue("FocusX"), 32)
 	focusY, err2 := strconv.ParseFloat(r.FormValue("FocusY"), 32)
 
 	entity := shtypes.MediaFile{
-		ID:               uuid,
 		OriginalFileName: r.FormValue("FileName"),
 		Title:            r.FormValue("Title"),
 		Description:      r.FormValue("Description"),
@@ -63,6 +62,7 @@ func UploadScaledWebps(w http.ResponseWriter, r *http.Request) {
 		FocusY:           float32(focusY),
 	}
 
+	entity.ID = uuid
 	entity.TenantID = r.FormValue("TenantID")
 
 	for _, sizeLabel := range sizeNames {

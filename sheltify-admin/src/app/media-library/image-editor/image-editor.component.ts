@@ -27,7 +27,7 @@ import { TagComponent } from 'src/app/ui/tag/tag.component';
 })
 export class ImageEditorComponent implements OnInit {
   public image = input.required<CmsImage>();
-  public selectedTags = signal<number[]>([]);
+  public selectedTags = signal<string[]>([]);
   public createdTag = output<CmsTag>()
 
   public editedImage = output<CmsImage>();

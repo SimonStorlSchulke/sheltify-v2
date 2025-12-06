@@ -82,9 +82,9 @@ func SaveAnimal(animal *shtypes.Animal) error {
 	return nil
 }
 
-func CreateAnimal(animal *shtypes.Animal) (uint, error) {
+func CreateAnimal(animal *shtypes.Animal) (string, error) {
 	if err := db.Create(&animal).Error; err != nil {
-		return 0, err
+		return "", err
 	}
 	return animal.ID, nil
 }

@@ -13,12 +13,12 @@ func DefaultGetAll[T any](tenant string, out *[]T, preloads ...string) error {
 	return nil
 }
 
-func DefaultGetById[T any](id int, tenant string, out *T, preloads ...string) error {
+func DefaultGetByID[T any](id string, tenant string, out *T, preloads ...string) error {
 	q := db
 	for _, p := range preloads {
 		q = q.Preload(p)
 	}
-	if err := q.Where("tenant_id = ?", tenant).First(out, id).Error; err != nil {
+	if err := q.Where("tenant_id = ? AND id = ?", tenant, id).First(out).Error; err != nil {
 		return err
 	}
 	return nil
@@ -35,7 +35,7 @@ func DefaultGetByField[T any](field string, value any, tenant string, out *T, pr
 	return nil
 }
 
-func DefaultDeleteByIds[T any](ids []int, tenantId string) error {
+func DefaultDeleteByIDS[T any](ids []string, tenantId string) error {
 	var model T
 
 	return db.

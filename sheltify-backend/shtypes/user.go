@@ -2,7 +2,8 @@ package shtypes
 
 type User struct {
 	CmsType
-	ID             string `gorm:"primaryKey"`
+	Name           string
+	Email          string
 	HashedPassword string
 	Role           string
 	SessionToken   *string

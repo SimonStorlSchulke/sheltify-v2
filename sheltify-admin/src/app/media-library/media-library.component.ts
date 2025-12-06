@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, computed, inject, OnInit, output, Pipe, PipeTransform, Signal, signal } from '@angular/core';
+import { Component, computed, OnInit, output, Pipe, PipeTransform, Signal, signal } from '@angular/core';
 import { lastValueFrom, map, Observable, Subject } from 'rxjs';
 import { CmsImage, CmsTag } from 'src/app/cms-types/cms-types';
 import { LoaderService } from 'src/app/layout/loader/loader.service';
@@ -20,7 +20,7 @@ class MediaSelectionPipe implements PipeTransform {
   transform(value: { images: CmsImage[], selected: Set<string>, active: string }, ...args: any[]) {
     return {
       active: value.images.find(i => i.ID == value.active),
-      selected: value.images.filter(i => value.selected.has(i.ID)),
+      selected: value.images.filter(i => value.selected.has(i.ID!)),
     }
   }
 }
@@ -42,7 +42,7 @@ class MediaSelectionPipe implements PipeTransform {
   styleUrl: './media-library.component.scss'
 })
 export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implements OnInit {
-  public selectedTags = signal<number[]>([]);
+  public selectedTags = signal<string[]>([]);
   public activeImageId = signal<string>("");
   public selectedImageIds = signal(new Set<string>());
   public filesHovered = signal<boolean>(false);

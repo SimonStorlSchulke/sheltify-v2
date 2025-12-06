@@ -17,7 +17,7 @@ import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { bootstrapEye } from '@ng-icons/bootstrap-icons';
 
-const emptyArticle: CmsArticle = {Structure: {Rows: []}, TenantID: ''};
+const emptyArticle: CmsArticle = {ID: '', Structure: {Rows: []}, TenantID: ''};
 
 @Component({
   selector: 'app-article-editor',
@@ -29,9 +29,9 @@ const emptyArticle: CmsArticle = {Structure: {Rows: []}, TenantID: ''};
 })
 export class ArticleEditorComponent {
 
-  articleId = input.required<number>();
+  articleId = input.required<string>();
 
-  articleIdSaved = output<number>();
+  articleIdSaved = output<string>();
 
   article = signal<CmsArticle | undefined>(emptyArticle);
   movedItem = signal<{ row: number, column: number, sectionRef: Section } | null>(null);
@@ -52,7 +52,7 @@ export class ArticleEditorComponent {
 
     effect(async () => {
       const articleId = this.articleId();
-      if (!articleId || articleId == -1) return;
+      if (!articleId || articleId == '') return;
       const article = await lastValueFrom(this.cmsRequestService.getArticle(articleId));
       this.article.set(article);
     });

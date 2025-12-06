@@ -62,14 +62,14 @@ export class CmsRequestService {
     }));
   }
 
-  public getAnimalsByArticleId(articleId: number): Observable<CollectionResult<CmsAnimal>> {
+  public getAnimalsByArticleId(articleId: string): Observable<CollectionResult<CmsAnimal>> {
     const tenantId = this.authService.getTenantID();
     return this.get<CmsAnimal[]>(`${CmsRequestService.publicApiUrl}${tenantId}/animals/by-article/${articleId}`).pipe(map(response => ({
       results: response,
     })));
   }
 
-  public getTenantsAnimal(id: number): Observable<CmsAnimal> {
+  public getTenantsAnimal(id: string): Observable<CmsAnimal> {
     const tenantId = this.authService.getTenantID();
     return this.get<CmsAnimal>(`${CmsRequestService.publicApiUrl}${tenantId}/animals/${id}`)
   }
@@ -93,7 +93,7 @@ export class CmsRequestService {
     return this.postOrPatch('animals', animal);
   }
 
-  public deleteAnimals(ids: number[]) {
+  public deleteAnimals(ids: string[]) {
     return this.delete<CmsAnimal>(`animals?ids=${ids.join(',')}`)
   }
 
@@ -106,7 +106,7 @@ export class CmsRequestService {
     return this.get<CmsTag[]>(`${CmsRequestService.publicApiUrl}${tenantId}/tags`)
   }
 
-  public deleteTag(id: number): Observable<void> {
+  public deleteTag(id: string): Observable<void> {
     return this.delete(`tags/` + id)
   }
 
@@ -114,7 +114,7 @@ export class CmsRequestService {
     return this.get<CmsImage[]>(`${CmsRequestService.publicApiUrl}${tenantId}/media?tags=` + tags.join(','));
   }
 
-  public getArticle(id: number) {
+  public getArticle(id: string) {
     const tenantId = this.authService.getTenantID();
     return this.get<CmsArticle>(`${CmsRequestService.publicApiUrl}${tenantId}/article/${id}`)
   }
@@ -156,7 +156,7 @@ export class CmsRequestService {
   }
 
   public deleteImage(id: string): Observable<void> {
-    return this.delete(CmsRequestService.adminApiUrl + 'media/' + id);
+    return this.delete('media/' + id);
   }
 
   private get<T>(path: string): Observable<T> {
