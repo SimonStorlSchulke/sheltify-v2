@@ -3,8 +3,12 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"sheltify-new-backend/logger"
+	"sheltify-new-backend/repository"
+	"sheltify-new-backend/services"
+	"sheltify-new-backend/shtypes"
 	"strconv"
 	"strings"
 
@@ -80,4 +84,65 @@ func jsonResponse(w http.ResponseWriter, statusCode int, content any) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
 	json.NewEncoder(w).Encode(content)
+}
+
+func DefaultGetAll[T shtypes.Validatable](w http.ResponseWriter, r *http.Request, out *[]T, preloads ...string) {
+	tenant, err := tenantFromParameter(w, r)
+	if err != nil {
+		return
+	}
+	if err := repository.DefaultGetAll(tenant, out, preloads...); err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	okResponse(w, out)
+}
+
+func DefaultGetById[T any](w http.ResponseWriter, r *http.Request, out *T, preloads ...string) {
+	tenant, err := tenantFromParameter(w, r)
+	if err != nil {
+		return
+	}
+	id, err := idFromParameter(w, r)
+	if err != nil {
+		return
+	}
+	if err := repository.DefaultGetById(id, tenant, out, preloads...); err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	okResponse(w, out)
+}
+
+func DefaultGetByField[T any](w http.ResponseWriter, r *http.Request, field string, value any, out *T, preloads ...string) {
+	tenant, err := tenantFromParameter(w, r)
+	if err != nil {
+		return
+	}
+	if err := repository.DefaultGetByField(field, value, tenant, out, preloads...); err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	okResponse(w, out)
+}
+
+func DefaultDeleteByIds[T shtypes.Validatable](w http.ResponseWriter, r *http.Request) []int {
+	user := services.UserFromRequest(r)
+	if user.TenantID == "" {
+		return []int{}
+	}
+	ids, err := idsFromQuery(w, r)
+	if err != nil {
+		return []int{}
+	}
+
+	err = repository.DefaultDeleteByIds[T](ids, user.TenantID)
+	if err == nil {
+		logger.Deleted(r, ids)
+		emptyOkResponse(w)
+		return ids
+	} else {
+		internalServerErrorResponse(w, r, fmt.Sprintf("Failed deleting by ids: %v", ids))
+	}
+	return []int{}
 }

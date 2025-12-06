@@ -26,6 +26,11 @@ func validateRequestBody[K shtypes.Validatable](w http.ResponseWriter, r *http.R
 		return zero, errorContentValidation
 	}
 
+	if content.GetTenantId() != "" && user.TenantID != content.GetTenantId() {
+		forbiddenResponse(w, r, "Content gehört nicht zur Organisation des Benutzers")
+		return zero, errorContentValidation
+	}
+
 	if errMessage := content.Validate(); errMessage != "" {
 		badRequestResponse(w, r, errMessage)
 		return zero, errorContentValidation

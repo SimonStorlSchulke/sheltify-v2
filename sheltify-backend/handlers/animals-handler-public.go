@@ -1,25 +1,15 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"sheltify-new-backend/repository"
 	"sheltify-new-backend/services"
+	"sheltify-new-backend/shtypes"
 )
 
 func GetAnimalById(w http.ResponseWriter, r *http.Request) {
-	id, err := idFromParameter(w, r)
-	if err != nil {
-		return
-	}
-
-	animal, err := repository.GetAnimal(id)
-
-	if err != nil {
-		http.NotFound(w, r)
-		return
-	}
-	okResponse(w, animal)
+	var animal shtypes.Animal
+	DefaultGetById(w, r, &animal, "Portrait")
 }
 
 func GetFilteredAnimals(w http.ResponseWriter, r *http.Request) {
@@ -43,55 +33,11 @@ func GetAnimalsByArticleId(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-
-	animal, err := repository.GetAnimalsByArticleId(id)
-
-	if err != nil {
-		http.NotFound(w, r)
-		return
-	}
-	okResponse(w, animal)
-}
-
-func GetTenantsAnimalById(w http.ResponseWriter, r *http.Request) {
-	id, err := idFromParameter(w, r)
-	if err != nil {
-		return
-	}
-	tenant, err := tenantFromParameter(w, r)
-	if err != nil {
-		return
-	}
-
-	animal, err := repository.GetTenantsAnimal(id, tenant)
-
-	if err != nil {
-		http.NotFound(w, r)
-		return
-	}
-	okResponse(w, animal)
+	var animal shtypes.Animal
+	DefaultGetByField(w, r, "article_id", id, &animal, "Portrait")
 }
 
 func GetAnimals(w http.ResponseWriter, r *http.Request) {
-	animal, err := repository.GetAnimals()
-
-	if err != nil {
-		http.NotFound(w, r)
-		return
-	}
-	fmt.Println(animal)
-	okResponse(w, animal)
-}
-
-func GetTenantsAnimals(w http.ResponseWriter, r *http.Request) {
-	tenant, err := tenantFromParameter(w, r)
-	if err != nil {
-		return
-	}
-	animal, err := repository.GetTenantsAnimals(tenant)
-	if err != nil {
-		http.NotFound(w, r)
-		return
-	}
-	okResponse(w, animal)
+	animals := []*shtypes.Animal{}
+	DefaultGetAll(w, r, &animals, "Portrait")
 }

@@ -57,8 +57,8 @@ func DeleteUploadsWithPrefix(prefix string) error {
 	return nil
 }
 
-func GetTenantsMediaFilesByTags(tags []string, tenant string) ([]shtypes.MediaFile, error) {
-	return repository.GetTenantsMediaFilesByTags(tags, tenant)
+func GetMediaFilesByTags(tags []string, tenant string) ([]shtypes.MediaFile, error) {
+	return repository.GetMediaFilesByTags(tags, tenant)
 }
 
 func AddTagToMedia(mediaID string, tagNames []string, tenant string) error {

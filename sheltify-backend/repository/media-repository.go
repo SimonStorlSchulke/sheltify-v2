@@ -22,7 +22,7 @@ func GetMediaFileMetaById(id string) (*shtypes.MediaFile, error) {
 	return &mediaFile, nil
 }
 
-func GetTenantsMediaFilesByTags(tags []string, tenant string) ([]shtypes.MediaFile, error) {
+func GetMediaFilesByTags(tags []string, tenant string) ([]shtypes.MediaFile, error) {
 	var mediaFiles []shtypes.MediaFile
 	var tagIds []uint
 	if err := db.Model(&shtypes.Tag{}).

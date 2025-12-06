@@ -2,14 +2,11 @@ package shtypes
 
 import (
 	"gorm.io/datatypes"
-	"gorm.io/gorm"
 )
 
 type TenantConfiguration struct {
-	gorm.Model
-	TenantID                  string         `gorm:"uniqueIndex"` // ensures one-to-one
-	AnimalKinds               datatypes.JSON `gorm:"type:json"`
-	DefaultAnimalKind         string
+	CmsType
+	TenantID                  string `gorm:"uniqueIndex"` // ensures one-to-one
 	CmsShowAnimalKindSelector bool
 	Address                   string
 	PhoneNumber               string
@@ -21,12 +18,16 @@ type TenantConfiguration struct {
 	LinkInstagram             string
 	LinkTiktok                string
 	LinkYoutube               string
+	AnimalKinds               datatypes.JSON `gorm:"type:json"`
+	DefaultAnimalKind         string
+
+	AnimalFilterConfigForAnimalKind map[string]AnimalFilterConfiguration `gorm:"serializer:json"`
 }
 
-func (c *TenantConfiguration) SetTenantId(id string) {
-	c.TenantID = id
-}
-
-func (c *TenantConfiguration) Validate() string {
-	return ""
+type AnimalFilterConfiguration struct {
+	AgeSteps             []int // for dynamic filtering by age eg: [1,3,6] ->  < 1y Welpen, 1-3y Jungtiere, 3-6y Erwachsene, >6y Senioren
+	SizeSteps            []int // for dynamic filtering by size eg: [30,50] -> <30cm Small, 30-50cm Medium, >50cm Large
+	BySponsorsSearched   bool  // whether allow filtering by sponsors searched (Paten gesucht) for AnimalKind
+	ByInGermanySearched  bool  // whether allow filtering by inGermany (Tier befindet sich In Deutschland) for AnimalKind
+	ByFreeRoamerSearched bool  // whether allow filtering by free roamer (Freigänger) for AnimalKind
 }

@@ -21,6 +21,9 @@ type Animal struct {
 	Article          *Article `gorm:"->"`
 	PortraitID       *string
 	Portrait         *MediaFile `gorm:"->"`
+	AnimalKind       string
+	FreeRoamer       bool
+	Race             string
 }
 
 func (a *Animal) Validate() string {
@@ -28,8 +31,4 @@ func (a *Animal) Validate() string {
 		valIsInList("Gender", a.Gender, []string{"male", "female"}) +
 		valMaxLength("Description", a.Description, 500) +
 		valNotEmpty("Status", a.Status)
-}
-
-func (a *Animal) SetTenantId(id string) {
-	a.TenantID = id
 }

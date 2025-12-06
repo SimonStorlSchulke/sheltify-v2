@@ -27,17 +27,5 @@ func SaveAnimal(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteAnimalsByIds(w http.ResponseWriter, r *http.Request) {
-	ids, err := idsFromQuery(w, r)
-	if err != nil {
-		return
-	}
-
-	err = repository.DeleteAnimalsByIds(ids)
-
-	if err == nil {
-		logger.Deleted(r, ids)
-		emptyOkResponse(w)
-	} else {
-		internalServerErrorResponse(w, r, fmt.Sprintf("Failed deleting animals by ids: %v", ids))
-	}
+	DefaultDeleteByIds[*shtypes.Animal](w, r)
 }

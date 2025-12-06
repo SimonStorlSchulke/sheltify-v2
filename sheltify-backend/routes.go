@@ -7,12 +7,11 @@ import (
 )
 
 func initRoutes(r *chi.Mux) {
-	r.Post("/admin/api/register", handlers.Register)
 	r.Post("/admin/api/login", handlers.Login)
 
 	rPublicApi := chi.NewRouter()
 	publicRoutes(rPublicApi)
-	r.Mount("/api", rPublicApi)
+	r.Mount("/api/{tenant}", rPublicApi)
 
 	rAdminApi := chi.NewRouter()
 	rAdminApi.Use(handlers.AuthMiddleware)
@@ -21,18 +20,22 @@ func initRoutes(r *chi.Mux) {
 }
 
 func publicRoutes(r *chi.Mux) {
-	r.Get("/{tenant}/animals/{id}", handlers.GetAnimalById)
-	r.Get("/{tenant}/animals/filtered", handlers.GetFilteredAnimals)
-	r.Get("/{tenant}/animals/by-article/{id}", handlers.GetAnimalsByArticleId)
-	r.Get("/{tenant}/animals", handlers.GetTenantsAnimals)
+	r.Get("/animals/{id}", handlers.GetAnimalById)
+	r.Get("/animals/filtered", handlers.GetFilteredAnimals)
+	r.Get("/animals/by-article/{id}", handlers.GetAnimalsByArticleId)
+	r.Get("/animals", handlers.GetAnimals)
 
-	r.Get("/{tenant}/media", handlers.GetTenantsMediaByTags)
-	r.Get("/{tenant}/tags", handlers.GetAllTags)
-	r.Get("/{tenant}/article/{id}", handlers.GetArticle)
-	r.Get("/{tenant}/configuration", handlers.GetTenantConfiguration)
+	r.Get("/media", handlers.GetMediaByTags)
+	r.Get("/tags", handlers.GetAllTags)
+	r.Get("/article/{id}", handlers.GetArticle)
+	r.Get("/configuration", handlers.GetTenantConfiguration)
+	r.Get("/pages", handlers.GetPages)
+	r.Get("/page-by-path", handlers.GetPageByPath)
 }
 
 func adminRoutes(r *chi.Mux) {
+	r.Post("/create-user", handlers.Register)
+
 	r.Post("/animals", handlers.SaveAnimal)
 	r.Patch("/animals", handlers.SaveAnimal)
 	r.Delete("/animals", handlers.DeleteAnimalsByIds)

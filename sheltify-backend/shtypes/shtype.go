@@ -9,7 +9,13 @@ type CmsType struct {
 }
 
 func (m *CmsType) SetTenantId(id string) {
-	m.TenantID = id
+	if m.TenantID == "" {
+		m.TenantID = id
+	}
+}
+
+func (m *CmsType) GetTenantId() string {
+	return m.TenantID
 }
 
 func (a *CmsType) Validate() string {

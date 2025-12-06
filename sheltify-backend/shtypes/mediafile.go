@@ -21,7 +21,3 @@ func (m *MediaFile) Validate() string {
 	}
 	return ""
 }
-
-func (m *MediaFile) SetTenantId(id string) {
-	m.TenantID = id
-}

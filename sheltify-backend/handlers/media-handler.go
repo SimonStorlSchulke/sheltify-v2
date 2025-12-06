@@ -16,7 +16,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func GetTenantsMediaByTags(w http.ResponseWriter, r *http.Request) {
+func GetMediaByTags(w http.ResponseWriter, r *http.Request) {
 	tenant, err := tenantFromParameter(w, r)
 	if err != nil {
 		return
@@ -28,7 +28,7 @@ func GetTenantsMediaByTags(w http.ResponseWriter, r *http.Request) {
 		medias, err = repository.GetAllTenantsMedia(tenant)
 	} else {
 		tags := strings.Split(tagsString, ",")
-		medias, err = repository.GetTenantsMediaFilesByTags(tags, tenant)
+		medias, err = repository.GetMediaFilesByTags(tags, tenant)
 	}
 	if err != nil {
 		//TODO - throws if multiple tags with same name exist (which shouldn't be possible in the first place)
