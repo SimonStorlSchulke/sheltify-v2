@@ -1,25 +1,20 @@
-@for $i from 1 through 20 {
-  $percentage: ($i * 5);
-  .bg-grey-#{$i * 50} {
-    background: hsl(0, 0%, ($i * 5));
+@use "colors" as *;
+
+.left-sidebar-layout {
+  height: 100%;
+  display: flex;
+  gap: 60px;
+
+  .left-sidebar {
+    background: $neutral100;
+    margin: -32px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
-  .color-grey-#{$i * 50} {
-    color: hsl(0, 0%, ($i * 5));
+
+  .content {
+    flex-grow: 1;
   }
 }
-
-/*@media (prefers-color-scheme: dark) {
-  html, {
-    background: #eaeaea;
-    filter: invert(100%) hue-rotate(180deg);
-
-    img {
-      filter: invert(100%) hue-rotate(180deg);
-    }
-
-    .cdk-overlay-pane, {
-      background: #cfcfcf;
-      filter: invert(100%) hue-rotate(180deg) !important;
-    }
-  }
-}*/

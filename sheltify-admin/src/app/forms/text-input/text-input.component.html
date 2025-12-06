@@ -6,7 +6,7 @@
 </div>
 
 @if(long()) {
-  <textarea [id]="idName()" [name]="idName()" type="text" [value]="twoWayModel()" (input)="onInput($event)" [placeholder]="placeholder() ?? ''"></textarea>
+  <textarea style="resize: vertical; max-height: 175px" [id]="idName()" [name]="idName()" type="text" [value]="twoWayModel()" (input)="onInput($event)" [placeholder]="placeholder() ?? ''"></textarea>
 } @else {
   <input [id]="idName()" [name]="idName()" [type]="isEmail() ? 'email' : 'text'" [value]="twoWayModel()" (input)="onInput($event)" [placeholder]="placeholder() ?? ''">
 }

@@ -1,6 +1,6 @@
 @let editorOpened = selectedAnimal() !== null || newAnimalMode;
-<div class="sui flex-x gap-4 h-100 panel-wrapper">
-  <div class="sui flex-y gap-2 panel-container">
+<div class="left-sidebar-layout">
+  <div class="left-sidebar">
     <div class="sui flex-x">
       <h1>Tiere</h1>
       <div class="sui grow-1"></div>
@@ -46,6 +46,6 @@
     </div>
   </div>
   @if (editorOpened) {
-    <app-animal-editor class="sui grow-1" [animal]="selectedAnimal()" (saved)="onSavedAnimal($event)" [newAnimalMode]="newAnimalMode"/>
+    <app-animal-editor class="content" [animal]="selectedAnimal()" (saved)="onSavedAnimal($event)" [newAnimalMode]="newAnimalMode"/>
   }
 </div>

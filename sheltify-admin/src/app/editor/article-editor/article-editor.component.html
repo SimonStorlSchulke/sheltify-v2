@@ -3,13 +3,13 @@
   <button (click)="isPreviewMode.set(!isPreviewMode())" [class]="isPreviewMode() ? 'primary' : 'secondary'"><ng-icon name="bootstrapEye"/></button>
 </div>
 
-<div class="sui flex-y grow-1" [class.dragMode]="movedItem()">
+<div class="sui flex-y grow-1 article-container" [class.previewMode]="isPreviewMode()" [class.dragMode]="movedItem()">
   <div (click)="addSectionAtNewRow(0)" (mouseup)="moveToNewRow(0)" class="move-to-row"></div>
 
   @if (article(); as article) {
     @for (row of article.Structure.Rows; track row) {
       @let iRow = $index;
-      <div class="article-row sui flex-x jc-stretch" [class.preview]="isPreviewMode()">
+      <div class="article-row sui flex-x jc-stretch" [class.previewMode]="isPreviewMode()">
         <div (mouseup)="moveToColumn(iRow,0)" (click)="addSectionAt(iRow, 0)" class="move-to-column"></div>
         @for (section of row.Sections; track section) {
           @let iColumn = $index;
