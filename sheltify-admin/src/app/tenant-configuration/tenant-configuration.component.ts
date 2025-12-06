@@ -1,0 +1,52 @@
+import { Component, model, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { firstValueFrom } from 'rxjs';
+import { CmsTenantConfiguration } from 'src/app/cms-types/cms-types';
+import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
+import { CmsRequestService } from 'src/app/services/cms-request.service';
+
+@Component({
+  selector: 'app-tenant-configuration',
+  imports: [
+    FormsModule,
+    TextInputComponent
+  ],
+  templateUrl: './tenant-configuration.component.html',
+  styleUrl: './tenant-configuration.component.scss',
+})
+export class TenantConfigurationComponent implements OnInit {
+
+  public options = model<CmsTenantConfiguration | undefined>(undefined);
+
+  constructor(private cmsRequestService: CmsRequestService) {
+  }
+
+  async ngOnInit() {
+    try {
+      const options = await firstValueFrom(this.cmsRequestService.getTenantConfiguration());
+      console.log("options", options);
+      this.options.set(options);
+    } catch (error) {
+      console.log('did not find tenant configuration, creating default');
+      this.options.set({
+        Address: '',
+        ArticleCss: '',
+        CmsShowAnimalKindSelector: true,
+        DefaultAnimalKind: '',
+        Email: '',
+        IBAN: '',
+        LinkFacebook: '',
+        LinkInstagram: '',
+        LinkPaypal: '',
+        LinkTiktok: '',
+        LinkYoutube: '',
+        PhoneNumber: '',
+        AnimalKinds: []
+      });
+    }
+  }
+
+  public async save() {
+    await firstValueFrom(this.cmsRequestService.saveTenantConfiguration(this.options()!));
+  }
+}
