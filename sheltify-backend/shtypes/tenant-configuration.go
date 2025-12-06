@@ -9,7 +9,7 @@ import (
 type TenantConfiguration struct {
 	gorm.Model
 	ID                        string `gorm:"primaryKey;type:char(36)"`
-	TenantID                  string `gorm:"uniqueIndex"` // ensures one-to-one
+	TenantID                  string `gorm:"uniqueIndex"`
 	CmsShowAnimalKindSelector bool
 	Address                   string
 	PhoneNumber               string

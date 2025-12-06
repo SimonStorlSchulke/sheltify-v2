@@ -52,7 +52,9 @@ export class ArticleEditorComponent {
 
     effect(async () => {
       const articleId = this.articleId();
-      if (!articleId || articleId == '') return;
+      if (!articleId || articleId == '') {
+        this.article.set(emptyArticle);
+      }
       const article = await lastValueFrom(this.cmsRequestService.getArticle(articleId));
       this.article.set(article);
     });
