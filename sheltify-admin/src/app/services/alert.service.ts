@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ModalService } from 'src/app/services/modal.service';
-import { AlertButtonName, AlertComponent } from 'src/app/ui/alert/alert.component';
+import { AlertChoice, AlertComponent } from 'src/app/ui/alert/alert.component';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ export class AlertService {
   }
 
 
-  public async openAlert(title: string, message: string, buttons: AlertButtonName[] = ['ok']): Promise<AlertButtonName> {
+  public async openAlert(title: string, message: string, buttons: AlertChoice[] = ['ok']): Promise<AlertChoice | undefined> {
     return await this.modalService.openFinishable(AlertComponent, {
         title,
         message,

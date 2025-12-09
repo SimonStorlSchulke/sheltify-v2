@@ -5,6 +5,8 @@ import { CmsRequestService } from './cms-request.service';
 
 export type CmsUser = {
   CreatedAt: string
+  Name: string;
+  Email: string;
   UpdatedAt: string
   DeletedAt: any
   ID: string

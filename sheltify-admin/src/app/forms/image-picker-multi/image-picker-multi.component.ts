@@ -22,7 +22,7 @@ export class ImagePickerMultiComponent extends InputBaseComponent {
 
   public async addImage() {
     const images = await this.modalService.openFinishable<CmsImage[], MediaLibraryComponent>(MediaLibraryComponent);
-    console.log(images)
+    if(!images) return;
     this.twoWayModel.set([...this.twoWayModel()!, ...images]);
   }
 

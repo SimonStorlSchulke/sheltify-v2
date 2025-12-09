@@ -1,7 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom, lastValueFrom, startWith, Subject, switchMap } from 'rxjs';
+import { createNewAnimal } from 'src/app/cms-types/cms-type.factory';
 import { CmsAnimal } from 'src/app/cms-types/cms-types';
+import { TextInputModalComponent } from 'src/app/forms/text-input-modal/text-input-modal.component';
+import { ModalService } from 'src/app/services/modal.service';
 import { CmsImageDirective } from 'src/app/ui/cms-image.directive';
 import { AnimalEditorComponent } from '../../editor/animal-editor/animal-editor.component';
 import { CmsRequestService } from '../../services/cms-request.service';
@@ -33,9 +36,11 @@ export class AnimalListComponent implements OnInit {
   );
 
   editedAnimals = signal(new Map<string, CmsAnimal>([]));
-  public newAnimalMode = false;
 
   selectedAnimal = signal<CmsAnimal | null>(null);
+
+  constructor(private modalService: ModalService) {
+  }
 
   ngOnInit() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
@@ -52,23 +57,18 @@ export class AnimalListComponent implements OnInit {
     this.router.navigate(['/tiere', id]);
   }
 
-  public newAnimal() {
-    // TODO most data should be undefined at start
-    this.selectedAnimal.set({
-      ID: '', //TODO - passt das so?
-      Birthday: "2018-03-29T15:04:05Z", //TODO
-      Castrated: false,
-      Gender: "male",
-      Health: '',
-      Patrons: '',
-      Priority: 0,
-      ShoulderHeightCm: 0,
-      Status: 'tierheim',
-      TenantID: '',
-      WeightKg: 0,
-      Name: "Neues Tier",
-      Description: ""
+  public async newAnimal() {
+    const name = await this.modalService.openFinishable(TextInputModalComponent, {
+      label: "Name eingeben"
     });
+    if(!name) return;
+    // TODO most data should be undefined at start
+    const animal = createNewAnimal(name);
+
+    const savedAnimal = await lastValueFrom(this.cmsRequestService.saveAnimal(animal));
+    this.reloadAnimals$.next();
+    this.selectedAnimal.set(savedAnimal);
+    this.router.navigate(['/tiere', savedAnimal.ID]);
   }
 
   public onSavedAnimal(animal: CmsAnimal | null) {

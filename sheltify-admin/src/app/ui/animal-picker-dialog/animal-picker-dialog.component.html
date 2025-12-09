@@ -1,0 +1,6 @@
+@for (entry of animalsByArticleID(); track $index) {
+  <div class="sui my-1 flex-x ai-center jc-space-between gap-2">
+    <span>{{entry[1].title}}</span>
+    <button class="small" (click)="finishWith(entry[1].animals[0])">auswählen ></button>
+  </div>
+}

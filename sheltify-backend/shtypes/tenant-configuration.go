@@ -2,7 +2,6 @@ package shtypes
 
 import (
 	"github.com/google/uuid"
-	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )
 
@@ -21,7 +20,9 @@ type TenantConfiguration struct {
 	LinkInstagram             string
 	LinkTiktok                string
 	LinkYoutube               string
-	AnimalKinds               datatypes.JSON `gorm:"type:json"`
+	AnimalKinds               string //comma separated list
+	AnimalStati               string //comma separated list
+	BlogCategories            string //comma separated list
 	DefaultAnimalKind         string
 
 	AnimalFilterConfigForAnimalKind map[string]AnimalFilterConfiguration `gorm:"serializer:json"`

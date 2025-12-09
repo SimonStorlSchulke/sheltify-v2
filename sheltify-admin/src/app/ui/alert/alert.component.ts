@@ -1,8 +1,7 @@
-import { DialogRef } from '@angular/cdk/dialog';
 import { Component } from '@angular/core';
 import { FinishableDialog } from 'src/app/services/modal.service';
 
-export type AlertButtonName = 'ok' | 'ja' | 'nein' | 'abbrechen';
+export type AlertChoice = 'ok' | 'ja' | 'nein' | 'abbrechen';
 
 @Component({
   selector: 'app-alert',
@@ -10,17 +9,13 @@ export type AlertButtonName = 'ok' | 'ja' | 'nein' | 'abbrechen';
   templateUrl: './alert.component.html',
   styleUrl: './alert.component.scss'
 })
-export class AlertComponent extends FinishableDialog<AlertButtonName> {
+export class AlertComponent extends FinishableDialog<AlertChoice> {
   title = '';
   message = '';
   type: 'info' | 'error' | 'warning' | '' = '';
-  buttons: AlertButtonName[] = [];
+  buttons: AlertChoice[] = [];
 
-  constructor(private dialogRef: DialogRef<AlertComponent>) {
-    super();
-  }
-
-  onButtonClicked(button: AlertButtonName) {
+  public onButtonClicked(button: AlertChoice) {
     this.finishWith(button);
   }
 }

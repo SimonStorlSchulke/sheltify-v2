@@ -1,6 +1,8 @@
-import { Component, input, inject, model, output, ChangeDetectionStrategy } from '@angular/core';
+import { Component, input, inject, output, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { firstValueFrom, lastValueFrom } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
+import { CmsArticle } from 'src/app/cms-types/article-types';
+import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
 import { CmsAnimal } from 'src/app/cms-types/cms-types';
 import { ArticleEditorComponent } from 'src/app/editor/article-editor/article-editor.component';
 import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-input.component';
@@ -8,7 +10,9 @@ import { DatePickerComponent } from 'src/app/forms/date-picker/date-picker.compo
 import { ImagePickerSingleComponent } from 'src/app/forms/image-picker-single/image-picker-single.component';
 import { NumberInputComponent } from 'src/app/forms/number-input/number-input.component';
 import { RadioButtonsInputComponent } from 'src/app/forms/radio-buttons-input/radio-buttons-input.component';
-import { randomColor } from 'src/app/services/color-utils';
+import { AnimalService } from 'src/app/services/animal.service';
+import { ModalService } from 'src/app/services/modal.service';
+import { AnimalPickerDialogComponent } from 'src/app/ui/animal-picker-dialog/animal-picker-dialog.component';
 import { TextInputComponent } from '../../forms/text-input/text-input.component';
 import { CmsRequestService } from '../../services/cms-request.service';
 
@@ -33,35 +37,35 @@ export class AnimalEditorComponent {
   private cmsRequestService = inject(CmsRequestService);
 
   animalId = input<string>("0");
-  newAnimalMode = input<boolean>(false);
   animal = input<CmsAnimal | null>(null);
+  animals = input.required<CmsAnimal[] | null>();
   saved = output<CmsAnimal | null>();
 
-  async save() {
-    if (!this.animal()) {
-      return;
-    }
-
-    // if the animal is new, we create a matching mediaTag for it and assign the portrait to it.
-    if(!(this.animal()!.ID)) {
-      const tag = await firstValueFrom(this.cmsRequestService.createTag({
-        Color: randomColor(30),
-        Name: "tier-" + this.animal()!.Name,
-      }));
-
-      const portrait = this.animal()!.Portrait;
-      if(portrait && portrait.MediaTags.findIndex(cTag => cTag.ID == tag.ID) == -1) {
-        portrait.MediaTags.push(tag);
-        await this.cmsRequestService.updateMedia(portrait);
-      }
-    }
-
-    const savedAnimal = await lastValueFrom(this.cmsRequestService.saveAnimal(this.animal()!))
-    this.saved.emit(savedAnimal);
+  constructor(private modalService: ModalService, private readonly animalService: AnimalService) {
   }
 
-  protected setArticleId(id: string) {
-    this.animal()!.ArticleID = id;
+  async save() {
+    const savedAnimal = await this.animalService.save(this.animal()!);
+    this.saved.emit(savedAnimal!);
+  }
+
+
+  protected async createArticle() {
+    const article: CmsArticle = createEmptyArticle();
+    const savedArticle = await firstValueFrom(this.cmsRequestService.saveArticle(article));
+    this.animal()!.ArticleID = savedArticle.ID;
     this.save();
+
+  }
+
+  protected async assignExistingArticle() {
+    const selectedAnimal = await this.modalService.openFinishable(AnimalPickerDialogComponent, {
+      animals: this.animals()!
+    });
+
+    if(selectedAnimal) {
+      this.animal()!.ArticleID = selectedAnimal.ArticleID;
+      this.save();
+    }
   }
 }

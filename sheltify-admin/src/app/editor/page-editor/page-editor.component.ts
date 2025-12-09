@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { ArticleEditorComponent } from 'src/app/editor/article-editor/article-editor.component';
 
 @Component({
@@ -10,5 +10,5 @@ import { ArticleEditorComponent } from 'src/app/editor/article-editor/article-ed
   styleUrl: './page-editor.component.scss',
 })
 export class PageEditorComponent {
-
+  pageId = input.required<string>();
 }

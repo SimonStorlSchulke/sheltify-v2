@@ -2,7 +2,7 @@ import { Dialog } from '@angular/cdk/dialog';
 import { ComponentType } from '@angular/cdk/portal';
 import { Directive, inject, Injectable, OnDestroy, Type } from '@angular/core';
 import { firstValueFrom, Observable, Subject } from 'rxjs';
-import { AlertButtonName, AlertComponent } from 'src/app/ui/alert/alert.component';
+import { AlertChoice, AlertComponent } from 'src/app/ui/alert/alert.component';
 
 export interface Finishable<TValue> {
   finish: Observable<TValue | undefined>;
@@ -53,7 +53,7 @@ export class ModalService {
     component: Type<TComponent>,
     inputs?: Partial<TComponent>,
     cssClass = 'modal-lg'
-  ): Promise<TComponent extends FinishableDialog<infer TValue> ? TValue : never> {
+  ): Promise<TComponent extends FinishableDialog<infer TValue> ? (TValue | undefined) : never> {
     const dialogRef = this.dialog.open(component, {
       panelClass: cssClass,
     });

@@ -25,7 +25,16 @@
 
     <hr class="sui my-3">
 
-    <app-article-editor [articleId]="animal.ArticleID ?? ''" (articleIdSaved)="setArticleId($event)" class="sui flex-y grow-1 mt-2"/>
+    @if (animal.ArticleID) {
+      <app-article-editor [articleId]="animal.ArticleID ?? ''" class="sui flex-y grow-1 mt-2"/>
+    } @else {
+      <div class="sui flex-x gap-2">
+        <button data-testid="btn-create-article-for-animal" (click)="createArticle()" class="secondary">Artikel erstellen</button>
+        <button data-testid="btn-assign-article-to-animal" (click)="assignExistingArticle()" class="secondary">Existierendem Tierartikel zuweisen*</button>
+      </div>
+      <br>
+      <p><b>*Existierendem Tierartikel zuweisen</b> ist z.B. für Geschwister gedacht, für die man nur einen Artikel schreiben will, aber den Steckbrief trotzdem separat pflegen möchte.</p>
+    }
   </div>
 } @else {
   404 Tier nicht gefunden

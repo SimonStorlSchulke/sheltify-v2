@@ -40,7 +40,7 @@ export type CmsAnimal = CmsType & {
 
 export type CmsImagesSize = 'thumbnail' | 'small' | 'medium' | 'large' | 'xlarge';
 
-export type CmsImage = CmsType &  {
+export type CmsImage = CmsType & {
   OriginalFileName: string
   Title: string
   Description: string

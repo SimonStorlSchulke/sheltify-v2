@@ -1,10 +1,9 @@
-// Light mode colors (default)
 $primary-h1: #377ed3;
 $primary-h2: #5a96db;
 $primary-h3: #81b3ec;
 $primary-h4: #b7d1ef;
 $primary-h10: #dfeefe;
-$primary: #2268bd;
+$primary: #155bd5;
 $primary-d1: #174e8f;
 $primary-bg: #9abee6;
 
@@ -32,75 +31,3 @@ $neutral600: #7c7c7c;
 $neutral700: #6b6b6b;
 $neutral800: #424242;
 $neutral900: #272727;
-
-// Dark mode colors
-$primary-h1-dark: #5a96db;
-$primary-h2-dark: #81b3ec;
-$primary-h3-dark: #b7d1ef;
-$primary-h4-dark: #dfeefe;
-$primary-h10-dark: #f0f8ff;
-$primary-dark: #1b4f7d;
-$primary-d1-dark: #133a5d;
-$primary-bg-dark: #1f3a5c;
-
-$accent-dark: #4a3220;
-$accent-h1-dark: #3b2a1f;
-
-$text-dark: #e0e0e0;
-$text-heading-dark: #ffffff;
-$backdrop-dark: #1a1a1a;
-
-$cto-dark: #28b84a;
-$cto-d1-dark: #1a8d33;
-
-$warning-dark: #e0b25d;
-$error-dark: #e06750;
-$alert-dark: #d94b3f;
-$alert-h1-dark: #f16f5a;
-
-$neutral100-dark: #1e1e1e;
-$neutral150-dark: #2a2a2a;
-$neutral200-dark: #333333;
-$neutral400-dark: #555555;
-$neutral500-dark: #777777;
-$neutral600-dark: #999999;
-$neutral700-dark: #b0b0b0;
-$neutral800-dark: #d4d4d4;
-$neutral900-dark: #f0f0f0;
-
-// Apply dark mode automatically
-@media (prefers-color-scheme: no-preference) {
-  $primary-h1: $primary-h1-dark !default;
-  $primary-h2: $primary-h2-dark !default;
-  $primary-h3: $primary-h3-dark !default;
-  $primary-h4: $primary-h4-dark !default;
-  $primary-h10: $primary-h10-dark !default;
-  $primary: $primary-dark !default;
-  $primary-d1: $primary-d1-dark !default;
-  $primary-bg: $primary-bg-dark !default;
-
-  $accent: $accent-dark !default;
-  $accent-h1: $accent-h1-dark !default;
-
-  $text: $text-dark !default;
-  $text-heading: $text-heading-dark !default;
-  $backdrop: $backdrop-dark !default;
-
-  $cto: $cto-dark !default;
-  $cto-d1: $cto-d1-dark !default;
-
-  $warning: $warning-dark !default;
-  $error: $error-dark !default;
-  $alert: $alert-dark !default;
-  $alert-h1: $alert-h1-dark !default;
-
-  $neutral100: $neutral100-dark !default;
-  $neutral150: $neutral150-dark !default;
-  $neutral200: $neutral200-dark !default;
-  $neutral400: $neutral400-dark !default;
-  $neutral500: $neutral500-dark !default;
-  $neutral600: $neutral600-dark !default;
-  $neutral700: $neutral700-dark !default;
-  $neutral800: $neutral800-dark !default;
-  $neutral900: $neutral900-dark !default;
-}

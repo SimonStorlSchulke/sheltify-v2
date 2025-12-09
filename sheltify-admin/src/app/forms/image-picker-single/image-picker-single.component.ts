@@ -21,7 +21,7 @@ export class ImagePickerSingleComponent extends InputBaseComponent {
 
   public async pickImage() {
     const portraits = await this.modalService.openFinishable<CmsImage[], MediaLibraryComponent>(MediaLibraryComponent);
-    console.log(portraits[0])
+    if(!portraits) return;
     this.twoWayModel.set(portraits[0]);
   }
 }

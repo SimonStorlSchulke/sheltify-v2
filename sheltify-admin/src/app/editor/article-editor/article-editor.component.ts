@@ -1,9 +1,10 @@
-import { Component, computed, effect, HostListener, input, output, Pipe, Renderer2, signal, untracked } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Component, computed, effect, HostListener, input, Renderer2, signal } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { bootstrapGripVertical, bootstrapX, bootstrapPlus } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lastValueFrom } from 'rxjs';
 import { CmsArticle, CmsArticleRow, Section } from 'src/app/cms-types/article-types';
+import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
 import { createEmptySection } from 'src/app/editor/article-editor/article-section.factory';
 import { PickNewSectionComponent } from 'src/app/editor/article-editor/pick-new-section/pick-new-section.component';
 import { SectionEditorAnimalListComponent } from 'src/app/editor/article-editor/section-editor-animal-list/section-editor-animal-list.component';
@@ -17,8 +18,6 @@ import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { bootstrapEye } from '@ng-icons/bootstrap-icons';
 
-const emptyArticle: CmsArticle = {ID: '', Structure: {Rows: []}, TenantID: ''};
-
 @Component({
   selector: 'app-article-editor',
   imports: [SectionEditorTextComponent, NgIcon, SectionEditorImagesComponent, SectionEditorTitleComponent, SectionEditorAnimalListComponent, SectionEditorHtmlComponent],
@@ -31,9 +30,7 @@ export class ArticleEditorComponent {
 
   articleId = input.required<string>();
 
-  articleIdSaved = output<string>();
-
-  article = signal<CmsArticle | undefined>(emptyArticle);
+  article = signal<CmsArticle | undefined>(createEmptyArticle());
   movedItem = signal<{ row: number, column: number, sectionRef: Section } | null>(null);
 
   isPreviewMode = signal<boolean>(false);
@@ -53,7 +50,7 @@ export class ArticleEditorComponent {
     effect(async () => {
       const articleId = this.articleId();
       if (!articleId || articleId == '') {
-        this.article.set(emptyArticle);
+        this.article.set(createEmptyArticle());
       }
       const article = await lastValueFrom(this.cmsRequestService.getArticle(articleId));
       this.article.set(article);
@@ -115,9 +112,7 @@ export class ArticleEditorComponent {
 
   public async save() {
     if (!this.article()) return;
-    console.log("saving article", this.article())
-    const savedArticle = await lastValueFrom(this.cmsRequestService.saveArticle(this.article()!));
-    this.articleIdSaved.emit(savedArticle!.ID!);
+    await lastValueFrom(this.cmsRequestService.saveArticle(this.article()!));
   }
 
   public exitMoveMode() {
@@ -139,6 +134,7 @@ export class ArticleEditorComponent {
     if (movedItem.row != -1) {
       article.Structure.Rows[movedItem.row].Sections.splice(movedItem.column, 1)
     }
+
     article.Structure.Rows.splice(row, 0, newRow);
     this.cleanupEmptyRows(article);
     this.exitMoveMode();

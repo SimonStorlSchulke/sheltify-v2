@@ -1,3 +1,20 @@
+@use "colors" as *;
+
+input, textarea {
+  border-radius: 5px;
+  padding: 0.5rem;
+  background-color: #fff;
+  transition: background-color 0.3s;
+  border: 2px solid #aaa;
+
+  &:focus {
+    background-color: $primary-h10;
+    outline: none;
+    border: 2px solid $primary;
+  }
+}
+
+
 .sui.form-field {
   label {
     font-weight: 500;
