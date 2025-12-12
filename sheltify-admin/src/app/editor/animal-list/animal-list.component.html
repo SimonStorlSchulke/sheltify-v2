@@ -1,6 +1,5 @@
 @let editorOpened = selectedAnimal() !== null;
 <div class="left-sidebar-layout">
-  @if ($animals | async; as animals) {
     <div class="left-sidebar">
       <div class="sui flex-x">
         <h1>Tiere</h1>
@@ -21,7 +20,7 @@
           </tr>
           </thead>
           <tbody>
-            @for (cmsAnimal of animals.results; track $index) {
+            @for (cmsAnimal of animalService.animals(); track $index) {
               @let animal = editedAnimals().get(cmsAnimal.ID ?? '') ?? cmsAnimal;
 
               <tr [attr.data-testid]="'label-list-animal-' + animal.Name" class="entry" [class.selected]="selectedAnimal()?.ID == animal.ID" (click)="toAnimal(animal.ID ?? '')">
@@ -46,10 +45,9 @@
     </div>
     <div class="content">
       @if (editorOpened) {
-        <div class="animals-in-article">hoo</div>
-        <app-animal-editor [animal]="selectedAnimal()" [animals]="animals.results" (saved)="onSavedAnimal($event)"/>
+        <div class="animals-in-article">{{'a'}}</div>
+        <app-animal-editor [animal]="selectedAnimal()" [animals]="animalService.animals()" (saved)="onSavedAnimal($event)"/>
       }
     </div>
 
-  }
 </div>

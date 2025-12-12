@@ -17,7 +17,7 @@ export class LoginComponent {
   onLogin(username: string, password: string) {
     this.authService.login(username, password).subscribe({
       next: (response) => {
-        this.toastrService.success("Logged in as " + response.ID);
+        this.toastrService.success("Eingeloggt als " + response.Name);
         this.router.navigate(["dashboard"]);
       },
       error: (err) => {

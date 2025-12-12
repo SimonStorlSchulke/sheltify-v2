@@ -24,6 +24,7 @@ type TenantConfiguration struct {
 	AnimalStati               string //comma separated list
 	BlogCategories            string //comma separated list
 	DefaultAnimalKind         string
+	LastModifiedBy            string
 
 	AnimalFilterConfigForAnimalKind map[string]AnimalFilterConfiguration `gorm:"serializer:json"`
 }
@@ -51,6 +52,16 @@ func (c *TenantConfiguration) BeforeCreate(tx *gorm.DB) (err error) {
 		c.ID = uuid.NewString()
 	}
 	return nil
+}
+
+func (c *TenantConfiguration) GetLastModifiedBy() string {
+	return c.LastModifiedBy
+}
+
+func (cmsType *TenantConfiguration) SetLastModifiedBy(userId string) {
+	if userId != "" {
+		cmsType.LastModifiedBy = userId
+	}
 }
 
 type AnimalFilterConfiguration struct {

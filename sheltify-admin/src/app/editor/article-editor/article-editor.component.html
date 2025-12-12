@@ -1,6 +1,10 @@
 <div class="sui flex-x jc-end grow-1 gap-2">
-  <button data-testid="btn-save-article" ( class="grow-1 primary" (click)="save()">Speichern</button>
-  <button data-testid="btn-preview-article" (click)="isPreviewMode.set(!isPreviewMode())" [class]="isPreviewMode() ? 'primary' : 'secondary'"><ng-icon name="bootstrapEye"/></button>
+  @if (!saveArticle()) {
+    <button data-testid="btn-save-article" ( class="grow-1 primary" (click)="save()">Speichern</button>
+  }
+  <button data-testid="btn-preview-article" (click)="isPreviewMode.set(!isPreviewMode())" [class]="isPreviewMode() ? 'primary' : 'secondary'">
+    <ng-icon name="bootstrapEye"/>
+  </button>
 </div>
 
 <div class="sui flex-y grow-1 article-container" [class.previewMode]="isPreviewMode()" [class.dragMode]="movedItem()">
@@ -19,30 +23,45 @@
 
             <div #articleColumn class="article-column sui grow-1">
 
-              <div class="section-titlebar sui flex-x px-1 gap-1 ai-center">
-                <b class="sui grow-1 py-1">{{ sectionLabels.get(section.SectionType) ?? 'Sektion' }}</b>
+              <div class="section-titlebar sui flex-x px-2 gap-1 ai-center">
+                <b class="sui grow-1 py-2">{{ sectionLabels.get(section.SectionType) ?? 'Sektion' }}</b>
                 <button (mousedown)="enterMoveMode(iRow, iColumn, section)" class="move-button small">verschieben</button>
                 <ng-icon class="x" (click)="deleteSection(iRow, iColumn)" name="bootstrapX" size="22px"/>
               </div>
               <div class="section-content">
-                @let renderedSectionsVal = renderedSections();
-                <div [attr.data-testid]="'section-preview-' + iRow + '-' + iColumn" class="section-preview" [innerHTML]="renderedSectionsVal ? renderedSectionsVal[iRow][iColumn] : ''">
+                @let renderedSectionsVal = renderedSections() | async;
+                <div [attr.data-testid]="'section-preview-' + iRow + '-' + iColumn" class="section-preview"
+                     [innerHTML]="renderedSectionsVal ? renderedSectionsVal[iRow][iColumn] : ''">
 
                 </div>
                 <div [attr.data-testid]="'section-editor-' + iRow + '-' + iColumn" class="section-editor">
                   @switch (section.SectionType) {
-                    @case ('title') {<app-section-editor-title [section]="section"/>}
-                    @case ('text') {<app-section-editor-text [section]="section"/>}
-                    @case ('image') {<app-section-editor-images [section]="section"/>}
-                    @case ('animal-list') {<app-section-editor-animal-list [section]="section" (triggerRerender)="triggerRerender()"/>}
-                    @case ('html') {<app-section-editor-html [section]="section"/>}
+                    @case ('title') {
+                      <app-section-editor-title [section]="section"/>
+                    }
+                    @case ('text') {
+                      <app-section-editor-text [section]="section"/>
+                    }
+                    @case ('image') {
+                      <app-section-editor-images [section]="section"/>
+                    }
+                    @case ('hero') {
+                      <app-section-editor-hero [section]="section"/>
+                    }
+                    @case ('animal-list') {
+                      <app-section-editor-animal-list [section]="section" (triggerRerender)="triggerRerender()"/>
+                    }
+                    @case ('html') {
+                      <app-section-editor-html [section]="section"/>
+                    }
                   }
                 </div>
               </div>
             </div>
 
           </div>
-          <div (mouseup)="moveToColumn(iRow, iColumn + 1)" (click)="addSectionAt(iRow, iColumn + 1)" [attr.data-testid]="'column-selector-' + iRow + '-' + (iColumn + 1)" class="move-to-column"></div>
+          <div (mouseup)="moveToColumn(iRow, iColumn + 1)" (click)="addSectionAt(iRow, iColumn + 1)" [attr.data-testid]="'column-selector-' + iRow + '-' + (iColumn + 1)"
+               class="move-to-column"></div>
         }
       </div>
       <div (click)="addSectionAtNewRow(iRow + 1)" (mouseup)="moveToNewRow(iRow + 1)" [attr.data-testid]="'row-selector-' + iRow + 1" class="move-to-row"></div>

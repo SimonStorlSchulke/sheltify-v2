@@ -10,8 +10,9 @@ type MediaFile struct {
 	FocusY               float32
 	SizesGenerated       bool
 	LargestAvailableSize string
-	MediaTags            []*Tag `gorm:"many2many:media_file_tags;OnDelete:SET NULL;"`
-	RotationSteps        int8   // 0-3, each step is 90 degrees clockwise
+	MediaTags            []*Tag    `gorm:"many2many:media_file_tags;constraint:OnDelete:CASCADE;"`
+	TaggedAnimals        []*Animal `gorm:"many2many:media_file_animals;constraint:OnDelete:CASCADE;"`
+	RotationSteps        int8      // 0-3, each step is 90 degrees clockwise
 }
 
 func (m *MediaFile) Validate() string {

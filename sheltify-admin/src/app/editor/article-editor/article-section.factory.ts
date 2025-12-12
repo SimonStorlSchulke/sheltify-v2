@@ -31,6 +31,14 @@ export function createEmptySection(SectionType: SectionType): Section {
           MediaFiles: [],
         }
       };
+    case 'hero':
+      return {
+        SectionType,
+        Content: {
+          MediaFiles: [],
+          Text: '',
+        }
+      };
     case 'html':
       return {
         SectionType,

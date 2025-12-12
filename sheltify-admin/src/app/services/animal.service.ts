@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { CmsAnimal } from 'src/app/cms-types/cms-types';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
@@ -9,6 +9,22 @@ import { randomColor } from 'src/app/services/color-utils';
 })
 export class AnimalService {
   constructor(private readonly cmsRequestService: CmsRequestService) {
+    this.reloadAnimals();
+  }
+
+  public animals = signal<CmsAnimal[]>([]);
+
+  public async reloadAnimals() {
+    const animals = await firstValueFrom(this.cmsRequestService.getAnimals());
+    this.animals.set(animals.results ?? []);
+  }
+
+  async publishAnimal(animal: CmsAnimal) {
+    animal.PublishedAt = {
+      Valid: true,
+      Time: new Date().toISOString(),
+    }
+    return await this.save(animal);
   }
 
   async save(animal: CmsAnimal) {

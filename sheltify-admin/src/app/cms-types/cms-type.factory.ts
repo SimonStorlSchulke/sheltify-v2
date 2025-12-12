@@ -1,8 +1,8 @@
 import { CmsArticle } from 'src/app/cms-types/article-types';
-import { CmsAnimal } from 'src/app/cms-types/cms-types';
+import { CmsAnimal, CmsPage } from 'src/app/cms-types/cms-types';
 
 export function createNewAnimal(name: string): CmsAnimal {
-  const animal: CmsAnimal = {
+  return {
     ID: '',
     Birthday: "2018-03-29T15:04:05Z", //TODO
     Castrated: false,
@@ -15,12 +15,21 @@ export function createNewAnimal(name: string): CmsAnimal {
     TenantID: '',
     WeightKg: 0,
     Name: name,
-    Description: ""
-  }
-
-  return animal;
+    Description: "",
+    MediaFiles: [],
+  };
 }
 
 export function createEmptyArticle(): CmsArticle {
   return {ID: '', Structure: {Rows: []}, TenantID: ''}
+}
+
+export function createNewPage(): CmsPage {
+  return {
+    ID: '',
+    Description: "",
+    Title: '',
+    Path: '',
+    ShowInMenu: true,
+  }
 }

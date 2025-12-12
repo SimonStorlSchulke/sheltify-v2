@@ -1,0 +1,4 @@
+<div class="sui flex-y gap-2">
+  <app-image-picker-multi [idName]="'bilder'" [label]="'Bilder auswählen'" [(twoWayModel)]="section().Content!.MediaFiles"/>
+  <app-text-input idName="text" label="Text" [(twoWayModel)]="section().Content.Text"/>
+</div>

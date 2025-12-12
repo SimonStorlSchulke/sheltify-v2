@@ -1,8 +1,10 @@
-import { Section, SectionAnimalList, SectionImages, SectionTitle, SectionType } from 'src/app/cms-types/article-types';
+import { Section, SectionAnimalList, SectionHero, SectionImages, SectionTitle, SectionType } from 'src/app/cms-types/article-types';
 import { CmsImage, CmsImagesSize } from 'src/app/cms-types/cms-types';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 
-export function renderArticleSection(section: Section) {
+const publicApiUrl = 'http://localhost:3000/api/'
+
+export async function renderArticleSection(section: Section) {
   let contentHtml = '';
 
   switch (section.SectionType) {
@@ -13,7 +15,10 @@ export function renderArticleSection(section: Section) {
       contentHtml = renderTitleSection(section);
       break;
     case 'image':
-      contentHtml = renderImageSection(section);
+      contentHtml = await renderImageSection(section);
+      break;
+    case 'hero':
+      contentHtml = await renderHeroSection(section);
       break;
     case 'html':
       contentHtml = section.Content.Html;
@@ -39,6 +44,7 @@ export const sectionLabels = new Map<SectionType, string>([
   ['html', 'HTML'],
   ['animal-list', 'Tierliste (statisch)'],
   ['separator-x', 'Trenner'],
+  ['hero', 'Hero'],
 ]);
 
 function renderTitleSection(section: SectionTitle) {
@@ -74,21 +80,51 @@ function renderAnimalList(section: SectionAnimalList) {
 }
 
 
-function renderImageSection(section: SectionImages) {
+async function renderImageSection(section: SectionImages) {
   const content = section.Content;
+
+  content.MediaFiles = await refetchMediaFiles(content.MediaFiles);
+
+  if (content.MediaFiles.length === 0) return '';
+
+  return renderImageTiles(section);
+}
+
+async function renderHeroSection(section: SectionHero) {
+  const content = section.Content;
+
+  content.MediaFiles = await refetchMediaFiles(content.MediaFiles);
+
   if (content.MediaFiles.length === 0) return '';
   const isSingle = content.MediaFiles.length === 1;
 
+  let imgSection = '';
   if (isSingle) {
-    return `<img src="${getImageFormatUrl(content.MediaFiles[0], 'large')}">`
+
+    const objectPosition = `${content.MediaFiles[0].FocusX * 100}% ${content.MediaFiles[0].FocusY * 100}%`
+
+    imgSection = `<img class="hero-image" style="object-position: ${objectPosition}" src="${getImageFormatUrl(content.MediaFiles[0], 'large')}">`
   } else {
-    return renderImageTiles(section);
+    imgSection = '';
   }
+
+  const textSection = `<h1 class="hero-text">${content.Text}</h1>`
+
+  return `${imgSection}${textSection}`;
+
+}
+
+async function refetchMediaFiles(images: CmsImage[]): Promise<CmsImage[]> {
+  const tenant = images[0].TenantID;
+  let ids = images.map(f => f.ID).join(',');
+  const refetchedImages = await fetch(`${publicApiUrl}${tenant}/media?ids=${ids}`);
+  return await refetchedImages.json();
 }
 
 
 function renderImageTiles(section: SectionImages) {
   let html = ' <div class="imagegrid">';
+
   for (const media of section.Content.MediaFiles) {
     const src = getImageFormatUrl(media, 'medium');
     html += `<img
@@ -163,6 +199,24 @@ const defaultImagesStyle = `
 }
 `;
 
+const defaultHeroStyle = `
+position: relative;
+.hero-image {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+}
+
+.hero-text {
+  position: absolute;
+  bottom: 10px;
+  left: 30px;
+  color: white;
+  font-size: 5rem;
+  text-shadow: 0 0 16px #0006;
+}
+`
+
 const defaultAnimalListStyle = `
 display: flex;
 flex-wrap: wrap;
@@ -235,6 +289,7 @@ hr {
 const defaultSectionStyles = new Map<SectionType, string>([
   ['title', defaultTitleStyle],
   ['image', defaultImagesStyle],
+  ['hero', defaultHeroStyle],
   ['animal-list', defaultAnimalListStyle],
   ['separator-x', defaultSeparatorStyle],
 ]);

@@ -14,5 +14,5 @@ type TeamMember struct {
 
 func (a *TeamMember) Validate() string {
 	return valMinMaxLength("Name", a.Name, 2, 32) +
-		valMaxLength("Description", a.Description, 500)
+		valMaxLength("Besachreibung", a.Description, 500)
 }

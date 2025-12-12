@@ -1,7 +1,7 @@
 <div class="sui flex-y gap-2">
   <p>{{ label }}</p>
   <input #input type="text">
-  <div class="sui flex-x gap-2">
+  <div class="sui flex-x gap-2 jc-end">
     <button data-testid="btn-cancel" (click)="cancel()">Abbrechen</button>
     <button data-testid="btn-submit" (click)="finishWith(input.value)">OK</button>
   </div>

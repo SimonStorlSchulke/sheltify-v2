@@ -1,28 +1,46 @@
 <h1>Medien</h1>
-
 @if (images$() | async; as images) {
   <div
     appFileDrop (filesDropped)="onFilesDropped($event)"
     (filesHovered)="onFilesHovered($event)"
     class="sui flex-x gap-2"
   >
-    <div class="sui flex-y gap-3 grow-1">
-      <div class="tag-selector">
-        <ng-select [(ngModel)]="selectedTags" [multiple]="true" placeholder="...tags auswählen">
-          @for (tag of tagsService.availableTags(); track tag.ID) {
-            <ng-option [value]="tag.ID">
-              <app-tag [tag]="tag"/>
-            </ng-option>
-          }
-        </ng-select>
-        <br>
-        <button (click)="deleteSelectedImages()">Löschen</button>
+    <div class="sui flex-y gap-2 grow-1">
 
+      <div class="sui flex-x gap-2">
+        <div class="tag-selector">
+          <ng-select [(ngModel)]="selectedTags" (ngModelChange)="selectedAnimals.set([])" [multiple]="true" placeholder="...Tags auswählen">
+            @for (tag of tagsService.availableTags(); track tag.ID) {
+              <ng-option [value]="tag.ID">
+                <app-tag [tag]="tag"/>
+              </ng-option>
+            }
+          </ng-select>
+          <br>
+        </div>
+
+        <div class="tag-selector">
+          <ng-select [(ngModel)]="selectedAnimals" (ngModelChange)="selectedTags.set([])" [multiple]="true" placeholder="...Tiere auswählen">
+            @for (animal of animalService.animals(); track animal) {
+              <ng-option [value]="animal">
+                {{animal.Name}}
+              </ng-option>
+            }
+          </ng-select>
+          <br>
+
+        </div>
       </div>
+      <div class="sui flex-x gap-2">
+        <button data-testid="btn-delete-images" (click)="deleteSelectedImages()">Löschen</button>
+        <button data-testid="btn-upload-images" (click)="uploadImages()">Hochladen</button>
+      </div>
+
       <div class="sui flex-x gap-2 wrap list dropzone" [class.files-hovered]="filesHovered()" [class.with-picker]="true">
         @for (image of images; track image.ID) {
           @let editedImage = editedImages().get(image.ID);
           <app-media-entry
+            [attr.data-testid]="'media-entry-' + image.Title"
             (click)="toggleSelect(image.ID, $event, images)"
             [media]="editedImage ?? image"
             [selected]="selectedImageIds().has(image.ID)"
@@ -32,7 +50,7 @@
       </div>
 
       <div class="sui flex-x gap-1 jc-end">
-        <button [disabled]="selectedImageIds().size == 0" class="primary" (click)="pickImages(selectedImageIds(), images)">Auswählen</button>
+        <button data-testid="btn-submit" [disabled]="selectedImageIds().size == 0" class="primary" (click)="pickImages(selectedImageIds(), images)">Auswählen</button>
       </div>
 
     </div>

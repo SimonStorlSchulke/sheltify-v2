@@ -37,10 +37,10 @@
   <app-text-input idName="title" label="Beschreibung" [long]="true" explanation="Wird z.B. in Gallerien unter dem Bild angezeigt"
                   [twoWayModel]="image().Description" (twoWayModelChange)="image().Description = $event"/>
 
-  <span class="tags-label">tags</span>
+  <span class="tags-label">Tags</span>
   <span class="sui flex-x gap-1">
       <div class="tag-selector sui flex-x">
-        <ng-select [notFoundText]="'keine'" [(ngModel)]="selectedTags" [multiple]="true" placeholder="...Tags auswählen">
+        <ng-select [notFoundText]="'keine'" [(ngModel)]="selectedTags" [multiple]="true" placeholder="...Tags zuweisen">
           @for (tag of tagsService.availableTags(); track tag.ID) {
             <ng-option [value]="tag.ID">
               <app-tag [tag]="tag"/>
@@ -50,6 +50,21 @@
         <button id="open-tag-manager" class="secondary" (click)="editTags()">+</button>
       </div>
   </span>
+
+  <span class="tags-label">Tiere</span>
+  <span class="sui flex-x gap-1">
+      <div class="tag-selector sui flex-x">
+        <ng-select [notFoundText]="'keine'" [(ngModel)]="selectedAnimals" [multiple]="true" placeholder="...Tiere zuweisen">
+          @for (animal of animalService.animals(); track animal) {
+            <ng-option [value]="animal.Name">
+              {{animal.Name}}
+            </ng-option>
+          }
+        </ng-select>
+      </div>
+  </span>
 </div>
 
 <button class="primary sui w-100" (click)="updateMedia()">Speichern</button>
+
+  {{animalService.animals().length}}

@@ -10,12 +10,12 @@ func Migrate(db *gorm.DB) {
 	db.AutoMigrate(
 		&shtypes.Tenant{},
 		&shtypes.TenantConfiguration{},
-		&shtypes.Animal{},
+		&shtypes.Article{}, // Parent first
+		&shtypes.Animal{},  // Children after
+		&shtypes.Page{},
 		&shtypes.MediaFile{},
 		&shtypes.Tag{},
 		&shtypes.User{},
-		&shtypes.MediaFile{},
-		&shtypes.Article{},
 		&shtypes.LogEntry{},
 	)
 }

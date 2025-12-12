@@ -42,7 +42,7 @@ export class TenantConfigurationComponent implements OnInit {
         LinkTiktok: '',
         LinkYoutube: '',
         PhoneNumber: '',
-        AnimalKinds: []
+        AnimalKinds: '',
       });
     }
   }

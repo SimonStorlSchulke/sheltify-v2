@@ -1,0 +1,21 @@
+<div class="article-editor-container">
+  <div data-testid="form-animal-editor" class="sui flex-x gap-3 grow-1">
+    <form>
+      <app-checkbox-input idName="show-in-menu" label="In Menü anzeigen" />
+      <app-text-input idName="title" label="Titel" [(twoWayModel)]="page().Title"/>
+      <app-text-input idName="path" label="Pfad" [(twoWayModel)]="page().Path"/>
+    </form>
+    <button (click)="save()">Speichern</button>
+  </div>
+
+  @if (page(); as page) {
+
+    @if (page.ArticleID) {
+      <app-article-editor [articleId]="page.ArticleID" [saveArticle]="saveArticle$" class="content"/>
+    } @else {
+      <button data-testid="btn-create-article-for-animal" (click)="createArticle()" class="secondary">Artikel erstellen</button>
+
+    }
+
+  }
+</div>

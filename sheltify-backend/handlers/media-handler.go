@@ -38,6 +38,53 @@ func GetMediaByTags(w http.ResponseWriter, r *http.Request) {
 	okResponse(w, medias)
 }
 
+func GetMediaByIds(w http.ResponseWriter, r *http.Request) {
+	var medias []shtypes.MediaFile
+	DefaultGetByIds(w, r, &medias)
+}
+
+func GetMediaByAnimalIDs(w http.ResponseWriter, r *http.Request) {
+	tenant, err := tenantFromParameter(w, r)
+	if err != nil {
+		return
+	}
+	animalIdsString := r.URL.Query().Get("animalIds")
+
+	var medias []shtypes.MediaFile
+	if animalIdsString == "" {
+		medias, err = repository.GetAllTenantsMedia(tenant)
+	} else {
+		animalIds := strings.Split(animalIdsString, ",")
+		medias, err = repository.GetMediaFilesByAnimalIds(animalIds, tenant)
+	}
+	if err != nil {
+		internalServerErrorResponse(w, r, err.Error())
+		return
+	}
+	okResponse(w, medias)
+}
+
+func AddAnimalsToMedia(w http.ResponseWriter, r *http.Request) {
+	mediaId := chi.URLParam(r, "mediaId")
+	animalIds := r.URL.Query().Get("animalIds")
+
+	if mediaId == "" || animalIds == "" {
+		badRequestResponse(w, r, "mediaId and animalIds must be provided")
+		return
+	}
+
+	user := services.UserFromRequest(r)
+
+	err := services.AddAnimalsToMedia(mediaId, strings.Split(animalIds, ","), user.TenantID)
+
+	if err != nil {
+		internalServerErrorResponse(w, r, fmt.Sprintf("Could not add animals to media: %v", err))
+		return
+	}
+
+	emptyOkResponse(w)
+}
+
 func UploadScaledWebps(w http.ResponseWriter, r *http.Request) {
 
 	// upload 50 MB max
@@ -94,9 +141,17 @@ func UploadScaledWebps(w http.ResponseWriter, r *http.Request) {
 
 	tagsStr := r.FormValue("Tags")
 	fmt.Println("Tags received:", tagsStr)
+
+	fmt.Println("Tags received:", tagsStr)
 	if tagsStr != "" {
 		tags := strings.Split(tagsStr, ",")
 		services.AddTagToMedia(uuid, tags, user.TenantID)
+	}
+
+	animalIDsStr := r.FormValue("AnimalIDs")
+	if animalIDsStr != "" {
+		animalIDs := strings.Split(animalIDsStr, ",")
+		services.AddAnimalsToMedia(uuid, animalIDs, user.TenantID)
 	}
 
 	for i, uploadedFile := range uploadedFiles {
@@ -128,7 +183,13 @@ func DeleteMedia(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetAllTags(w http.ResponseWriter, r *http.Request) {
-	tags, err := repository.GetAllTags()
+	tenant, err := tenantFromParameter(w, r)
+
+	if err != nil {
+		return
+	}
+
+	tags, err := repository.GetAllTags(tenant)
 	if err != nil {
 		internalServerErrorResponse(w, r, "Could not retrieve tags")
 		return
@@ -167,11 +228,6 @@ func DeleteTag(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-type AddTagToMediaRequest struct {
-	MediaId  string
-	TagNames []string
-}
-
 func SaveMedia(w http.ResponseWriter, r *http.Request) {
 	media, err := validateRequestBody[*shtypes.MediaFile](w, r)
 	if err != nil {
@@ -181,7 +237,7 @@ func SaveMedia(w http.ResponseWriter, r *http.Request) {
 	user := services.UserFromRequest(r)
 
 	for _, tag := range media.MediaTags {
-		tagEntity, _ := repository.GetTagByName(tag.Name)
+		tagEntity, _ := repository.GetTagByName(tag.Name, user.TenantID)
 		if tagEntity == nil {
 			tag := shtypes.Tag{Name: tag.Name}
 			tag.TenantID = user.TenantID

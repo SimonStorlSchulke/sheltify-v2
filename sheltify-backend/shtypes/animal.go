@@ -5,7 +5,7 @@ import (
 )
 
 type Animal struct {
-	CmsType
+	Publishable
 	Name             string
 	Birthday         *time.Time
 	WeightKg         uint
@@ -13,22 +13,33 @@ type Animal struct {
 	Castrated        bool
 	Gender           string
 	Description      string
+	NotesIntern      string //TODO
 	Patrons          string
-	Status           string //TODO possible values could be tenant specific?
+	Status           string
 	Health           string
 	Priority         int
 	ArticleID        *string
-	Article          *Article `gorm:"->"`
+	Article          *Article `gorm:"->;"`
 	PortraitID       *string
 	Portrait         *MediaFile `gorm:"->"`
 	AnimalKind       string
 	FreeRoamer       bool
 	Race             string
+	MediaFiles       []*MediaFile `gorm:"many2many:media_file_animals;constraint:OnDelete:CASCADE;"`
 }
 
 func (a *Animal) Validate() string {
-	return valMinMaxLength("Name", a.Name, 2, 32) +
-		valIsInList("Gender", a.Gender, []string{"male", "female"}) +
-		valMaxLength("Description", a.Description, 500) +
-		valNotEmpty("Status", a.Status)
+	return valMinMaxLength("Name", a.Name, 2, 32)
+}
+
+func (a *Animal) ValidateForPublishing() string {
+	articleIDErr := ""
+	if a.ArticleID == nil || *a.ArticleID == "" {
+		articleIDErr = "Artikel zum Tier muss bestehen\n"
+	}
+	return a.Validate() +
+		valNotEmpty("Status", a.Status) +
+		valMaxLength("Beschreibung", a.Description, 500) +
+		valIsInList("Geschlecht", a.Gender, []string{"male", "female"}) +
+		articleIDErr
 }

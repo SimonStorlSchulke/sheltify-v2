@@ -1,19 +1,19 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { firstValueFrom, lastValueFrom, startWith, Subject, switchMap } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { createNewAnimal } from 'src/app/cms-types/cms-type.factory';
 import { CmsAnimal } from 'src/app/cms-types/cms-types';
 import { TextInputModalComponent } from 'src/app/forms/text-input-modal/text-input-modal.component';
+import { AnimalService } from 'src/app/services/animal.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { CmsImageDirective } from 'src/app/ui/cms-image.directive';
 import { AnimalEditorComponent } from '../../editor/animal-editor/animal-editor.component';
 import { CmsRequestService } from '../../services/cms-request.service';
-import { AsyncPipe, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-animal-list',
   imports: [
-    AsyncPipe,
     DatePipe,
     AnimalEditorComponent,
     CmsImageDirective,
@@ -25,21 +25,15 @@ import { AsyncPipe, DatePipe } from '@angular/common';
 export class AnimalListComponent implements OnInit {
   private cmsRequestService = inject(CmsRequestService);
 
-  private reloadAnimals$ = new Subject<void>();
-
   private activatedRoute = inject(ActivatedRoute);
   private router = inject(Router);
 
-  $animals = this.reloadAnimals$.pipe(
-    startWith(void 0),
-    switchMap(() => this.cmsRequestService.getTenantsAnimals())
-  );
 
   editedAnimals = signal(new Map<string, CmsAnimal>([]));
 
   selectedAnimal = signal<CmsAnimal | null>(null);
 
-  constructor(private modalService: ModalService) {
+  constructor(private modalService: ModalService, protected animalService: AnimalService) {
   }
 
   ngOnInit() {
@@ -51,7 +45,7 @@ export class AnimalListComponent implements OnInit {
   }
 
   async toAnimal(id: string) {
-    const animal = await lastValueFrom(this.cmsRequestService.getTenantsAnimal(id));
+    const animal = await firstValueFrom(this.cmsRequestService.getAnimal(id));
     this.selectedAnimal.set(animal);
 
     this.router.navigate(['/tiere', id]);
@@ -65,8 +59,8 @@ export class AnimalListComponent implements OnInit {
     // TODO most data should be undefined at start
     const animal = createNewAnimal(name);
 
-    const savedAnimal = await lastValueFrom(this.cmsRequestService.saveAnimal(animal));
-    this.reloadAnimals$.next();
+    const savedAnimal = await firstValueFrom(this.cmsRequestService.saveAnimal(animal));
+    this.animalService.reloadAnimals();
     this.selectedAnimal.set(savedAnimal);
     this.router.navigate(['/tiere', savedAnimal.ID]);
   }
@@ -77,12 +71,12 @@ export class AnimalListComponent implements OnInit {
       // structurecClone hier sinnvoll? Wenns fehlt wird liste bei jeder änderung geupdated, auch wenn nicht gespeichert wurde...
       this.editedAnimals.update(map => map.set(animal.ID!, structuredClone(animal)));
       this.selectedAnimal.set(animal);
-      this.reloadAnimals$.next();
+      this.animalService.reloadAnimals();
     }
   }
 
   public async deleteAnimals(ids: string[]) {
     await firstValueFrom(this.cmsRequestService.deleteAnimals(ids));
-    this.reloadAnimals$.next();
+    this.animalService.reloadAnimals();
   }
 }

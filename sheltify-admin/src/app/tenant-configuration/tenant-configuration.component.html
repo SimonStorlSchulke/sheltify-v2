@@ -1,12 +1,21 @@
 @if (options(); as options) {
   @let rowClass = "sui flex-x gap-2 grow-1";
-  <form class="sui flex-y gap-2 grow-1 pr-1">
+
+  <h2>Vereinsdaten</h2>
+
+  <form class="sui flex-y gap-2 grow-1 pr-1 py-3">
     <app-text-input [long]="true" class="sui grow-1" idName="name" label="Adresse" [(twoWayModel)]="options.Address"/>
     <div [class]="rowClass">
       <app-text-input [isEmail]="true" class="sui grow-1" idName="email" label="Email" [(twoWayModel)]="options.Email"/>
       <app-text-input class="sui grow-1" idName="phone" label="Telefonnummer" [(twoWayModel)]="options.PhoneNumber"/>
     </div>
     <app-text-input class="sui grow-1" idName="iban" label="IBAN" [(twoWayModel)]="options.IBAN"/>
+  </form>
+
+  <h2>Administration</h2>
+
+  <form class="sui flex-y gap-2 grow-1 pr-1 pb-2 pt-1">
+    <app-text-input [(twoWayModel)]="options.AnimalKinds" idName="animal-kinds" label="Tierarten" explanation="Kommaseparierte Liste an Tierarten"/>
   </form>
   <br>
   <button (click)="save()">Speichern</button>

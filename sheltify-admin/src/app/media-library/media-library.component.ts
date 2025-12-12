@@ -1,11 +1,12 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, computed, OnInit, output, Pipe, PipeTransform, Signal, signal } from '@angular/core';
 import { lastValueFrom, map, Observable, Subject } from 'rxjs';
-import { CmsImage, CmsTag } from 'src/app/cms-types/cms-types';
+import { CmsAnimal, CmsImage, CmsTag } from 'src/app/cms-types/cms-types';
 import { LoaderService } from 'src/app/layout/loader/loader.service';
 import { FileDropDirective } from 'src/app/media-library/file-drop.directive';
 import { ImageEditorComponent } from 'src/app/media-library/image-editor/image-editor.component';
 import { MediaEntryComponent } from 'src/app/media-library/media-entry/media-entry.component';
+import { AnimalService } from 'src/app/services/animal.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { ImageConverterService } from 'src/app/services/image-converter.service';
@@ -43,6 +44,7 @@ class MediaSelectionPipe implements PipeTransform {
 })
 export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implements OnInit {
   public selectedTags = signal<string[]>([]);
+  public selectedAnimals = signal<CmsAnimal[]>([]);
   public activeImageId = signal<string>("");
   public selectedImageIds = signal(new Set<string>());
   public filesHovered = signal<boolean>(false);
@@ -51,12 +53,23 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
 
   public images$: Signal<Observable<CmsImage[]>> = computed(() => {
     const tenant = this.authSv.getTenantID();
-    const selected = this.selectedTags();
-
+    const selectedTags = this.selectedTags()
+    const selectedAnimals = this.selectedAnimals()
     this.refreshImages();
 
+
+    if(selectedAnimals.length > 0) {
+      const animalIds = selectedAnimals.map(animal => animal.ID);
+      return this.cmsRequestSv.getMediaByAnimalIDs(animalIds, tenant).pipe(
+        map(images => images.sort((a, b) => {
+          if (a.Title == b.Title) return a.ID < b.ID ? -1 : 1
+          else return a.Title < b.Title ? -1 : 1
+        })),
+      );
+    }
+
     const tags = this.tagsService.availableTags()
-      .filter(tag => selected.includes(tag.ID))
+      .filter(tag => selectedTags.includes(tag.ID))
       .map(tag => tag.Name);
 
     return this.cmsRequestSv.getMediaByTags(tags, tenant).pipe(
@@ -77,6 +90,7 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
     private authSv: AuthService,
     private imageConverterSv: ImageConverterService,
     public tagsService: TagsService,
+    public animalService: AnimalService,
   ) {
     super();
   }
@@ -113,6 +127,15 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
     }
   }
 
+  public async uploadImages() {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.multiple = true;
+    fileInput.click();
+    fileInput.onchange = () => this.onFilesDropped(fileInput.files!);
+  }
+
   public async onFilesDropped(files: FileList) {
     this.loaderSv.setLoading('Bilder hochladen...');
     for (let i = 0; i < files.length; i++) {
@@ -120,7 +143,9 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
 
       const tags = this.tagsService.availableTags().filter(tag => this.selectedTags().includes(tag.ID)).map(tag => tag.Name);
 
-      await lastValueFrom(this.cmsRequestSv.uploadScaledImage(scaledImages, files[i].name, tags.join(",")));
+      const animalIds = this.selectedAnimals().map(animal => animal.ID);
+
+      await lastValueFrom(this.cmsRequestSv.uploadScaledImage(scaledImages, files[i].name, tags.join(","), animalIds.join(",")));
 
     }
     this.refreshImages.update((i) => i + 1);

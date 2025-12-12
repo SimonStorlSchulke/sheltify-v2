@@ -9,7 +9,7 @@ import (
 )
 
 func SaveAnimal(w http.ResponseWriter, r *http.Request) {
-	animal, err := validateRequestBody[*shtypes.Animal](w, r)
+	animal, err := validatePublishable[*shtypes.Animal](w, r)
 	if err != nil {
 		return
 	}
@@ -27,5 +27,5 @@ func SaveAnimal(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteAnimalsByIds(w http.ResponseWriter, r *http.Request) {
-	DefaultDeleteByIds[*shtypes.Animal](w, r)
+	DefaultDeleteByIds[*shtypes.Animal](w, r, true)
 }

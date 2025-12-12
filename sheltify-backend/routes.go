@@ -25,7 +25,9 @@ func publicRoutes(r *chi.Mux) {
 	r.Get("/animals/by-article/{id}", handlers.GetAnimalsByArticleId)
 	r.Get("/animals", handlers.GetAnimals)
 
-	r.Get("/media", handlers.GetMediaByTags)
+	r.Get("/media", handlers.GetMediaByIds)
+	r.Get("/media-by-tags", handlers.GetMediaByTags)
+	r.Get("/media-by-animals", handlers.GetMediaByAnimalIDs)
 	r.Get("/tags", handlers.GetAllTags)
 	r.Get("/article/{id}", handlers.GetArticle)
 	r.Get("/configuration", handlers.GetTenantConfiguration)
@@ -52,6 +54,9 @@ func adminRoutes(r *chi.Mux) {
 
 	r.Post("/article", handlers.SaveArticle)
 	r.Patch("/article", handlers.SaveArticle)
+
+	r.Post("/pages", handlers.SavePage)
+	r.Patch("/pages", handlers.SavePage)
 
 	r.Patch("/configuration", handlers.SaveTenantConfiguration)
 }

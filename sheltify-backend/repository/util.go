@@ -24,12 +24,23 @@ func DefaultGetByID[T any](id string, tenant string, out *T, preloads ...string)
 	return nil
 }
 
+func DefaultGetByIDs[T any](ids []string, tenant string, out *T, preloads ...string) error {
+	q := db
+	for _, p := range preloads {
+		q = q.Preload(p)
+	}
+	if err := q.Where("tenant_id = ? AND id IN ?", tenant, ids).Find(out).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 func DefaultGetByField[T any](field string, value any, tenant string, out *T, preloads ...string) error {
 	q := db
 	for _, p := range preloads {
 		q = q.Preload(p)
 	}
-	if err := q.Where("tenant_id = ?", tenant).Where(field+" = ?", value).First(out).Error; err != nil {
+	if err := q.Where("tenant_id = ?", tenant).Where(field+" = ?", value).Find(out).Error; err != nil {
 		return err
 	}
 	return nil
@@ -44,4 +55,14 @@ func DefaultDeleteByIDS[T any](ids []string, tenantId string) error {
 		Where("id IN ?", ids).
 		Delete(&model).
 		Error
+}
+
+func DeleteOrphanedArticles(tenantId string) error {
+	sql := `
+      DELETE FROM articles
+      WHERE tenant_id = ?
+        AND id NOT IN (SELECT article_id FROM animals WHERE tenant_id = ? AND article_id IS NOT NULL)
+        AND id NOT IN (SELECT article_id FROM pages WHERE tenant_id = ? AND article_id IS NOT NULL)
+    `
+	return db.Exec(sql, tenantId, tenantId, tenantId).Error
 }

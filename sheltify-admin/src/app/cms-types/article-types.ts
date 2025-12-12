@@ -1,7 +1,7 @@
 import { CmsAnimal, CmsImage, CmsType } from 'src/app/cms-types/cms-types';
 import { AnimalsFilter } from 'src/app/services/cms-request.service';
 
-export const SectionTypes = ["title", "text", "video", "image", "animal-list", "html", "separator-x"] as const;
+export const SectionTypes = ["title", "text", "video", "image", "hero", "animal-list", "html", "separator-x"] as const;
 
 export type SectionType = (typeof SectionTypes)[number];
 
@@ -27,6 +27,7 @@ export type Section =
   | SectionAnimalList
   | SectionHtml
   | SectionSeparatorX
+  | SectionHero
 
 export type SectionText = {
   SectionType: 'text',
@@ -45,6 +46,14 @@ export type SectionHtml = {
 export type SectionImages = {
   SectionType: 'image',
   Content: {
+    MediaFiles: CmsImage[];
+  },
+};
+
+export type SectionHero = {
+  SectionType: 'hero',
+  Content: {
+    Text: string;
     MediaFiles: CmsImage[];
   },
 };

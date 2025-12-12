@@ -108,6 +108,22 @@ func DefaultGetById[T any](w http.ResponseWriter, r *http.Request, out *T, prelo
 	okResponse(w, out)
 }
 
+func DefaultGetByIds[T any](w http.ResponseWriter, r *http.Request, out *[]T, preloads ...string) {
+	tenant, err := tenantFromParameter(w, r)
+	if err != nil {
+		return
+	}
+	ids, err := idsFromQuery(w, r)
+	if err != nil {
+		return
+	}
+	if err := repository.DefaultGetByIDs(ids, tenant, out, preloads...); err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	okResponse(w, out)
+}
+
 func DefaultGetByField[T any](w http.ResponseWriter, r *http.Request, field string, value any, out *T, preloads ...string) {
 	tenant, err := tenantFromParameter(w, r)
 	if err != nil {
@@ -120,7 +136,7 @@ func DefaultGetByField[T any](w http.ResponseWriter, r *http.Request, field stri
 	okResponse(w, out)
 }
 
-func DefaultDeleteByIds[T shtypes.Validatable](w http.ResponseWriter, r *http.Request) []string {
+func DefaultDeleteByIds[T shtypes.Validatable](w http.ResponseWriter, r *http.Request, deleteOrphanedArticles bool) []string {
 	user := services.UserFromRequest(r)
 	if user.TenantID == "" {
 		return []string{}
@@ -131,6 +147,11 @@ func DefaultDeleteByIds[T shtypes.Validatable](w http.ResponseWriter, r *http.Re
 	}
 
 	err = repository.DefaultDeleteByIDS[T](ids, user.TenantID)
+
+	if deleteOrphanedArticles {
+		repository.DeleteOrphanedArticles(user.TenantID)
+	}
+
 	if err == nil {
 		logger.Deleted(r, ids)
 		emptyOkResponse(w)

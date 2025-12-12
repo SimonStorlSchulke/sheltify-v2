@@ -1,12 +1,17 @@
 @let rowClass = "sui flex-x gap-2 grow-1";
 @if (animal(); as animal) {
-  <div class="article-editor-container sui">
-    <div class="sui flex-x gap-3 grow-1">
-      <app-image-picker-single label="Portrait" idName="imagePicker" [(twoWayModel)]="animal.Portrait"/>
+  <div class="sui flex-x jc-end">
+    <button data-testid="btn-save-animal" (click)="save()">Speichern</button>
+    <button (click)="publish()">Veröffentlichen</button>
+  </div>
+  <div class="article-editor-container">
+    <div data-testid="form-animal-editor" class="sui flex-x gap-3 grow-1">
+      <app-image-picker-single label="Portrait" idName="portrait" [(twoWayModel)]="animal.Portrait"/>
       <form class="sui flex-y gap-2 grow-1 pr-1">
         <div [class]="rowClass">
-          <app-text-input class="sui grow-1" idName="name" label="Name" [(twoWayModel)]="animal.Name"/>
-          <app-radio-buttons-input idName="gender" label="Geschlecht" [options]="['male', 'female']" [optionTranslations]="['Männlich', 'Weiblich']" [(twoWayModel)]="animal.Gender"/>
+          <app-text-input class="sui grow-1" idName="animal-name" label="Name" [(twoWayModel)]="animal.Name"/>
+          <app-radio-buttons-input idName="gender" label="Geschlecht" [options]="['male', 'female']" [optionTranslations]="['Männlich', 'Weiblich']"
+                                   [(twoWayModel)]="animal.Gender"/>
         </div>
         <app-text-input
           class="description" idName="description" label="Beschreibung" [long]="true"
@@ -15,9 +20,9 @@
           explanation="Kurzer Text, der im Steckbrief oben unter jedem Tier angezeigt wird"/>
         <div [class]="rowClass">
 
-        <app-checkbox-input idName="castrated" label="Kastriert" [(twoWayModel)]="animal.Castrated"/>
-        <app-date-picker idName="birthday" label="Geboren ca." [(twoWayModelISOString)]="animal.Birthday"/>
-        <app-number-input idName="size" label="Schulterhöhe in cm" [(twoWayModel)]="animal.ShoulderHeightCm"/>
+          <app-checkbox-input idName="castrated" label="Kastriert" [(twoWayModel)]="animal.Castrated"/>
+          <app-date-picker idName="birthday" label="Geboren ca." [(twoWayModelISOString)]="animal.Birthday"/>
+          <app-number-input idName="size" label="Schulterhöhe in cm" [(twoWayModel)]="animal.ShoulderHeightCm"/>
         </div>
       </form>
     </div>
@@ -26,14 +31,15 @@
     <hr class="sui my-3">
 
     @if (animal.ArticleID) {
-      <app-article-editor [articleId]="animal.ArticleID ?? ''" class="sui flex-y grow-1 mt-2"/>
+      <app-article-editor [articleId]="animal.ArticleID ?? ''" [saveArticle]="saveArticle$" class="sui flex-y grow-1 mt-2"/>
     } @else {
       <div class="sui flex-x gap-2">
         <button data-testid="btn-create-article-for-animal" (click)="createArticle()" class="secondary">Artikel erstellen</button>
         <button data-testid="btn-assign-article-to-animal" (click)="assignExistingArticle()" class="secondary">Existierendem Tierartikel zuweisen*</button>
       </div>
       <br>
-      <p><b>*Existierendem Tierartikel zuweisen</b> ist z.B. für Geschwister gedacht, für die man nur einen Artikel schreiben will, aber den Steckbrief trotzdem separat pflegen möchte.</p>
+      <p><b>*Existierendem Tierartikel zuweisen</b> ist z.B. für Geschwister gedacht, für die man nur einen Artikel schreiben will, aber den Steckbrief trotzdem separat pflegen
+        möchte.</p>
     }
   </div>
 } @else {

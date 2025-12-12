@@ -1,6 +1,6 @@
 import { Component, input, inject, output, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Subject } from 'rxjs';
 import { CmsArticle } from 'src/app/cms-types/article-types';
 import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
 import { CmsAnimal } from 'src/app/cms-types/cms-types';
@@ -36,26 +36,38 @@ export class AnimalEditorComponent {
 
   private cmsRequestService = inject(CmsRequestService);
 
-  animalId = input<string>("0");
   animal = input<CmsAnimal | null>(null);
   animals = input.required<CmsAnimal[] | null>();
   saved = output<CmsAnimal | null>();
+
+  saveArticle$ = new Subject<void>();
 
   constructor(private modalService: ModalService, private readonly animalService: AnimalService) {
   }
 
   async save() {
     const savedAnimal = await this.animalService.save(this.animal()!);
-    this.saved.emit(savedAnimal!);
+
+    if(savedAnimal) {
+      this.saved.emit(savedAnimal!);
+      this.saveArticle$.next();
+    }
   }
 
+  async publish() {
+    const savedAnimal = await this.animalService.publishAnimal(this.animal()!);
+
+    if(savedAnimal) {
+      this.saved.emit(savedAnimal!);
+      this.saveArticle$.next();
+    }
+  }
 
   protected async createArticle() {
     const article: CmsArticle = createEmptyArticle();
     const savedArticle = await firstValueFrom(this.cmsRequestService.saveArticle(article));
     this.animal()!.ArticleID = savedArticle.ID;
     this.save();
-
   }
 
   protected async assignExistingArticle() {

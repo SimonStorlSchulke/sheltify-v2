@@ -1,4 +1,4 @@
-import { Page } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
 import { CmsPage } from "./login";
 
 export const SectionTypes = ["title", "text", "video", "image", "animal-list", "html", "separator-x"] as const;
@@ -25,5 +25,9 @@ export class ArticleEditor extends CmsPage {
 
     async save() {
         await this.page.getByTestId('btn-save-article').click();
+    }
+
+    expectTextInPreview(row: number, column: number, text: string) {
+        return expect(this.getSectionPreview(row, column)).toContainText(text);
     }
 }

@@ -1,0 +1,13 @@
+@use 'colors' as *;
+
+.page-entry {
+  cursor: pointer;
+  &:hover {
+    background-color: $primary-bg;
+  }
+
+  &.selected {
+    outline: 3px solid $primary;
+    outline-offset: -3px;
+  }
+}

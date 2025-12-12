@@ -69,7 +69,7 @@ func AddTagToMedia(mediaID string, tagNames []string, tenant string) error {
 
 	var tags []*shtypes.Tag
 	for _, tagName := range tagNames {
-		tag, _ := repository.GetTagByName(tagName)
+		tag, _ := repository.GetTagByName(tagName, tenant)
 		if tag == nil {
 			newTag := &shtypes.Tag{Name: tagName}
 			newTag.TenantID = tenant
@@ -81,6 +81,30 @@ func AddTagToMedia(mediaID string, tagNames []string, tenant string) error {
 	}
 
 	mediaFile.MediaTags = append(mediaFile.MediaTags, tags...)
+
+	err = repository.SaveMedia(mediaFile)
+	if err != nil {
+		return errors.New("failed to update media file with new tag")
+	}
+
+	return nil
+}
+
+func AddAnimalsToMedia(mediaID string, animalIds []string, tenant string) error {
+	mediaFile, err := repository.GetMediaFileMetaById(mediaID)
+	if err != nil {
+		return err
+	}
+
+	var animals []shtypes.Animal
+	err = repository.DefaultGetByIDs(animalIds, tenant, &animals)
+	if err != nil {
+		return err
+	}
+
+	for i := range animals {
+		mediaFile.TaggedAnimals = append(mediaFile.TaggedAnimals, &animals[i])
+	}
 
 	err = repository.SaveMedia(mediaFile)
 	if err != nil {

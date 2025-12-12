@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { CmsArticle } from 'src/app/cms-types/article-types';
-import { CmsAnimal, CmsImage, CmsTag, CmsTenantConfiguration } from 'src/app/cms-types/cms-types';
+import { CmsAnimal, CmsImage, CmsPage, CmsTag, CmsTenantConfiguration } from 'src/app/cms-types/cms-types';
 import { LoaderService } from 'src/app/layout/loader/loader.service';
 import { AuthService } from './auth.service';
 import { HttpClient } from '@angular/common/http';
@@ -43,18 +43,28 @@ export class CmsRequestService {
     };
   }
 
+  public getPages(): Observable<CmsPage[]> {
+    return this.get<CmsPage[]>(`${this.publicTenantsUrl}/pages`);
+  }
+
+  public getPageByPath(path: string): Observable<CmsPage> {
+    return this.get<CmsPage>(`${this.publicTenantsUrl}/page-by-path?path=${path}`);
+  }
+
+  public savePage(page: CmsPage): Observable<CmsPage> {
+    return this.postOrPatch('pages', page);
+  }
+
   public getTenantConfiguration(): Observable<CmsTenantConfiguration> {
-    const tenantId = this.authService.getTenantID();
-    return this.get<CmsTenantConfiguration>(`${CmsRequestService.publicApiUrl}${tenantId}/configuration`);
+    return this.get<CmsTenantConfiguration>(`${this.publicTenantsUrl}/configuration`);
   }
 
   public saveTenantConfiguration(config: CmsTenantConfiguration): Observable<CmsTenantConfiguration> {
     return this.patch<CmsTenantConfiguration>('configuration', config);
   }
 
-  public getTenantsAnimals(): Observable<CollectionResult<CmsAnimal>> {
-    const tenantId = this.authService.getTenantID();
-    return this.get<CmsAnimal[]>(`${CmsRequestService.publicApiUrl}${tenantId}/animals`).pipe(map(response => {
+  public getAnimals(): Observable<CollectionResult<CmsAnimal>> {
+    return this.get<CmsAnimal[]>(`${this.publicTenantsUrl}/animals`).pipe(map(response => {
       response.sort((a, b) => a.Name.localeCompare(b.Name));
       return {
         results: response,
@@ -63,19 +73,16 @@ export class CmsRequestService {
   }
 
   public getAnimalsByArticleId(articleId: string): Observable<CollectionResult<CmsAnimal>> {
-    const tenantId = this.authService.getTenantID();
-    return this.get<CmsAnimal[]>(`${CmsRequestService.publicApiUrl}${tenantId}/animals/by-article/${articleId}`).pipe(map(response => ({
+    return this.get<CmsAnimal[]>(`${this.publicTenantsUrl}/animals/by-article/${articleId}`).pipe(map(response => ({
       results: response,
     })));
   }
 
-  public getTenantsAnimal(id: string): Observable<CmsAnimal> {
-    const tenantId = this.authService.getTenantID();
-    return this.get<CmsAnimal>(`${CmsRequestService.publicApiUrl}${tenantId}/animals/${id}`)
+  public getAnimal(id: string): Observable<CmsAnimal> {
+    return this.get<CmsAnimal>(`${this.publicTenantsUrl}/animals/${id}`)
   }
 
   public getFilteredAnimals(filter: AnimalsFilter): Observable<CmsAnimal[]> {
-    const tenantId = this.authService.getTenantID();
     let query = ``;
 
     if(filter.AnimalKind) query += `kind=${filter.AnimalKind}&`;
@@ -86,7 +93,7 @@ export class CmsRequestService {
     if(filter.SizeRange[1]) query += `sizeMax=${filter.SizeRange[1]}&`;
     if(filter.Gender != 'both') query += `gender=${filter.Gender}&`;
 
-    return this.get<CmsAnimal[]>(`${CmsRequestService.publicApiUrl}${tenantId}/animals/filtered?${query}`);
+    return this.get<CmsAnimal[]>(`${this.publicTenantsUrl}/animals/filtered?${query}`);
   }
 
   public saveAnimal(animal: CmsAnimal): Observable<CmsAnimal> {
@@ -101,22 +108,28 @@ export class CmsRequestService {
     return this.post<CmsTag>(`tags`, tag)
   }
 
-  public getTenantsTags() {
-    const tenantId = this.authService.getTenantID();
-    return this.get<CmsTag[]>(`${CmsRequestService.publicApiUrl}${tenantId}/tags`)
+  public getTags() {
+    return this.get<CmsTag[]>(`${this.publicTenantsUrl}/tags`)
   }
 
   public deleteTag(id: string): Observable<void> {
     return this.delete(`tags/` + id)
   }
 
+  public getMediaByIds(ids: string[], tenantId: string): Observable<CmsImage[]> {
+    return this.get<CmsImage[]>(`${this.publicTenantsUrl}/media?ids=` + ids.join(','));
+  }
+
   public getMediaByTags(tags: string[], tenantId: string): Observable<CmsImage[]> {
-    return this.get<CmsImage[]>(`${CmsRequestService.publicApiUrl}${tenantId}/media?tags=` + tags.join(','));
+    return this.get<CmsImage[]>(`${this.publicTenantsUrl}/media-by-tags?tags=` + tags.join(','));
+  }
+
+  public getMediaByAnimalIDs(animalIds: string[], tenantId: string): Observable<CmsImage[]> {
+    return this.get<CmsImage[]>(`${this.publicTenantsUrl}/media-by-animals?animalIds=` + animalIds.join(','));
   }
 
   public getArticle(id: string) {
-    const tenantId = this.authService.getTenantID();
-    return this.get<CmsArticle>(`${CmsRequestService.publicApiUrl}${tenantId}/article/${id}`)
+    return this.get<CmsArticle>(`${this.publicTenantsUrl}/article/${id}`)
   }
 
   public saveArticle( article: CmsArticle) {
@@ -127,7 +140,7 @@ export class CmsRequestService {
     return lastValueFrom(this.patch<CmsImage>(`media`, image));
   }
 
-  public uploadScaledImage(files: { size: string, blob: Blob }[], fileName: string, commaSeparatedTags: string) {
+  public uploadScaledImage(files: { size: string; blob: Blob; }[], fileName: string, commaSeparatedTags: string, commaSeparatedAnimalIds: string) {
     const url = CmsRequestService.adminApiUrl + 'media/scaled';
     const tenantId = this.authService.getTenantID();
     const data = new FormData();
@@ -143,6 +156,7 @@ export class CmsRequestService {
     data.append('Description', "");
     data.append('TenantID', tenantId);
     data.append('Tags', commaSeparatedTags);
+    data.append('AnimalIDs', commaSeparatedAnimalIds);
 
     const options = {
       headers: {
@@ -186,11 +200,15 @@ export class CmsRequestService {
 
   /** uses PATCH if data has ID, else PATCH */
   public postOrPatch<T>(path: string, data: { ID?: number | string }): Observable<T> {
-    if (data.ID) {
+    if (data.ID && data.ID != '') {
       return this.patch<T>(path, data);
     } else {
       return this.post<T>(path, data);
     }
+  }
+
+  private get publicTenantsUrl() {
+    return CmsRequestService.publicApiUrl + this.authService.getTenantID();
   }
 
   private handleRequest<T>(

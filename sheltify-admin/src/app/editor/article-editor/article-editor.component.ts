@@ -1,13 +1,16 @@
-import { Component, computed, effect, HostListener, input, Renderer2, signal } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { AsyncPipe } from '@angular/common';
+import { Component, computed, DestroyRef, effect, HostListener, input, OnInit, Renderer2, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { bootstrapGripVertical, bootstrapX, bootstrapPlus } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, Observable, Subject } from 'rxjs';
 import { CmsArticle, CmsArticleRow, Section } from 'src/app/cms-types/article-types';
 import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
 import { createEmptySection } from 'src/app/editor/article-editor/article-section.factory';
 import { PickNewSectionComponent } from 'src/app/editor/article-editor/pick-new-section/pick-new-section.component';
 import { SectionEditorAnimalListComponent } from 'src/app/editor/article-editor/section-editor-animal-list/section-editor-animal-list.component';
+import { SectionEditorHeroComponent } from 'src/app/editor/article-editor/section-editor-hero/section-editor-hero.component';
 import { SectionEditorHtmlComponent } from 'src/app/editor/article-editor/section-editor-html/section-editor-html.component';
 import { SectionEditorImagesComponent } from 'src/app/editor/article-editor/section-editor-images/section-editor-images.component';
 import { SectionEditorTitleComponent } from 'src/app/editor/article-editor/section-editor-title/section-editor-title.component';
@@ -20,18 +23,20 @@ import { bootstrapEye } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-article-editor',
-  imports: [SectionEditorTextComponent, NgIcon, SectionEditorImagesComponent, SectionEditorTitleComponent, SectionEditorAnimalListComponent, SectionEditorHtmlComponent],
+  imports: [SectionEditorTextComponent, NgIcon, SectionEditorImagesComponent, SectionEditorTitleComponent, SectionEditorAnimalListComponent, SectionEditorHtmlComponent, SectionEditorHeroComponent, AsyncPipe],
   providers: [provideIcons({bootstrapGripVertical, bootstrapX, bootstrapPlus, bootstrapEye})],
   templateUrl: './article-editor.component.html',
   styleUrl: './article-editor.component.scss',
   //changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArticleEditorComponent {
+export class ArticleEditorComponent implements OnInit {
 
   articleId = input.required<string>();
 
   article = signal<CmsArticle | undefined>(createEmptyArticle());
   movedItem = signal<{ row: number, column: number, sectionRef: Section } | null>(null);
+
+  saveArticle = input<Observable<void>>();
 
   isPreviewMode = signal<boolean>(false);
 
@@ -43,6 +48,7 @@ export class ArticleEditorComponent {
     private cmsRequestService: CmsRequestService,
     private domSanitizer: DomSanitizer,
     private renderer: Renderer2,
+    private destroyRef: DestroyRef,
   ) {
 
     this.addGlobalStyle();
@@ -55,6 +61,10 @@ export class ArticleEditorComponent {
       const article = await lastValueFrom(this.cmsRequestService.getArticle(articleId));
       this.article.set(article);
     });
+  }
+
+  ngOnInit() {
+    this.saveArticle()?.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.save());
   }
 
   public enterMoveMode(row: number, column: number, sectionRef: Section) {
@@ -193,12 +203,23 @@ export class ArticleEditorComponent {
 
 
   triggerRerenderVal = signal(0);
-  renderedSections = computed(() => {
+  renderedSections = computed(async () => {
     this.triggerRerenderVal();
     const article = this.article();
-    return article?.Structure.Rows.map(r =>
-      r.Sections.map(s => this.domSanitizer.bypassSecurityTrustHtml(renderArticleSection(s)))
-    );
+
+    const sections: SafeHtml[][] = [];
+
+    for (const row of article?.Structure.Rows ?? []) {
+      const rowHtml: SafeHtml[] = [];
+      for (const section of row.Sections) {
+        const html = this.domSanitizer.bypassSecurityTrustHtml(await renderArticleSection(section));
+        rowHtml.push(html);
+      }
+      sections.push(rowHtml);
+    }
+
+    return sections;
+
   });
 
 }

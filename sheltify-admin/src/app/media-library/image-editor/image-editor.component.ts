@@ -1,10 +1,12 @@
-import { DatePipe } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { Component, effect, input, OnInit, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
-import { CmsImage, CmsImagesSize, CmsTag } from 'src/app/cms-types/cms-types';
+import { firstValueFrom } from 'rxjs';
+import { CmsAnimal, CmsImage, CmsImagesSize, CmsTag } from 'src/app/cms-types/cms-types';
 import { TagsManagerComponent } from 'src/app/editor/tags-manager/tags-manager.component';
 import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
+import { AnimalService } from 'src/app/services/animal.service';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { TagsService } from 'src/app/services/tags.service';
@@ -28,6 +30,7 @@ import { TagComponent } from 'src/app/ui/tag/tag.component';
 export class ImageEditorComponent implements OnInit {
   public image = input.required<CmsImage>();
   public selectedTags = signal<string[]>([]);
+  public selectedAnimals = signal<string[]>([]);
   public createdTag = output<CmsTag>()
 
   public editedImage = output<CmsImage>();
@@ -38,11 +41,16 @@ export class ImageEditorComponent implements OnInit {
     private cmsRequestSv: CmsRequestService,
     private modalService: ModalService,
     public tagsService: TagsService,
-    ) {
+    public animalService: AnimalService,
+  ) {
+
+    //const a = this.animalService.$animals
+
     effect(() => {
       const img = this.image();
       if (this.image()) {
         this.selectedTags.set(img.MediaTags.map(tag => tag.ID));
+        this.selectedAnimals.set(img.TaggedAnimals.map(animal => animal.Name));
       }
     });
   }
@@ -54,6 +62,10 @@ export class ImageEditorComponent implements OnInit {
   async updateMedia() {
     const img = this.image();
     img.MediaTags = this.tagsService.availableTags().filter(tag => this.selectedTags().includes(tag.ID));
+    img.TaggedAnimals = this.animalService.animals().filter(animal => this.selectedAnimals().includes(animal.Name));
+    console.log(img);
+    console.log(this.animalService.animals());
+    console.log(this.selectedAnimals());
     const editedImage = await this.cmsRequestSv.updateMedia(img);
     if (editedImage) {
       this.editedImage.emit(editedImage)

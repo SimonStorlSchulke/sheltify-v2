@@ -1,6 +1,20 @@
 <div class="left-sidebar-layout">
   <div class="left-sidebar">
-    <h1>Seiten</h1>
+    <div class="sui flex-x gap-2">
+      <h1>Seiten</h1>
+      <div class="sui grow-1"></div>
+      <button data-testid="btn-new-animal" class="primary" (click)="newPage()">Neue Seite</button>
+    </div>
+
+    <div class="sui flex-y">
+      @let pages = pagesService.pages();
+      @for (page of pages; track page) {
+        <div [class.selected]="selectedPage()?.ID == pages[$index].ID" class="page-entry sui p-1" (click)="toPage(page.Path)">{{page.Path || ' - '}}</div>
+      }
+    </div>
+
   </div>
-  <app-page-editor class="content"/>
+  @if (selectedPage(); as page) {
+    <app-page-editor [page]="page" class="content"/>
+  }
 </div>

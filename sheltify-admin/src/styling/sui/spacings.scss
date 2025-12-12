@@ -4,51 +4,51 @@
   @for $i from 1 through length($spacers) {
     $cspacer: nth($spacers, $i);
 
-    &.m-#{$i - 1} {
+    &.m-#{$i} {
       margin: nth($spacers, $i);
     }
-    &.mx-#{$i - 1} {
+    &.mx-#{$i} {
       margin-left: $cspacer;
       margin-right: $cspacer;
     }
-    &.my-#{$i - 1} {
+    &.my-#{$i} {
       margin-top: $cspacer;
       margin-bottom: $cspacer;
     }
-    &.mb-#{$i - 1} {
+    &.mb-#{$i} {
       margin-bottom: $cspacer;
     }
-    &.mt-#{$i - 1} {
+    &.mt-#{$i} {
       margin-top: $cspacer;
     }
-    &.mr-#{$i - 1} {
+    &.mr-#{$i} {
       margin-right: $cspacer;
     }
-    &.ml-#{$i - 1} {
+    &.ml-#{$i} {
       margin-left: $cspacer;
     }
 
-    &.p-#{$i - 1} {
+    &.p-#{$i} {
         padding: nth($spacers, $i);
       }
-      &.px-#{$i - 1} {
+      &.px-#{$i} {
         padding-left: $cspacer;
         padding-right: $cspacer;
       }
-      &.py-#{$i - 1} {
+      &.py-#{$i} {
         padding-top: $cspacer;
         padding-bottom: $cspacer;
       }
-      &.pb-#{$i - 1} {
+      &.pb-#{$i} {
         padding-bottom: $cspacer;
       }
-      &.pt-#{$i - 1} {
+      &.pt-#{$i} {
         padding-top: $cspacer;
       }
-      &.pr-#{$i - 1} {
+      &.pr-#{$i} {
         padding-right: $cspacer;
       }
-      &.pl-#{$i - 1} {
+      &.pl-#{$i} {
         padding-left: $cspacer;
       }
   }

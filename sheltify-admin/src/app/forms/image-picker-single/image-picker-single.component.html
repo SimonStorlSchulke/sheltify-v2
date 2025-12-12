@@ -4,7 +4,7 @@
     <button class="small secondary questionmark" (click)="showExplanation()">?</button>
   }
 </div>
-<div (click)="pickImage()" class="img-container">
+<div [id]="idName()" (click)="pickImage()" class="img-container">
   @if(twoWayModel()) {
     <img [cmsImage]="twoWayModel()!">
   } @else {
