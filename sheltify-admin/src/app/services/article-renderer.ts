@@ -194,6 +194,23 @@ const defaultGeneralArticleStyle = `
   font-size: 1.2rem;
 `;
 
+const defaultTextStyle = `
+.article-button {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 4px;
+  background: #0078d4;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.article-button:hover {
+  background: #005ea2;
+}
+`
+
 const defaultTitleStyle = `
 h1 {font-size: 3.8rem;}
 h2 {font-size: 2.8rem;}
@@ -328,6 +345,7 @@ hr {
 `;
 
 const defaultSectionStyles = new Map<SectionType, string>([
+  ['text', defaultTextStyle],
   ['title', defaultTitleStyle],
   ['image', defaultImagesStyle],
   ['hero', defaultHeroStyle],
