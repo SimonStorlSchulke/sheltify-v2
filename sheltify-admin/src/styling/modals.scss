@@ -1,6 +1,7 @@
 .modal-lg,
 .modal-alert,
-.modal-fullscreen {
+.modal-fullscreen,
+.modal-lg-no-padding {
   background: #fff;
   padding: 16px;
 
@@ -17,4 +18,8 @@
 .modal-fullscreen {
   width: 100dvw !important;
   height: 100vh !important;
+}
+
+.modal-lg-no-padding {
+  padding: 0;
 }

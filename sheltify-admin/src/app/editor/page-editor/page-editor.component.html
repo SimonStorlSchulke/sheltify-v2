@@ -1,14 +1,23 @@
 <div class="article-editor-container">
   <div data-testid="form-animal-editor" class="sui flex-x gap-3 grow-1">
-    <form>
-      <app-checkbox-input idName="show-in-menu" label="In Menü anzeigen" />
-      <app-text-input idName="title" label="Titel" [(twoWayModel)]="page().Title"/>
-      <app-text-input idName="path" label="Pfad" [(twoWayModel)]="page().Path"/>
+    <form class="sui grow-1 flex-y gap-2">
+      <div class="sui flex-x gap-2">
+        <app-text-input idName="title" label="Titel" [(twoWayModel)]="page().Title"/>
+        <app-text-input idName="path" label="Pfad" [(twoWayModel)]="page().Path"/>
+      </div>
+      <div class="sui flex-x gap-2">
+        <app-checkbox-input idName="show-in-menu" label="In Menü anzeigen" [(twoWayModel)]="page().ShowInMenu"/>
+        <app-checkbox-input idName="show-in-menu" label="Im Footer verlinken" [(twoWayModel)]="page().LinkInFooter"/>
+      </div>
+      <button type="button" (click)="save()">Speichern</button>
     </form>
-    <button (click)="save()">Speichern</button>
   </div>
 
+
   @if (page(); as page) {
+    <br>
+    <hr>
+    <br>
 
     @if (page.ArticleID) {
       <app-article-editor [articleId]="page.ArticleID" [saveArticle]="saveArticle$" class="content"/>

@@ -18,6 +18,8 @@ type ArticleRow struct {
 }
 
 type ArticleSection struct {
-	SectionType string
-	Content     interface{}
+	BackgroundColor string
+	Width           string
+	SectionType     string
+	Content         interface{}
 }

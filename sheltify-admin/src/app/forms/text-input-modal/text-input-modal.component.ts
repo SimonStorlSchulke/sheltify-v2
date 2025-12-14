@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, ElementRef, HostListener, input, viewChild } from '@angular/core';
 import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
 import { FinishableDialog } from 'src/app/services/modal.service';
 
@@ -11,4 +11,11 @@ import { FinishableDialog } from 'src/app/services/modal.service';
 })
 export class TextInputModalComponent extends FinishableDialog<string>{
   label = '';
+
+  inputElement = viewChild<ElementRef<HTMLInputElement>>('input');
+
+  @HostListener('window:keyup.enter', ['$event'])
+  submit(_: Event) {
+    this.finishWith(this.inputElement()?.nativeElement.value ?? '');
+  }
 }

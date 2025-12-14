@@ -1,4 +1,5 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { CmsArticle } from 'src/app/cms-types/article-types';
 import { createEmptyArticle, createNewPage } from 'src/app/cms-types/cms-type.factory';
@@ -24,19 +25,25 @@ export class PageListComponent {
     public pagesService: PagesService,
     private cmsRequestService: CmsRequestService,
     private modalService: ModalService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
   ) {
+  }
+
+  ngOnInit() {
+    const path = this.activatedRoute.snapshot.paramMap.get('path');
+    if(path != null) {
+      this.toPage(path);
+    }
   }
 
   selectedPage = signal<CmsPage | null>(null);
 
   public async newPage() {
-
     const page = createNewPage();
     page.Path = await this.modalService.openFinishable(TextInputModalComponent, {label: 'Pfad für die Seite eingeben - dieser muss mit / beginnen und darf nur Buchstaben, Zahlen, - und / enthalten.'}) ?? '';
     if(page.Path == '') return;
-    page.Title = this.pagesService.createTitleFromPath(page.Path);
-    await firstValueFrom(this.cmsRequestService.savePage(page));
-    this.pagesService.reloadPages();
+    page.Path = '/' + page.Path;
     page.Title = this.pagesService.createTitleFromPath(page.Path);
     await firstValueFrom(this.cmsRequestService.savePage(page));
     this.pagesService.reloadPages();
@@ -45,5 +52,6 @@ export class PageListComponent {
   public async toPage(path: string) {
     const page = await firstValueFrom(this.cmsRequestService.getPageByPath(path));
     this.selectedPage.set(page);
+    this.router.navigate(['/seiten', path]);
   }
 }

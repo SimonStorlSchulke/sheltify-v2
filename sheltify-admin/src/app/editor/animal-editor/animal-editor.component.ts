@@ -54,8 +54,8 @@ export class AnimalEditorComponent {
     }
   }
 
-  async publish() {
-    const savedAnimal = await this.animalService.publishAnimal(this.animal()!);
+  async togglePublished() {
+    const savedAnimal = await this.animalService.togglePublishedAnimal(this.animal()!);
 
     if(savedAnimal) {
       this.saved.emit(savedAnimal!);

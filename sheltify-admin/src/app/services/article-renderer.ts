@@ -1,4 +1,4 @@
-import { Section, SectionAnimalList, SectionHero, SectionImages, SectionTitle, SectionType } from 'src/app/cms-types/article-types';
+import { Section, SectionAnimalList, SectionHero, SectionImages, SectionTitle, SectionType, SectionVideo } from 'src/app/cms-types/article-types';
 import { CmsImage, CmsImagesSize } from 'src/app/cms-types/cms-types';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 
@@ -29,8 +29,11 @@ export async function renderArticleSection(section: Section) {
     case 'separator-x':
       contentHtml = `<hr>`;
       break;
+    case 'video':
+      contentHtml = renderVideoSection(section);
+      break;
     default:
-      contentHtml = 'Vorschau noch nicht implementiert für ' + section.SectionType;
+      contentHtml = 'Vorschau noch nicht implementiert';
   }
 
   return `<div class="section-container ${section.SectionType}">${contentHtml}</div>`;
@@ -114,7 +117,45 @@ async function renderHeroSection(section: SectionHero) {
 
 }
 
+
+function renderVideoSection(section: SectionVideo) {
+  const videoId = getYouTubeVideoId(section.Content.Url);
+
+  if(!videoId) {
+    return 'Video konnte nicht geladen werden.'
+  }
+
+  return `
+  <p>
+  <iframe width="560" height="315"
+  src="https://www.youtube.com/embed/${videoId}"
+  title=""
+  frameBorder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  allowFullScreen><br>Powered by <a href="https://youtubeembedcode.com">youtube embed code</a> and <a href="https://casinomga.se/">nya casinon utan spelpaus mga</a></iframe>
+  </p>
+  `;
+}
+
+function getYouTubeVideoId(url: string) {
+  if (typeof url !== 'string') return null;
+
+  const patterns = [
+    /(?:youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/,
+  ];
+
+  for (const pattern of patterns) {
+    const match = url.match(pattern);
+    if (match) {
+      return match[1];
+    }
+  }
+
+  return null;
+}
+
 async function refetchMediaFiles(images: CmsImage[]): Promise<CmsImage[]> {
+  if(!images[0]) return [];
   const tenant = images[0].TenantID;
   let ids = images.map(f => f.ID).join(',');
   const refetchedImages = await fetch(`${publicApiUrl}${tenant}/media?ids=${ids}`);

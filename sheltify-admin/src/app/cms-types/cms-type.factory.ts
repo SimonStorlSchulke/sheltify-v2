@@ -31,5 +31,6 @@ export function createNewPage(): CmsPage {
     Title: '',
     Path: '',
     ShowInMenu: true,
+    LinkInFooter: false,
   }
 }

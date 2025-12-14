@@ -19,8 +19,7 @@ button:not(.unstyled) {
     }
 
     &.large {
-        padding: 0.7em 2em;
-        font-size: $fontsize-h4;
+        font-size: $fontsize-default;
     }
 
     &.primary {
@@ -31,6 +30,37 @@ button:not(.unstyled) {
             background-color: $primary-h1;
         }
     }
+
+  &.warning {
+    background-color: $warning;
+    color: #fff;
+
+    &:hover {
+      background-color: $success-d1;
+    }
+  }
+
+  &.success {
+    background-color: $success-d1;
+    color: #fff;
+
+    &:hover {
+      background-color: $success;
+    }
+  }
+
+  &.tab {
+    background: $neutral150;
+    border-radius: 0;
+    font-weight: 500;
+    &:hover {
+      color: $primary;
+      box-shadow: none;
+    }
+    &.active {
+      background: linear-gradient($primary 4px, #fff 4px);
+    }
+  }
 
     &.alert {
         background-color: $alert;

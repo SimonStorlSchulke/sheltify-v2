@@ -18,6 +18,7 @@ export type CmsPage = CmsType & {
   ArticleID?: string,
   Article?: CmsArticle;
   ShowInMenu: boolean,
+  LinkInFooter: boolean,
 }
 
 export type AnimalStatusName = "in-spaichingen" | "in-bulgarien" | "vermittlungshilfe" | "zuhause-gefunden" | "vermisst" | "fundtier";
@@ -25,7 +26,7 @@ export type AnimalStatusName = "in-spaichingen" | "in-bulgarien" | "vermittlungs
 // New CMS types
 export type CmsAnimal = CmsType & {
   PublishedAt?: {
-    Time: string,
+    Time: string | null,
     Valid: boolean,
   },
   Name: string;

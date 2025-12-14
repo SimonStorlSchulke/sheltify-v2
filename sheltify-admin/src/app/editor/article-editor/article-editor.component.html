@@ -24,10 +24,11 @@
             <div #articleColumn class="article-column sui grow-1">
 
               <div class="section-titlebar sui flex-x px-2 gap-1 ai-center">
-                <b class="sui grow-1 py-2">{{ sectionLabels.get(section.SectionType) ?? 'Sektion' }}</b>
+                <b class="sui py-2 grow-1">{{ sectionLabels.get(section.SectionType) ?? 'Sektion' }}</b>
                 <button (mousedown)="enterMoveMode(iRow, iColumn, section)" class="move-button small">verschieben</button>
                 <ng-icon class="x" (click)="deleteSection(iRow, iColumn)" name="bootstrapX" size="22px"/>
               </div>
+
               <div class="section-content">
                 @let renderedSectionsVal = renderedSections() | async;
                 <div [attr.data-testid]="'section-preview-' + iRow + '-' + iColumn" class="section-preview"
@@ -54,6 +55,9 @@
                     @case ('html') {
                       <app-section-editor-html [section]="section"/>
                     }
+                    @case ('video') {
+                      <app-section-editor-video [section]="section"/>
+                    }
                   }
                 </div>
               </div>
@@ -68,4 +72,3 @@
     }
   }
 </div>
-

@@ -23,6 +23,23 @@
 .article-container:not(.previewMode) {
   .move-to-column,
   .move-to-row {
+    &:only-of-type {
+      outline: 2px dashed mix($primary, transparent, 50%);
+      position: relative;
+      height: 100px;
+    }
+
+    &:only-of-type:after {
+      content: "Erste Sektion hinzufügen";
+      position: absolute;
+      width: 95%;
+      top: 35px;
+      text-align: center;
+      color: $primary;
+      font-size: 20px;
+      box-sizing: border-box;
+    }
+
     cursor: pointer;
     outline-offset: -2px;
 
@@ -79,7 +96,6 @@
 .article-column {
   &.edit-mode {
     outline: 2px solid $primary !important;
-
     .section-editor {
       pointer-events: all;
       opacity: 100%;

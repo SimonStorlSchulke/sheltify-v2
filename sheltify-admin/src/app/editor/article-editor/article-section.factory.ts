@@ -22,6 +22,8 @@ export function createEmptySection(SectionType: SectionType): Section {
       return {
         SectionType,
         Content: {
+          Title: '',
+          Url: '',
         }
       };
     case 'image':

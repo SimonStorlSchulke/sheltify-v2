@@ -1,9 +1,11 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, computed, DestroyRef, effect, HostListener, input, OnInit, Renderer2, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { bootstrapGripVertical, bootstrapX, bootstrapPlus } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { NgSelectComponent } from '@ng-select/ng-select';
 import { lastValueFrom, Observable, Subject } from 'rxjs';
 import { CmsArticle, CmsArticleRow, Section } from 'src/app/cms-types/article-types';
 import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
@@ -14,7 +16,9 @@ import { SectionEditorHeroComponent } from 'src/app/editor/article-editor/sectio
 import { SectionEditorHtmlComponent } from 'src/app/editor/article-editor/section-editor-html/section-editor-html.component';
 import { SectionEditorImagesComponent } from 'src/app/editor/article-editor/section-editor-images/section-editor-images.component';
 import { SectionEditorTitleComponent } from 'src/app/editor/article-editor/section-editor-title/section-editor-title.component';
+import { SectionEditorVideoComponent } from 'src/app/editor/article-editor/section-editor-video/section-editor-video.component';
 import { SectionEditorTextComponent } from 'src/app/editor/article-editor/text-section-editor/section-editor-text.component';
+import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
 import { AlertService } from 'src/app/services/alert.service';
 import { createArticleStyle, renderArticleSection, sectionLabels } from 'src/app/services/article-renderer';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
@@ -23,7 +27,7 @@ import { bootstrapEye } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-article-editor',
-  imports: [SectionEditorTextComponent, NgIcon, SectionEditorImagesComponent, SectionEditorTitleComponent, SectionEditorAnimalListComponent, SectionEditorHtmlComponent, SectionEditorHeroComponent, AsyncPipe],
+  imports: [SectionEditorTextComponent, NgIcon, SectionEditorImagesComponent, SectionEditorTitleComponent, SectionEditorAnimalListComponent, SectionEditorHtmlComponent, SectionEditorHeroComponent, AsyncPipe, SectionEditorVideoComponent, TextInputComponent, FormsModule, NgSelectComponent],
   providers: [provideIcons({bootstrapGripVertical, bootstrapX, bootstrapPlus, bootstrapEye})],
   templateUrl: './article-editor.component.html',
   styleUrl: './article-editor.component.scss',
@@ -121,7 +125,6 @@ export class ArticleEditorComponent implements OnInit {
 
 
   public async save() {
-    if (!this.article()) return;
     await lastValueFrom(this.cmsRequestService.saveArticle(this.article()!));
   }
 

@@ -11,7 +11,7 @@ export const routes: Routes = [
   {path: "login", component: LoginComponent},
   {path: "dashboard", component: DashboardComponent, canActivate: [AuthGuard]},
   {path: "seiten", component: PageListComponent, canActivate: [AuthGuard]},
-  {path: "seiten/:id", component: PageListComponent, canActivate: [AuthGuard]},
+  {path: "seiten/:path", component: PageListComponent, canActivate: [AuthGuard]},
   {path: "media", component: MediaLibraryComponent, canActivate: [AuthGuard]},
   {path: "optionen", component: TenantConfigurationComponent, canActivate: [AuthGuard]},
   {path: "tiere", component: AnimalListComponent, canActivate: [AuthGuard]},

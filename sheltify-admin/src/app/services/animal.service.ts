@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { CmsAnimal } from 'src/app/cms-types/cms-types';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
@@ -14,17 +14,36 @@ export class AnimalService {
 
   public animals = signal<CmsAnimal[]>([]);
 
+  public animalsByArticleID = computed(() => {
+    return this.animals().reduce((acc, animal) => {
+      animal.ArticleID ??= 'NoArticle'
+      acc[animal.ArticleID] = acc[animal.ArticleID] ?? [];
+      acc[animal.ArticleID].push(animal);
+      return acc;
+    }, {} as Record<string, CmsAnimal[]>);
+  })
+
   public async reloadAnimals() {
     const animals = await firstValueFrom(this.cmsRequestService.getAnimals());
     this.animals.set(animals.results ?? []);
   }
 
-  async publishAnimal(animal: CmsAnimal) {
-    animal.PublishedAt = {
-      Valid: true,
-      Time: new Date().toISOString(),
+  async togglePublishedAnimal(animal: CmsAnimal) {
+    const animalToSave = structuredClone(animal);
+    if(animalToSave.PublishedAt?.Valid) {
+      animalToSave.PublishedAt = {
+        Valid: false,
+        Time: null,
+      };
+      return await this.save(animalToSave);
+    } else {
+      animalToSave.PublishedAt = {
+        Valid: true,
+        Time: new Date().toISOString(),
+      }
+      return await this.save(animalToSave);
     }
-    return await this.save(animal);
+
   }
 
   async save(animal: CmsAnimal) {
@@ -48,6 +67,7 @@ export class AnimalService {
     }
 
     const savedAnimal = await firstValueFrom(this.cmsRequestService.saveAnimal(animal!));
+    console.log("saved animal", savedAnimal);
     return savedAnimal;
   }
 }

@@ -2,12 +2,13 @@ package shtypes
 
 type Page struct {
 	Publishable
-	Title       string
-	Path        string
-	Description string
-	ShowInMenu  bool
-	ArticleID   *string
-	Article     *Article `gorm:"onDelete:CASCADE"`
+	Title        string
+	Path         string
+	Description  string
+	ShowInMenu   bool
+	LinkInFooter bool
+	ArticleID    *string
+	Article      *Article `gorm:"onDelete:CASCADE"`
 }
 
 func (p *Page) Validate() string {

@@ -6,6 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import { CmsAnimal, CmsImage, CmsImagesSize, CmsTag } from 'src/app/cms-types/cms-types';
 import { TagsManagerComponent } from 'src/app/editor/tags-manager/tags-manager.component';
 import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
+import { MediaLibraryComponent } from 'src/app/media-library/media-library.component';
 import { AnimalService } from 'src/app/services/animal.service';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { ModalService } from 'src/app/services/modal.service';
@@ -43,9 +44,6 @@ export class ImageEditorComponent implements OnInit {
     public tagsService: TagsService,
     public animalService: AnimalService,
   ) {
-
-    //const a = this.animalService.$animals
-
     effect(() => {
       const img = this.image();
       if (this.image()) {
@@ -104,4 +102,5 @@ export class ImageEditorComponent implements OnInit {
   rotateImage(steps: number) {
     this.image().RotationSteps += steps;
   }
+
 }

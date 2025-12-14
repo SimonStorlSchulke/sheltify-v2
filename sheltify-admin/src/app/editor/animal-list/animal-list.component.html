@@ -1,53 +1,64 @@
 @let editorOpened = selectedAnimal() !== null;
 <div class="left-sidebar-layout">
-    <div class="left-sidebar">
-      <div class="sui flex-x">
-        <h1>Tiere</h1>
-        <div class="sui grow-1"></div>
-        <button data-testid="btn-new-animal" class="primary" (click)="newAnimal()">Neues Tier</button>
+  <div class="left-sidebar">
+    <div class="sui flex-x">
+      <h1>Tiere</h1>
+      <div class="sui grow-1"></div>
+      <button data-testid="btn-new-animal" class="primary" (click)="newAnimal()">Neues Tier</button>
+    </div>
+
+    <div class="animals sui flex-x ai-start wrap gap-4">
+      <table [class.partial-table]="editorOpened">
+        <thead>
+        <tr>
+          <th class="td-image">Bild</th>
+          <th class="td-name">Name</th>
+          <th class="td-born">Geboren</th>
+          <th class="td-created">erstellt</th>
+          <th class="td-modified">modifiziert</th>
+          <th class="td-buttons"></th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (cmsAnimal of animalService.animals(); track $index) {
+            @let animal = editedAnimals().get(cmsAnimal.ID ?? '') ?? cmsAnimal;
+
+            <tr [attr.data-testid]="'label-list-animal-' + animal.Name" class="entry" [class.selected]="selectedAnimal()?.ID == animal.ID" (click)="toAnimal(animal.ID ?? '')">
+              <td class="td-image">
+                @if (animal.Portrait) {
+                  <div class="img-wrapper"><img [cmsImage]="animal.Portrait" cmsImageSize="thumbnail"></div>
+                }
+              </td>
+              <td class="td-name">{{ animal.Name }}</td>
+              <td class="td-born">{{ animal.Birthday | date: 'dd.MM.yyyy' }}</td>
+              <td class="td-created">{{ animal.CreatedAt | date: 'dd.MM.yyyy' }}</td>
+              <td class="td-modified">{{ animal.UpdatedAt | date: 'dd.MM.yyyy' }}</td>
+              <td>
+                <button data-testid="btn-delete-animal" (click)="deleteAnimals([animal.ID!])" class="secondary">Löschen</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+  <div class="content">
+    @if (editorOpened) {
+      @let animalsWithSameArticle = animalService.animalsByArticleID()[selectedAnimal()?.ArticleID ?? ''] ?? [];
+
+      <div class="content-info-header">
+        @if (animalsWithSameArticle.length > 1) {
+          @for (animal of animalsWithSameArticle; track animal) {
+            <button class="tab large" [class.active]="selectedAnimal()?.ID == animal.ID" (click)="toAnimal(animal.ID ?? '')">{{ animal.Name }}</button>
+          }
+        } @else {
+          <h1>{{ selectedAnimal()?.Name }}</h1>
+        }
       </div>
 
-      <div class="animals sui flex-x ai-start wrap gap-4">
-        <table [class.partial-table]="editorOpened">
-          <thead>
-          <tr>
-            <th class="td-image">Bild</th>
-            <th class="td-name">Name</th>
-            <th class="td-born">Geboren</th>
-            <th class="td-created">erstellt</th>
-            <th class="td-modified">modifiziert</th>
-            <th class="td-buttons"></th>
-          </tr>
-          </thead>
-          <tbody>
-            @for (cmsAnimal of animalService.animals(); track $index) {
-              @let animal = editedAnimals().get(cmsAnimal.ID ?? '') ?? cmsAnimal;
-
-              <tr [attr.data-testid]="'label-list-animal-' + animal.Name" class="entry" [class.selected]="selectedAnimal()?.ID == animal.ID" (click)="toAnimal(animal.ID ?? '')">
-                <td class="td-image">
-                  @if (animal.Portrait) {
-                    <div class="img-wrapper"><img [cmsImage]="animal.Portrait" cmsImageSize="thumbnail"></div>
-                  }
-                </td>
-                <td class="td-name">{{ animal.Name }}</td>
-                <td class="td-born">{{ animal.Birthday | date: 'dd.MM.yyyy' }}</td>
-                <td class="td-created">{{ animal.CreatedAt | date: 'dd.MM.yyyy' }}</td>
-                <td class="td-modified">{{ animal.UpdatedAt | date: 'dd.MM.yyyy' }}</td>
-                <td>
-                  <button data-testid="btn-delete-animal" (click)="deleteAnimals([animal.ID!])" class="secondary">Löschen</button>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-
-      </div>
-    </div>
-    <div class="content">
-      @if (editorOpened) {
-        <div class="animals-in-article">{{'a'}}</div>
-        <app-animal-editor [animal]="selectedAnimal()" [animals]="animalService.animals()" (saved)="onSavedAnimal($event)"/>
-      }
-    </div>
+      <app-animal-editor [animal]="selectedAnimal()" [animals]="animalService.animals()" (saved)="onSavedAnimal($event)"/>
+    }
+  </div>
 
 </div>

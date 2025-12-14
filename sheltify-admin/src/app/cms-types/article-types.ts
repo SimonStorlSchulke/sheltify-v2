@@ -74,10 +74,11 @@ export type SectionAnimalList = {
   TempFoundAnimals: CmsAnimal[],
 };
 
-export type SectionVideo= {
+export type SectionVideo = {
   SectionType: 'video',
   Content: {
-
+    Title: string,
+    Url: string,
   },
 };
 

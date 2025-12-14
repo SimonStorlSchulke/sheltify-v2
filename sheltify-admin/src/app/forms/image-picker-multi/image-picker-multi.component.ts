@@ -1,9 +1,8 @@
-import { Component, inject, model, signal } from '@angular/core';
+import { Component, inject, model } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { CmsImage } from 'src/app/cms-types/cms-types';
 import { InputBaseComponent } from 'src/app/forms/input-base.component';
-import { MediaLibraryComponent } from 'src/app/media-library/media-library.component';
-import { ModalService } from 'src/app/services/modal.service';
+import { ModalPresenter } from 'src/app/services/modal.presenter';
 import { CmsImageDirective } from 'src/app/ui/cms-image.directive';
 import { bootstrapCardImage, bootstrapPlus } from '@ng-icons/bootstrap-icons'
 
@@ -18,10 +17,10 @@ export class ImagePickerMultiComponent extends InputBaseComponent {
   public twoWayModel = model<CmsImage[]>([]);
 
 
-  private modalService = inject(ModalService);
+  private modalPresenter = inject(ModalPresenter);
 
   public async addImage() {
-    const images = await this.modalService.openFinishable<CmsImage[], MediaLibraryComponent>(MediaLibraryComponent);
+    const images = await this.modalPresenter.openMediaLibrary();
     if(!images) return;
     this.twoWayModel.set([...this.twoWayModel()!, ...images]);
   }

@@ -1,10 +1,11 @@
 @let rowClass = "sui flex-x gap-2 grow-1";
 @if (animal(); as animal) {
-  <div class="sui flex-x jc-end">
-    <button data-testid="btn-save-animal" (click)="save()">Speichern</button>
-    <button (click)="publish()">Veröffentlichen</button>
+  <div class="sui save-content-buttons flex-x gap-2 jc-end">
+    <button class="primary" data-testid="btn-save-animal" (click)="save()">Speichern</button>
+    @let isPublished = animal.PublishedAt?.Valid;
+    <button [class.warning]="!isPublished" [class.success]="isPublished"  (click)="togglePublished()">{{ animal.PublishedAt?.Valid ? 'Depublizieren' : 'Publizieren' }}</button>
   </div>
-  <div class="article-editor-container">
+  <div class="article-editor-container sui p-3">
     <div data-testid="form-animal-editor" class="sui flex-x gap-3 grow-1">
       <app-image-picker-single label="Portrait" idName="portrait" [(twoWayModel)]="animal.Portrait"/>
       <form class="sui flex-y gap-2 grow-1 pr-1">

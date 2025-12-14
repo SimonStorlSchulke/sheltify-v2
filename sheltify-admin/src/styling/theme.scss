@@ -3,12 +3,10 @@
 .left-sidebar-layout {
   height: 100%;
   display: flex;
-  gap: 60px;
 
   .left-sidebar {
     background: $neutral100;
-    margin: -32px;
-    padding: 32px;
+    padding: 16px;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -17,4 +15,10 @@
   .content {
     flex-grow: 1;
   }
+}
+
+.content-info-header {
+  min-height: 48px;
+  max-height: 48px;
+  background: $neutral100;
 }
