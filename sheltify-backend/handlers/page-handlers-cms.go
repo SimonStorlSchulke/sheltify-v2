@@ -18,3 +18,7 @@ func SavePage(w http.ResponseWriter, r *http.Request) {
 		okResponse(w, page)
 	}
 }
+
+func DeletePagesByIds(w http.ResponseWriter, r *http.Request) {
+	DefaultDeleteByIds[*shtypes.Page](w, r, true)
+}

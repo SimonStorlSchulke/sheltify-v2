@@ -7,11 +7,10 @@ export type CmsType = {
   UpdatedAt?: Date,
   DeletedAt?: Date,
   TenantID?: string;
-  Tenant?: any // TODO
   LastModifiedBy?: string,
 }
 
-export type CmsPage = CmsType & {
+export type CmsPage = Publishable & {
   Title: string,
   Path: string,
   Description: string,
@@ -21,15 +20,19 @@ export type CmsPage = CmsType & {
   LinkInFooter: boolean,
 }
 
-export type AnimalStatusName = "in-spaichingen" | "in-bulgarien" | "vermittlungshilfe" | "zuhause-gefunden" | "vermisst" | "fundtier";
-
-// New CMS types
-export type CmsAnimal = CmsType & {
+export type Publishable = CmsType & {
   PublishedAt?: {
     Time: string | null,
     Valid: boolean,
   },
+}
+
+export type AnimalStatusName = "in-spaichingen" | "in-bulgarien" | "vermittlungshilfe" | "zuhause-gefunden" | "vermisst" | "fundtier";
+
+// New CMS types
+export type CmsAnimal = Publishable & {
   Name: string;
+  AnimalKind?: string,
   Birthday?: string;
   WeightKg: number;
   ShoulderHeightCm: number;
@@ -45,6 +48,17 @@ export type CmsAnimal = CmsType & {
   PortraitID?: string;
   Portrait?: CmsImage;
   MediaFiles: CmsImage[];
+}
+
+export type CmsTeamMember = CmsType & {
+  Name:        string,
+  Role:        string,
+  Description: string,
+  Priority: number,
+  EMail:       string,
+  Phone:       string,
+  PortraitID?: string;
+  Portrait?: CmsImage;
 }
 
 export type CmsImagesSize = 'thumbnail' | 'small' | 'medium' | 'large' | 'xlarge';
@@ -68,6 +82,8 @@ export type CmsTag = CmsType & {
 }
 
 export type CmsTenantConfiguration = CmsType & {
+  Name: string,
+  SiteUrl: string,
   AnimalKinds: string,
   DefaultAnimalKind: string,
   CmsShowAnimalKindSelector: boolean,
@@ -81,4 +97,17 @@ export type CmsTenantConfiguration = CmsType & {
   LinkInstagram: string,
   LinkTiktok: string,
   LinkYoutube: string,
+  LogoHeaderID?: string;
+  LogoHeader?: CmsImage;
+}
+
+export type CmsBlogEntry = Publishable & {
+  Title: string,
+  Category: string,
+  Description: string,
+  ShowPopup: boolean,
+  ThumbnailID?: string,
+  Thumbnail?: CmsImage,
+  ArticleID?: string;
+  Article?: CmsArticle;
 }

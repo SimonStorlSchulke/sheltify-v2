@@ -2,14 +2,17 @@ import { Component, model, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { CmsTenantConfiguration } from 'src/app/cms-types/cms-types';
+import { ImagePickerSingleComponent } from 'src/app/forms/image-picker-single/image-picker-single.component';
 import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
+import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
 
 @Component({
   selector: 'app-tenant-configuration',
   imports: [
     FormsModule,
-    TextInputComponent
+    TextInputComponent,
+    ImagePickerSingleComponent
   ],
   templateUrl: './tenant-configuration.component.html',
   styleUrl: './tenant-configuration.component.scss',
@@ -18,7 +21,7 @@ export class TenantConfigurationComponent implements OnInit {
 
   public options = model<CmsTenantConfiguration | undefined>(undefined);
 
-  constructor(private cmsRequestService: CmsRequestService) {
+  constructor(private cmsRequestService: CmsRequestService, private tenantConfigurationService: TenantConfigurationService) {
   }
 
   async ngOnInit() {
@@ -30,6 +33,8 @@ export class TenantConfigurationComponent implements OnInit {
       console.log('did not find tenant configuration, creating default');
       this.options.set({
         ID: '',
+        Name: '',
+        SiteUrl: '',
         Address: '',
         ArticleCss: '',
         CmsShowAnimalKindSelector: true,
@@ -49,5 +54,6 @@ export class TenantConfigurationComponent implements OnInit {
 
   public async save() {
     await firstValueFrom(this.cmsRequestService.saveTenantConfiguration(this.options()!));
+    this.tenantConfigurationService.reloadConfig();
   }
 }

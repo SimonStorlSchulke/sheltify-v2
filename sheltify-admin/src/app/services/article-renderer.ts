@@ -199,11 +199,24 @@ const defaultTextStyle = `
   display: inline-block;
   padding: 6px 12px;
   border-radius: 4px;
-  background: #0078d4;
-  color: white;
   text-decoration: none;
   font-weight: 500;
   cursor: pointer;
+}
+
+.article-button.primary {
+  background: #0078d4;
+  color: white;
+}
+
+.article-button.secondary {
+  background: #fff;
+  outline: 2px solid #0078d4;
+}
+
+.article-button.cto {
+  background: #ed4f4f;
+  color: white;
 }
 
 .article-button:hover {

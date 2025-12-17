@@ -1,3 +1,28 @@
-<p>dashboard works!</p>
+<div class="sui p-3">
+  @if (authService.user$ | async; as user) {
+    <h1>{{ tenantConfigurationService.config()?.Name }}</h1>
+    <h2 data-testid="sidebar-username">Willkommen {{ user.Name }}</h2>
+  }
 
-<app-text-editor/>
+  <br>
+  <br>
+
+  <h2>Zuletzt bearbeitete Tiere</h2>
+  @if (lastModifiedAnimals | async; as animals) {
+    @for (animal of animals; track animal) {
+      <a [routerLink]="['/tiere', animal.ID]" class="sui flex-x gap-2 ai-center list-entry">
+        <div class="img-wrapper">
+          @if (animal.Portrait) {
+            <img [cmsImage]="animal.Portrait" cmsImageSize="thumbnail" class="sui thumbnail">
+          } @else {
+            <div><ng-icon name="bootstrapCardImage" size="2rem" color="#888"/></div>
+          }
+        </div>
+        <div>
+          <span>{{ animal.Name }}</span><br>
+          <span class="text-meta">von {{ animal.LastModifiedBy }} am {{ animal.UpdatedAt | date: 'dd.MM.yyyy HH:mm' }}</span>
+        </div>
+      </a>
+    }
+  }
+</div>

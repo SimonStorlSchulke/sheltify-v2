@@ -9,6 +9,7 @@ import (
 	"sheltify-new-backend/repository"
 	"sheltify-new-backend/services"
 	"sheltify-new-backend/shtypes"
+	"strconv"
 	"strings"
 
 	"github.com/go-chi/chi/v5"
@@ -120,6 +121,29 @@ func DefaultGetByIds[T any](w http.ResponseWriter, r *http.Request, out *[]T, pr
 	if err := repository.DefaultGetByIDs(ids, tenant, out, preloads...); err != nil {
 		http.NotFound(w, r)
 		return
+	}
+	okResponse(w, out)
+}
+
+func DefaultGetLastModified[T any](w http.ResponseWriter, r *http.Request, out *[]T, preloads ...string) {
+	tenant, err := tenantFromParameter(w, r)
+	if err != nil {
+		return
+	}
+
+	amount := r.URL.Query().Get("amount")
+	if amount == "" {
+		amount = "10"
+	}
+
+	amountInt, err := strconv.Atoi(amount)
+	if err != nil {
+		badRequestResponse(w, r, "amount must be a number")
+		return
+	}
+
+	if err := repository.DefaultGetLastModified(tenant, amountInt, out, preloads...); err != nil {
+		http.NotFound(w, r)
 	}
 	okResponse(w, out)
 }

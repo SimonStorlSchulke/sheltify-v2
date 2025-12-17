@@ -35,6 +35,24 @@ func DefaultGetByIDs[T any](ids []string, tenant string, out *T, preloads ...str
 	return nil
 }
 
+func DefaultGetLastModified[T any](tenant string, amount int, out *T, preloads ...string) error {
+	q := db
+	for _, p := range preloads {
+		q = q.Preload(p)
+	}
+
+	err := q.
+		Where("tenant_id = ?", tenant).
+		Order("updated_at DESC").
+		Limit(amount).
+		Find(out).Error
+
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func DefaultGetByField[T any](field string, value any, tenant string, out *T, preloads ...string) error {
 	q := db
 	for _, p := range preloads {

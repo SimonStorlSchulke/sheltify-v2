@@ -14,10 +14,5 @@ func SavePage(page *shtypes.Page) error {
 	if err := db.Save(&page).Error; err != nil {
 		return err
 	}
-	/*
-		if page.Article.ID != nil {
-			page.ArticleID = &page.Article.ID
-		} */
-
 	return nil
 }

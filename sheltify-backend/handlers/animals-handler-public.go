@@ -41,3 +41,8 @@ func GetAnimals(w http.ResponseWriter, r *http.Request) {
 	animals := []*shtypes.Animal{}
 	DefaultGetAll(w, r, &animals, "Portrait")
 }
+
+func GetLastModifiedAnimals(w http.ResponseWriter, r *http.Request) {
+	animals := []*shtypes.Animal{}
+	DefaultGetLastModified(w, r, &animals, "Portrait")
+}

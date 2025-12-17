@@ -16,14 +16,14 @@
           <th class="td-born">Geboren</th>
           <th class="td-created">erstellt</th>
           <th class="td-modified">modifiziert</th>
-          <th class="td-buttons"></th>
         </tr>
         </thead>
         <tbody>
           @for (cmsAnimal of animalService.animals(); track $index) {
             @let animal = editedAnimals().get(cmsAnimal.ID ?? '') ?? cmsAnimal;
 
-            <tr [attr.data-testid]="'label-list-animal-' + animal.Name" class="entry" [class.selected]="selectedAnimal()?.ID == animal.ID" (click)="toAnimal(animal.ID ?? '')">
+            <tr [attr.data-testid]="'label-list-animal-' + animal.Name" class="list-entry striped" [class.selected]="selectedAnimal()?.ID == animal.ID"
+                (click)="toAnimal(animal.ID ?? '')">
               <td class="td-image">
                 @if (animal.Portrait) {
                   <div class="img-wrapper"><img [cmsImage]="animal.Portrait" cmsImageSize="thumbnail"></div>
@@ -33,14 +33,10 @@
               <td class="td-born">{{ animal.Birthday | date: 'dd.MM.yyyy' }}</td>
               <td class="td-created">{{ animal.CreatedAt | date: 'dd.MM.yyyy' }}</td>
               <td class="td-modified">{{ animal.UpdatedAt | date: 'dd.MM.yyyy' }}</td>
-              <td>
-                <button data-testid="btn-delete-animal" (click)="deleteAnimals([animal.ID!])" class="secondary">Löschen</button>
-              </td>
             </tr>
           }
         </tbody>
       </table>
-
     </div>
   </div>
   <div class="content">
@@ -57,7 +53,12 @@
         }
       </div>
 
-      <app-animal-editor [animal]="selectedAnimal()" [animals]="animalService.animals()" (saved)="onSavedAnimal($event)"/>
+      <app-animal-editor
+        [animal]="selectedAnimal()"
+        [animals]="animalService.animals()"
+        (saved)="onSavedAnimal($event)"
+        (deleted)="onDeletedAnimal()"
+      />
     }
   </div>
 

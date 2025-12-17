@@ -9,8 +9,7 @@ import (
 
 type Tenant struct {
 	gorm.Model
-	ID            string `gorm:"primaryKey"`
-	Name          string
+	ID            string              `gorm:"primaryKey"`
 	Configuration TenantConfiguration `gorm:"foreignKey:TenantID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 

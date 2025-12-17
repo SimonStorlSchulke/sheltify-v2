@@ -9,6 +9,8 @@ type TenantConfiguration struct {
 	gorm.Model
 	ID                        string `gorm:"primaryKey;type:char(36)"`
 	TenantID                  string `gorm:"uniqueIndex"`
+	Name                      string
+	SiteUrl                   string
 	CmsShowAnimalKindSelector bool
 	Address                   string
 	PhoneNumber               string
@@ -25,6 +27,8 @@ type TenantConfiguration struct {
 	BlogCategories            string //comma separated list
 	DefaultAnimalKind         string
 	LastModifiedBy            string
+	LogoHeader                *MediaFile `gorm:"->"`
+	LogoHeaderID              *string
 
 	AnimalFilterConfigForAnimalKind map[string]AnimalFilterConfiguration `gorm:"serializer:json"`
 }

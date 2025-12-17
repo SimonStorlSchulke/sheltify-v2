@@ -32,6 +32,7 @@ func validateRequestBody[K shtypes.Validatable](w http.ResponseWriter, r *http.R
 	}
 
 	w.Header().Set("Content-Type", "application/json")
+	content.SetLastModifiedBy(user.Name)
 	content.SetTenantId(user.TenantID)
 	return content, nil
 }

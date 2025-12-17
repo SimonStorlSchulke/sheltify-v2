@@ -5,8 +5,10 @@ import { toggleMark } from 'prosemirror-commands';
 import { Plugin } from 'prosemirror-state';
 import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
 import { Schema, NodeSpec, MarkSpec, Mark, Node as PMNode, DOMOutputSpec } from 'prosemirror-model';
+import { ButtonLinkDialogComponent } from 'src/app/editor/text-editor/button-link-dialog/button-link-dialog.component';
+import { TextInputModalComponent } from 'src/app/forms/text-input-modal/text-input-modal.component';
+import { ModalService } from 'src/app/services/modal.service';
 
-// --- 1. Define a schema with a custom link mark ---
 const nodes: { [key: string]: NodeSpec } = {
   doc: { content: "block+" },
   paragraph: {
@@ -78,8 +80,7 @@ export class TextEditorComponent implements OnInit {
     ['align_left', 'align_center', 'align_right', 'align_justify'],
   ];
 
-
-  constructor() {
+  constructor(private readonly modalService: ModalService) {
     const plainTextOnlyPaste = new Plugin({
       props: {
         transformPastedHTML(html: string): string {
@@ -105,18 +106,18 @@ export class TextEditorComponent implements OnInit {
     this.html = this.htmlModel();
   }
 
-  addButtonLink(event: MouseEvent) {
-    event.preventDefault(); // keep selection
-    const href = prompt("Enter URL for button");
-    if (!href) return;
+  async addButtonLink(event: MouseEvent, buttonType: 'primary' | 'secondary' | 'cto') {
+    event.preventDefault();
+    const data = await this.modalService.openFinishable(ButtonLinkDialogComponent);
+    if (!data || !data.url) return;
 
     const view: EditorView = this.editor.view;
     const markType = view.state.schema.marks['link'];
     if (!markType) return;
 
     toggleMark(markType, {
-      href,
-      class: 'BUTTON',          // <- now works
+      href: data.url,
+      class: `article-button ${data.buttonTye}`,
       rel: "noopener noreferrer",
     })(view.state, view.dispatch);
 

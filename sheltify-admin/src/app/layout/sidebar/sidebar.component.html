@@ -1,13 +1,14 @@
-<div class="sidebar sui color-grey-400 h-100 flex-y">
-  <div class="sui flex-y gap-1">
-    <a routerLink="dashboard" routerLinkActive="active">Dashboard</a>
-    <a routerLink="seiten" routerLinkActive="active">Seiten</a>
-    <a routerLink="tiere" routerLinkActive="active">Tiere</a>
-    <a routerLink="team" routerLinkActive="active">Team</a>
-    <a routerLink="media" routerLinkActive="active">Medien</a>
-    <a routerLink="optionen" routerLinkActive="active">Optionen</a>
-    <div class="sui grow-1"></div>
-    <app-user-menu/>
-    <button class="secondary" (click)="logout()">Logout</button>
-  </div>
+<div class="sidebar sui color-grey-400 h-100 flex-y h-100">
+  @if (tenantConfigurationService.config()) {
+    <img class="logo" class="logo-header" [cmsImage]="tenantConfigurationService.config()!.LogoHeader!" alt="Logo"/>
+  }
+  <a routerLink="dashboard" routerLinkActive="active">Dashboard</a>
+  <a routerLink="seiten" routerLinkActive="active">Seiten</a>
+  <a routerLink="blog" routerLinkActive="active">Blogs</a>
+  <a routerLink="tiere" routerLinkActive="active">Tiere</a>
+  <a routerLink="team" routerLinkActive="active">Team</a>
+  <a routerLink="media" routerLinkActive="active">Medien</a>
+  <a routerLink="optionen" routerLinkActive="active">Optionen</a>
+  <div class="sui grow-1"></div>
+  <app-user-menu/>
 </div>

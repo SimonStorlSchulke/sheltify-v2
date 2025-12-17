@@ -4,7 +4,7 @@ import "sheltify-new-backend/shtypes"
 
 func GetConfigByTenantId(tenantId string) (*shtypes.TenantConfiguration, error) {
 	var config shtypes.TenantConfiguration
-	if err := db.Where("tenant_id = ?", tenantId).First(&config).Error; err != nil {
+	if err := db.Preload("LogoHeader").Where("tenant_id = ?", tenantId).First(&config).Error; err != nil {
 		return nil, err
 	}
 	return &config, nil

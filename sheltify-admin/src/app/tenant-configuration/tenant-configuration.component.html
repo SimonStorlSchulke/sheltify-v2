@@ -1,11 +1,17 @@
-<div class="sui p-3">
+<div class="sui p-3 editor-layout">
   @if (options(); as options) {
-    @let rowClass = "sui flex-x gap-2 grow-1";
+    @let rowClass = "sui flex-x gap-2 grow-1 wrap";
 
     <h2>Vereinsdaten</h2>
-
-    <form class="sui flex-y gap-2 grow-1 pr-1 py-3">
-      <app-text-input [long]="true" class="sui grow-1" idName="name" label="Adresse" [(twoWayModel)]="options.Address"/>
+    <form class="sui flex-y gap-2 grow-1 pr-1 pb-3 pt-1">
+      <div [class]="rowClass">
+        <app-image-picker-single [objectFitContain]="true" label="Logo" idName="logo" [(twoWayModel)]="options.LogoHeader"/>
+        <div class="sui flex-y gap-2 grow-1">
+          <app-text-input class="sui grow-1" idName="name" label="Name" [(twoWayModel)]="options.Name"/>
+          <app-text-input class="sui grow-1" idName="siteUrl" label="Webseiten-Url" [(twoWayModel)]="options.SiteUrl"/>
+          <app-text-input [long]="true" class="sui grow-1" idName="name" label="Adresse" [(twoWayModel)]="options.Address"/>
+        </div>
+      </div>
       <div [class]="rowClass">
         <app-text-input [isEmail]="true" class="sui grow-1" idName="email" label="Email" [(twoWayModel)]="options.Email"/>
         <app-text-input class="sui grow-1" idName="phone" label="Telefonnummer" [(twoWayModel)]="options.PhoneNumber"/>
@@ -13,12 +19,24 @@
       <app-text-input class="sui grow-1" idName="iban" label="IBAN" [(twoWayModel)]="options.IBAN"/>
     </form>
 
-    <h2>Administration</h2>
+    <h2>Social Media Links</h2>
+    <form class="sui flex-y gap-2 grow-1 pr-1 pb-3 pt-1">
+      <div [class]="rowClass">
+        <app-text-input class="sui grow-1" [(twoWayModel)]="options.LinkInstagram" idName="Instagram" label="Instagram"/>
+        <app-text-input class="sui grow-1" [(twoWayModel)]="options.LinkFacebook" idName="Facebook" label="Facebook"/>
+      </div>
+      <div [class]="rowClass">
+        <app-text-input class="sui grow-1" [(twoWayModel)]="options.LinkTiktok" idName="Tiktok" label="Tiktok"/>
+        <app-text-input class="sui grow-1" [(twoWayModel)]="options.LinkYoutube" idName="Youtube" label="Youtube"/>
+      </div>
+      <app-text-input class="sui grow-1" [(twoWayModel)]="options.LinkPaypal" idName="Paypal" label="Paypal"/>
+    </form>
 
-    <form class="sui flex-y gap-2 grow-1 pr-1 pb-2 pt-1">
-      <app-text-input [(twoWayModel)]="options.AnimalKinds" idName="animal-kinds" label="Tierarten" explanation="Kommaseparierte Liste an Tierarten"/>
+    <h2>Administration</h2>
+    <form class="sui flex-y gap-2 grow-1 pr-1 pb-3 pt-1">
+      <app-text-input [(twoWayModel)]="options.AnimalKinds" idName="animal-kinds" label="Tierarten" explanation="Kommaseparierte Liste an Tierarten (z.B. Hund,Katze,Kaninchen)"/>
     </form>
     <br>
-    <button (click)="save()">Speichern</button>
+    <button class="primary" (click)="save()">Speichern</button>
   }
 </div>

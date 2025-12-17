@@ -22,4 +22,9 @@ export class UserMenuComponent implements OnInit {
   ngOnInit() {
 
   }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(["login"])
+  }
 }

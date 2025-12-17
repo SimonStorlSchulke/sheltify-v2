@@ -1,5 +1,5 @@
 import { CmsArticle } from 'src/app/cms-types/article-types';
-import { CmsAnimal, CmsPage } from 'src/app/cms-types/cms-types';
+import { CmsAnimal, CmsBlogEntry, CmsPage, CmsTeamMember } from 'src/app/cms-types/cms-types';
 
 export function createNewAnimal(name: string): CmsAnimal {
   return {
@@ -32,5 +32,27 @@ export function createNewPage(): CmsPage {
     Path: '',
     ShowInMenu: true,
     LinkInFooter: false,
+  }
+}
+
+export function createNewBlog(): CmsBlogEntry {
+  return {
+    ID: '',
+    Description: "",
+    Title: '',
+    ShowPopup: false,
+    Category: '',
+  }
+}
+
+export function createNewTeamMember(): CmsTeamMember {
+  return {
+    ID: '',
+    Description: "",
+    Name: '',
+    EMail: '',
+    Phone: '',
+    Role: '',
+    Priority: 0,
   }
 }

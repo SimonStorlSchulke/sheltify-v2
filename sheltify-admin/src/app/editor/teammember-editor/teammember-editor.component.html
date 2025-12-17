@@ -1,0 +1,28 @@
+<div class="content-info-header sui flex-x">
+  @if (teamMember(); as teamMember) {
+    <h1 class="sui grow-1">{{ teamMember.Name }}</h1>
+  }
+  <button type="button" class="primary" (click)="save()">Speichern</button>
+</div>
+
+<div class="editor-layout sui p-3">
+  <div data-testid="form-teammember-editor" class="sui flex-x gap-3 grow-1">
+    <form class="sui grow-1 flex-y gap-2">
+      <div class="sui flex-x gap-2">
+        <app-image-picker-single label="Portrait" idName="portrait" [(twoWayModel)]="teamMember().Portrait"/>
+        <div class="sui flex-y gap-2">
+          <div class="sui flex-x gap-2">
+            <app-text-input idName="name" label="Name" [(twoWayModel)]="teamMember().Name"/>
+            <app-text-input idName="role" label="Rolle" [(twoWayModel)]="teamMember().Role"/>
+          </div>
+          <div class="sui flex-x gap-2">
+            <app-text-input [isEmail]="true" idName="name" label="Emailadresse" [(twoWayModel)]="teamMember().EMail"/>
+            <app-text-input idName="role" label="Telefonnummer" [(twoWayModel)]="teamMember().Phone"/>
+          </div>
+          <app-number-input idName="age" label="Priorität" [(twoWayModel)]="teamMember().Priority"/>
+        </div>
+      </div>
+      <app-text-input [long]="true" idName="description" label="Beschreibung" [(twoWayModel)]="teamMember().Description"/>
+    </form>
+  </div>
+</div>

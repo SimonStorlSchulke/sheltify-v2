@@ -31,7 +31,6 @@ import { bootstrapEye } from '@ng-icons/bootstrap-icons';
   providers: [provideIcons({bootstrapGripVertical, bootstrapX, bootstrapPlus, bootstrapEye})],
   templateUrl: './article-editor.component.html',
   styleUrl: './article-editor.component.scss',
-  //changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArticleEditorComponent implements OnInit {
 
@@ -192,7 +191,13 @@ export class ArticleEditorComponent implements OnInit {
   }
 
   @HostListener('document:click', ['$event'])
-  deselectSections(_: any) {
+  deselectSections(event: any) {
+    const target = event!.target as HTMLElement;
+
+    // Only react if the click occurred inside <main>
+    if (!target.closest('main')) {
+      return;
+    }
     const wasInEditMode = !!document.querySelector('.article-column.edit-mode');
     document.querySelectorAll('.article-column').forEach(el => el.classList.remove('edit-mode'));
     if(wasInEditMode) {
@@ -203,7 +208,6 @@ export class ArticleEditorComponent implements OnInit {
   public triggerRerender() {
     this.triggerRerenderVal.update(v => v + 1);
   }
-
 
   triggerRerenderVal = signal(0);
   renderedSections = computed(async () => {

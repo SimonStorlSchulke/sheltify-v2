@@ -75,8 +75,8 @@ export class AnimalListComponent implements OnInit {
     }
   }
 
-  public async deleteAnimals(ids: string[]) {
-    await firstValueFrom(this.cmsRequestService.deleteAnimals(ids));
+  protected onDeletedAnimal() {
+    this.selectedAnimal.set(null);
     this.animalService.reloadAnimals();
   }
 }

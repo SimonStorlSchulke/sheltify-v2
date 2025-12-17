@@ -1,10 +1,5 @@
 <div class="NgxEditor__Wrapper">
-  <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
-
-  <!-- Custom button outside toolbar -->
-  <button type="button" class="NgxEditor__MenuItem" (mousedown)="addButtonLink($event)">
-    Button Link
-  </button>
+  <ngx-editor-menu [editor]="editor" [toolbar]="toolbar" [customMenuRef]="customMenu">aaa</ngx-editor-menu>
 
   <ngx-editor
     [editor]="editor"
@@ -13,3 +8,10 @@
     [placeholder]="'Text eingeben...'">
   </ngx-editor>
 </div>
+
+
+<ng-template #customMenu>
+  <button type="button" class="small primary" (mousedown)="addButtonLink($event, 'cto')">
+    Linkbutton
+  </button>
+</ng-template>

@@ -1,4 +1,4 @@
-import { Component, inject, model, signal } from '@angular/core';
+import { Component, inject, input, model, signal } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { CmsImage } from 'src/app/cms-types/cms-types';
 import { InputBaseComponent } from 'src/app/forms/input-base.component';
@@ -15,6 +15,8 @@ import { bootstrapCardImage } from '@ng-icons/bootstrap-icons'
 })
 export class ImagePickerSingleComponent extends InputBaseComponent {
   public twoWayModel = model<CmsImage>();
+  public objectFitContain = input(false);
+
 
   private modalPresenter = inject(ModalPresenter);
 

@@ -3,9 +3,10 @@
   <div class="sui save-content-buttons flex-x gap-2 jc-end">
     <button class="primary" data-testid="btn-save-animal" (click)="save()">Speichern</button>
     @let isPublished = animal.PublishedAt?.Valid;
-    <button [class.warning]="!isPublished" [class.success]="isPublished"  (click)="togglePublished()">{{ animal.PublishedAt?.Valid ? 'Depublizieren' : 'Publizieren' }}</button>
+    <button [class.warning]="!isPublished" [class.success]="isPublished" (click)="togglePublished()">{{ animal.PublishedAt?.Valid ? 'Depublizieren' : 'Publizieren' }}</button>
+    <button class="warning" (click)="delete()">Löschen</button>
   </div>
-  <div class="article-editor-container sui p-3">
+  <div class="editor-layout sui p-3">
     <div data-testid="form-animal-editor" class="sui flex-x gap-3 grow-1">
       <app-image-picker-single label="Portrait" idName="portrait" [(twoWayModel)]="animal.Portrait"/>
       <form class="sui flex-y gap-2 grow-1 pr-1">
@@ -25,10 +26,16 @@
           <app-date-picker idName="birthday" label="Geboren ca." [(twoWayModelISOString)]="animal.Birthday"/>
           <app-number-input idName="size" label="Schulterhöhe in cm" [(twoWayModel)]="animal.ShoulderHeightCm"/>
         </div>
+
+        @if(animalKinds) {
+
+          <app-select-input idName="animalKind" label="Art" [(twoWayModel)]="animal.AnimalKind" [options]="animalKinds"/>
+        }
       </form>
     </div>
     <br>
-
+    <br>
+    <app-last-edited [entry]="animal"/>
     <hr class="sui my-3">
 
     @if (animal.ArticleID) {

@@ -18,6 +18,15 @@ export class PagesService {
     this.pages.set(pages ?? []);
   }
 
+  public async savePage(page: CmsPage) {
+    const savedPage = await firstValueFrom(this.cmsRequestService.savePage(page));
+    if (savedPage) {
+      this.reloadPages();
+      page.LastModifiedBy = savedPage.LastModifiedBy;
+      page.UpdatedAt = savedPage.UpdatedAt;
+    }
+  }
+
   public createTitleFromPath(path: string) {
     const pathSegments = path.split('/');
     return pathSegments[pathSegments.length - 1]
@@ -27,4 +36,23 @@ export class PagesService {
         text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
       );
   }
+
+  async togglePublished(page: CmsPage) {
+    const pageToSave = structuredClone(page);
+    if(pageToSave.PublishedAt?.Valid) {
+      pageToSave.PublishedAt = {
+        Valid: false,
+        Time: null,
+      };
+      return await firstValueFrom(this.cmsRequestService.savePage(pageToSave));
+    } else {
+      pageToSave.PublishedAt = {
+        Valid: true,
+        Time: new Date().toISOString(),
+      }
+      return await firstValueFrom(this.cmsRequestService.savePage(pageToSave));
+    }
+
+  }
 }
+

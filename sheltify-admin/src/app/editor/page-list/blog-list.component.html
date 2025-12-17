@@ -1,0 +1,20 @@
+<div class="left-sidebar-layout">
+  <div class="left-sidebar">
+    <div class="sui flex-x gap-2">
+      <h1>Blogeinträge</h1>
+      <div class="sui grow-1"></div>
+      <button data-testid="btn-new-blog" class="primary" (click)="newBlog()">Neuer Post</button>
+    </div>
+
+    <div class="sui flex-y">
+      @let pages = blogService.blogs();
+      @for (page of pages; track page) {
+        <div [class.selected]="selectedBlog()?.ID == pages[$index].ID" class="list-entry sui p-1" (click)="toBlog(page.ID)">{{page.Title}}</div>
+      }
+    </div>
+
+  </div>
+  @if (selectedBlog(); as blog) {
+    <app-blog-editor [blog]="blog" class="content"/>
+  }
+</div>

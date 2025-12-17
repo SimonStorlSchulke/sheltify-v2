@@ -14,8 +14,6 @@ export class TextInputComponent extends InputBaseComponent {
   public twoWayModel = model<string>('');
 
   public onInput(event: Event) {
-    console.log((event.target as HTMLInputElement).value)
     this.twoWayModel.set((event.target as HTMLInputElement).value);
   }
-
 }

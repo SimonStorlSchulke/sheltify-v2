@@ -28,7 +28,7 @@ export class AnimalService {
     this.animals.set(animals.results ?? []);
   }
 
-  async togglePublishedAnimal(animal: CmsAnimal) {
+  async togglePublished(animal: CmsAnimal) {
     const animalToSave = structuredClone(animal);
     if(animalToSave.PublishedAt?.Valid) {
       animalToSave.PublishedAt = {

@@ -1,6 +1,8 @@
+import { DatePipe } from '@angular/common';
 import { Component, input, inject, output, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { firstValueFrom, Subject } from 'rxjs';
+import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
+import { firstValueFrom, lastValueFrom, Subject } from 'rxjs';
 import { CmsArticle } from 'src/app/cms-types/article-types';
 import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
 import { CmsAnimal } from 'src/app/cms-types/cms-types';
@@ -10,9 +12,13 @@ import { DatePickerComponent } from 'src/app/forms/date-picker/date-picker.compo
 import { ImagePickerSingleComponent } from 'src/app/forms/image-picker-single/image-picker-single.component';
 import { NumberInputComponent } from 'src/app/forms/number-input/number-input.component';
 import { RadioButtonsInputComponent } from 'src/app/forms/radio-buttons-input/radio-buttons-input.component';
+import { SelectInputComponent } from 'src/app/forms/select-input/select-input.component';
+import { AlertService } from 'src/app/services/alert.service';
 import { AnimalService } from 'src/app/services/animal.service';
 import { ModalService } from 'src/app/services/modal.service';
+import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
 import { AnimalPickerDialogComponent } from 'src/app/ui/animal-picker-dialog/animal-picker-dialog.component';
+import { LastEditedComponent } from 'src/app/ui/last-edited/last-edited.component';
 import { TextInputComponent } from '../../forms/text-input/text-input.component';
 import { CmsRequestService } from '../../services/cms-request.service';
 
@@ -27,6 +33,11 @@ import { CmsRequestService } from '../../services/cms-request.service';
     DatePickerComponent,
     RadioButtonsInputComponent,
     NumberInputComponent,
+    NgSelectComponent,
+    NgOptionComponent,
+    DatePipe,
+    SelectInputComponent,
+    LastEditedComponent,
   ],
   templateUrl: './animal-editor.component.html',
   styleUrl: './animal-editor.component.scss',
@@ -39,25 +50,37 @@ export class AnimalEditorComponent {
   animal = input<CmsAnimal | null>(null);
   animals = input.required<CmsAnimal[] | null>();
   saved = output<CmsAnimal | null>();
+  deleted = output();
 
   saveArticle$ = new Subject<void>();
 
-  constructor(private modalService: ModalService, private readonly animalService: AnimalService) {
+  constructor(
+    public tenantConfigurationService: TenantConfigurationService,
+    private modalService: ModalService,
+    private animalService: AnimalService,
+    private readonly alertService: AlertService,
+  ) {
+  }
+
+  animalKinds: string[] = [];
+
+  async ngOnInit() {
+    this.animalKinds = (await this.tenantConfigurationService.animalKinds() ?? '').split(',');
   }
 
   async save() {
     const savedAnimal = await this.animalService.save(this.animal()!);
 
-    if(savedAnimal) {
+    if (savedAnimal) {
       this.saved.emit(savedAnimal!);
       this.saveArticle$.next();
     }
   }
 
   async togglePublished() {
-    const savedAnimal = await this.animalService.togglePublishedAnimal(this.animal()!);
+    const savedAnimal = await this.animalService.togglePublished(this.animal()!);
 
-    if(savedAnimal) {
+    if (savedAnimal) {
       this.saved.emit(savedAnimal!);
       this.saveArticle$.next();
     }
@@ -75,9 +98,17 @@ export class AnimalEditorComponent {
       animals: this.animals()!
     });
 
-    if(selectedAnimal) {
+    if (selectedAnimal) {
       this.animal()!.ArticleID = selectedAnimal.ArticleID;
       this.save();
     }
+  }
+
+  protected async delete() {
+    const choice = await this.alertService.openAlert('Tier wirklich entfernen?', 'Aktion kann nicht rückgängig gemacht werden', ['ja', 'nein'])
+    if (choice !== 'ja') return;
+
+    await lastValueFrom(this.cmsRequestService.deleteAnimals([this.animal()!.ID]));
+    this.deleted.emit();
   }
 }

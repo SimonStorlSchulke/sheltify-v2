@@ -1,0 +1,35 @@
+<div class="content-info-header sui flex-x">
+  @if (blog(); as page) {
+    <h1 class="sui grow-1">{{ page.Title }}</h1>
+  }
+  <button type="button" class="primary" (click)="save()">Speichern</button>
+</div>
+
+<div class="editor-layout sui p-3">
+  <div data-testid="form-animal-editor" class="sui flex-x gap-3 grow-1">
+    <form class="sui grow-1 flex-y gap-2">
+      <app-image-picker-single [objectFitContain]="true" label="Logo" idName="logo" [(twoWayModel)]="blog().Thumbnail"/>
+      <div class="sui flex-x gap-2">
+        <app-text-input idName="title" label="Titel" [(twoWayModel)]="blog().Title"/>
+      </div>
+      <div class="sui flex-x gap-2">
+        <app-checkbox-input idName="show-in-menu" label="Im Footer verlinken" [(twoWayModel)]="blog().ShowPopup"/>
+      </div>
+    </form>
+  </div>
+
+
+  @if (blog(); as page) {
+    <br>
+    <hr>
+    <br>
+
+    @if (page.ArticleID) {
+      <app-article-editor [articleId]="page.ArticleID" [saveArticle]="saveArticle$" class="content"/>
+    } @else {
+      <button data-testid="btn-create-article-for-animal" (click)="createArticle()" class="secondary">Artikel erstellen</button>
+
+    }
+
+  }
+</div>

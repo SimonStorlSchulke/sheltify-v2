@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { CmsArticle } from 'src/app/cms-types/article-types';
-import { CmsAnimal, CmsImage, CmsPage, CmsTag, CmsTenantConfiguration } from 'src/app/cms-types/cms-types';
+import { CmsAnimal, CmsBlogEntry, CmsImage, CmsPage, CmsTag, CmsTeamMember, CmsTenantConfiguration } from 'src/app/cms-types/cms-types';
 import { LoaderService } from 'src/app/layout/loader/loader.service';
-import { AuthService } from './auth.service';
+import { AuthService, CmsUser } from './auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, timer, tap, OperatorFunction, lastValueFrom } from 'rxjs';
 
@@ -43,6 +43,34 @@ export class CmsRequestService {
     };
   }
 
+  public getTeamMembers(): Observable<CmsTeamMember[]> {
+    return this.get<CmsTeamMember[]>(`${this.publicTenantsUrl}/teammembers`);
+  }
+
+  public getTeamMember(id: string): Observable<CmsTeamMember> {
+    return this.get<CmsTeamMember>(`${this.publicTenantsUrl}/teammembers/` + id);
+  }
+
+  public saveTeamMember(user: CmsTeamMember): Observable<CmsTeamMember> {
+    return this.postOrPatch<CmsTeamMember>('teammembers', user);
+  }
+
+  public getBlogEntries(): Observable<CmsBlogEntry[]> {
+    return this.get<CmsBlogEntry[]>(`${this.publicTenantsUrl}/blogs`);
+  }
+
+  public getBlogEntry(id: string): Observable<CmsBlogEntry> {
+    return this.get<CmsBlogEntry>(`${this.publicTenantsUrl}/blogs/` + id);
+  }
+
+  public saveBlogEntry(user: CmsBlogEntry): Observable<CmsBlogEntry> {
+    return this.postOrPatch<CmsBlogEntry>('blogs', user);
+  }
+
+  public deleteTeamMember(id: string): Observable<void> {
+    return this.delete(`blogs/` + id)
+  }
+
   public getPages(): Observable<CmsPage[]> {
     return this.get<CmsPage[]>(`${this.publicTenantsUrl}/pages`);
   }
@@ -55,8 +83,13 @@ export class CmsRequestService {
     return this.postOrPatch('pages', page);
   }
 
+  public deletePage(ids: string[]) {
+    return this.delete<CmsPage>(`pages?ids=${ids.join(',')}`)
+  }
+
+
   public getTenantConfiguration(): Observable<CmsTenantConfiguration> {
-    return this.get<CmsTenantConfiguration>(`${this.publicTenantsUrl}/configuration`);
+    return this.get<CmsTenantConfiguration>(`${CmsRequestService.adminApiUrl}configuration`);
   }
 
   public saveTenantConfiguration(config: CmsTenantConfiguration): Observable<CmsTenantConfiguration> {
@@ -70,6 +103,10 @@ export class CmsRequestService {
         results: response,
       }
     }));
+  }
+
+  public getLastModifiedAnimals(amount: number): Observable<CmsAnimal[]> {
+    return this.get<CmsAnimal[]>(`${this.publicTenantsUrl}/animals/last-modified?amount=${amount}`)
   }
 
   public getAnimalsByArticleId(articleId: string): Observable<CollectionResult<CmsAnimal>> {

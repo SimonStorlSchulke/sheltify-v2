@@ -1,5 +1,8 @@
 @if(user$ | async; as user) {
+  <div class="sui p-2 flex-y gap-1">
   <span data-testid="sidebar-username">{{user.Name}}</span>
 
+  </div>
 }
+    <button class="secondary" (click)="logout()">Ausloggen</button>
 

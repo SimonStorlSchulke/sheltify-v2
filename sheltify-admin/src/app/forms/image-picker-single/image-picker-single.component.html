@@ -6,7 +6,7 @@
 </div>
 <div [id]="idName()" (click)="pickImage()" class="img-container">
   @if(twoWayModel()) {
-    <img [cmsImage]="twoWayModel()!">
+    <img [cmsImage]="twoWayModel()!" [class.fit-contain]="objectFitContain()" [style]="'object-fit: ' + objectFitContain() + ' !important;'">
   } @else {
     <div class="sui flex-x jc-center ai-center h-100">
       <ng-icon name="bootstrapCardImage" size="2rem" color="#888"/>

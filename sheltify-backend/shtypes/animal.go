@@ -41,5 +41,6 @@ func (a *Animal) ValidateForPublishing() string {
 		valNotEmpty("Status", a.Status) +
 		valMaxLength("Beschreibung", a.Description, 500) +
 		valIsInList("Geschlecht", a.Gender, []string{"male", "female"}) +
+		valNotEmpty("Tierart", a.AnimalKind) +
 		articleIDErr
 }

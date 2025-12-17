@@ -15,8 +15,8 @@ import { InputBaseComponent } from 'src/app/forms/input-base.component';
 })
 export class SelectInputComponent extends InputBaseComponent {
   public placeholder = input<string>();
-  public twoWayModel = model<string>('');
-  public onInputChange = output<string>();
+  public twoWayModel = model<string | undefined>('');
+  public onInputChange = output<string | undefined>();
   public options = input.required<string[]>();
   public optionTranslations = input<Record<string, string> | undefined>(undefined);
   public clearable = input<boolean>(true);

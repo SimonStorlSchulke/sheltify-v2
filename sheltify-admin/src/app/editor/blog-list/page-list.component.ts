@@ -54,4 +54,9 @@ export class PageListComponent {
     this.selectedPage.set(page);
     this.router.navigate(['/seiten', path]);
   }
+
+  protected onDeleted() {
+    this.pagesService.reloadPages();
+    this.selectedPage.set(null);
+  }
 }

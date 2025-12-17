@@ -1,4 +1,17 @@
-<div class="article-editor-container">
+<div class="content-info-header sui flex-x">
+  @if (page(); as page) {
+    <h1 class="sui grow-1">{{ page.Path.replace('/', '').replaceAll('/', ' › ') }}</h1>
+
+    <div class="sui flex-x gap-2">
+      <button type="button" class="primary" (click)="save()">Speichern</button>
+      @let isPublished = page.PublishedAt?.Valid;
+      <button [class.warning]="!isPublished" [class.success]="isPublished" (click)="togglePublished()">{{ page.PublishedAt?.Valid ? 'Depublizieren' : 'Publizieren' }}</button>
+      <button type="button" class="warning" (click)="delete()">Löschen</button>
+    </div>
+  }
+</div>
+
+<div class="editor-layout sui p-3">
   <div data-testid="form-animal-editor" class="sui flex-x gap-3 grow-1">
     <form class="sui grow-1 flex-y gap-2">
       <div class="sui flex-x gap-2">
@@ -9,11 +22,10 @@
         <app-checkbox-input idName="show-in-menu" label="In Menü anzeigen" [(twoWayModel)]="page().ShowInMenu"/>
         <app-checkbox-input idName="show-in-menu" label="Im Footer verlinken" [(twoWayModel)]="page().LinkInFooter"/>
       </div>
-      <button type="button" (click)="save()">Speichern</button>
     </form>
   </div>
 
-
+  <app-last-edited [entry]="page()"/>
   @if (page(); as page) {
     <br>
     <hr>
