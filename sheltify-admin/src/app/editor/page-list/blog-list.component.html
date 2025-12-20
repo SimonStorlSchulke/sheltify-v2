@@ -15,6 +15,6 @@
 
   </div>
   @if (selectedBlog(); as blog) {
-    <app-blog-editor [blog]="blog" class="content"/>
+    <app-blog-editor (deleted)="onDeleted()" [blog]="blog" class="content"/>
   }
 </div>

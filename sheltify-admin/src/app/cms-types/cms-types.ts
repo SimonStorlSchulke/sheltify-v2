@@ -1,5 +1,9 @@
 import { CmsArticle } from 'src/app/cms-types/article-types';
 
+export type SqlNullTime = {
+  Time: string | null,
+  Valid: boolean,
+}
 
 export type CmsType = {
   ID: string,
@@ -21,10 +25,7 @@ export type CmsPage = Publishable & {
 }
 
 export type Publishable = CmsType & {
-  PublishedAt?: {
-    Time: string | null,
-    Valid: boolean,
-  },
+  PublishedAt?: SqlNullTime,
 }
 
 export type AnimalStatusName = "in-spaichingen" | "in-bulgarien" | "vermittlungshilfe" | "zuhause-gefunden" | "vermisst" | "fundtier";
@@ -85,6 +86,7 @@ export type CmsTenantConfiguration = CmsType & {
   Name: string,
   SiteUrl: string,
   AnimalKinds: string,
+  BlogCategories: string,
   DefaultAnimalKind: string,
   CmsShowAnimalKindSelector: boolean,
   Address: string,
@@ -99,6 +101,7 @@ export type CmsTenantConfiguration = CmsType & {
   LinkYoutube: string,
   LogoHeaderID?: string;
   LogoHeader?: CmsImage;
+  LastBuild?: SqlNullTime
 }
 
 export type CmsBlogEntry = Publishable & {

@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { createNewAnimal } from 'src/app/cms-types/cms-type.factory';
 import { CmsAnimal } from 'src/app/cms-types/cms-types';
 import { TextInputModalComponent } from 'src/app/forms/text-input-modal/text-input-modal.component';
+import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
 import { AnimalService } from 'src/app/services/animal.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { CmsImageDirective } from 'src/app/ui/cms-image.directive';
@@ -17,6 +18,7 @@ import { DatePipe } from '@angular/common';
     DatePipe,
     AnimalEditorComponent,
     CmsImageDirective,
+    TextInputComponent,
   ],
   templateUrl: './animal-list.component.html',
   styleUrl: './animal-list.component.scss',
@@ -33,8 +35,14 @@ export class AnimalListComponent implements OnInit {
 
   selectedAnimal = signal<CmsAnimal | null>(null);
 
+  search = signal('');
+
   constructor(private modalService: ModalService, protected animalService: AnimalService) {
   }
+
+  public animalList = computed(() => {
+    return this.animalService.animals().filter(animal => animal.Name?.toLowerCase().includes(this.search().toLowerCase()));
+  })
 
   ngOnInit() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');

@@ -13,8 +13,12 @@ export class TenantConfigurationService {
 
   public config = signal<CmsTenantConfiguration | undefined>(undefined);
 
-  public async animalKinds(): Promise<string | undefined> {
-    return (await firstValueFrom(this.getOrLoad()))?.AnimalKinds;
+  public async animalKinds(): Promise<string[]> {
+    return (await firstValueFrom(this.getOrLoad()))?.AnimalKinds.split(",") ?? [];
+  }
+
+  public async blogCategories(): Promise<string[]> {
+    return (await firstValueFrom(this.getOrLoad()))?.BlogCategories.split(",") ?? [];
   }
 
   public getOrLoad() {

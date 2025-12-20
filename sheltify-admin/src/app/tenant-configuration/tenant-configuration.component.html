@@ -35,6 +35,7 @@
     <h2>Administration</h2>
     <form class="sui flex-y gap-2 grow-1 pr-1 pb-3 pt-1">
       <app-text-input [(twoWayModel)]="options.AnimalKinds" idName="animal-kinds" label="Tierarten" explanation="Kommaseparierte Liste an Tierarten (z.B. Hund,Katze,Kaninchen)"/>
+      <app-text-input [(twoWayModel)]="options.BlogCategories" idName="blog-categories" label="Blogkategorien" explanation="Kommaseparierte Liste an Blogkategorien (z.B. Neuigkeiten,Veranstaltungen,Wissenswertes)"/>
     </form>
     <br>
     <button class="primary" (click)="save()">Speichern</button>

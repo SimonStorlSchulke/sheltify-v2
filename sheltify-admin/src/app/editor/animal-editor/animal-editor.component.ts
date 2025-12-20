@@ -65,7 +65,7 @@ export class AnimalEditorComponent {
   animalKinds: string[] = [];
 
   async ngOnInit() {
-    this.animalKinds = (await this.tenantConfigurationService.animalKinds() ?? '').split(',');
+    this.animalKinds = (await this.tenantConfigurationService.animalKinds());
   }
 
   async save() {
