@@ -1,6 +1,8 @@
 package shtypes
 
 import (
+	"database/sql"
+
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
@@ -29,6 +31,7 @@ type TenantConfiguration struct {
 	LastModifiedBy            string
 	LogoHeader                *MediaFile `gorm:"->"`
 	LogoHeaderID              *string
+	LastBuild                 sql.NullTime
 
 	AnimalFilterConfigForAnimalKind map[string]AnimalFilterConfiguration `gorm:"serializer:json"`
 }
