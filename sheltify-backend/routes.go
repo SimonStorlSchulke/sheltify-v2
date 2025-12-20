@@ -77,4 +77,6 @@ func adminRoutes(r *chi.Mux) {
 	r.Delete("/pages", handlers.DeletePagesByIds)
 
 	r.Patch("/configuration", handlers.SaveTenantConfiguration)
+
+	r.Get("/trigger-build", handlers.TriggerAstroSiteBuild)
 }
