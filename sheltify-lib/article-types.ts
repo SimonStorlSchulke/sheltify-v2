@@ -1,5 +1,4 @@
-import { CmsAnimal, CmsImage, CmsType } from 'src/app/cms-types/cms-types';
-import { AnimalsFilter } from 'src/app/services/cms-request.service';
+import { CmsAnimal, CmsImage, CmsType } from './cms-types';
 
 export const SectionTypes = ["title", "text", "video", "image", "hero", "animal-list", "html", "separator-x"] as const;
 
@@ -74,6 +73,15 @@ export type SectionAnimalList = {
   TempFoundAnimals: CmsAnimal[],
 };
 
+export type AnimalsFilter = {
+  AnimalKind: string | undefined,
+  MaxNumber: number | undefined,
+  AgeRange: [number | undefined, number | undefined],
+  SizeRange: [number | undefined, number | undefined],
+  Gender: 'male' | 'female' | 'both',
+  InGermany: boolean | undefined,
+}
+
 export type SectionVideo = {
   SectionType: 'video',
   Content: {
@@ -85,4 +93,3 @@ export type SectionVideo = {
 export type SectionSeparatorX = {
   SectionType: 'separator-x'
 };
-

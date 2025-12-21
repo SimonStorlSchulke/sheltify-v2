@@ -1,6 +1,7 @@
 package shtypes
 
 import (
+	"database/sql"
 	"time"
 )
 
@@ -10,7 +11,7 @@ type Animal struct {
 	Birthday         *time.Time
 	WeightKg         uint
 	ShoulderHeightCm uint
-	Castrated        bool
+	Castrated        sql.NullBool
 	Gender           string
 	Where            string
 	Description      string
@@ -24,7 +25,7 @@ type Animal struct {
 	PortraitID       *string
 	Portrait         *MediaFile `gorm:"->"`
 	AnimalKind       string
-	FreeRoamer       bool
+	FreeRoamer       sql.NullBool
 	Race             string
 	MediaFiles       []*MediaFile `gorm:"many2many:media_file_animals;constraint:OnDelete:CASCADE;"`
 }

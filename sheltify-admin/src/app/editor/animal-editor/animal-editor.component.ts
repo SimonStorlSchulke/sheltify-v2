@@ -3,9 +3,9 @@ import { Component, input, inject, output, ChangeDetectionStrategy } from '@angu
 import { FormsModule } from '@angular/forms';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { firstValueFrom, lastValueFrom, Subject } from 'rxjs';
-import { CmsArticle } from 'src/app/cms-types/article-types';
+import { CmsArticle } from 'sheltify-lib/article-types';
 import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
-import { CmsAnimal } from 'src/app/cms-types/cms-types';
+import { CmsAnimal } from 'sheltify-lib/cms-types';
 import { ArticleEditorComponent } from 'src/app/editor/article-editor/article-editor.component';
 import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-input.component';
 import { DatePickerComponent } from 'src/app/forms/date-picker/date-picker.component';

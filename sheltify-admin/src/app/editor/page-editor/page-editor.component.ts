@@ -1,8 +1,8 @@
 import { Component, input, output } from '@angular/core';
 import { firstValueFrom, lastValueFrom, Subject } from 'rxjs';
-import { CmsArticle } from 'src/app/cms-types/article-types';
+import { CmsArticle } from 'sheltify-lib/article-types';
 import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
-import { CmsPage } from 'src/app/cms-types/cms-types';
+import { CmsPage } from 'sheltify-lib/cms-types';
 import { ArticleEditorComponent } from 'src/app/editor/article-editor/article-editor.component';
 import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-input.component';
 import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';

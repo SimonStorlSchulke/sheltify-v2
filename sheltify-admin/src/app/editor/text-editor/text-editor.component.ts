@@ -47,10 +47,38 @@ const link: MarkSpec = {
   },
 };
 
+const dogLink: MarkSpec = {
+  attrs: {
+    href: {},
+    title: { default: null },
+    class: { default: null },
+    rel: { default: null },
+  },
+  inclusive: false,
+  parseDOM: [
+    {
+      tag: "a[href]",
+      getAttrs: (dom: Node | string): Record<string, any> | null => {
+        if (!(dom instanceof HTMLElement)) return null;
+        return {
+          href: dom.getAttribute("href"),
+          class: dom.getAttribute("class"),
+          rel: dom.getAttribute("rel"),
+          title: dom.getAttribute("title"),
+        };
+      },
+    },
+  ],
+  toDOM: (mark: Mark, inline: boolean): DOMOutputSpec => {
+    return ["a", mark.attrs, 0];
+  },
+};
+
 const schema = new Schema({
   nodes,
   marks: {
     link,
+    dogLink,
   },
 });
 
@@ -106,16 +134,14 @@ export class TextEditorComponent implements OnInit {
     this.html = this.htmlModel();
   }
 
-  async addButtonLink(event: MouseEvent, buttonType: 'primary' | 'secondary' | 'cto') {
+  async addButtonLink(event: MouseEvent) {
     event.preventDefault();
     const data = await this.modalService.openFinishable(ButtonLinkDialogComponent);
     if (!data || !data.url) return;
 
     const view: EditorView = this.editor.view;
-    const markType = view.state.schema.marks['link'];
-    if (!markType) return;
 
-    toggleMark(markType, {
+    toggleMark(view.state.schema.marks['link'], {
       href: data.url,
       class: `article-button ${data.buttonTye}`,
       rel: "noopener noreferrer",

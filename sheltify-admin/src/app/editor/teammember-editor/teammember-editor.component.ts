@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { CmsTeamMember } from 'src/app/cms-types/cms-types';
+import { CmsTeamMember } from 'sheltify-lib/cms-types';
 import { ImagePickerSingleComponent } from 'src/app/forms/image-picker-single/image-picker-single.component';
 import { NumberInputComponent } from 'src/app/forms/number-input/number-input.component';
 import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';

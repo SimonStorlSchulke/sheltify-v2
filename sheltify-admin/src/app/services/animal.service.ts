@@ -1,6 +1,6 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { CmsAnimal } from 'src/app/cms-types/cms-types';
+import { CmsAnimal } from 'sheltify-lib/cms-types';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { randomColor } from 'src/app/services/color-utils';
 

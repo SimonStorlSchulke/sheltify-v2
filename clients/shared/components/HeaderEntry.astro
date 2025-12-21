@@ -1,0 +1,16 @@
+---
+import type { MenuEntry } from 'sheltify-lib/page-structure';
+interface Props {
+  entry: MenuEntry,
+}
+const {entry} = Astro.props;
+---
+
+
+<a>{entry.path}</a>
+
+<div>
+  {entry.children.map((entry: MenuEntry) => (
+    entry.link
+  ))}
+</div>

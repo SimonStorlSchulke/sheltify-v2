@@ -1,7 +1,7 @@
 import { Component, model, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
-import { CmsTenantConfiguration } from 'src/app/cms-types/cms-types';
+import { CmsTenantConfiguration } from 'sheltify-lib/cms-types';
 import { ImagePickerSingleComponent } from 'src/app/forms/image-picker-single/image-picker-single.component';
 import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
 import { CmsRequestService } from 'src/app/services/cms-request.service';

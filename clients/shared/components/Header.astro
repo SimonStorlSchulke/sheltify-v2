@@ -1,0 +1,18 @@
+---
+import { cms } from "@shared/cms/sheltify-access"
+import { createPageStructure } from 'sheltify-lib/page-structure.ts';
+import HeaderEntry from "./HeaderEntry.astro";
+
+const pages = await cms.pages;
+
+const menu = createPageStructure(pages);
+console.log(menu);
+---
+
+<div class="header">
+  {
+    menu.values().map((entry, key) =>
+      <HeaderEntry entry={entry}/>
+    )
+  }
+</div>

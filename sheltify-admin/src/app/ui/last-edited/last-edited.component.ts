@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, input } from '@angular/core';
-import { CmsType } from 'src/app/cms-types/cms-types';
+import { CmsType } from 'sheltify-lib/cms-types';
 
 @Component({
   selector: 'app-last-edited',

@@ -1,4 +1,4 @@
-import type { CmsAnimal } from '@shared/types/cms-types.ts';
+import type { CmsAnimal, CmsPage } from 'sheltify-lib/cms-types';
 
 export class SheltifyAccess {
 
@@ -10,6 +10,10 @@ export class SheltifyAccess {
 
   public get apiBaseUrl() {
     return `http://localhost:3000/api/${this.tenant}/`;
+  }
+
+  public get pages(): Promise<CmsPage[]> {
+    return this.get<CmsPage[]>('pages')
   }
 
   public get animals(): Promise<CmsAnimal[]> {

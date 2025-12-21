@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CmsImage } from 'src/app/cms-types/cms-types';
+import { CmsImage } from 'sheltify-lib/cms-types';
 import { MediaLibraryComponent } from 'src/app/media-library/media-library.component';
 import { ModalService } from 'src/app/services/modal.service';
 

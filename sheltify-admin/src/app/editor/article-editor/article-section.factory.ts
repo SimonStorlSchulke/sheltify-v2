@@ -1,4 +1,4 @@
-import { Section, SectionType } from 'src/app/cms-types/article-types';
+import { Section, SectionType } from 'sheltify-lib/article-types';
 
 export function createEmptySection(SectionType: SectionType): Section {
   switch (SectionType) {

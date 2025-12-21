@@ -1,6 +1,6 @@
 <div class="content-info-header sui flex-x">
   @if (page(); as page) {
-    <h1 class="sui grow-1">{{ page.Path.replace('/', '').replaceAll('/', ' › ') }}</h1>
+    <h1 class="sui grow-1">{{ page.Path.replace('-', ' ').replaceAll('/', ' › ') }}</h1>
 
     <div class="sui flex-x gap-2">
       <button type="button" class="primary" (click)="save()">Speichern</button>

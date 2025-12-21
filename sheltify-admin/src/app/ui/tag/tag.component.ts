@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { CmsTag } from 'src/app/cms-types/cms-types';
+import { CmsTag } from 'sheltify-lib/cms-types';
 
 @Component({
   selector: 'app-tag',

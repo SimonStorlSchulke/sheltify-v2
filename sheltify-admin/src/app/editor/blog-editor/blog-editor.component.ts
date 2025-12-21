@@ -1,8 +1,8 @@
 import { Component, input, OnInit, output } from '@angular/core';
 import { firstValueFrom, Subject } from 'rxjs';
-import { CmsArticle } from 'src/app/cms-types/article-types';
+import { CmsArticle } from 'sheltify-lib/article-types';
 import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
-import { CmsBlogEntry } from 'src/app/cms-types/cms-types';
+import { CmsBlogEntry } from 'sheltify-lib/cms-types';
 import { ArticleEditorComponent } from 'src/app/editor/article-editor/article-editor.component';
 import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-input.component';
 import { ImagePickerSingleComponent } from 'src/app/forms/image-picker-single/image-picker-single.component';

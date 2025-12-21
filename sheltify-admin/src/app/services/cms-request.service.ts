@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
+import { AnimalsFilter, CmsArticle } from 'sheltify-lib/article-types';
 import { ToastrService } from 'ngx-toastr';
-import { CmsArticle } from 'src/app/cms-types/article-types';
-import { CmsAnimal, CmsBlogEntry, CmsImage, CmsPage, CmsTag, CmsTeamMember, CmsTenantConfiguration } from 'src/app/cms-types/cms-types';
+import { CmsAnimal, CmsBlogEntry, CmsImage, CmsPage, CmsTag, CmsTeamMember, CmsTenantConfiguration } from 'sheltify-lib/cms-types';
 import { LoaderService } from 'src/app/layout/loader/loader.service';
 import { AuthService, CmsUser } from './auth.service';
 import { HttpClient } from '@angular/common/http';
@@ -10,15 +10,6 @@ import { Observable, map, timer, tap, OperatorFunction, lastValueFrom } from 'rx
 
 export type CollectionResult<T> = {
   results: T[] | null,
-}
-
-export type AnimalsFilter = {
-  AnimalKind: string | undefined,
-  MaxNumber: number | undefined,
-  AgeRange: [number | undefined, number | undefined],
-  SizeRange: [number | undefined, number | undefined],
-  Gender: 'male' | 'female' | 'both',
-  InGermany: boolean | undefined,
 }
 
 @Injectable({providedIn: 'root'})

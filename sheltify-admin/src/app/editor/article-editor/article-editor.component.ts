@@ -7,7 +7,7 @@ import { bootstrapGripVertical, bootstrapX, bootstrapPlus } from '@ng-icons/boot
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { lastValueFrom, Observable, Subject } from 'rxjs';
-import { CmsArticle, CmsArticleRow, Section } from 'src/app/cms-types/article-types';
+import { CmsArticle, CmsArticleRow, Section } from 'sheltify-lib/article-types';
 import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
 import { createEmptySection } from 'src/app/editor/article-editor/article-section.factory';
 import { PickNewSectionComponent } from 'src/app/editor/article-editor/pick-new-section/pick-new-section.component';

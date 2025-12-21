@@ -71,6 +71,6 @@ func valMatchesRegex(fieldName string, fieldValue string, regex string, regexDes
 }
 
 func valIsValidPath(fieldName string, fieldValue string) string {
-	regex := `^/[a-zA-Z0-9/_-]*$`
+	regex := `^[a-zäöü-]+/?[a-zäöü-]*$`
 	return valMatchesRegex(fieldName, fieldValue, regex, "muss eine gültige URL sein (muss mit / beginnen und nur Kleinbuchstaben, Zahlen, '-', '_' und '/' enthalten)")
 }

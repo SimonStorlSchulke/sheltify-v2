@@ -1,9 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { CmsArticle } from 'src/app/cms-types/article-types';
+import { CmsArticle } from 'sheltify-lib/article-types';
 import { createEmptyArticle, createNewBlog, createNewPage } from 'src/app/cms-types/cms-type.factory';
-import { CmsAnimal, CmsBlogEntry, CmsPage } from 'src/app/cms-types/cms-types';
+import { CmsAnimal, CmsBlogEntry, CmsPage } from 'sheltify-lib/cms-types';
 import { ArticleEditorComponent } from 'src/app/editor/article-editor/article-editor.component';
 import { BlogEditorComponent } from 'src/app/editor/blog-editor/blog-editor.component';
 import { PageEditorComponent } from 'src/app/editor/page-editor/page-editor.component';

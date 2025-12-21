@@ -1,5 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { CmsAnimal } from 'src/app/cms-types/cms-types';
+import { CmsAnimal } from 'sheltify-lib/cms-types';
 import { FinishableDialog } from 'src/app/services/modal.service';
 
 @Component({

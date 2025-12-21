@@ -21,7 +21,7 @@
           style="width: 100%;"
           explanation="Kurzer Text, der im Steckbrief oben unter jedem Tier angezeigt wird"/>
         <div [class]="rowClass">
-          <app-checkbox-input idName="castrated" label="Kastriert" [(twoWayModel)]="animal.Castrated"/>
+          <app-checkbox-input idName="castrated" label="Kastriert" [(nullBoolModel)]="animal.Castrated"/>
           <app-date-picker idName="birthday" label="Geboren ca." [(twoWayModelISOString)]="animal.Birthday"/>
           <app-number-input idName="size" label="Schulterhöhe in cm" [(twoWayModel)]="animal.ShoulderHeightCm"/>
         </div>

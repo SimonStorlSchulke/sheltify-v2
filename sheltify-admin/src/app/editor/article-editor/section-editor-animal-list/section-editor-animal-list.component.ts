@@ -1,7 +1,7 @@
 import { Component, input, OnDestroy, OnInit, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { debounceTime, firstValueFrom, Subject, Subscription } from 'rxjs';
-import { SectionAnimalList } from 'src/app/cms-types/article-types';
+import { SectionAnimalList } from 'sheltify-lib/article-types';
 import { NumberInputComponent } from 'src/app/forms/number-input/number-input.component';
 import { RangeInputComponent } from 'src/app/forms/range-input/range-input.component';
 import { SelectInputComponent } from 'src/app/forms/select-input/select-input.component';

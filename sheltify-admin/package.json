@@ -27,6 +27,7 @@
     "ngx-highlightjs": "^14.0.1",
     "ngx-toastr": "^19.0.0",
     "rxjs": "~7.8.0",
+    "sheltify-lib": "file:../sheltify-lib",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },

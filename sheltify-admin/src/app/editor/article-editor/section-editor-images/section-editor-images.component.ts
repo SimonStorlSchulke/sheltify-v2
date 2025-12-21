@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { SectionImages } from 'src/app/cms-types/article-types';
+import { SectionImages } from 'sheltify-lib/article-types';
 import { ImagePickerMultiComponent } from 'src/app/forms/image-picker-multi/image-picker-multi.component';
 
 @Component({

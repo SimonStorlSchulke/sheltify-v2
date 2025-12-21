@@ -1,5 +1,5 @@
-import { Section, SectionAnimalList, SectionHero, SectionImages, SectionTitle, SectionType, SectionVideo } from 'src/app/cms-types/article-types';
-import { CmsImage, CmsImagesSize } from 'src/app/cms-types/cms-types';
+import { Section, SectionAnimalList, SectionHero, SectionImages, SectionTitle, SectionType, SectionVideo } from 'sheltify-lib/article-types';
+import { CmsImage, CmsImagesSize } from 'sheltify-lib/cms-types';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 
 const publicApiUrl = 'http://localhost:3000/api/'

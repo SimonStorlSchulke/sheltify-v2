@@ -1,9 +1,18 @@
-import { CmsArticle } from 'src/app/cms-types/article-types';
+import { CmsArticle } from './article-types';
 
 export type SqlNullTime = {
   Time: string | null,
   Valid: boolean,
 }
+
+export type SqlNullBool = {
+  Bool:  boolean,
+  Valid: boolean, // Valid is true if Bool is not NULL
+}
+
+export const SqlNullBoolNull: SqlNullBool = {Bool: false, Valid: false}
+export const SqlNullBoolTrue: SqlNullBool = {Bool: true, Valid: true}
+export const SqlNullBoolFalse: SqlNullBool = {Bool: false, Valid: true}
 
 export type CmsType = {
   ID: string,
@@ -37,8 +46,8 @@ export type CmsAnimal = Publishable & {
   Birthday?: string;
   WeightKg: number;
   ShoulderHeightCm: number;
-  Castrated: boolean;
-  Gender: "male" | "female";
+  Castrated: SqlNullBool;
+  Gender: '' | 'male' | 'female';
   Description: string;
   Where: string,
   Patrons: string;

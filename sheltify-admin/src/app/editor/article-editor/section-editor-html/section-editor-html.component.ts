@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, effect, ElementRef, input, output, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { SectionHtml } from 'src/app/cms-types/article-types';
+import { SectionHtml } from 'sheltify-lib/article-types';
 import { Highlight } from 'ngx-highlightjs';
 
 @Component({

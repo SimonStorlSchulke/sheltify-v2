@@ -1,6 +1,6 @@
 import { Component, inject, input, model, signal } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { CmsImage } from 'src/app/cms-types/cms-types';
+import { CmsImage } from 'sheltify-lib/cms-types';
 import { InputBaseComponent } from 'src/app/forms/input-base.component';
 import { ModalPresenter } from 'src/app/services/modal.presenter';
 import { CmsImageDirective } from 'src/app/ui/cms-image.directive';

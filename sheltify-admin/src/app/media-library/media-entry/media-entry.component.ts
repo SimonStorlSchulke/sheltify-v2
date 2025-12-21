@@ -1,5 +1,5 @@
 import { Component, HostBinding, input } from '@angular/core';
-import { CmsImage } from 'src/app/cms-types/cms-types';
+import { CmsImage } from 'sheltify-lib/cms-types';
 import { CmsImageDirective } from 'src/app/ui/cms-image.directive';
 import { CmsImagePipe } from 'src/app/ui/cms-image.pipe';
 

@@ -2,7 +2,7 @@ import { Component, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { createNewTeamMember } from 'src/app/cms-types/cms-type.factory';
-import { CmsPage, CmsTeamMember } from 'src/app/cms-types/cms-types';
+import { CmsPage, CmsTeamMember } from 'sheltify-lib/cms-types';
 import { PageEditorComponent } from 'src/app/editor/page-editor/page-editor.component';
 import { TeammemberEditorComponent } from 'src/app/editor/teammember-editor/teammember-editor.component';
 import { TextInputModalComponent } from 'src/app/forms/text-input-modal/text-input-modal.component';

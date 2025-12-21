@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } 
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { createNewAnimal } from 'src/app/cms-types/cms-type.factory';
-import { CmsAnimal } from 'src/app/cms-types/cms-types';
+import { CmsAnimal } from 'sheltify-lib/cms-types';
 import { TextInputModalComponent } from 'src/app/forms/text-input-modal/text-input-modal.component';
 import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
 import { AnimalService } from 'src/app/services/animal.service';

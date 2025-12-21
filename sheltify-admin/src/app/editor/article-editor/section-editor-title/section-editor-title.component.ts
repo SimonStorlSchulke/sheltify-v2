@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
-import { SectionTitle } from 'src/app/cms-types/article-types';
+import { SectionTitle } from 'sheltify-lib/article-types';
 import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-input.component';
 import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
 

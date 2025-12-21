@@ -1,4 +1,4 @@
-import type { CmsImage } from '@shared/types/cms-types.ts';
+import type { CmsImage } from 'sheltify-lib/cms-types';
 
 export const SectionTypes = ["title", "text", "video", "image"] as const;
 

@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { firstValueFrom, of, tap } from 'rxjs';
-import { CmsTenantConfiguration } from 'src/app/cms-types/cms-types';
+import { CmsTenantConfiguration } from 'sheltify-lib/cms-types';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 
 @Injectable({

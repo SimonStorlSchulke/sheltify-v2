@@ -1,7 +1,7 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, computed, OnInit, output, Pipe, PipeTransform, Signal, signal } from '@angular/core';
 import { lastValueFrom, map, Observable, Subject } from 'rxjs';
-import { CmsAnimal, CmsImage, CmsTag } from 'src/app/cms-types/cms-types';
+import { CmsAnimal, CmsImage, CmsTag } from 'sheltify-lib/cms-types';
 import { LoaderService } from 'src/app/layout/loader/loader.service';
 import { FileDropDirective } from 'src/app/media-library/file-drop.directive';
 import { ImageEditorComponent } from 'src/app/media-library/image-editor/image-editor.component';

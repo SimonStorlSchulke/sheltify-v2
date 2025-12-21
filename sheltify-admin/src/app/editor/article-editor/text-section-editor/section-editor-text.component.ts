@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { SectionText } from 'src/app/cms-types/article-types';
+import { SectionText } from 'sheltify-lib/article-types';
 import { TextEditorComponent } from 'src/app/editor/text-editor/text-editor.component';
 
 @Component({

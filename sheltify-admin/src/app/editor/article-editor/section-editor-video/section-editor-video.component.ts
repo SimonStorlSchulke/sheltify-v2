@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { SectionVideo } from 'src/app/cms-types/article-types';
+import { SectionVideo } from 'sheltify-lib/article-types';
 import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
 
 @Component({

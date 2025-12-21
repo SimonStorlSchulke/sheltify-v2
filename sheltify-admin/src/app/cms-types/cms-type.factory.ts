@@ -1,12 +1,12 @@
-import { CmsArticle } from 'src/app/cms-types/article-types';
-import { CmsAnimal, CmsBlogEntry, CmsPage, CmsTeamMember } from 'src/app/cms-types/cms-types';
+import { CmsArticle } from 'sheltify-lib/article-types';
+import { CmsAnimal, CmsBlogEntry, CmsPage, CmsTeamMember } from 'sheltify-lib/cms-types';
 
 export function createNewAnimal(name: string): CmsAnimal {
   return {
     ID: '',
     Birthday: "2018-03-29T15:04:05Z", //TODO
-    Castrated: false,
-    Gender: "male",
+    Castrated: {Bool: false, Valid: false},
+    Gender: '',
     Where: '',
     Health: '',
     Patrons: '',

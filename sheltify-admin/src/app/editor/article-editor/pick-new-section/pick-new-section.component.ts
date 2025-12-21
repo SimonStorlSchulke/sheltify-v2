@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SectionType, SectionTypes } from 'src/app/cms-types/article-types';
+import { SectionType, SectionTypes } from 'sheltify-lib/article-types';
 import { sectionLabels } from 'src/app/services/article-renderer';
 import { FinishableDialog } from 'src/app/services/modal.service';
 

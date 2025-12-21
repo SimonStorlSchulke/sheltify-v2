@@ -1,5 +1,5 @@
 import { Directive, effect, ElementRef, input, OnChanges, Renderer2 } from '@angular/core';
-import { CmsImage, CmsImagesSize } from 'src/app/cms-types/cms-types';
+import { CmsImage, CmsImagesSize } from 'sheltify-lib/cms-types';
 import { getImageFormatUrl, getLargestAvailableImageSize } from 'src/app/services/article-renderer';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 

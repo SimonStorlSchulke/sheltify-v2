@@ -1,9 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { CmsArticle } from 'src/app/cms-types/article-types';
+import { CmsArticle } from 'sheltify-lib/article-types';
 import { createEmptyArticle, createNewPage } from 'src/app/cms-types/cms-type.factory';
-import { CmsAnimal, CmsPage } from 'src/app/cms-types/cms-types';
+import { CmsAnimal, CmsPage } from 'sheltify-lib/cms-types';
 import { ArticleEditorComponent } from 'src/app/editor/article-editor/article-editor.component';
 import { PageEditorComponent } from 'src/app/editor/page-editor/page-editor.component';
 import { TextInputModalComponent } from 'src/app/forms/text-input-modal/text-input-modal.component';
@@ -42,8 +42,6 @@ export class PageListComponent {
   public async newPage() {
     const page = createNewPage();
     page.Path = await this.modalService.openFinishable(TextInputModalComponent, {label: 'Pfad für die Seite eingeben - dieser darf nur Buchstaben, Zahlen, - und / enthalten.'}) ?? '';
-    if(page.Path == '') return;
-    page.Path = '/' + page.Path;
     page.Title = this.pagesService.createTitleFromPath(page.Path);
     await firstValueFrom(this.cmsRequestService.savePage(page));
     this.pagesService.reloadPages();

@@ -3,7 +3,7 @@ import { Component, effect, input, OnInit, output, signal } from '@angular/core'
 import { FormsModule } from '@angular/forms';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { firstValueFrom } from 'rxjs';
-import { CmsAnimal, CmsImage, CmsImagesSize, CmsTag } from 'src/app/cms-types/cms-types';
+import { CmsAnimal, CmsImage, CmsImagesSize, CmsTag } from 'sheltify-lib/cms-types';
 import { TagsManagerComponent } from 'src/app/editor/tags-manager/tags-manager.component';
 import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
 import { MediaLibraryComponent } from 'src/app/media-library/media-library.component';
