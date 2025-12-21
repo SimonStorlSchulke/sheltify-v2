@@ -7,6 +7,8 @@
       <button data-testid="btn-new-animal" class="primary" (click)="newAnimal()">Neues Tier</button>
     </div>
 
+    <app-text-input idName="filter" placeholder="Suche" label="" [(twoWayModel)]="search"/>
+
     <div class="animals sui flex-x ai-start wrap gap-4">
       <table [class.partial-table]="editorOpened">
         <thead>
@@ -19,7 +21,7 @@
         </tr>
         </thead>
         <tbody>
-          @for (cmsAnimal of animalService.animals(); track $index) {
+          @for (cmsAnimal of animalList(); track $index) {
             @let animal = editedAnimals().get(cmsAnimal.ID ?? '') ?? cmsAnimal;
 
             <tr [attr.data-testid]="'label-list-animal-' + animal.Name" class="list-entry striped" [class.selected]="selectedAnimal()?.ID == animal.ID"

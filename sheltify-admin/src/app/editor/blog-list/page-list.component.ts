@@ -41,7 +41,7 @@ export class PageListComponent {
 
   public async newPage() {
     const page = createNewPage();
-    page.Path = await this.modalService.openFinishable(TextInputModalComponent, {label: 'Pfad für die Seite eingeben - dieser muss mit / beginnen und darf nur Buchstaben, Zahlen, - und / enthalten.'}) ?? '';
+    page.Path = await this.modalService.openFinishable(TextInputModalComponent, {label: 'Pfad für die Seite eingeben - dieser darf nur Buchstaben, Zahlen, - und / enthalten.'}) ?? '';
     if(page.Path == '') return;
     page.Path = '/' + page.Path;
     page.Title = this.pagesService.createTitleFromPath(page.Path);

@@ -10,5 +10,16 @@
   <a routerLink="media" routerLinkActive="active">Medien</a>
   <a routerLink="optionen" routerLinkActive="active">Optionen</a>
   <div class="sui grow-1"></div>
-  <app-user-menu/>
+  <div class="sui p-2">
+    <app-user-menu/>
+  </div>
+  <button (click)="triggerBuild()">Build</button>
+
+  <!-- TODO: in footer verschieben -->
+  @if(building()) {
+    <span>Wird gebaut...</span>
+  } @else if(tenantConfigurationService.config()?.LastBuild) {
+    <span>Letzte Build: {{tenantConfigurationService.config()?.LastBuild?.Time}}</span>
+  }
+  <!--------------------------------->
 </div>

@@ -3,13 +3,14 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "snhg": "astro dev --root ./sites/snhg --port 4201",
-    "mft": "astro dev --root ./sites/mft --port 4201",
-    "hhg": "astro dev --root ./sites/hhg --port 4201",
+    "snhg": "astro dev --root ./sites/snhg --port 4202",
+    "mft": "astro dev --root ./sites/mft --port 4203",
+    "hhg": "astro dev --root ./sites/hhg --port 4204",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "build:snhg": "astro build --config sites/snhg/astro.config.mjs",
     "build:mft": "astro build --config sites/mft/astro.config.mjs",
     "build:hhg": "astro build --config sites/hhg/astro.config.mjs"
   },

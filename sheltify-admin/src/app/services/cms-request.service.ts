@@ -67,6 +67,10 @@ export class CmsRequestService {
     return this.postOrPatch<CmsBlogEntry>('blogs', user);
   }
 
+  public deleteBlogEntries(ids: string[]) {
+    return this.delete(`blogs?ids=${ids.join(',')}`)
+  }
+
   public deleteTeamMember(id: string): Observable<void> {
     return this.delete(`blogs/` + id)
   }
@@ -83,8 +87,8 @@ export class CmsRequestService {
     return this.postOrPatch('pages', page);
   }
 
-  public deletePage(ids: string[]) {
-    return this.delete<CmsPage>(`pages?ids=${ids.join(',')}`)
+  public deletePages(ids: string[]) {
+    return this.delete(`pages?ids=${ids.join(',')}`)
   }
 
 
@@ -175,6 +179,10 @@ export class CmsRequestService {
 
   public async updateMedia(image: CmsImage): Promise<CmsImage> {
     return lastValueFrom(this.patch<CmsImage>(`media`, image));
+  }
+
+  public triggerBuild() {
+    return this.httpClient.get<void>(CmsRequestService.adminApiUrl + 'trigger-build', this.options());
   }
 
   public uploadScaledImage(files: { size: string; blob: Blob; }[], fileName: string, commaSeparatedTags: string, commaSeparatedAnimalIds: string) {

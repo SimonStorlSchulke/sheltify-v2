@@ -43,7 +43,7 @@ export class BlogListComponent {
 
   public async newBlog() {
     const blog = createNewBlog();
-    blog.Title = await this.modalService.openFinishable(TextInputModalComponent, {label: 'Pfad für die Seite eingeben - dieser muss mit / beginnen und darf nur Buchstaben, Zahlen, - und / enthalten.'}) ?? '';
+    blog.Title = await this.modalService.openFinishable(TextInputModalComponent, {label: 'Blogtitel eingeben'}) ?? '';
     await firstValueFrom(this.cmsRequestService.saveBlogEntry(blog));
     this.blogService.reloadBlogs();
   }
@@ -52,5 +52,10 @@ export class BlogListComponent {
     const blog = await firstValueFrom(this.cmsRequestService.getBlogEntry(id));
     this.selectedBlog.set(blog);
     this.router.navigate(['/blog', id]);
+  }
+
+  public onDeleted() {
+    this.blogService.reloadBlogs();
+    this.selectedBlog.set(null);
   }
 }

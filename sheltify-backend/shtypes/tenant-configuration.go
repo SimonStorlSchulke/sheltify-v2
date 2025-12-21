@@ -1,6 +1,8 @@
 package shtypes
 
 import (
+	"database/sql"
+
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
@@ -33,6 +35,7 @@ type TenantConfiguration struct {
 	AnimalFeaturePatrons      bool
 	AnimalFeatureRace         bool
 	AnimalFeatureAnimalKind   bool
+	LastBuild                 sql.NullTime
 
 	AnimalFilterConfigForAnimalKind map[string]AnimalFilterConfiguration `gorm:"serializer:json"`
 }
