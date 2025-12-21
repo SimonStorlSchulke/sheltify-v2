@@ -12,6 +12,7 @@ type Animal struct {
 	ShoulderHeightCm uint
 	Castrated        bool
 	Gender           string
+	Where            string
 	Description      string
 	NotesIntern      string //TODO
 	Patrons          string

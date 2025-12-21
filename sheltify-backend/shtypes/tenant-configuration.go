@@ -29,6 +29,10 @@ type TenantConfiguration struct {
 	LastModifiedBy            string
 	LogoHeader                *MediaFile `gorm:"->"`
 	LogoHeaderID              *string
+	AnimalFeatureWhere        bool
+	AnimalFeaturePatrons      bool
+	AnimalFeatureRace         bool
+	AnimalFeatureAnimalKind   bool
 
 	AnimalFilterConfigForAnimalKind map[string]AnimalFilterConfiguration `gorm:"serializer:json"`
 }

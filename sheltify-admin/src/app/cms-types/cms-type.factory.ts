@@ -7,6 +7,7 @@ export function createNewAnimal(name: string): CmsAnimal {
     Birthday: "2018-03-29T15:04:05Z", //TODO
     Castrated: false,
     Gender: "male",
+    Where: '',
     Health: '',
     Patrons: '',
     Priority: 0,

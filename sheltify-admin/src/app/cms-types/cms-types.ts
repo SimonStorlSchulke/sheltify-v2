@@ -39,6 +39,7 @@ export type CmsAnimal = Publishable & {
   Castrated: boolean;
   Gender: "male" | "female";
   Description: string;
+  Where: string,
   Patrons: string;
   Status: string;
   Health: string;
