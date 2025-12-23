@@ -1,13 +1,13 @@
-import { Component, model, OnInit, output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, model, OnInit, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { EditorView } from 'prosemirror-view';
 import { toggleMark } from 'prosemirror-commands';
 import { Plugin } from 'prosemirror-state';
 import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
-import { Schema, NodeSpec, MarkSpec, Mark, Node as PMNode, DOMOutputSpec } from 'prosemirror-model';
+import { Schema, NodeSpec, MarkSpec, Mark, DOMOutputSpec } from 'prosemirror-model';
 import { ButtonLinkDialogComponent } from 'src/app/editor/text-editor/button-link-dialog/button-link-dialog.component';
-import { TextInputModalComponent } from 'src/app/forms/text-input-modal/text-input-modal.component';
 import { ModalService } from 'src/app/services/modal.service';
+import { marks as defaultMarks } from 'ngx-editor';
 
 const nodes: { [key: string]: NodeSpec } = {
   doc: { content: "block+" },
@@ -20,34 +20,7 @@ const nodes: { [key: string]: NodeSpec } = {
   text: { group: "inline" }
 };
 
-const link: MarkSpec = {
-  attrs: {
-    href: {},
-    title: { default: null },
-    class: { default: null },
-    rel: { default: null },
-  },
-  inclusive: false,
-  parseDOM: [
-    {
-      tag: "a[href]",
-      getAttrs: (dom: Node | string): Record<string, any> | null => {
-        if (!(dom instanceof HTMLElement)) return null;
-        return {
-          href: dom.getAttribute("href"),
-          class: dom.getAttribute("class"),
-          rel: dom.getAttribute("rel"),
-          title: dom.getAttribute("title"),
-        };
-      },
-    },
-  ],
-  toDOM: (mark: Mark, inline: boolean): DOMOutputSpec => {
-    return ["a", mark.attrs, 0];
-  },
-};
-
-const dogLink: MarkSpec = {
+const myLink: MarkSpec = {
   attrs: {
     href: {},
     title: { default: null },
@@ -75,11 +48,11 @@ const dogLink: MarkSpec = {
 };
 
 const schema = new Schema({
-  nodes,
+  nodes: nodes,
   marks: {
-    link,
-    dogLink,
-  },
+    ...defaultMarks,
+    myLink: myLink,
+  }
 });
 
 @Component({
@@ -141,7 +114,7 @@ export class TextEditorComponent implements OnInit {
 
     const view: EditorView = this.editor.view;
 
-    toggleMark(view.state.schema.marks['link'], {
+    toggleMark(view.state.schema.marks['myLink'], {
       href: data.url,
       class: `article-button ${data.buttonTye}`,
       rel: "noopener noreferrer",
