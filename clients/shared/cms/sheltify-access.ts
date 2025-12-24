@@ -15,8 +15,13 @@ export class SheltifyAccess {
     return `http://localhost:3000/api/${this.tenant}/`;
   }
 
-  public get pages(): Promise<CmsPage[]> {
-    return this.get<CmsPage[]>('pages')
+  cachedPages: CmsPage[] = [];
+  public async getPages(): Promise<CmsPage[]> {
+    if(this.cachedPages.length > 0) {
+      return this.cachedPages
+    }
+    this.cachedPages = await this.get<CmsPage[]>('pages');
+    return this.cachedPages;
   }
 
   public async getPageByPath(path: string): Promise<CmsPage> {
@@ -27,6 +32,7 @@ export class SheltifyAccess {
     return this.get<CmsArticle>(`article/${id}`)
   }
 
+  cachedAnimals: CmsPage[] = []; //TODO
   public get animals(): Promise<CmsAnimal[]> {
     return this.get<CmsAnimal[]>('animals')
   }

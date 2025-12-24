@@ -12,12 +12,17 @@ const { article } = Astro.props;
 
 const fullWidthSections: SectionType[] = ['hero'];
 
+let rowindex = 0;
 ---
 <div class="themable article sui flex-y">
 
 {
   article.Structure.Rows.map(row =>
     {
+      const isTopHero = rowindex == 0 && row.Sections.length == 1 && row.Sections[0].SectionType == 'hero';
+      rowindex++;
+
+
       const isFullWidth = row.Sections.length == 1 && fullWidthSections.includes(row.Sections[0].SectionType);
       const sections = row.Sections.map(section => {
         let comp;
@@ -32,7 +37,7 @@ const fullWidthSections: SectionType[] = ['hero'];
             comp = <hr/>;
             break;
           case 'hero':
-            comp = <SectionRendererHero section={section}/>;
+            comp = <SectionRendererHero isTopHero={isTopHero} section={section}/>;
             break;
           default:
             comp = <div>Sektionstyp nicht unterstützt</div>;
@@ -53,7 +58,7 @@ const fullWidthSections: SectionType[] = ['hero'];
       gap: var(--section-gap-x);
 
       &:not(.full-width) {
-        width: min(1250px, 100dvw - 64px);
+        width: var(--wrapper-width);
         max-width: 100%;
         margin-left: auto;
         margin-right: auto;
@@ -72,7 +77,6 @@ const fullWidthSections: SectionType[] = ['hero'];
     }
 
     .section-hero {
-      position: absolute;
       width: 100dvw;
       left: 0;
     }

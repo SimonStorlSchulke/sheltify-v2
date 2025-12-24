@@ -1,14 +1,11 @@
 ---
 import { cms } from '@shared/cms/sheltify-access.ts';
-import AnimalList from '@shared/components/AnimalList.astro';
-import Header from '@shared/components/Header.astro';
 import Page from '@shared/components/Page.astro';
-import Layout from '@shared/layouts/Layout.astro';
 
-import '../theme/_index.scss'
+import SnhgLayout from '../layouts/SnhgLayout.astro';
 
 export async function getStaticPaths() {
-  const sites = (await cms.pages).map(page => ({
+  const sites = (await cms.getPages()).map(page => ({
     params: {path: page.Path}
   }));
   return sites;
@@ -17,18 +14,6 @@ export async function getStaticPaths() {
 const {path} = Astro.params;
 ---
 
-<Layout>
-  <Header/>
-  <main>
-    <h1>SNHG</h1>
-    <AnimalList/>
-    <Page path={path}/>
-  </main>
-</Layout>
-
-
-<style>
-    main {
-        padding-top: var(--header-height);
-    }
-</style>
+<SnhgLayout>
+  <Page path={path}/>
+</SnhgLayout>

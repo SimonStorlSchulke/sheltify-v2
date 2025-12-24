@@ -1,0 +1,22 @@
+---
+import Footer from '@shared/components/Footer.astro';
+import Header from '@shared/components/Header.astro';
+import Layout from '@shared/layouts/Layout.astro';
+
+import '../theme/_index.scss'
+---
+
+<Layout>
+  <Header/>
+  <main>
+    <slot/>
+  </main>
+  <Footer/>
+</Layout>
+
+<style>
+    main {
+        padding-top: var(--header-height);
+        min-height: 100dvh;
+    }
+</style>

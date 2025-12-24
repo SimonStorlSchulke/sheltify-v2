@@ -19,6 +19,6 @@ const article = page.ArticleID ? await cms.getArticle(page.ArticleID) : undefine
 {
   article ?
   <Article article={article}/> :
-  <div></div>
+  <div>Kein Artikel</div>
 }
 

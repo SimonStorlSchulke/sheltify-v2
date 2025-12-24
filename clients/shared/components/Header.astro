@@ -3,7 +3,9 @@ import { cms } from "@shared/cms/sheltify-access"
 import { createPageStructure } from 'sheltify-lib/page-structure.ts';
 import HeaderEntry from "./HeaderEntry.astro";
 
-const pages = (await cms.pages).sort(((a,b) => b.Priority - a.Priority));
+const pages = (await cms.getPages())
+  .filter(page => page.ShowInMenu)
+  .sort(((a,b) => b.Priority - a.Priority));
 
 const menu = [...createPageStructure(pages).values()];
 ---

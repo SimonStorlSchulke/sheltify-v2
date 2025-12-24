@@ -1,0 +1,23 @@
+---
+import { cms } from '@shared/cms/sheltify-access.ts';
+import type { CmsPage } from 'sheltify-lib/cms-types';
+const pages = (await cms.getPages())
+  .filter(page => page.LinkInFooter)
+  .sort(((a,b) => b.Priority - a.Priority));
+
+function getTitle(page: CmsPage): string {
+  const parts = page.Path.split('/');
+  return parts[parts.length - 1];
+}
+
+---
+
+<div class="themable footer">
+  {
+    pages.map(page => <a href={'/' + page.Path}>{getTitle(page)}</a>)
+  }
+
+  <a href="/sitemap">Sitemap</a>
+
+</div>
+

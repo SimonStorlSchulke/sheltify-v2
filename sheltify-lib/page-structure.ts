@@ -2,7 +2,6 @@ import { CmsPage } from 'cms-types';
 
 export type MenuEntry = {
   title: string,
-  //isMainMenu: boolean,
   link?: string,
   children: MenuEntry[],
 }
@@ -27,7 +26,6 @@ export function createPageStructure(pages: CmsPage[]): Map<string, MenuEntry> {
       menu.set(category, {
         title: category,
         children: [],
-        //isMainMenu: true,
       });
     }
 
@@ -40,7 +38,6 @@ export function createPageStructure(pages: CmsPage[]): Map<string, MenuEntry> {
         title: parts[1],
         link: page.Path,
         children: [],
-        //isMainMenu: false,
       })
     }
   }

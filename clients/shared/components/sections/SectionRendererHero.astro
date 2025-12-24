@@ -2,11 +2,12 @@
 import { cms } from '@shared/cms/sheltify-access.ts';
 import type { SectionHero } from 'sheltify-lib/article-types.ts';
 interface Props {
-  section: SectionHero
+  section: SectionHero,
+  isTopHero: boolean,
 }
 
 
-const {section} = Astro.props;
+const {section, isTopHero} = Astro.props;
 const url = cms.uploadsUrl + `${section.Content.MediaFiles[0].ID}_${section.Content.MediaFiles[0].LargestAvailableSize}.webp`;
 ---
 
