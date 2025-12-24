@@ -1,0 +1,24 @@
+---
+import { cms } from '@shared/cms/sheltify-access.ts';
+import Article from '@shared/components/Article.astro';
+
+interface Props {
+  path: string,
+}
+
+const {path} = Astro.props;
+
+const parts = path.split("/");
+const title = parts[parts.length - 1];
+
+const page = await cms.getPageByPath(path);
+
+const article = page.ArticleID ? await cms.getArticle(page.ArticleID) : undefined;
+---
+
+{
+  article ?
+  <Article article={article}/> :
+  <div></div>
+}
+

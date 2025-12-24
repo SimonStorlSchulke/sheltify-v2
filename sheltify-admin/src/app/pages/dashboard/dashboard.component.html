@@ -1,7 +1,7 @@
 <div class="sui p-3">
   @if (authService.user$ | async; as user) {
     <h1>{{ tenantConfigurationService.config()?.Name }}</h1>
-    <h2 data-testid="sidebar-username">Willkommen {{ user.Name }}</h2>
+    <h2 data-testid="sidebar-username">Hallo {{ user.Name }}!</h2>
   }
 
   <br>

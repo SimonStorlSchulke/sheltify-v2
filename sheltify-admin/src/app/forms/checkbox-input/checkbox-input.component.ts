@@ -12,13 +12,8 @@ export class CheckboxInputComponent extends InputBaseComponent {
   public twoWayModel = model<boolean>(false);
   public nullBoolModel = model<SqlNullBool | undefined>(undefined);
 
-  public onInput(checked: boolean | null) {
-    if (checked === null) {
-      this.nullBoolModel.set({Bool: false, Valid: false})
-    } else {
-      this.twoWayModel.set(checked);
-      this.nullBoolModel.set({Bool: checked, Valid: true})
-    }
+  public onInput(checked: boolean) {
+    this.twoWayModel.set(checked);
   }
 
   public tooggleNullBool(newBool: boolean) {

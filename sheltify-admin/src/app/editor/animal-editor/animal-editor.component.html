@@ -1,10 +1,11 @@
 @let rowClass = "sui flex-x gap-2 grow-1";
+@let config = tenantConfigurationService.config();
 @if (animal(); as animal) {
   <div class="sui save-content-buttons flex-x gap-2 jc-end">
     <button class="primary" data-testid="btn-save-animal" (click)="save()">Speichern</button>
     @let isPublished = animal.PublishedAt?.Valid;
     <button [class.warning]="!isPublished" [class.success]="isPublished" (click)="togglePublished()">{{ animal.PublishedAt?.Valid ? 'Depublizieren' : 'Publizieren' }}</button>
-    <button class="warning" (click)="delete()">Löschen</button>
+    <button class="red" (click)="delete()">Löschen</button>
   </div>
   <div class="editor-layout sui p-3">
     <div data-testid="form-animal-editor" class="sui flex-x gap-3 grow-1">
@@ -26,8 +27,16 @@
           <app-number-input idName="size" label="Schulterhöhe in cm" [(twoWayModel)]="animal.ShoulderHeightCm"/>
         </div>
 
-        @if(animalKinds) {
+        @if(animalKinds && config?.AnimalFeatureAnimalKind) {
           <app-select-input idName="animalKind" label="Art" [(twoWayModel)]="animal.AnimalKind" [options]="animalKinds"/>
+        }
+
+        @if(config?.AnimalFeatureNoAdoption) {
+          <app-checkbox-input idName="noAdoption" label="Keine Adoption (nur Paten)" [(twoWayModel)]="animal.NoAdoption"/>
+        }
+
+        @if(animal.AnimalKind == 'Katze') {
+          <app-checkbox-input idName="noAdoption" label="Freigänger" [(nullBoolModel)]="animal.FreeRoamer"/>
         }
       </form>
     </div>

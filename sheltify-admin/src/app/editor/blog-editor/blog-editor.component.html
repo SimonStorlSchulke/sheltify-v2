@@ -6,7 +6,7 @@
       <button type="button" class="primary" (click)="save()">Speichern</button>
       @let isPublished = blog.PublishedAt?.Valid;
       <button [class.warning]="!isPublished" [class.success]="isPublished" (click)="togglePublished()">{{ blog.PublishedAt?.Valid ? 'Depublizieren' : 'Publizieren' }}</button>
-      <button type="button" class="warning" (click)="delete()">Löschen</button>
+      <button type="button" class="red" (click)="delete()">Löschen</button>
     </div>
   }
 </div>

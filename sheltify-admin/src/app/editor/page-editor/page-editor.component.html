@@ -6,7 +6,7 @@
       <button type="button" class="primary" (click)="save()">Speichern</button>
       @let isPublished = page.PublishedAt?.Valid;
       <button [class.warning]="!isPublished" [class.success]="isPublished" (click)="togglePublished()">{{ page.PublishedAt?.Valid ? 'Depublizieren' : 'Publizieren' }}</button>
-      <button type="button" class="warning" (click)="delete()">Löschen</button>
+      <button type="button" class="red" (click)="delete()">Löschen</button>
     </div>
   }
 </div>
@@ -15,8 +15,8 @@
   <div data-testid="form-animal-editor" class="sui flex-x gap-3 grow-1">
     <form class="sui grow-1 flex-y gap-2">
       <div class="sui flex-x gap-2">
-        <app-text-input idName="title" label="Titel" [(twoWayModel)]="page().Title"/>
         <app-text-input idName="path" label="Pfad" [(twoWayModel)]="page().Path"/>
+        <app-number-input idName="priority" label="Priorität" [(twoWayModel)]="page().Priority"/>
       </div>
       <div class="sui flex-x gap-2">
         <app-checkbox-input idName="show-in-menu" label="In Menü anzeigen" [(twoWayModel)]="page().ShowInMenu"/>

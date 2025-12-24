@@ -1,12 +1,12 @@
 <div class="sui flex-y">
-  <div class="sui flex-x"  style="height: calc(100dvh - 36px)">
+  <div class="sui flex-x" style="height: 100dvh">
     <app-loader/>
     <app-sidebar/>
     <div class="sui flex-y grow-1">
       <main class="sui grow-1">
         <router-outlet/>
       </main>
+      <app-footer/>
     </div>
   </div>
-  <app-footer/>
 </div>

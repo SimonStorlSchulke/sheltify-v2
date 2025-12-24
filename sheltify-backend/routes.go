@@ -15,6 +15,7 @@ func initRoutes(r *chi.Mux) {
 
 	rAdminApi := chi.NewRouter()
 	rAdminApi.Use(handlers.AuthMiddleware)
+	rAdminApi.Use(handlers.SetNeedsRebuild)
 	adminRoutes(rAdminApi)
 	r.Mount("/admin/api", rAdminApi)
 }

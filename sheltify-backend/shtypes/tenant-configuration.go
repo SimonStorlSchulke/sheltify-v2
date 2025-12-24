@@ -35,7 +35,9 @@ type TenantConfiguration struct {
 	AnimalFeaturePatrons      bool
 	AnimalFeatureRace         bool
 	AnimalFeatureAnimalKind   bool
+	AnimalFeatureNoAdoption   bool
 	LastBuild                 sql.NullTime
+	NeedsRebuild              bool
 
 	AnimalFilterConfigForAnimalKind map[string]AnimalFilterConfiguration `gorm:"serializer:json"`
 }

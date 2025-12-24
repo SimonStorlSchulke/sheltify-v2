@@ -24,13 +24,13 @@ export type CmsType = {
 }
 
 export type CmsPage = Publishable & {
-  Title: string,
   Path: string,
   Description: string,
   ArticleID?: string,
   Article?: CmsArticle;
   ShowInMenu: boolean,
   LinkInFooter: boolean,
+  Priority: number,
 }
 
 export type Publishable = CmsType & {
@@ -59,6 +59,8 @@ export type CmsAnimal = Publishable & {
   PortraitID?: string;
   Portrait?: CmsImage;
   MediaFiles: CmsImage[];
+  NoAdoption: boolean,
+  FreeRoamer: SqlNullBool,
 }
 
 export type CmsTeamMember = CmsType & {
@@ -109,9 +111,15 @@ export type CmsTenantConfiguration = CmsType & {
   LinkInstagram: string,
   LinkTiktok: string,
   LinkYoutube: string,
-  LogoHeaderID?: string;
-  LogoHeader?: CmsImage;
-  LastBuild?: SqlNullTime
+  LogoHeaderID?: string,
+  LogoHeader?: CmsImage,
+  LastBuild?: SqlNullTime,
+  NeedsRebuild: boolean,
+  AnimalFeatureWhere: boolean,
+  AnimalFeaturePatrons: boolean,
+  AnimalFeatureRace: boolean,
+  AnimalFeatureAnimalKind: boolean,
+  AnimalFeatureNoAdoption: boolean,
 }
 
 export type CmsBlogEntry = Publishable & {

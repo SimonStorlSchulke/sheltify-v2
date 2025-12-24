@@ -4,17 +4,18 @@ import { Observable, tap, Subject, BehaviorSubject, catchError, of } from 'rxjs'
 import { CmsRequestService } from './cms-request.service';
 
 export type CmsUser = {
-  CreatedAt: string
-  Name: string;
-  Email: string;
-  UpdatedAt: string
-  DeletedAt: any
-  ID: string
-  HashedPassword: string
-  SessionToken: string
-  CsrfToken: string
-  TenantID: string
-  Tenant: any
+  CreatedAt: string,
+  Name: string,
+  Email: string,
+  Role: 'ADMIN' | 'EDITOR' | 'UPLOADED',
+  UpdatedAt: string,
+  DeletedAt: any,
+  ID: string,
+  HashedPassword: string,
+  SessionToken: string,
+  CsrfToken: string,
+  TenantID: string,
+  Tenant: any,
 }
 
 

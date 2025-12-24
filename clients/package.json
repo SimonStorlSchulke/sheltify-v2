@@ -10,9 +10,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "build:snhg": "astro build --config sites/snhg/astro.config.mjs",
-    "build:mft": "astro build --config sites/mft/astro.config.mjs",
-    "build:hhg": "astro build --config sites/hhg/astro.config.mjs"
+    "build:snhg": "astro build --root ./sites/snhg --config ./astro.config.mjs",
+    "build:mft": "astro build --root ./sites/mft --config ./astro.config.mjs",
+    "build:hhg": "astro build --root ./sites/hhg --config ./astro.config.mjs"
   },
   "dependencies": {
     "astro": "^5.12.5",

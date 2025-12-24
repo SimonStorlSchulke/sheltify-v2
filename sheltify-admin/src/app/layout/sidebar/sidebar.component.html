@@ -1,6 +1,9 @@
+@let config = tenantConfigurationService.config();
 <div class="sidebar sui color-grey-400 h-100 flex-y h-100">
-  @if (tenantConfigurationService.config()) {
-    <img class="logo" class="logo-header" [cmsImage]="tenantConfigurationService.config()!.LogoHeader!" alt="Logo"/>
+  @if (config?.LogoHeader) {
+    <img class="logo-header" [cmsImage]="config!.LogoHeader!" alt="Logo"/>
+  } @else if (config?.Name) {
+    <b class="sui p-2 pt-3 text-balance">{{ config!.Name }}</b>
   }
   <a routerLink="dashboard" routerLinkActive="active">Dashboard</a>
   <a routerLink="seiten" routerLinkActive="active">Seiten</a>
@@ -8,18 +11,28 @@
   <a routerLink="tiere" routerLinkActive="active">Tiere</a>
   <a routerLink="team" routerLinkActive="active">Team</a>
   <a routerLink="media" routerLinkActive="active">Medien</a>
-  <a routerLink="optionen" routerLinkActive="active">Optionen</a>
+  <a routerLink="optionen" routerLinkActive="active">Organisationsdaten</a>
   <div class="sui grow-1"></div>
   <div class="sui p-2">
     <app-user-menu/>
   </div>
-  <button (click)="triggerBuild()">Build</button>
-
-  <!-- TODO: in footer verschieben -->
-  @if(building()) {
-    <span>Wird gebaut...</span>
-  } @else if(tenantConfigurationService.config()?.LastBuild) {
-    <span>Letzte Build: {{tenantConfigurationService.config()?.LastBuild?.Time}}</span>
-  }
+  <div class="sui flex-y gap-2 px-2">
+    <button class="{{ tenantConfigurationService.needsRebuild() ? 'primary' : 'secondary' }} sui mb-2" (click)="triggerBuild()">
+      <b>
+        @if (building()) {
+          wird gebaut...
+        } @else {
+          Seite bauen
+        }
+      </b>
+      <br>
+      <span class="sui text-secondary text-small-2">
+       @if (config?.LastBuild) {
+         zuletzt: {{ config?.LastBuild?.Time | date: 'dd.MM.yyyy HH:mm' }}
+       }
+      </span>
+    </button>
+  </div>
   <!--------------------------------->
+
 </div>

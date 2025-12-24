@@ -26,6 +26,7 @@ type Animal struct {
 	Portrait         *MediaFile `gorm:"->"`
 	AnimalKind       string
 	FreeRoamer       sql.NullBool
+	NoAdoption       bool
 	Race             string
 	MediaFiles       []*MediaFile `gorm:"many2many:media_file_animals;constraint:OnDelete:CASCADE;"`
 }

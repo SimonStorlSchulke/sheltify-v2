@@ -40,6 +40,15 @@ button:not(.unstyled) {
     }
   }
 
+  &.red {
+    background-color: $alert;
+    color: #fff;
+
+    &:hover {
+      background-color: $alert-h1;
+    }
+  }
+
   &.success {
     background-color: $success-d1;
     color: #fff;
@@ -92,6 +101,19 @@ button:not(.unstyled) {
             outline-color: $primary;
             color: $primary;
             background-color: $primary-bg;
+        }
+    }
+
+    &.secondary-red {
+        outline: 3px solid $alert;
+        outline-offset: -3px;
+        background-color: transparent;
+        color: $alert-d1;
+
+        &:hover {
+            outline-color: $alert;
+            color: $alert-h1;
+            background-color: $alert-bg;
         }
     }
 

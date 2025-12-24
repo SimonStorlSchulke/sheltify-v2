@@ -5,6 +5,7 @@ import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
 import { CmsPage } from 'sheltify-lib/cms-types';
 import { ArticleEditorComponent } from 'src/app/editor/article-editor/article-editor.component';
 import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-input.component';
+import { NumberInputComponent } from 'src/app/forms/number-input/number-input.component';
 import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
 import { AlertService } from 'src/app/services/alert.service';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
@@ -17,7 +18,8 @@ import { LastEditedComponent } from 'src/app/ui/last-edited/last-edited.componen
     TextInputComponent,
     ArticleEditorComponent,
     CheckboxInputComponent,
-    LastEditedComponent
+    LastEditedComponent,
+    NumberInputComponent
   ],
   templateUrl: './page-editor.component.html',
   styleUrl: './page-editor.component.scss',

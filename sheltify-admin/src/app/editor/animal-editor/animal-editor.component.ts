@@ -5,7 +5,7 @@ import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { firstValueFrom, lastValueFrom, Subject } from 'rxjs';
 import { CmsArticle } from 'sheltify-lib/article-types';
 import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
-import { CmsAnimal } from 'sheltify-lib/cms-types';
+import { CmsAnimal, CmsTenantConfiguration } from 'sheltify-lib/cms-types';
 import { ArticleEditorComponent } from 'src/app/editor/article-editor/article-editor.component';
 import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-input.component';
 import { DatePickerComponent } from 'src/app/forms/date-picker/date-picker.component';
@@ -33,9 +33,6 @@ import { CmsRequestService } from '../../services/cms-request.service';
     DatePickerComponent,
     RadioButtonsInputComponent,
     NumberInputComponent,
-    NgSelectComponent,
-    NgOptionComponent,
-    DatePipe,
     SelectInputComponent,
     LastEditedComponent,
   ],
@@ -58,7 +55,7 @@ export class AnimalEditorComponent {
     public tenantConfigurationService: TenantConfigurationService,
     private modalService: ModalService,
     private animalService: AnimalService,
-    private readonly alertService: AlertService,
+    private alertService: AlertService,
   ) {
   }
 

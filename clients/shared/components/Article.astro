@@ -1,0 +1,80 @@
+---
+import SectionRendererHero from '@shared/components/sections/SectionRendererHero.astro';
+import SectionRendererTitle from '@shared/components/sections/SectionRendererTitle.astro';
+import type { CmsArticle, SectionType } from 'sheltify-lib/article-types.ts';
+import SectionRendererText from './sections/SectionRendererText.astro';
+
+interface Props {
+  article: CmsArticle;
+}
+
+const { article } = Astro.props;
+
+const fullWidthSections: SectionType[] = ['hero'];
+
+---
+<div class="themable article sui flex-y">
+
+{
+  article.Structure.Rows.map(row =>
+    {
+      const isFullWidth = row.Sections.length == 1 && fullWidthSections.includes(row.Sections[0].SectionType);
+      const sections = row.Sections.map(section => {
+        let comp;
+        switch (section.SectionType) {
+          case 'text':
+            comp = <SectionRendererText section={section}/>;
+            break;
+          case 'title':
+            comp = <SectionRendererTitle section={section}/>;
+            break;
+          case 'separator-x':
+            comp = <hr/>;
+            break;
+          case 'hero':
+            comp = <SectionRendererHero section={section}/>;
+            break;
+          default:
+            comp = <div>Sektionstyp nicht unterstützt</div>;
+            break;
+          }
+        return <div class={'section section-' + section.SectionType}>{comp}</div>;
+        })
+      return <div class={'row sui flex-x wrap' +  (isFullWidth ? ' full-width' : '')}>{sections}</div>
+      }
+    )
+  }
+</div>
+
+<style is:global lang="scss">
+  .article {
+    gap: var(--section-gap-y);
+    .row {
+      gap: var(--section-gap-x);
+
+      &:not(.full-width) {
+        width: min(1250px, 100dvw - 64px);
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+
+    .section {
+      flex-grow: 1;
+    }
+
+    .section-separator-x hr {
+      border: none;
+      background-color: #ddd;
+      height: 1.5px;
+      margin: 1.5rem 0;
+    }
+
+    .section-hero {
+      position: absolute;
+      width: 100dvw;
+      left: 0;
+    }
+  }
+</style>

@@ -14,7 +14,9 @@ export class ModalPresenter {
   public async openMediaLibrary(): Promise<CmsImage[] | undefined> {
     return await this.modalService.openFinishable<CmsImage[], MediaLibraryComponent>(
       MediaLibraryComponent,
-      undefined,
+      {
+        isPicker: true,
+      },
       'modal-lg-no-padding'
     )
   }

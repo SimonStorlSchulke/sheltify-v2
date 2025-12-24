@@ -1,11 +1,11 @@
 import { CmsArticle } from 'sheltify-lib/article-types';
-import { CmsAnimal, CmsBlogEntry, CmsPage, CmsTeamMember } from 'sheltify-lib/cms-types';
+import { CmsAnimal, CmsBlogEntry, CmsPage, CmsTeamMember, SqlNullBoolNull } from 'sheltify-lib/cms-types';
 
 export function createNewAnimal(name: string): CmsAnimal {
   return {
     ID: '',
     Birthday: "2018-03-29T15:04:05Z", //TODO
-    Castrated: {Bool: false, Valid: false},
+    Castrated: SqlNullBoolNull,
     Gender: '',
     Where: '',
     Health: '',
@@ -18,6 +18,8 @@ export function createNewAnimal(name: string): CmsAnimal {
     Name: name,
     Description: "",
     MediaFiles: [],
+    NoAdoption: false,
+    FreeRoamer: SqlNullBoolNull,
   };
 }
 
@@ -29,10 +31,10 @@ export function createNewPage(): CmsPage {
   return {
     ID: '',
     Description: "",
-    Title: '',
     Path: '',
     ShowInMenu: true,
     LinkInFooter: false,
+    Priority: 0,
   }
 }
 

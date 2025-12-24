@@ -1,8 +1,12 @@
+<div class="content-info-header sui flex-x px-3">
+  <h1>Organisationsdaten</h1>
+  <div class="sui grow-1"></div>
+  <button class="primary" (click)="save()">Speichern</button>
+</div>
 <div class="sui p-3 editor-layout">
   @if (options(); as options) {
     @let rowClass = "sui flex-x gap-2 grow-1 wrap";
 
-    <h2>Vereinsdaten</h2>
     <form class="sui flex-y gap-2 grow-1 pr-1 pb-3 pt-1">
       <div [class]="rowClass">
         <app-image-picker-single [objectFitContain]="true" label="Logo" idName="logo" [(twoWayModel)]="options.LogoHeader"/>
@@ -33,11 +37,23 @@
     </form>
 
     <h2>Administration</h2>
-    <form class="sui flex-y gap-2 grow-1 pr-1 pb-3 pt-1">
-      <app-text-input [(twoWayModel)]="options.AnimalKinds" idName="animal-kinds" label="Tierarten" explanation="Kommaseparierte Liste an Tierarten (z.B. Hund,Katze,Kaninchen)"/>
-      <app-text-input [(twoWayModel)]="options.BlogCategories" idName="blog-categories" label="Blogkategorien" explanation="Kommaseparierte Liste an Blogkategorien (z.B. Neuigkeiten,Veranstaltungen,Wissenswertes)"/>
-    </form>
+    <app-text-input [(twoWayModel)]="options.BlogCategories" idName="blog-categories" label="Blogkategorien"
+                    explanation="Kommaseparierte Liste an Blogkategorien (z.B. Neuigkeiten,Veranstaltungen,Wissenswertes)"/>
     <br>
-    <button class="primary" (click)="save()">Speichern</button>
+    <h3>Tierdatenpflege</h3>
+    <form class="sui flex-y gap-2 grow-1 pr-1 pb-3 pt-1">
+
+      <span>Verfügbare Funktionen</span>
+      <div class="sui flex-x wrap gap-2">
+        <app-checkbox-input idName="" label="Tierart auswählbar" [(twoWayModel)]="options.AnimalFeatureAnimalKind"/>
+        <app-checkbox-input idName="" label="Paten" [(twoWayModel)]="options.AnimalFeaturePatrons"/>
+        <app-checkbox-input idName="" label="Rasse" [(twoWayModel)]="options.AnimalFeatureRace"/>
+        <app-checkbox-input idName="" label="Standortangabe" [(twoWayModel)]="options.AnimalFeatureWhere"/>
+        <app-checkbox-input idName="" label="Keine Adoption" [(twoWayModel)]="options.AnimalFeatureNoAdoption"/>
+      </div>
+      @if (options.AnimalFeatureAnimalKind) {
+        <app-text-input [(twoWayModel)]="options.AnimalKinds" idName="animal-kinds" label="Tierarten" explanation="Kommaseparierte Liste an Tierarten (z.B. Hund,Katze,Kaninchen)"/>
+      }
+    </form>
   }
 </div>

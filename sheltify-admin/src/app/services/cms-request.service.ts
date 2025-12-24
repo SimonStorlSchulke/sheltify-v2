@@ -5,7 +5,7 @@ import { CmsAnimal, CmsBlogEntry, CmsImage, CmsPage, CmsTag, CmsTeamMember, CmsT
 import { LoaderService } from 'src/app/layout/loader/loader.service';
 import { AuthService, CmsUser } from './auth.service';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map, timer, tap, OperatorFunction, lastValueFrom } from 'rxjs';
+import { Observable, map, timer, tap, OperatorFunction, lastValueFrom, Subject } from 'rxjs';
 
 
 export type CollectionResult<T> = {
@@ -19,6 +19,7 @@ export class CmsRequestService {
   private httpClient = inject(HttpClient);
   private toastrSv = inject(ToastrService);
   private loaderSv = inject(LoaderService);
+  public postPatchOrDeleteCalled$ = new Subject<string>();
 
   public static readonly adminApiUrl = 'http://localhost:3000/admin/api/';
   public static readonly publicApiUrl = 'http://localhost:3000/api/';
@@ -67,7 +68,7 @@ export class CmsRequestService {
   }
 
   public getPages(): Observable<CmsPage[]> {
-    return this.get<CmsPage[]>(`${this.publicTenantsUrl}/pages`);
+    return this.get<CmsPage[]>(`${this.publicTenantsUrl}/pages`).pipe(map((pages) => pages.sort(((a,b) => b.Priority - a.Priority))));
   }
 
   public getPageByPath(path: string): Observable<CmsPage> {
@@ -218,20 +219,20 @@ export class CmsRequestService {
   private delete<T>(path: string): Observable<T> {
     const url = decodeURIComponent(CmsRequestService.adminApiUrl + path);
     return this.httpClient.delete<T>(url, this.options())
-      .pipe(this.handleRequest(url, 'Löschen erfolgreich'));
+      .pipe(this.handleRequest(url, 'Löschen erfolgreich'), tap(() => this.postPatchOrDeleteCalled$.next(path)));
   }
 
   public post<T>(path: string, body: any) {
     const url = decodeURIComponent(CmsRequestService.adminApiUrl + path);
     if (body.ID) body.ID = undefined;
     return this.httpClient.post<T>(url, body, this.options())
-      .pipe(this.handleRequest(url, 'Erstellen erfolgreich'));
+      .pipe(this.handleRequest(url, 'Erstellen erfolgreich'), tap(() => this.postPatchOrDeleteCalled$.next(path)));
   }
 
   public patch<T>(path: string, body: any) {
     const url = decodeURIComponent(CmsRequestService.adminApiUrl + path);
     return this.httpClient.patch<T>(url, body, this.options())
-      .pipe(this.handleRequest(url, 'Speichern erfolgreich'));
+      .pipe(this.handleRequest(url, 'Speichern erfolgreich'), tap(() => this.postPatchOrDeleteCalled$.next(path)));
   }
 
   /** uses PATCH if data has ID, else PATCH */

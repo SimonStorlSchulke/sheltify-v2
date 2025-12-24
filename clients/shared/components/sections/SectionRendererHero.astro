@@ -1,0 +1,21 @@
+---
+import { cms } from '@shared/cms/sheltify-access.ts';
+import type { SectionHero } from 'sheltify-lib/article-types.ts';
+interface Props {
+  section: SectionHero
+}
+
+
+const {section} = Astro.props;
+const url = cms.uploadsUrl + `${section.Content.MediaFiles[0].ID}_${section.Content.MediaFiles[0].LargestAvailableSize}.webp`;
+---
+
+<img class="hero-img" src={url}>
+
+<style is:global lang="scss">
+  .article .hero-img {
+    width: 100%;
+    max-height: 100dvh;
+    object-fit: cover;
+  }
+</style>

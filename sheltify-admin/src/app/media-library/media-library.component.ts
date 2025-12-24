@@ -49,6 +49,8 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
   public selectedImageIds = signal(new Set<string>());
   public filesHovered = signal<boolean>(false);
 
+  public isPicker = false;
+
   private refreshImages = signal(0);
 
   public images$: Signal<Observable<CmsImage[]>> = computed(() => {

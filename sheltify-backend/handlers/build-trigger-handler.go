@@ -32,6 +32,7 @@ func TriggerAstroSiteBuild(w http.ResponseWriter, r *http.Request) {
 			Time:  time.Now(),
 			Valid: true,
 		}
+		tenantonfig.NeedsRebuild = false
 		err = repository.SaveTenantConfiguration(tenantonfig)
 	}
 

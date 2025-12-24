@@ -1,4 +1,5 @@
 @use "variables" as *;
+@use "sass:list";
 
 .sui {
     &.flex-x {
@@ -15,33 +16,43 @@
         &.ai-center {
             align-items: center;
         }
+
         &.ai-stretch {
             align-items: stretch;
         }
+
         &.ai-start {
             align-items: start;
         }
+
         &.ai-end {
             align-items: end;
         }
+
         &.jc-center {
             justify-content: center;
         }
+
         &.jc-start {
             justify-content: start;
         }
+
         &.jc-end {
             justify-content: end;
         }
+
         &.jc-space-between {
             justify-content: space-between;
         }
+
         &.jc-space-around {
-          justify-content: space-around;
+            justify-content: space-around;
         }
+
         &.jc-space-evenly {
             justify-content: space-evenly;
         }
+
         &.jc-stretch {
             justify-content: stretch;
         }
@@ -63,9 +74,9 @@
         flex-grow: 3;
     }
 
-    @for $i from 1 through length($spacers) {
+    @for $i from 1 through list.length($spacers) {
         &.gap-#{$i} {
-            gap: nth($spacers, $i);
+            gap: list.nth($spacers, $i);
         }
     }
 
@@ -73,9 +84,11 @@
         display: block;
 
     }
+
     &.inline-block {
         display: inline-block;
     }
+
     &.relative {
         position: relative;
     }
@@ -86,9 +99,9 @@
 
     &.wrapper {
         width: clamp(250px, calc(100dvw - 64px), 1250px);
-      max-width: 100%;
-      margin-left: auto;
-      margin-right: auto;
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .w-100 {
@@ -154,21 +167,21 @@
     }
 
 
-  @media (max-width: $breakpoint-mobile) {
-    &.desktop {
-      display: none !important;
+    @media (max-width: $breakpoint-mobile) {
+        &.desktop {
+            display: none !important;
+        }
     }
-  }
 
-  @media (hover: none) {
-    &.desktop {
-      display: none !important;
+    @media (hover: none) {
+        &.desktop {
+            display: none !important;
+        }
     }
-  }
 
-  @media (min-width: calc($breakpoint-mobile) + 1) and (hover: Hover) {
-      &.mobile {
-          display: none !important;
-      }
-  }
+    @media (min-width: calc($breakpoint-mobile) + 1) and (hover: Hover) {
+        &.mobile {
+            display: none !important;
+        }
+    }
 }

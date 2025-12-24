@@ -9,7 +9,7 @@
     <div class="sui flex-y">
       @let teamMembers = teamMembersService.teamMembers();
       @for (teamMember of teamMembers; track teamMember) {
-        <div [class.selected]="selectedTeamMember()?.ID == teamMembers[$index].ID" class="entry sui p-1" (click)="toTeamMember(teamMember.ID)">{{teamMember.Name || ' - '}}</div>
+        <div [class.selected]="selectedTeamMember()?.ID == teamMembers[$index].ID" class="list-entry sui p-1" (click)="toTeamMember(teamMember.ID)">{{teamMember.Name || ' - '}}</div>
       }
     </div>
 

@@ -1,7 +1,8 @@
-import { Component, model, OnInit } from '@angular/core';
+import { Component, model, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { CmsTenantConfiguration } from 'sheltify-lib/cms-types';
+import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-input.component';
 import { ImagePickerSingleComponent } from 'src/app/forms/image-picker-single/image-picker-single.component';
 import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
@@ -12,7 +13,8 @@ import { TenantConfigurationService } from 'src/app/services/tenant-configuratio
   imports: [
     FormsModule,
     TextInputComponent,
-    ImagePickerSingleComponent
+    ImagePickerSingleComponent,
+    CheckboxInputComponent
   ],
   templateUrl: './tenant-configuration.component.html',
   styleUrl: './tenant-configuration.component.scss',
@@ -21,7 +23,11 @@ export class TenantConfigurationComponent implements OnInit {
 
   public options = model<CmsTenantConfiguration | undefined>(undefined);
 
-  constructor(private cmsRequestService: CmsRequestService, private tenantConfigurationService: TenantConfigurationService) {
+
+  constructor(
+    private cmsRequestService: CmsRequestService,
+    private tenantConfigurationService: TenantConfigurationService,
+  ) {
   }
 
   async ngOnInit() {
@@ -49,6 +55,12 @@ export class TenantConfigurationComponent implements OnInit {
         PhoneNumber: '',
         AnimalKinds: '',
         BlogCategories: '',
+        AnimalFeatureWhere: true,
+        AnimalFeaturePatrons: true,
+        AnimalFeatureRace: true,
+        AnimalFeatureAnimalKind: true,
+        AnimalFeatureNoAdoption: true,
+        NeedsRebuild: true,
       });
     }
   }

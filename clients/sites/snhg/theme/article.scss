@@ -1,0 +1,20 @@
+:root {
+  --section-gap-x: 50px;
+  --section-gap-y: 50px;
+  --c-primary: #ff9f10;
+}
+
+.themable.article {
+  .section-separator-x hr {
+    height: 30px;
+    position: absolute;
+    width: 100dvw;
+    left: 0;
+    background: linear-gradient(#afafaf40, #a7a7a708, transparent);
+  }
+
+  .section-hero,
+  .hero-img{
+    max-height: 750px;
+  }
+}

@@ -1,3 +1,4 @@
+import type { CmsArticle } from 'sheltify-lib/article-types.ts';
 import type { CmsAnimal, CmsPage } from 'sheltify-lib/cms-types';
 
 export class SheltifyAccess {
@@ -8,12 +9,22 @@ export class SheltifyAccess {
     "Content-Type": "application/json",
   };
 
+  public uploadsUrl = 'http://localhost:3000/api/uploads/' as const;
+
   public get apiBaseUrl() {
     return `http://localhost:3000/api/${this.tenant}/`;
   }
 
   public get pages(): Promise<CmsPage[]> {
     return this.get<CmsPage[]>('pages')
+  }
+
+  public async getPageByPath(path: string): Promise<CmsPage> {
+    return this.get<CmsPage>(`page-by-path?path=${path}`)
+  }
+
+  public async getArticle(id: string): Promise<CmsArticle> {
+    return this.get<CmsArticle>(`article/${id}`)
   }
 
   public get animals(): Promise<CmsAnimal[]> {
@@ -25,8 +36,6 @@ export class SheltifyAccess {
   }
 
   public async get<T>(path: string) {
-    console.log(this.apiBaseUrl)
-    console.log(this.apiBaseUrl + path)
     const res = await fetch(this.apiBaseUrl + path, {
       headers: this.headers,
     });

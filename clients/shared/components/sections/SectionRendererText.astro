@@ -1,0 +1,10 @@
+---
+import type { SectionText } from 'sheltify-lib/article-types.ts';
+interface Props {
+  section: SectionText
+}
+
+const {section} = Astro.props;
+---
+
+<div set:html={section.Content.Html}></div>

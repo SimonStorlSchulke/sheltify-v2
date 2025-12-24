@@ -13,11 +13,7 @@ import { AuthGuard } from './services/auth-guard.service';
 
 export const routes: Routes = [
   {path: "login", component: LoginComponent},
-  {path: "dashboard", component: DashboardComponent, providers: [
-    provideEnvironmentInitializer(async () => {
-      await inject(TenantConfigurationService).reloadConfig(); //TODO sse
-    })
-    ]},
+  {path: "dashboard", component: DashboardComponent, canActivate: [AuthGuard]},
   {path: "seiten", component: PageListComponent, canActivate: [AuthGuard]},
   {path: "seiten/:path", component: PageListComponent, canActivate: [AuthGuard]},
   {path: "blog", component: BlogListComponent, canActivate: [AuthGuard]},

@@ -1,0 +1,53 @@
+---
+import type { SectionTitle } from 'sheltify-lib/article-types.ts';
+
+interface Props {
+  section: SectionTitle;
+}
+
+const { section } = Astro.props;
+const content = section.Content;
+
+const Tag = content.Type as 'h1' | 'h2' | 'h3';
+
+const anchor = content.Anchor?.trim();
+const attrs = anchor ? { id: anchor } : {};
+---
+
+<Tag {...attrs} class="title">
+  {content.Text}
+
+  {anchor && (
+    <a
+      id={anchor ? `${anchor}-link` : undefined}
+      href={`#${anchor}`}
+      class="anchor-link"
+      aria-label="Copy link to this section"
+      onclick={`navigator.clipboard.writeText(window.location.href.split('#')[0] + '#${anchor}'); return false;`}
+    >
+      #
+    </a>
+  )}
+</Tag>
+
+{content.Underline &&
+  <hr class="title-underline">
+
+  }
+
+<style>
+    .underline {
+        text-decoration: underline;
+    }
+
+    .anchor-link {
+        margin-left: 0.4em;
+        font-size: 0.8em;
+        text-decoration: none;
+        opacity: 0.4;
+    }
+
+    .anchor-link:hover {
+        opacity: 1;
+    }
+</style>

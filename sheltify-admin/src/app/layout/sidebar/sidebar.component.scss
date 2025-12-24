@@ -2,6 +2,8 @@
 
 .sidebar {
   min-width: 180px;
+  max-width: min(275px, 20dvw);
+  width: 275px;
   background: $neutral200;
 }
 
@@ -10,6 +12,10 @@ a {
   font-weight: bold;
   &.active {
     background: linear-gradient(90deg, $primary 4px, $neutral100 4px);
+    color: $primary;
+  }
+
+  &:hover {
     color: $primary;
   }
 }

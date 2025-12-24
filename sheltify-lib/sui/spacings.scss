@@ -1,11 +1,12 @@
 @use "variables" as *;
+@use "sass:list";
 
 .sui {
-  @for $i from 1 through length($spacers) {
-    $cspacer: nth($spacers, $i);
+  @for $i from 1 through list.length($spacers) {
+    $cspacer: list.nth($spacers, $i);
 
     &.m-#{$i} {
-      margin: nth($spacers, $i);
+      margin: list.nth($spacers, $i);
     }
     &.mx-#{$i} {
       margin-left: $cspacer;
@@ -29,7 +30,7 @@
     }
 
     &.p-#{$i} {
-        padding: nth($spacers, $i);
+        padding: list.nth($spacers, $i);
       }
       &.px-#{$i} {
         padding-left: $cspacer;

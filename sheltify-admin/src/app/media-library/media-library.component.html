@@ -32,8 +32,8 @@
         </div>
       </div>
       <div class="sui flex-x gap-2">
-        <button data-testid="btn-delete-images" (click)="deleteSelectedImages()">Löschen</button>
-        <button data-testid="btn-upload-images" (click)="uploadImages()">Hochladen</button>
+        <button class="red" data-testid="btn-delete-images" (click)="deleteSelectedImages()">Löschen</button>
+        <button class="primary" data-testid="btn-upload-images" (click)="uploadImages()">Hochladen</button>
       </div>
 
       <div class="sui flex-x gap-2 wrap list dropzone" [class.files-hovered]="filesHovered()" [class.with-picker]="true">
@@ -49,9 +49,11 @@
         }
       </div>
 
-      <div class="sui flex-x gap-1 jc-end">
-        <button data-testid="btn-submit" [disabled]="selectedImageIds().size == 0" class="primary" (click)="pickImages(selectedImageIds(), images)">Auswählen</button>
-      </div>
+      @if (isPicker) {
+        <div class="sui flex-x gap-1 jc-end">
+          <button data-testid="btn-submit" [disabled]="selectedImageIds().size == 0" class="primary" (click)="pickImages(selectedImageIds(), images)">Auswählen</button>
+        </div>
+      }
 
     </div>
 
