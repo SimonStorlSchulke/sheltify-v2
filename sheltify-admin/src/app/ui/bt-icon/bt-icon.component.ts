@@ -6,6 +6,11 @@ import {
   bootstrapPlus,
   bootstrapEye,
   bootstrapCardImage,
+  bootstrapGearFill,
+  bootstrapPersonFill,
+  bootstrapJournalBookmarkFill,
+  bootstrapFileEarmarkFill,
+  bootstrapHouseFill,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
@@ -15,7 +20,13 @@ export type IconName =
   | 'X'
   | 'Plus'
   | 'Eye'
-  | 'CardImage';
+  | 'CardImage'
+  | 'GearFill'
+  | 'PersonFill'
+  | 'Paw'
+  | 'JournalBookmarkFill'
+  | 'FileEarmarkFill'
+  | 'HouseFill'
 
 @Component({
   selector: 'app-bt-icon',
@@ -31,12 +42,23 @@ export type IconName =
       bootstrapPlus,
       bootstrapEye,
       bootstrapCardImage,
+      bootstrapGearFill,
+      bootstrapPersonFill,
+      bootstrapJournalBookmarkFill,
+    bootstrapFileEarmarkFill,
+      bootstrapHouseFill,
     }
   )]
 })
 export class BtIconComponent {
   public name = input.required<IconName>()
   public size = input<'s' | 'ms' | 'ml' | 'l'>();
+
+  public customIconPath = computed(() => {
+    return new Map<IconName, string>([
+      ['Paw', '/assets/icons/paw-icon.svg']
+    ]).get(this.name())
+  })
 
   public iconSize = computed(() => {
     return new Map([

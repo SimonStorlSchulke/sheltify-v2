@@ -8,17 +8,17 @@
       type="button"
       [class]="
     !nullBoolModel.Valid
-      ? 'secondary'
+      ? 'white'
       : nullBoolModel.Bool
         ? 'primary'
-        : 'secondary'
+        : 'white'
   "
       (click)="tooggleNullBool(true)">
       Ja
     </button>
     <button
       type="button"
-      [class]="(nullBoolModel.Valid && !nullBoolModel.Bool) ? 'primary' : 'secondary'"
+      [class]="(nullBoolModel.Valid && !nullBoolModel.Bool) ? 'primary' : 'white'"
       (click)="tooggleNullBool(false)">
       Nein
     </button>
@@ -27,13 +27,13 @@
   <div class="button-group">
     <button
       type="button"
-      [class]="twoWayModel() ? 'primary' : 'secondary'"
+      [class]="twoWayModel() ? 'primary' : 'white'"
       (click)="onInput(true)">
       Ja
     </button>
     <button
       type="button"
-      [class]="twoWayModel() ? 'secondary' : 'primary'"
+      [class]="twoWayModel() ? 'white' : 'primary'"
       (click)="onInput(false)">
       Nein
     </button>

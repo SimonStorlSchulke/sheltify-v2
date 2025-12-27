@@ -13,7 +13,7 @@ export class DatePickerComponent extends InputBaseComponent {
   public twoWayModelISOStringDateOnly = model<string>();
 
   public dateOnly = computed(() => {
-    return this.twoWayModelISOString()?.split('T')[0]
+    return this.twoWayModelISOString()?.split('T')[0];
   });
 
   public onInput(event: Event) {

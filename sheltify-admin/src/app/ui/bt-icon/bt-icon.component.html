@@ -1,1 +1,5 @@
-<ng-icon [size]="iconSize() + 'px'" [name]=" 'bootstrap' + name()"/>
+@if(customIconPath()) {
+  <img [style]="'width: ' + iconSize() + 'px'" [src]="customIconPath()"/>
+} @else {
+  <ng-icon [size]="iconSize() + 'px'" [name]=" 'bootstrap' + name()"/>
+}

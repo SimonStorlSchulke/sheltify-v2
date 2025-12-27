@@ -12,29 +12,22 @@
 </div>
 
 <div class="editor-layout sui p-2">
-  <div data-testid="form-animal-editor" class="sui flex-x gap-3 grow-1">
-    <form class="sui grow-1 flex-y gap-2">
-      <app-image-picker-single [objectFitContain]="true" label="Logo" idName="logo" [(twoWayModel)]="blog().Thumbnail"/>
-      <div class="sui flex-x gap-2">
+  <div data-testid="form-animal-editor" class="sui flex-y gap-1 grow-1 card">
+    <form class="sui grow-1 flex-x gap-2">
+      <app-image-picker-single [objectFitContain]="true" label="Vorschaubild" idName="thumbnail" [(twoWayModel)]="blog().Thumbnail"/>
+      <div class="sui flex-y gap-2">
         <app-text-input idName="title" label="Titel" [(twoWayModel)]="blog().Title"/>
 
         @if (blogCategories) {
           <app-select-input idName="blogCategory" label="Kategorie" [(twoWayModel)]="blog().Category" [options]="blogCategories"/>
         }
-
-      </div>
-      <div class="sui flex-x gap-2">
         <app-checkbox-input idName="show-in-menu" label="Als Popup anzeigen" [(twoWayModel)]="blog().ShowPopup"/>
       </div>
     </form>
-
-
+      <app-last-edited [entry]="blog()"/>
   </div>
-  <app-last-edited [entry]="blog()"/>
 
   @if (blog(); as page) {
-    <br>
-    <hr>
     <br>
 
     @if (page.ArticleID) {

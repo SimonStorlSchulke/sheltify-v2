@@ -8,7 +8,7 @@
 
   @for (option of options(); track option) {
     <button
-      [class]="twoWayModel() == option ? 'primary' : 'secondary'"
+      [class]="twoWayModel() == option ? 'primary' : 'white'"
       (click)="onInput(option)">
       {{ optionTranslations()[$index] ?? option }}
     </button>

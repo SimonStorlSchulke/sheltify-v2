@@ -3,26 +3,25 @@
   @if (config?.Name) {
     <span class="sui p-2 text-balance sitename">{{ config!.Name }}</span>
   }
-  <a routerLink="dashboard" routerLinkActive="active">Dashboard</a>
-  <a routerLink="seiten" routerLinkActive="active">Seiten</a>
-  <a routerLink="blog" routerLinkActive="active">Blogs</a>
-  <a routerLink="tiere" routerLinkActive="active">Tiere</a>
-  <a routerLink="team" routerLinkActive="active">Team</a>
-  <a routerLink="media" routerLinkActive="active">Medien</a>
-  <a routerLink="optionen" routerLinkActive="active">Organisationsdaten</a>
+  <a class="sui flex-x gap-1" routerLink="" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active"> <app-bt-icon name="HouseFill"/> <span>Dashboard</span></a>
+  <a class="sui flex-x gap-1" routerLink="seiten" routerLinkActive="active"> <app-bt-icon name="FileEarmarkFill"/> <span>Seiten</span></a>
+  <a class="sui flex-x gap-1" routerLink="blog" routerLinkActive="active"> <app-bt-icon name="JournalBookmarkFill"/> <span>Blogs</span></a>
+  <a class="sui flex-x gap-1" routerLink="tiere" routerLinkActive="active"> <app-bt-icon name="Paw"/> <span>Tiere</span></a>
+  <a class="sui flex-x gap-1" routerLink="team" routerLinkActive="active"> <app-bt-icon name="PersonFill"/> <span>Team</span></a>
+  <a class="sui flex-x gap-1" routerLink="media" routerLinkActive="active"> <app-bt-icon name="CardImage"/> <span>Medien</span></a>
+  <a class="sui flex-x gap-1" routerLink="optionen" routerLinkActive="active"> <app-bt-icon name="GearFill"/> <span>Organisationsdaten</span></a>
   <div class="sui grow-1"></div>
-  <div class="sui p-2">
+  <div class="sui flex-y gap-2 px-2 buttons">
     <app-user-menu/>
-  </div>
-  <div class="sui flex-y gap-2 px-2">
+
     <button class="{{ tenantConfigurationService.needsRebuild() ? 'primary' : 'secondary' }} sui mb-2" (click)="triggerBuild()">
-      <b>
+      <span>
         @if (building()) {
           wird gebaut...
         } @else {
           Seite bauen
         }
-      </b>
+      </span>
       <br>
       <span class="sui text-secondary text-small-2">
        @if (config?.LastBuild) {

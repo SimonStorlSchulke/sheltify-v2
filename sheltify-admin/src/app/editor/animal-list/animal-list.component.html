@@ -24,7 +24,7 @@
           @for (cmsAnimal of animalList(); track $index) {
             @let animal = editedAnimals().get(cmsAnimal.ID ?? '') ?? cmsAnimal;
 
-            <tr [attr.data-testid]="'label-list-animal-' + animal.Name" class="list-entry striped" [class.selected]="selectedAnimal()?.ID == animal.ID"
+            <tr [attr.data-testid]="'label-list-animal-' + animal.Name" class="list-entry" [class.selected]="selectedAnimal()?.ID == animal.ID"
                 (click)="toAnimal(animal.ID ?? '')">
               <td class="td-image">
                 @if (animal.Portrait) {

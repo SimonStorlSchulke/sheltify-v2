@@ -1,8 +1,10 @@
+@use "colors" as *;
+
 .modal-lg,
 .modal-alert,
 .modal-fullscreen,
 .modal-lg-no-padding {
-  background: #fff;
+  background: $neutral100;
   padding: 16px;
 
   & :focus {

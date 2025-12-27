@@ -158,7 +158,7 @@ export class CmsRequestService {
     return this.get<CmsImage[]>(`${this.publicTenantsUrl}/media-by-tags?tags=` + tags.join(','));
   }
 
-  public getMediaByAnimalIDs(animalIds: string[], tenantId: string): Observable<CmsImage[]> {
+  public getMediaByAnimalIDs(animalIds: string[]): Observable<CmsImage[]> {
     return this.get<CmsImage[]>(`${this.publicTenantsUrl}/media-by-animals?animalIds=` + animalIds.join(','));
   }
 

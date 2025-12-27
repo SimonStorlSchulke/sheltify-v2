@@ -8,7 +8,7 @@
     <button class="red" (click)="delete()">Löschen</button>
   </div>
   <div class="editor-layout sui p-2">
-    <div data-testid="form-animal-editor" class="sui flex-x gap-3 grow-1">
+    <div data-testid="form-animal-editor" class="sui flex-x gap-3 grow-1 card">
       <app-image-picker-single label="Portrait" idName="portrait" [(twoWayModel)]="animal.Portrait"/>
       <form class="sui flex-y gap-2 grow-1 pr-1">
         <div [class]="rowClass">
@@ -38,12 +38,11 @@
         @if(animal.AnimalKind == 'Katze') {
           <app-checkbox-input idName="noAdoption" label="Freigänger" [(nullBoolModel)]="animal.FreeRoamer"/>
         }
+        <app-last-edited [entry]="animal"/>
       </form>
     </div>
+
     <br>
-    <br>
-    <app-last-edited [entry]="animal"/>
-    <hr class="sui my-3">
 
     @if (animal.ArticleID) {
       <app-article-editor [articleId]="animal.ArticleID ?? ''" [saveArticle]="saveArticle$" class="sui flex-y grow-1 mt-2"/>

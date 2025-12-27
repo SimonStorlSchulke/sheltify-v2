@@ -1,6 +1,6 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, computed, OnInit, output, Pipe, PipeTransform, Signal, signal } from '@angular/core';
-import { lastValueFrom, map, Observable, Subject } from 'rxjs';
+import { lastValueFrom, map, Observable } from 'rxjs';
 import { CmsAnimal, CmsImage, CmsTag } from 'sheltify-lib/cms-types';
 import { LoaderService } from 'src/app/layout/loader/loader.service';
 import { FileDropDirective } from 'src/app/media-library/file-drop.directive';
@@ -62,7 +62,7 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
 
     if(selectedAnimals.length > 0) {
       const animalIds = selectedAnimals.map(animal => animal.ID);
-      return this.cmsRequestSv.getMediaByAnimalIDs(animalIds, tenant).pipe(
+      return this.cmsRequestSv.getMediaByAnimalIDs(animalIds).pipe(
         map(images => images.sort((a, b) => {
           if (a.Title == b.Title) return a.ID < b.ID ? -1 : 1
           else return a.Title < b.Title ? -1 : 1

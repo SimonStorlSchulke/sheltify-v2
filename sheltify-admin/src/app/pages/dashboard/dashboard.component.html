@@ -7,8 +7,10 @@
   <br>
   <br>
 
-  <h2>Zuletzt bearbeitete Tiere</h2>
+  <h2 class="sui mb-1">Zuletzt bearbeitete Tiere</h2>
   @if (lastModifiedAnimals | async; as animals) {
+    <div class="sui flex-y gap-1">
+
     @for (animal of animals; track animal) {
       <a [routerLink]="['/tiere', animal.ID]" class="sui flex-x gap-2 ai-center list-entry">
         <div class="img-wrapper">
@@ -24,5 +26,6 @@
         </div>
       </a>
     }
+    </div>
   }
 </div>

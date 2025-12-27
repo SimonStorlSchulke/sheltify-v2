@@ -16,6 +16,12 @@
   }
 }
 
+.buttons {
+  color: $text-heading;
+  background: #553a2c;
+  border-top: 1px solid transparentize($primary-d1, 0.4);
+}
+
 a {
   padding: 12px 16px;
   margin-right: 22px;
@@ -35,4 +41,25 @@ a {
 
 .logo-header {
   width: 220px;
+}
+
+@media (max-width: 1200px) {
+  .sidebar {
+    max-width: 64px;
+    min-width: 64px;
+
+    .sitename {
+      display: none;
+    }
+
+    a {
+      margin-right: 0;
+      padding: 12px 18px;
+      border-radius: 0;
+      span {
+        display: none;
+      }
+    }
+
+  }
 }

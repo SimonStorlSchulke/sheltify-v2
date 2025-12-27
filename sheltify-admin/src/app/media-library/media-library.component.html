@@ -61,7 +61,7 @@
     <div class="sidebar">
       @if (selection.selected!.length == 1) {
         @let image = editedImages().get(selection.active?.ID ?? "") ?? selection.active;
-        <app-image-editor [image]="image!" (editedImage)="addEditedImage($event)" (createdTag)="onTagAdded($event, image!)"/>
+        <app-image-editor class="card" [image]="image!" (editedImage)="addEditedImage($event)" (createdTag)="onTagAdded($event, image!)"/>
       } @else if (selection.selected!.length > 0) {
         <h2>{{ selectedImageIds().size }} Elemente</h2>
       }

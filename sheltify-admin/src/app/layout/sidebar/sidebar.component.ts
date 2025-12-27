@@ -3,6 +3,7 @@ import { Component, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
+import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
 import { UserMenuComponent } from './user-menu/user-menu.component';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 
@@ -12,7 +13,8 @@ import { RouterLink, RouterLinkActive, Router } from '@angular/router';
     UserMenuComponent,
     RouterLink,
     RouterLinkActive,
-    DatePipe
+    DatePipe,
+    BtIconComponent
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'

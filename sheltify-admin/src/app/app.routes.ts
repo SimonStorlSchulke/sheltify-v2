@@ -12,8 +12,8 @@ import { AnimalListComponent } from './editor/animal-list/animal-list.component'
 import { AuthGuard } from './services/auth-guard.service';
 
 export const routes: Routes = [
+  {path: "", component: DashboardComponent, canActivate: [AuthGuard]},
   {path: "login", component: LoginComponent},
-  {path: "dashboard", component: DashboardComponent, canActivate: [AuthGuard]},
   {path: "seiten", component: PageListComponent, canActivate: [AuthGuard]},
   {path: "seiten/:path", component: PageListComponent, canActivate: [AuthGuard]},
   {path: "blog", component: BlogListComponent, canActivate: [AuthGuard]},
