@@ -15,7 +15,7 @@ func TriggerAstroSiteBuild(w http.ResponseWriter, r *http.Request) {
 
 	cmd := exec.Command("npm", "run", "build:"+user.TenantID)
 
-	cmd.Stdout = os.Stdout
+	cmd.Stdout = w
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin
 	cmd.Dir = "../clients"

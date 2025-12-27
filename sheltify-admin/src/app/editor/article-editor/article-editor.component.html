@@ -1,13 +1,14 @@
-<div class="sui flex-x jc-end grow-1 gap-2">
+
+<div class="sui flex-y grow-1 article-container card" [class.previewMode]="isPreviewMode()" [class.dragMode]="movedItem()">
+<span class="sui flex-x jc-end grow-1 gap-2">
   @if (!saveArticle()) {
     <button data-testid="btn-save-article" ( class="grow-1 primary" (click)="save()">Speichern</button>
   }
   <button data-testid="btn-preview-article" (click)="isPreviewMode.set(!isPreviewMode())" [class]="isPreviewMode() ? 'primary' : 'secondary'">
     <ng-icon name="bootstrapEye"/>
   </button>
-</div>
+</span>
 
-<div class="sui flex-y grow-1 article-container" [class.previewMode]="isPreviewMode()" [class.dragMode]="movedItem()">
   <div (click)="addSectionAtNewRow(0)" (mouseup)="moveToNewRow(0)" data-testid="row-selector-0" class="move-to-row"></div>
 
   @if (article(); as article) {
@@ -71,4 +72,5 @@
       <div (click)="addSectionAtNewRow(iRow + 1)" (mouseup)="moveToNewRow(iRow + 1)" [attr.data-testid]="'row-selector-' + iRow + 1" class="move-to-row"></div>
     }
   }
+  <span class="overscroll"></span>
 </div>

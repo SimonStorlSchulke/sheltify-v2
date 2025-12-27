@@ -1,5 +1,7 @@
-import { Component, input, output } from '@angular/core';
-import { firstValueFrom, lastValueFrom, Subject } from 'rxjs';
+import { Component, computed, input, output } from '@angular/core';
+import { bootstrapBoxArrowUpRight } from '@ng-icons/bootstrap-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { firstValueFrom, Subject } from 'rxjs';
 import { CmsArticle } from 'sheltify-lib/article-types';
 import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
 import { CmsPage } from 'sheltify-lib/cms-types';
@@ -10,6 +12,8 @@ import { TextInputComponent } from 'src/app/forms/text-input/text-input.componen
 import { AlertService } from 'src/app/services/alert.service';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { PagesService } from 'src/app/services/pages.service';
+import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
+import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
 import { LastEditedComponent } from 'src/app/ui/last-edited/last-edited.component';
 
 @Component({
@@ -19,8 +23,11 @@ import { LastEditedComponent } from 'src/app/ui/last-edited/last-edited.componen
     ArticleEditorComponent,
     CheckboxInputComponent,
     LastEditedComponent,
-    NumberInputComponent
+    NumberInputComponent,
+    NgIcon,
+    BtIconComponent,
   ],
+  providers: [provideIcons({bootstrapBoxArrowUpRight})],
   templateUrl: './page-editor.component.html',
   styleUrl: './page-editor.component.scss',
 })
@@ -30,11 +37,20 @@ export class PageEditorComponent {
   deleted = output();
 
   constructor(
+    public tenantConfigurationService: TenantConfigurationService,
     private cmsRequestService: CmsRequestService,
     private pagesService: PagesService,
-    private readonly alertService: AlertService,
+    private alertService: AlertService,
   ) {
   }
+
+  public pageUrl = computed(() => {
+    let url = this.tenantConfigurationService.config()?.SiteUrl;
+    if (!url) return undefined;
+    if (!url.endsWith('/')) url += '/';
+    console.log(url + this.page().Path)
+    return url + this.page().Path;
+  });
 
   public async save(skipArticle: boolean = false) {
     this.pagesService.savePage(this.page());

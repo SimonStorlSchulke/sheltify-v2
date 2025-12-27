@@ -3,7 +3,6 @@ import { Component, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
-import { CmsImageDirective } from 'src/app/ui/cms-image.directive';
 import { UserMenuComponent } from './user-menu/user-menu.component';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 
@@ -13,7 +12,6 @@ import { RouterLink, RouterLinkActive, Router } from '@angular/router';
     UserMenuComponent,
     RouterLink,
     RouterLinkActive,
-    CmsImageDirective,
     DatePipe
   ],
   templateUrl: './sidebar.component.html',
@@ -30,7 +28,8 @@ export class SidebarComponent {
   public async triggerBuild() {
     this.building.set(true);
     try {
-      await firstValueFrom(this.cmsRequestService.triggerBuild());
+      const response = await firstValueFrom(this.cmsRequestService.triggerBuild());
+      console.log(response)
       await this.tenantConfigurationService.reloadConfig();
     } finally {
       this.building.set(false);

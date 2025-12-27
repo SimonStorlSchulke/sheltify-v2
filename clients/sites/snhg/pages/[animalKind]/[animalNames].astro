@@ -1,0 +1,33 @@
+---
+import { cms } from '@shared/cms/sheltify-access.ts';
+import AnimalArticle from '@shared/components/AnimalArticle.astro';
+import { animalsByArticleId } from 'sheltify-lib/animal-util.ts';
+import SnhgLayout from '../../layouts/SnhgLayout.astro';
+export async function getStaticPaths() {
+  const animals = await cms.animals;
+
+  const animalsByArticle = animalsByArticleId(animals);
+
+
+  const defaultAnimalKind = (await cms.tenantConfig).DefaultAnimalKind;
+
+  const paths = Object.entries(animalsByArticle).map(entry => {
+    const animals = entry[1];
+    const animalNames = animals.map(animal => animal.Name).join('-');
+
+    return {params: {
+      animalKind: animals[0].AnimalKind ?? defaultAnimalKind,
+        animalNames: animalNames,
+      }}
+  })
+
+  console.log(paths);
+  return paths;
+}
+
+const {animalKind, animalNames} = Astro.params;
+---
+
+<SnhgLayout>
+  <AnimalArticle animalKind={animalKind} animalNames={animalNames}/>
+</SnhgLayout>

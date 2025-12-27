@@ -1,5 +1,10 @@
 @use "colors" as *;
 
+
+body {
+  color: $text;
+}
+
 .left-sidebar-layout {
   height: 100%;
   display: flex;
@@ -14,13 +19,13 @@
 
   .content {
     flex-grow: 1;
+    background: $neutral100;
   }
 }
 
 .content-info-header {
   min-height: 74px;
-  max-height: 74px;
-  padding: 16px 16px 16px 0;
+  padding: 16px;
   background: $neutral100;
 }
 
@@ -36,6 +41,7 @@
 
 .list-entry {
   cursor: pointer;
+  font-weight: 400;
 
   &.striped {
     &:nth-child(3n){background-color: $neutral100;}
@@ -65,8 +71,10 @@
   }
 
   &.selected {
-    outline: 3px solid $primary;
-    outline-offset: -3px;
+    outline: 1px solid transparentize($primary-d1, 0.9);
+    outline-offset: -1px;
+    border-radius: 6px;
+    background-color: transparentize($primary, 0.82);
   }
 }
 
@@ -75,4 +83,20 @@
   height: calc(100dvh - 100px);
   overflow: auto;
   max-width: 1300px;
+
+  .overscroll {
+    height: 500px;
+  }
+}
+
+.card {
+  background: $neutral0;
+  padding: 16px;
+  border-radius: 6px;
+  outline: 1px solid transparentize($primary-d1, 0.94);
+  box-shadow: 4px 4px 8px $neutral150;
+}
+
+.border {
+  outline: 1.5px solid $primary;
 }

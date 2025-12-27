@@ -9,6 +9,7 @@ export function createEmptySection(SectionType: SectionType): Section {
           Text: '',
           Type: 'h1',
           Anchor: '',
+          Centered: false,
         }
       };
     case 'text':
@@ -39,6 +40,7 @@ export function createEmptySection(SectionType: SectionType): Section {
         Content: {
           MediaFiles: [],
           Text: '',
+          DurationSeconds: 5,
         }
       };
     case 'html':
@@ -58,6 +60,7 @@ export function createEmptySection(SectionType: SectionType): Section {
           SizeRange: [undefined, undefined],
           Gender: 'both',
           InGermany: undefined,
+          Names: '',
         },
         TempFoundAnimals: [],
       };

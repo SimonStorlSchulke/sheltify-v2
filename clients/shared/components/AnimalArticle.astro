@@ -1,0 +1,33 @@
+---
+import { cms } from '@shared/cms/sheltify-access.ts';
+interface Props {
+  animalKind: string,
+  animalNames: string,
+}
+
+const {animalKind, animalNames} = Astro.props;
+
+const animals = await cms.getFilteredAnimals({
+  AnimalKind: animalKind,
+  MaxNumber: undefined,
+  AgeRange: [undefined, undefined],
+  SizeRange: [undefined, undefined],
+  Gender: 'both',
+  InGermany: undefined,
+  Names: animalNames,
+})
+
+---
+
+<div class="wrapper">{animalKind} {animalNames}</div>
+
+
+<style>
+  .wrapper {
+      padding-top: 32px;
+      width: var(--wrapper-width);
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+  }
+</style>

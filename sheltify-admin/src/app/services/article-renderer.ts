@@ -52,13 +52,15 @@ export const sectionLabels = new Map<SectionType, string>([
 
 function renderTitleSection(section: SectionTitle) {
   const c = section.Content;
+  console.log(c.Centered, c.Centered ? 'text-align: center;' : '')
+  const style = c.Centered ? 'text-align: center;' : '';
   let html = c.Anchor ? `
-  <${c.Type} class="title" id="${c.Anchor}">
+  <${c.Type} style="${style}" class="title" id="${c.Anchor}">
     <span class="title-text"">${c.Text}</span>
     <a class="title-hashtag">#</a>
   </${c.Type}>`
   :
-  `<${c.Type}>${c.Text}</${c.Type}>`
+  `<${c.Type} style="${style}">${c.Text}</${c.Type}>`
 
   if(c.Underline) {
     html += `<hr>`;

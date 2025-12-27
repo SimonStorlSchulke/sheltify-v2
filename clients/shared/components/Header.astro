@@ -1,24 +1,33 @@
 ---
 import { cms } from "@shared/cms/sheltify-access"
+import CmsImg from '@shared/components/ui/CmsImg.astro';
 import { createPageStructure } from 'sheltify-lib/page-structure.ts';
 import HeaderEntry from "./HeaderEntry.astro";
 
 const pages = (await cms.getPages())
   .filter(page => page.ShowInMenu)
-  .sort(((a,b) => b.Priority - a.Priority));
+  .sort(((a, b) => b.Priority - a.Priority));
 
 const menu = [...createPageStructure(pages).values()];
+const logo = (await cms.tenantConfig).LogoHeader;
 ---
 
-<nav>
-  {menu.map((item) =>
-    <HeaderEntry entry={item}/>
-  )
-  }
+<nav class="themable header">
+  <div class="logo">
+    {logo && <CmsImg img={logo} size="medium"/>}
+  </div>
+  <div class="menu">
+    {menu.map((item) =>
+      <HeaderEntry entry={item}/>
+    )
+    }
+  </div>
 </nav>
 
 <style lang="scss">
   nav {
+    display: flex;
+    align-items: center;
     height: var(--header-height);
     top: 0;
     transition: opacity 0.3s;
@@ -26,17 +35,27 @@ const menu = [...createPageStructure(pages).values()];
     z-index: 22;
     width: 100dvw;
     box-shadow: 0 0 22px rgba(0, 0, 0, 0.22);
-    display: flex;
-    align-items: center;
     padding: 0 16px;
     gap: 24px;
     background-color: #fff;
     font-size: 1.25rem;
     font-weight: 600;
 
-    .logo-link,
-    img {
+    .logo {
+      padding-left: 42px;
+      height: 100%;
+    }
+
+    .logo :global(img) {
       height: 90%;
     }
+
+    .menu {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+    }
   }
+
 </style>

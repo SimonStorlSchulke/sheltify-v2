@@ -1,4 +1,16 @@
 <div class="sui flex-y gap-2">
   <app-image-picker-multi [idName]="'bilder'" [label]="'Bilder auswählen'" [(twoWayModel)]="section().Content!.MediaFiles"/>
-  <app-text-input idName="text" label="Text" [(twoWayModel)]="section().Content.Text"/>
+  <div class="sui flex-x gap-2">
+
+    <app-text-input class="sui grow-1" idName="text" label="Text" [(twoWayModel)]="section().Content.Text"/>
+
+    @if (section().Content.MediaFiles.length > 1) {
+      <app-number-input
+        idName="duration"
+        label="Anzeigedauer"
+        [(twoWayModel)]="section().Content.DurationSeconds"
+        explanation="Definiert in Sekunden, wie schnell zwischen den Bildern gewechselt wird"/>
+    }
+  </div>
+
 </div>

@@ -1,16 +1,5 @@
 @use "colors" as *;
 
 input {
-  border-radius: 5px;
-  padding: 0.5rem;
-  background-color: #fff;
-  transition: background-color 0.3s;
-  border: 2px solid #aaa;
   max-width: 96px;
-
-  &:focus {
-    background-color: $primary-h10;
-    outline: none;
-    border: 2px solid $primary;
-  }
 }

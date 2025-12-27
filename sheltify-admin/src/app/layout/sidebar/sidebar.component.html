@@ -1,9 +1,7 @@
 @let config = tenantConfigurationService.config();
 <div class="sidebar sui color-grey-400 h-100 flex-y h-100">
-  @if (config?.LogoHeader) {
-    <img class="logo-header" [cmsImage]="config!.LogoHeader!" alt="Logo"/>
-  } @else if (config?.Name) {
-    <b class="sui p-2 pt-3 text-balance">{{ config!.Name }}</b>
+  @if (config?.Name) {
+    <span class="sui p-2 text-balance sitename">{{ config!.Name }}</span>
   }
   <a routerLink="dashboard" routerLinkActive="active">Dashboard</a>
   <a routerLink="seiten" routerLinkActive="active">Seiten</a>

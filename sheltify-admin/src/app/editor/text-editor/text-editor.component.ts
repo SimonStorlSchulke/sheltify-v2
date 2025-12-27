@@ -8,6 +8,7 @@ import { Schema, NodeSpec, MarkSpec, Mark, DOMOutputSpec } from 'prosemirror-mod
 import { ButtonLinkDialogComponent } from 'src/app/editor/text-editor/button-link-dialog/button-link-dialog.component';
 import { ModalService } from 'src/app/services/modal.service';
 import { marks as defaultMarks } from 'ngx-editor';
+import { nodes as defaultNodes } from 'ngx-editor';
 
 const nodes: { [key: string]: NodeSpec } = {
   doc: { content: "block+" },
@@ -48,7 +49,10 @@ const myLink: MarkSpec = {
 };
 
 const schema = new Schema({
-  nodes: nodes,
+  nodes: {
+    ...defaultNodes,
+    ...nodes
+  },
   marks: {
     ...defaultMarks,
     myLink: myLink,

@@ -5,13 +5,16 @@ interface Props {
   section: SectionTitle;
 }
 
-const { section } = Astro.props;
+const {section} = Astro.props;
 const content = section.Content;
 
 const Tag = content.Type as 'h1' | 'h2' | 'h3';
 
 const anchor = content.Anchor?.trim();
-const attrs = anchor ? { id: anchor } : {};
+const attrs = {
+  ...(anchor ? {id: anchor} : {}),
+  style: content.Centered ? 'text-align: center;' : '',
+};
 ---
 
 <Tag {...attrs} class="title">
@@ -31,7 +34,7 @@ const attrs = anchor ? { id: anchor } : {};
 </Tag>
 
 {content.Underline &&
-  <hr class="title-underline">
+<hr class="title-underline">
 
   }
 

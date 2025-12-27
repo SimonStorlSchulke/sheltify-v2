@@ -1,0 +1,22 @@
+---
+import { getImageSrc } from '@shared/cms/cms-image.ts';
+import type { CmsImage, CmsImagesSize } from 'sheltify-lib/cms-types.ts';
+interface Props {
+  img: CmsImage,
+  size: CmsImagesSize,
+  cssClass?: string,
+  cssStyle?: string,
+  contain?: boolean,
+}
+const {img, size, cssClass, cssStyle, contain} = Astro.props;
+
+const style = `object-fit: ${contain ? 'contain' : 'cover'}; object-position: ${(img.FocusX * 100).toFixed(2)}% ${(img.FocusY * 100).toFixed(2)}%;` + (cssStyle ? ` ${cssStyle}` : '');
+---
+
+<img style={style} class={cssClass} src={getImageSrc(img, size)} alt={img.Description || img.Title} />
+
+<style lang="scss">
+  img {
+      object-fit: cover;
+  }
+</style>

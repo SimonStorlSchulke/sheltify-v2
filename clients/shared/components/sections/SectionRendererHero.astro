@@ -1,22 +1,105 @@
 ---
-import { cms } from '@shared/cms/sheltify-access.ts';
+import CmsImg from '@shared/components/ui/CmsImg.astro';
 import type { SectionHero } from 'sheltify-lib/article-types.ts';
+import type { CmsImage } from 'sheltify-lib/cms-types.ts';
 interface Props {
   section: SectionHero,
   isTopHero: boolean,
 }
 
-
 const {section, isTopHero} = Astro.props;
-const url = cms.uploadsUrl + `${section.Content.MediaFiles[0].ID}_${section.Content.MediaFiles[0].LargestAvailableSize}.webp`;
+const cmsImages = section.Content.MediaFiles;
 ---
 
-<img class="hero-img" src={url}>
+<div class:list={['hero-container', {'top-hero': isTopHero}]}>
+  <div data-duration={section.Content.DurationSeconds ?? 5} data-image-count={cmsImages.length + 1} class="hero-scroller">
+    {
+      cmsImages.map((image: CmsImage, index) => (
+        <CmsImg
+          cssStyle={`transform: translateX(${index * 100}%)`}
+          cssClass="hero-img"
+          img={image}
+          size="xlarge"
+        />
+      ))
+    }
+
+    <CmsImg
+      cssStyle={`transform: translateX(${cmsImages.length * 100}%)`}
+      cssClass="hero-img"
+      img={cmsImages[0]}
+      size="xlarge"
+    />
+
+  </div>
+  {section.Content.Text &&
+    <h1><span>{section.Content.Text}</span></h1>
+  }
+</div>
+
+<script>
+  const containers = document.querySelectorAll<HTMLDivElement>('.hero-scroller')!;
+
+  for (const container of containers) {
+    const totalSlides = Number(container.dataset.imageCount);
+    const duration = Number(container.dataset.duration);
+
+    if (totalSlides != 1) {
+      let index = 1;
+
+      setInterval(() => {
+        container.style.transition = 'transform 1s';
+        container.style.transform = `translateX(${-index * 100}%)`;
+        index++;
+
+        if (index === totalSlides) {
+          // After the animation finishes, jump back without transition
+          setTimeout(() => {
+            container.style.transition = 'none';
+            container.style.transform = 'translateX(0%)';
+            index = 1;
+          }, 1000);
+        }
+      }, duration * 1000);
+    }
+  }
+</script>
+
 
 <style is:global lang="scss">
-  .article .hero-img {
-    width: 100%;
-    max-height: 100dvh;
-    object-fit: cover;
+  .article {
+    .hero-container {
+      display: block;
+      position: relative;
+      height: var(--hero-height);
+      overflow: hidden;
+
+      &.top-hero {
+        height: var(--hero-top-height);
+
+        .hero-img {
+          height: var(--hero-top-height);
+        }
+      }
+
+      .hero-scroller {
+        transition: transform 1s;
+      }
+
+      .hero-img {
+        height: var(--hero-height);
+        width: 100%;
+        max-height: 100dvh;
+        position: absolute;
+      }
+
+      h1 {
+        position: absolute;
+        z-index: 1;
+        bottom: 20%;
+        width: 100%;
+        padding-left: 20%;
+      }
+    }
   }
 </style>

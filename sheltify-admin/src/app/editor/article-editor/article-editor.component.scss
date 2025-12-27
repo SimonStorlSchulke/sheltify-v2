@@ -95,7 +95,8 @@
 
 .article-column {
   &.edit-mode {
-    outline: 2px solid $primary !important;
+    outline: 1px solid transparentize($primary-d1, 0.94) !important;
+    box-shadow: 3px 3px 12px $neutral200;
     .section-editor {
       pointer-events: all;
       opacity: 100%;

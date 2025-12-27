@@ -43,16 +43,19 @@
   </div>
   <div class="content">
     @if (editorOpened) {
-      @let animalsWithSameArticle = animalService.animalsByArticleID()[selectedAnimal()?.ArticleID ?? ''] ?? [];
 
       <div class="content-info-header">
-        @if (animalsWithSameArticle.length > 1) {
-          @for (animal of animalsWithSameArticle; track animal) {
+        <div class="sui flex-x ai-center gap-2 grow-1">
+
+        @if (animalsWithSameArticle().length > 1) {
+          @for (animal of animalsWithSameArticle(); track animal) {
             <button class="tab large" [class.active]="selectedAnimal()?.ID == animal.ID" (click)="toAnimal(animal.ID ?? '')">{{ animal.Name }}</button>
           }
         } @else {
           <h1>{{ selectedAnimal()?.Name }}</h1>
         }
+        <a [href]="pageUrl()" target="_blank"><app-bt-icon name="BoxArrowUpRight" size="ml"/></a>
+        </div>
       </div>
 
       <app-animal-editor

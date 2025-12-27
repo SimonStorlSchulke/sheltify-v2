@@ -7,6 +7,8 @@ import { TextInputModalComponent } from 'src/app/forms/text-input-modal/text-inp
 import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
 import { AnimalService } from 'src/app/services/animal.service';
 import { ModalService } from 'src/app/services/modal.service';
+import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
+import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
 import { CmsImageDirective } from 'src/app/ui/cms-image.directive';
 import { AnimalEditorComponent } from '../../editor/animal-editor/animal-editor.component';
 import { CmsRequestService } from '../../services/cms-request.service';
@@ -19,6 +21,7 @@ import { DatePipe } from '@angular/common';
     AnimalEditorComponent,
     CmsImageDirective,
     TextInputComponent,
+    BtIconComponent,
   ],
   templateUrl: './animal-list.component.html',
   styleUrl: './animal-list.component.scss',
@@ -30,14 +33,30 @@ export class AnimalListComponent implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
   private router = inject(Router);
 
+  public editedAnimals = signal(new Map<string, CmsAnimal>([]));
 
-  editedAnimals = signal(new Map<string, CmsAnimal>([]));
+  public selectedAnimal = signal<CmsAnimal | null>(null);
 
-  selectedAnimal = signal<CmsAnimal | null>(null);
+  public animalsWithSameArticle = computed(() => {
+    return this.animalService.animalsByArticleID()[this.selectedAnimal()?.ArticleID ?? ''] ?? []
+  })
 
-  search = signal('');
+  public pageUrl = computed(() => {
+    let url = this.tenantConfigurationService.config()?.SiteUrl;
+    if (!url) return undefined;
+    if (!url.endsWith('/')) url += '/';
+    const animals = this.animalsWithSameArticle();
+    if(!animals[0]?.AnimalKind) return undefined;
+    return url + animals[0].AnimalKind + '/' + animals.map(animal => animal.Name).join('-');
+  })
 
-  constructor(private modalService: ModalService, protected animalService: AnimalService) {
+  public search = signal('');
+
+  constructor(
+    public animalService: AnimalService,
+    private modalService: ModalService,
+    private tenantConfigurationService: TenantConfigurationService,
+    ) {
   }
 
   public animalList = computed(() => {

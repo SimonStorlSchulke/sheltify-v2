@@ -1,7 +1,8 @@
 :root {
   --section-gap-x: 50px;
   --section-gap-y: 50px;
-  --c-primary: #ff9f10;
+  --hero-height: 600px;
+  --hero-top-height: 400px;
 }
 
 .themable.article {
@@ -13,8 +14,41 @@
     background: linear-gradient(#afafaf40, #a7a7a708, transparent);
   }
 
-  .section-hero,
-  .hero-img{
-    max-height: 750px;
+  h1 {
+    font-family: Poppins, system-ui;
+    font-size: 40px;
+    color: var(--c-primary);
+    font-weight: 500;
+  }
+
+  h2 {
+    font-family: Poppins, system-ui;
+    font-size: 24px;
+    font-weight: normal;
+    color: #454545;
+  }
+
+  .section-hero {
+    .hero-container {
+      margin-bottom: 50px;
+
+      &.top-hero::after {
+        content: "";
+        display: block;
+        height: 100px;
+        background: #fff;
+        position: absolute;
+        z-index: 1;
+        width: 100%;
+        transform: skew(0deg, -2deg);
+        top: 350px;
+      }
+    }
+
+    h1 {
+      font-weight: 800;
+      left: 20px;
+      font-size: 60px;
+    }
   }
 }

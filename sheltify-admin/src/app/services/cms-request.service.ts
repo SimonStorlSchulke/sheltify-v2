@@ -24,8 +24,9 @@ export class CmsRequestService {
   public static readonly adminApiUrl = 'http://localhost:3000/admin/api/';
   public static readonly publicApiUrl = 'http://localhost:3000/api/';
 
-  private options(contentType = 'application/json') {
+  private options(contentType = 'application/json', raw = false) {
     return {
+      raw,
       timeout: 10000,
       headers: {
         'Content-Type': contentType,
@@ -174,7 +175,14 @@ export class CmsRequestService {
   }
 
   public triggerBuild() {
-    return this.httpClient.get<void>(CmsRequestService.adminApiUrl + 'trigger-build', this.options());
+    return this.httpClient.get(CmsRequestService.adminApiUrl + 'trigger-build', {
+      timeout: 10000,
+      responseType: 'text',
+      headers: {
+        Authorization: `Bearer ${this.authService.bearer}`,
+      },
+      withCredentials: true,
+    });
   }
 
   public uploadScaledImage(files: { size: string; blob: Blob; }[], fileName: string, commaSeparatedTags: string, commaSeparatedAnimalIds: string) {

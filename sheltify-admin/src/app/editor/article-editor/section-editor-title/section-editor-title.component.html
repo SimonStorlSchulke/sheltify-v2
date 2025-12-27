@@ -10,7 +10,6 @@
       <div class="sui flex-x ai-center gap-1">
         <label>Größe</label>
       </div>
-
       <ng-select class="type-selector" [clearable]="false" [(ngModel)]="section().Content.Type">
         <ng-option value="h1">
           <h1>Überschrift 1</h1>
@@ -26,8 +25,10 @@
         </ng-option>
       </ng-select>
 
-      <app-checkbox-input idName="underlined" label="Unterstrichen" [(twoWayModel)]="section().Content.Underline!"/>
     </div>
+
+    <app-checkbox-input idName="underlined" label="Unterstrichen" [(twoWayModel)]="section().Content.Underline!"/>
+    <app-checkbox-input idName="underlined" label="Zentriert" [(twoWayModel)]="section().Content.Centered!"/>
 
   </div>
   <app-text-input

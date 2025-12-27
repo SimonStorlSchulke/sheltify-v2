@@ -1,0 +1,36 @@
+---
+import { cms } from '@shared/cms/sheltify-access.ts';
+import CmsImg from '@shared/components/ui/CmsImg.astro';
+import type { SectionImages } from 'sheltify-lib/article-types.ts';
+import type { CmsImage } from 'sheltify-lib/cms-types.ts';
+interface Props {
+  section: SectionImages,
+  isTopHero: boolean,
+}
+
+
+const {section, isTopHero} = Astro.props;
+const url = cms.uploadsUrl + `${section.Content.MediaFiles[0].ID}_${section.Content.MediaFiles[0].LargestAvailableSize}.webp`;
+---
+
+<div class:list={['hero-container', {'top-hero': isTopHero}]}>
+
+  {
+    section.Content.MediaFiles.map((image: CmsImage) => {
+      return <CmsImg img={image} size="medium"/>;
+    })
+  }
+
+</div>
+
+<script>
+
+</script>
+
+<style is:global lang="scss">
+  .article .hero-img {
+    width: 100%;
+    max-height: 100dvh;
+    object-fit: cover;
+  }
+</style>

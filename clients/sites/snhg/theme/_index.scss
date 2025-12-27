@@ -1,6 +1,11 @@
 @use "header";
 @use "article";
 @use "footer";
+@use "font";
+
+:root {
+  --c-primary: #ff9f10;
+}
 
 :root {
   --wrapper-width: min(1250px, 100dvw - 64px);

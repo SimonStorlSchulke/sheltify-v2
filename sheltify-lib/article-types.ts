@@ -54,6 +54,7 @@ export type SectionHero = {
   Content: {
     Text: string;
     MediaFiles: CmsImage[];
+    DurationSeconds?: number;
   },
 };
 
@@ -64,6 +65,7 @@ export type SectionTitle = {
     Type: 'h1' | 'h2' | 'h3' | 'h4',
     Anchor: string,
     Underline?: boolean,
+    Centered: boolean,
   },
 };
 
@@ -80,6 +82,7 @@ export type AnimalsFilter = {
   SizeRange: [number | undefined, number | undefined],
   Gender: 'male' | 'female' | 'both',
   InGermany: boolean | undefined,
+  Names: string | undefined,
 }
 
 export type SectionVideo = {

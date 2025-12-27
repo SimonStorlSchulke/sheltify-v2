@@ -7,7 +7,7 @@
     <button [class.warning]="!isPublished" [class.success]="isPublished" (click)="togglePublished()">{{ animal.PublishedAt?.Valid ? 'Depublizieren' : 'Publizieren' }}</button>
     <button class="red" (click)="delete()">Löschen</button>
   </div>
-  <div class="editor-layout sui p-3">
+  <div class="editor-layout sui p-2">
     <div data-testid="form-animal-editor" class="sui flex-x gap-3 grow-1">
       <app-image-picker-single label="Portrait" idName="portrait" [(twoWayModel)]="animal.Portrait"/>
       <form class="sui flex-y gap-2 grow-1 pr-1">

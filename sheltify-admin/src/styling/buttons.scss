@@ -3,33 +3,33 @@
 
 .button:not(.unstyled),
 button:not(.unstyled) {
-    border: none;
-    border-radius: 10px;
-    padding: 0.5em 1.2em;
-    cursor: pointer;
-    transition: background-color 0.27s, outline-color 0.27s, color 0.27s, box-shadow 0.3s;
+  border: none;
+  border-radius: 10px;
+  padding: 0.5em 1.2em;
+  cursor: pointer;
+  transition: background-color 0.27s, outline-color 0.27s, color 0.27s, box-shadow 0.3s;
+
+  &:hover {
+    box-shadow: 1px 2px 4px #0000003f;
+  }
+
+  &.small {
+    padding: 0.15em 0.5em;
+    font-size: $fontsize-small;
+  }
+
+  &.large {
+    font-size: $fontsize-default;
+  }
+
+  &.primary {
+    background-color: $primary;
+    color: #fff;
 
     &:hover {
-        box-shadow: 1px 2px 4px #0000003f;
+      background-color: $accent;
     }
-
-    &.small {
-        padding: 0.15em 0.5em;
-        font-size: $fontsize-small;
-    }
-
-    &.large {
-        font-size: $fontsize-default;
-    }
-
-    &.primary {
-        background-color: $primary;
-        color: #fff;
-
-        &:hover {
-            background-color: $primary-h1;
-        }
-    }
+  }
 
   &.warning {
     background-color: $warning;
@@ -62,89 +62,91 @@ button:not(.unstyled) {
     background: $neutral150;
     border-radius: 0;
     font-weight: 500;
+
     &:hover {
       color: $primary;
       box-shadow: none;
     }
+
     &.active {
       background: linear-gradient($primary 4px, #fff 4px);
     }
   }
 
-    &.alert {
-        background-color: $alert;
-        color: #fff;
+  &.alert {
+    background-color: $alert;
+    color: #fff;
 
-        &:hover {
-            background-color: $alert-h1;
-        }
+    &:hover {
+      background-color: $alert-h1;
+    }
+  }
+
+  &.cto, &.call-to-action {
+    background-color: $cto;
+    color: #fff;
+    transition: transform 0.27s, background-color 0.27s;
+
+    &:hover {
+      background-color: $cto-d1;
+      transform: scale(1.05) translateY(-1%);
+    }
+  }
+
+  &.secondary {
+    outline: none;
+    outline-offset: -3px;
+    background-color: $primary-h5;
+    color: $primary-d2;
+    font-weight: 500;
+
+    &:hover {
+      outline-color: $primary;
+      background-color: $primary-h10;
+    }
+  }
+
+  &.secondary-red {
+    outline: 3px solid $alert;
+    outline-offset: -3px;
+    background-color: transparent;
+    color: $alert-d1;
+
+    &:hover {
+      outline-color: $alert;
+      color: $alert-h1;
+      background-color: $alert-bg;
+    }
+  }
+
+  &.bubble {
+
+    outline: 3px solid $primary;
+    outline-offset: -3px;
+    background-color: transparent;
+    color: $primary;
+
+    &:hover {
+      outline-color: $primary;
+      color: $primary;
+      background-color: $primary-bg;
     }
 
-    &.cto, &.call-to-action {
-        background-color: $cto;
-        color: #fff;
-        transition: transform 0.27s, background-color 0.27s;
+    &.active {
+      background-color: $primary;
+      color: #fff;
 
-        &:hover {
-            background-color: $cto-d1;
-            transform: scale(1.05) translateY(-1%);
-        }
+      &:hover {
+        background-color: $primary;
+      }
     }
-
-    &.secondary {
-        outline: 3px solid $primary;
-        outline-offset: -3px;
-        background-color: transparent;
-        color: $primary;
-
-        &:hover {
-            outline-color: $primary;
-            color: $primary;
-            background-color: $primary-bg;
-        }
-    }
-
-    &.secondary-red {
-        outline: 3px solid $alert;
-        outline-offset: -3px;
-        background-color: transparent;
-        color: $alert-d1;
-
-        &:hover {
-            outline-color: $alert;
-            color: $alert-h1;
-            background-color: $alert-bg;
-        }
-    }
-
-    &.bubble {
-
-        outline: 3px solid $primary;
-        outline-offset: -3px;
-        background-color: transparent;
-        color: $primary;
-
-        &:hover {
-            outline-color: $primary;
-            color: $primary;
-            background-color: $primary-bg;
-        }
-
-        &.active {
-            background-color: $primary;
-            color: #fff;
-
-            &:hover {
-                background-color: $primary;
-            }
-        }
-    }
+  }
 }
 
 button.unstyled {
-    border: inherit;
-    background-color: inherit;
-    color: inherit;
+  border: inherit;
+  background-color: inherit;
+  color: inherit;
 }
 
 button:disabled {
@@ -157,9 +159,11 @@ button:disabled {
     border-radius: 0;
     margin-right: -3px;
   }
+
   :last-child {
     border-radius: 0 10px 10px 0;
   }
+
   :first-child {
     border-radius: 10px 0 0 10px;
   }

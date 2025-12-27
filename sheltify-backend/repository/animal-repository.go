@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"sheltify-new-backend/shtypes"
+	"strings"
 	"time"
 )
 
@@ -16,6 +17,7 @@ type AnimalsFilter struct {
 	SizeMax    int
 	Gender     string
 	InGermany  bool
+	Names      string //separated by "-"
 }
 
 func GetFilteredAnimals(filter AnimalsFilter, tenant string) (*[]shtypes.Animal, error) {
@@ -24,6 +26,11 @@ func GetFilteredAnimals(filter AnimalsFilter, tenant string) (*[]shtypes.Animal,
 	query := db.Model(&shtypes.Animal{})
 
 	query = query.Where("tenant_id = ?", tenant)
+
+	if filter.Names != "" {
+		names := strings.Split(filter.Names, "-")
+		query.Where("name IN ?", names)
+	}
 
 	if filter.AnimalKind != "" {
 		query = query.Where("type = ?", filter.AnimalKind)

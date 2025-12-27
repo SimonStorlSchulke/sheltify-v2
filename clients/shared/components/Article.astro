@@ -1,4 +1,5 @@
 ---
+import SectionRendererAnimalList from '@shared/components/sections/SectionRendererAnimalList.astro';
 import SectionRendererHero from '@shared/components/sections/SectionRendererHero.astro';
 import SectionRendererTitle from '@shared/components/sections/SectionRendererTitle.astro';
 import type { CmsArticle, SectionType } from 'sheltify-lib/article-types.ts';
@@ -9,20 +10,20 @@ interface Props {
 }
 
 const { article } = Astro.props;
-
 const fullWidthSections: SectionType[] = ['hero'];
 
 let rowindex = 0;
+
+const topPadding = 48;
 ---
-<div class="themable article sui flex-y">
+<div style={'margin-top: ' + topPadding + 'px'} class="themable article sui flex-y">
 
 {
   article.Structure.Rows.map(row =>
     {
+      // if a hero is the first row, we need negate of the initial top padding so it's placed right below the header
       const isTopHero = rowindex == 0 && row.Sections.length == 1 && row.Sections[0].SectionType == 'hero';
       rowindex++;
-
-
       const isFullWidth = row.Sections.length == 1 && fullWidthSections.includes(row.Sections[0].SectionType);
       const sections = row.Sections.map(section => {
         let comp;
@@ -39,11 +40,14 @@ let rowindex = 0;
           case 'hero':
             comp = <SectionRendererHero isTopHero={isTopHero} section={section}/>;
             break;
+          case 'animal-list':
+            comp = <SectionRendererAnimalList isTopHero={isTopHero} section={section}/>;
+            break;
           default:
             comp = <div>Sektionstyp nicht unterstützt</div>;
             break;
           }
-        return <div class={'section section-' + section.SectionType}>{comp}</div>;
+        return <div style={isTopHero ? 'margin-top: -' + topPadding + 'px' : ''} class={'section section-' + section.SectionType}>{comp}</div>;
         })
       return <div class={'row sui flex-x wrap' +  (isFullWidth ? ' full-width' : '')}>{sections}</div>
       }
@@ -67,6 +71,12 @@ let rowindex = 0;
 
     .section {
       flex-grow: 1;
+    }
+
+    .section-text {
+      p {
+        min-height: 1rem;
+      }
     }
 
     .section-separator-x hr {

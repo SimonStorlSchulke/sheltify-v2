@@ -5,12 +5,12 @@ input, textarea {
   padding: 0.5rem;
   background-color: #fff;
   transition: background-color 0.3s;
-  border: 2px solid #aaa;
+  border: 1.5px solid $neutral150;
 
   &:focus {
     background-color: $primary-h10;
     outline: none;
-    border: 2px solid $primary;
+    border: 1.5px solid $primary;
   }
 }
 
@@ -21,13 +21,13 @@ input, textarea {
   }
 
   input {
-    border: 1px solid #7e7e7e;
+    border: 1.5px solid $neutral150;
     border-radius: 5px;
     padding: 5px;
 
     &:focus, &:active {
       outline: none;
-      border: 1px solid #7e7e7e;
+      border: 1.5px solid $primary;
     }
   }
 }
