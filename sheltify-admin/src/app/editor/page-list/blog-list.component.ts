@@ -12,11 +12,13 @@ import { BlogService } from 'src/app/services/blog.service';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { PagesService } from 'src/app/services/pages.service';
+import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
 
 @Component({
   selector: 'app-page-list',
   imports: [
     BlogEditorComponent,
+    BtIconComponent,
   ],
   templateUrl: './blog-list.component.html',
   styleUrl: './blog-list.component.scss',

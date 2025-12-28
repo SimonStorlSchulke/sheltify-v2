@@ -31,7 +31,11 @@
                   <div class="img-wrapper"><img [cmsImage]="animal.Portrait" cmsImageSize="thumbnail"></div>
                 }
               </td>
-              <td class="td-name">{{ animal.Name }}</td>
+              <td class="td-name">{{ animal.Name }}
+                @if(!animal.PublishedAt?.Valid) {
+                  <app-bt-icon style="display: inline-block" class="sui ml-1" name="PencilFill" size="s" />
+                }
+              </td>
               <td class="td-born">{{ animal.Birthday | date: 'dd.MM.yyyy' }}</td>
               <td class="td-created">{{ animal.CreatedAt | date: 'dd.MM.yyyy' }}</td>
               <td class="td-modified">{{ animal.UpdatedAt | date: 'dd.MM.yyyy' }}</td>

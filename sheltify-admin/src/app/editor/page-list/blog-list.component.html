@@ -7,9 +7,14 @@
     </div>
 
     <div class="sui flex-y">
-      @let pages = blogService.blogs();
-      @for (page of pages; track page) {
-        <div [class.selected]="selectedBlog()?.ID == pages[$index].ID" class="list-entry sui p-1" (click)="toBlog(page.ID)">{{page.Title}}</div>
+      @let blogs = blogService.blogs();
+      @for (blog of blogs; track blog) {
+        <div [class.selected]="selectedBlog()?.ID == blogs[$index].ID" class="list-entry sui p-1" (click)="toBlog(blog.ID)">
+          {{blog.Title}}
+          @if(!blog.PublishedAt?.Valid) {
+            <app-bt-icon style="display: inline-block" class="sui ml-1" name="PencilFill" size="s" />
+          }
+        </div>
       }
     </div>
 

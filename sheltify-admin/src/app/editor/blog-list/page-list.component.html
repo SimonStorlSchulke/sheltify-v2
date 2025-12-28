@@ -9,7 +9,12 @@
     <div class="sui flex-y">
       @let pages = pagesService.pages();
       @for (page of pages; track page) {
-        <div [class.selected]="selectedPage()?.ID == pages[$index].ID" class="list-entry sui p-1" (click)="toPage(page.Path)">{{page.Path || ' - '}}</div>
+        <a [class.selected]="selectedPage()?.ID == pages[$index].ID" class="list-entry sui p-1" (click)="toPage(page.Path)">
+          {{page.Path || 'Startseite' }}
+          @if(!page.PublishedAt?.Valid) {
+            <app-bt-icon style="display: inline-block" class="sui ml-1" name="PencilFill" size="s" />
+          }
+        </a>
       }
     </div>
 

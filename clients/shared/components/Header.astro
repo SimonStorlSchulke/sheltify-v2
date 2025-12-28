@@ -9,18 +9,18 @@ const pages = (await cms.getPages())
   .sort(((a, b) => b.Priority - a.Priority));
 
 const menu = [...createPageStructure(pages).values()];
+const startPage = menu.find(item => item.link == '');
 const logo = (await cms.tenantConfig).LogoHeader;
 ---
 
 <nav class="themable header">
   <div class="logo">
-    {logo && <CmsImg img={logo} size="medium"/>}
+    <a href={startPage && ''}>
+      {logo && <CmsImg img={logo} size="medium"/>}
+    </a>
   </div>
   <div class="menu">
-    {menu.map((item) =>
-      <HeaderEntry entry={item}/>
-    )
-    }
+    {menu.map((item) => <HeaderEntry entry={item} startPageName="Home"/>)}
   </div>
 </nav>
 

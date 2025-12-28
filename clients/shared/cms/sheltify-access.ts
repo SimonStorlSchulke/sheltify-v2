@@ -19,6 +19,12 @@ export class SheltifyAccess {
     return this.get<CmsPage[]>('pages');
   }
 
+  public async getStaticPaths() {
+    return (await this.getPages()).map(page => ({
+      params: { path: page.Path }
+    }));
+  }
+
   public async getPageByPath(path: string): Promise<CmsPage> {
     return this.get<CmsPage>(`page-by-path?path=${path}`)
   }

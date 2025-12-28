@@ -48,6 +48,10 @@ export class CmsRequestService {
     return this.postOrPatch<CmsTeamMember>('teammembers', user);
   }
 
+  public deleteTeamMember(ids: string[]): Observable<void> {
+    return this.delete(`teammembers?ids=${ids.join(',')}`)
+  }
+
   public getBlogEntries(): Observable<CmsBlogEntry[]> {
     return this.get<CmsBlogEntry[]>(`${this.publicTenantsUrl}/blogs`);
   }
@@ -62,10 +66,6 @@ export class CmsRequestService {
 
   public deleteBlogEntries(ids: string[]) {
     return this.delete(`blogs?ids=${ids.join(',')}`)
-  }
-
-  public deleteTeamMember(id: string): Observable<void> {
-    return this.delete(`blogs/` + id)
   }
 
   public getPages(): Observable<CmsPage[]> {

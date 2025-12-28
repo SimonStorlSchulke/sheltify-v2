@@ -2,7 +2,10 @@
   @if (teamMember(); as teamMember) {
     <h1 class="sui grow-1">{{ teamMember.Name }}</h1>
   }
-  <button type="button" class="primary" (click)="save()">Speichern</button>
+  <div class="sui flex-x gap-2">
+    <button type="button" class="primary" (click)="save()">Speichern</button>
+    <button type="button" class="red" (click)="delete()">Löschen</button>
+  </div>
 </div>
 
 <div class="editor-layout sui p-2">

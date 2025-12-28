@@ -8,11 +8,13 @@ import { TextInputModalComponent } from 'src/app/forms/text-input-modal/text-inp
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { PagesService } from 'src/app/services/pages.service';
+import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
 
 @Component({
   selector: 'app-page-list',
   imports: [
     PageEditorComponent,
+    BtIconComponent,
   ],
   templateUrl: './page-list.component.html',
   styleUrl: './page-list.component.scss',

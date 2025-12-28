@@ -4,6 +4,7 @@ import SectionRendererHero from '@shared/components/sections/SectionRendererHero
 import SectionRendererTitle from '@shared/components/sections/SectionRendererTitle.astro';
 import type { CmsArticle, SectionType } from 'sheltify-lib/article-types.ts';
 import SectionRendererText from './sections/SectionRendererText.astro';
+import SectionRendererImages from './sections/SectionRendererImages.astro';
 
 interface Props {
   article: CmsArticle;
@@ -41,7 +42,10 @@ const topPadding = 48;
             comp = <SectionRendererHero isTopHero={isTopHero} section={section}/>;
             break;
           case 'animal-list':
-            comp = <SectionRendererAnimalList isTopHero={isTopHero} section={section}/>;
+            comp = <SectionRendererAnimalList section={section}/>;
+            break;
+          case 'image':
+            comp = <SectionRendererImages section={section}/>;
             break;
           default:
             comp = <div>Sektionstyp nicht unterstützt</div>;

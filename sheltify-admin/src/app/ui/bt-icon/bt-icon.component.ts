@@ -11,6 +11,7 @@ import {
   bootstrapJournalBookmarkFill,
   bootstrapFileEarmarkFill,
   bootstrapHouseFill,
+  bootstrapPencilFill,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
@@ -27,6 +28,7 @@ export type IconName =
   | 'JournalBookmarkFill'
   | 'FileEarmarkFill'
   | 'HouseFill'
+  | 'PencilFill'
 
 @Component({
   selector: 'app-bt-icon',
@@ -45,8 +47,9 @@ export type IconName =
       bootstrapGearFill,
       bootstrapPersonFill,
       bootstrapJournalBookmarkFill,
-    bootstrapFileEarmarkFill,
+      bootstrapFileEarmarkFill,
       bootstrapHouseFill,
+      bootstrapPencilFill,
     }
   )]
 })

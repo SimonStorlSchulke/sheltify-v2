@@ -9,7 +9,6 @@ interface Props {
 const {path} = Astro.props;
 
 const parts = path.split("/");
-const title = parts[parts.length - 1];
 
 const page = await cms.getPageByPath(path);
 

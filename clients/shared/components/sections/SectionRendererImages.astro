@@ -5,15 +5,14 @@ import type { SectionImages } from 'sheltify-lib/article-types.ts';
 import type { CmsImage } from 'sheltify-lib/cms-types.ts';
 interface Props {
   section: SectionImages,
-  isTopHero: boolean,
 }
 
 
-const {section, isTopHero} = Astro.props;
+const {section} = Astro.props;
 const url = cms.uploadsUrl + `${section.Content.MediaFiles[0].ID}_${section.Content.MediaFiles[0].LargestAvailableSize}.webp`;
 ---
 
-<div class:list={['hero-container', {'top-hero': isTopHero}]}>
+<div class:list={['hero-container']}>
 
   {
     section.Content.MediaFiles.map((image: CmsImage) => {

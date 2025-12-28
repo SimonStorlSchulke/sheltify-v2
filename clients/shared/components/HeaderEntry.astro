@@ -2,13 +2,14 @@
 import type { MenuEntry } from 'sheltify-lib/page-structure';
 interface Props {
   entry: MenuEntry,
+  startPageName: string,
 }
-const {entry} = Astro.props;
+const {entry, startPageName} = Astro.props;
 ---
 
 {
   /*if*/ entry.children.length == 0 ?
-  <a href={'/' + entry.link} class="sui px-2 py-3">{entry.title}</a>
+  <a href={'/' + entry.link} class="sui px-2 py-3">{entry.title || startPageName}</a>
 
     /*else*/:
   <div class="sui px-2 py-3 dropdown-container">

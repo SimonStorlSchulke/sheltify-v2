@@ -12,12 +12,11 @@ type Page struct {
 }
 
 func (p *Page) Validate() string {
-	return valNotEmpty("Title", p.Path) +
-		valMaxLength("Title", p.Path, 256)
+	return valMaxLength("Pfad", p.Path, 256)
 }
 
 func (p *Page) ValidateForPublishing() string {
-	return valNotEmpty("Title", p.Path) +
-		valMaxLength("Title", p.Path, 256) +
-		valMaxLength("Description", p.Description, 512)
+	return valNotEmpty("Pfad", p.Path) +
+		valMaxLength("Pfad", p.Path, 256) +
+		valMaxLength("Beschreibung", p.Description, 512)
 }
