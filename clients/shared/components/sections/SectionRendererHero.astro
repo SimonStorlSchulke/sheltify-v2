@@ -44,7 +44,7 @@ const cmsImages = section.Content.MediaFiles;
     const totalSlides = Number(container.dataset.imageCount);
     const duration = Number(container.dataset.duration);
 
-    if (totalSlides != 1) {
+    if (totalSlides > 2) {
       let index = 1;
 
       setInterval(() => {

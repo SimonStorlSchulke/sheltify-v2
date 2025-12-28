@@ -12,24 +12,67 @@ const {section} = Astro.props;
 const url = cms.uploadsUrl + `${section.Content.MediaFiles[0].ID}_${section.Content.MediaFiles[0].LargestAvailableSize}.webp`;
 ---
 
-<div class:list={['hero-container']}>
-
+<div class="sui flex-x gap-2 wrap images-wrapper">
   {
     section.Content.MediaFiles.map((image: CmsImage) => {
       return <CmsImg img={image} size="medium"/>;
     })
   }
+</div>
 
+<!-- TODO make global -->
+<div class="themable lightbox">
+  <div class="lightbox-images">
+  {
+    section.Content.MediaFiles.map((image: CmsImage) => {
+      return <CmsImg img={image} size="xlarge"/>;
+    })
+  }
+  </div>
 </div>
 
 <script>
+  const lightbox = document.querySelector('.lightbox')!;
+  const images = document.querySelectorAll('.images-wrapper')!.values()
+    .flatMap(wrapper => wrapper.children);
 
+  for (const image of images) {
+    image.addEventListener('click', () => {
+      const id = (image as HTMLImageElement).dataset.id;
+      const title = (image as HTMLImageElement).dataset.title;
+      const description = (image as HTMLImageElement).dataset.description;
+      console.log(id, title, description);
+      lightbox.classList.add('visible');
+    })
+  }
+
+  lightbox.addEventListener('click', () => {
+    lightbox.classList.remove('visible');
+  })
 </script>
 
 <style is:global lang="scss">
-  .article .hero-img {
-    width: 100%;
-    max-height: 100dvh;
+  .article .images-wrapper img {
+    width: 300px;
     object-fit: cover;
+  }
+
+  .lightbox {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 100;
+
+    &.visible {
+      display: block;
+    }
+
+    .lightbox-images {
+      display: flex;
+    }
   }
 </style>
