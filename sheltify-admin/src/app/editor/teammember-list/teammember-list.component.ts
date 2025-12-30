@@ -9,11 +9,13 @@ import { TextInputModalComponent } from 'src/app/forms/text-input-modal/text-inp
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { TeamMembersService } from 'src/app/services/team-members.service';
+import { CmsImageDirective } from 'src/app/ui/cms-image.directive';
 
 @Component({
   selector: 'app-teammember-list',
   imports: [
-    TeammemberEditorComponent
+    TeammemberEditorComponent,
+    CmsImageDirective
   ],
   templateUrl: './teammember-list.component.html',
   styleUrl: './teammember-list.component.scss',

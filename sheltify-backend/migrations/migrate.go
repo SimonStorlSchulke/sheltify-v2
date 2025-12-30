@@ -19,5 +19,6 @@ func Migrate(db *gorm.DB) {
 		&shtypes.Tag{},
 		&shtypes.User{},
 		&shtypes.LogEntry{},
+		&shtypes.HomeFoundEntry{},
 	)
 }

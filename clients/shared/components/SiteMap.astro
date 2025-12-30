@@ -4,44 +4,41 @@ import type { MenuEntry } from 'sheltify-lib/page-structure';
 import { createPageStructure } from 'sheltify-lib/page-structure.ts';
 
 const structure: Map<string, MenuEntry> =
-  createPageStructure(await cms.getPages());
+  createPageStructure((await cms.getPages()).filter(page => page.PublishedAt?.Valid));
 
 const entries = Array.from(structure.values());
 
-const { entry } = Astro.props as { entry?: MenuEntry };
+const {entry} = Astro.props as { entry?: MenuEntry };
 ---
 <div class="themable sitemap">
+  {entry ? (
+    <li>
+      {entry.link ? (
+        <a class="link" href={entry.link}>🗏 {entry.title}</a>
+      ) : (
+        <span>{entry.title}</span>
+      )}
 
-{entry ? (
-<li>
-  {entry.link ? (
-    <a href={entry.link}>{entry.title}</a>
+      {entry.children.length > 0 && (
+        <ul>
+          {entry.children.map((child) => (
+            <Astro.self entry={child}/>
+          ))}
+        </ul>
+      )}
+    </li>
   ) : (
-    <span>{entry.title}</span>
-  )}
-
-  {entry.children.length > 0 && (
-    <ul>
-      {entry.children.map((child) => (
-        <Astro.self entry={child} />
+    <ul class="sitemap">
+      {entries.map((entry) => (
+        <Astro.self entry={entry}/>
       ))}
     </ul>
   )}
-</li>
-  ) : (
-<ul class="sitemap">
-  {entries.map((entry) => (
-    <Astro.self entry={entry} />
-  ))}
-</ul>
-  )}
 </div>
 
-<style lang="scss" scoped>
-  .sitemap {
-    width: var(--wrapper-width);
-    max-width: 100%;
-    margin-left: auto;
-    margin-right: auto;
+<style>
+  li {
+    list-style-type: none;
+      line-height: 1.7rem;
   }
 </style>

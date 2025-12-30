@@ -1,15 +1,15 @@
-<div class="left-sidebar-layout">
-  <div class="left-sidebar">
+<app-left-sidebar-layout #layout>
+  <div class="sidebar">
     <div class="sui flex-x gap-2">
       <h1>Seiten</h1>
       <div class="sui grow-1"></div>
-      <button data-testid="btn-new-page" class="primary" (click)="newPage()">Neue Seite</button>
+      <button data-testid="btn-new-page" class="primary" (click)="newPage(); layout.mobileOpen.set(true)">Neue Seite</button>
     </div>
-
+    <br>
     <div class="sui flex-y">
       @let pages = pagesService.pages();
       @for (page of pages; track page) {
-        <a [class.selected]="selectedPage()?.ID == pages[$index].ID" class="list-entry sui p-1" (click)="toPage(page.Path)">
+        <a [class.selected]="selectedPage()?.ID == pages[$index].ID" class="list-entry" (click)="toPage(page.Path); layout.mobileOpen.set(true)">
           {{page.Path || 'Startseite' }}
           @if(!page.PublishedAt?.Valid) {
             <app-bt-icon style="display: inline-block" class="sui ml-1" name="PencilFill" size="s" />
@@ -20,6 +20,6 @@
 
   </div>
   @if (selectedPage(); as page) {
-    <app-page-editor (deleted)="onDeleted()" [page]="page" class="content"/>
+    <app-page-editor (deleted)="onDeleted(); layout.mobileOpen.set(false)" [page]="page" class="content"/>
   }
-</div>
+</app-left-sidebar-layout>

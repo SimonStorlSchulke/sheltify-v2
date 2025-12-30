@@ -1,0 +1,21 @@
+.themable.animal-card {
+  transition: transform 0.23s, box-shadow 0.4s, color 0.23s;
+  border-radius: 6px;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 10px #0006;
+    color: var(--c-primary) !important;
+  }
+
+  .name-row {
+    padding-left: 0.5rem;
+    padding-top: 0.3rem;
+    font-weight: bold;
+  }
+
+  .gender-icon {
+    font-family: fantasy, sans-serif;
+    font-size: 1.2rem;
+  }
+}

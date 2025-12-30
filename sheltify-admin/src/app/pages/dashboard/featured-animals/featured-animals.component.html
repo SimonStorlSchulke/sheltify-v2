@@ -1,0 +1,10 @@
+
+<h2>hervorgehobene Tiere</h2>
+
+<ng-select [(ngModel)]="selectedAnimals" [multiple]="true" placeholder="...Tiere auswählen">
+  @for (animal of animalService.animals(); track animal) {
+    <ng-option [value]="animal">
+      {{ animal.Name }}
+    </ng-option>
+  }
+</ng-select>

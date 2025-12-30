@@ -8,43 +8,69 @@
     <button class="red" (click)="delete()">Löschen</button>
   </div>
   <div class="editor-layout sui p-2">
-    <div data-testid="form-animal-editor" class="sui flex-x gap-3 grow-1 card">
-      <app-image-picker-single label="Portrait" idName="portrait" [(twoWayModel)]="animal.Portrait"/>
-      <form class="sui flex-y gap-2 grow-1 pr-1">
-        <div [class]="rowClass">
-          <app-text-input class="sui grow-1" idName="animal-name" label="Name" [(twoWayModel)]="animal.Name"/>
-          <app-radio-buttons-input idName="gender" label="Geschlecht" [options]="['male', 'female']" [optionTranslations]="['Männlich', 'Weiblich']"
-                                   [(twoWayModel)]="animal.Gender"/>
+    <div class="sui flex-y gap-2 grow-1 card">
+      @if (animal.HomeFoundStatus !== 'yes') {
+
+
+        <div data-testid="form-animal-editor" class="sui flex-x gap-3 grow-1">
+          <app-image-picker-single label="Portrait" idName="portrait" [(twoWayModel)]="animal.Portrait"/>
+
+
+          <div class="sui flex-y gap-2 grow-1 pr-1">
+            <div [class]="rowClass">
+              <app-text-input class="sui grow-1" idName="animal-name" label="Name" [(twoWayModel)]="animal.Name"/>
+              <app-radio-buttons-input idName="gender" label="Geschlecht" [options]="['male', 'female']" [optionTranslations]="['Männlich', 'Weiblich']"
+                                       [(twoWayModel)]="animal.Gender"/>
+            </div>
+            <app-text-input
+              class="description" idName="description" label="Beschreibung" [long]="true"
+              [(twoWayModel)]="animal.Description"
+              style="width: 100%;"
+              explanation="Kurzer Text, der im Steckbrief oben unter jedem Tier angezeigt wird"/>
+            <div [class]="rowClass">
+              <app-checkbox-input idName="castrated" label="Kastriert" [(nullBoolModel)]="animal.Castrated"/>
+              <app-date-picker idName="birthday" label="Geboren ca." [(twoWayModelISOString)]="animal.Birthday"/>
+              <app-number-input idName="size" label="Schulterhöhe in cm" [(twoWayModel)]="animal.ShoulderHeightCm"/>
+            </div>
+
+            @if (animalKinds && config?.AnimalFeatureAnimalKind) {
+              <app-select-input idName="animalKind" label="Art" [(twoWayModel)]="animal.AnimalKind" [options]="animalKinds"/>
+            }
+
+            @if (config?.AnimalFeatureNoAdoption) {
+              <app-checkbox-input idName="noAdoption" label="Keine Adoption (nur Paten)" [(twoWayModel)]="animal.NoAdoption"/>
+            }
+
+            @if (animal.AnimalKind == 'Katze') {
+              <app-checkbox-input idName="noAdoption" label="Freigänger" [(nullBoolModel)]="animal.FreeRoamer"/>
+            }
+
+
+          </div>
         </div>
-        <app-text-input
-          class="description" idName="description" label="Beschreibung" [long]="true"
-          [(twoWayModel)]="animal.Description"
-          style="width: 100%;"
-          explanation="Kurzer Text, der im Steckbrief oben unter jedem Tier angezeigt wird"/>
-        <div [class]="rowClass">
-          <app-checkbox-input idName="castrated" label="Kastriert" [(nullBoolModel)]="animal.Castrated"/>
-          <app-date-picker idName="birthday" label="Geboren ca." [(twoWayModelISOString)]="animal.Birthday"/>
-          <app-number-input idName="size" label="Schulterhöhe in cm" [(twoWayModel)]="animal.ShoulderHeightCm"/>
+      } @else {
+        <div class="sui flex-x ai-center gap-3">
+          <app-image-picker-single label="Portrait" idName="portrait" [(twoWayModel)]="animal.Portrait"/>
+          <h3>{{animal.Name}} hat ein Zuhause gefunden ♥</h3>
         </div>
+      }
 
-        @if(animalKinds && config?.AnimalFeatureAnimalKind) {
-          <app-select-input idName="animalKind" label="Art" [(twoWayModel)]="animal.AnimalKind" [options]="animalKinds"/>
-        }
-
-        @if(config?.AnimalFeatureNoAdoption) {
-          <app-checkbox-input idName="noAdoption" label="Keine Adoption (nur Paten)" [(twoWayModel)]="animal.NoAdoption"/>
-        }
-
-        @if(animal.AnimalKind == 'Katze') {
-          <app-checkbox-input idName="noAdoption" label="Freigänger" [(nullBoolModel)]="animal.FreeRoamer"/>
-        }
-        <app-last-edited [entry]="animal"/>
-      </form>
+      <div class="sui flex-x gap-2 wrap jc-space-between ai-end">
+        <app-radio-buttons-input
+          idName="homeFoundStatus" label="Vermittlungsstatus"
+          [(twoWayModel)]="animal.HomeFoundStatus"
+          [options]="['no', 'reserved', 'yes']"
+          [optionTranslations]="['unvermittelt', 'reserviert', animal.HomeFoundStatus == 'yes' ? 'Zuhause gefunden ♥' : 'Zuhause gefunden']"
+        />
+        <app-last-edited class="sui grow-1" [entry]="animal"/>
+      </div>
     </div>
 
     <br>
 
-    @if (animal.ArticleID) {
+    @if (animal.HomeFoundStatus == 'yes') {
+      <app-home-found-editor [animal]="animal"/>
+    } @else if (animal.ArticleID) {
       <app-article-editor [articleId]="animal.ArticleID ?? ''" [saveArticle]="saveArticle$" class="sui flex-y grow-1 mt-2"/>
     } @else {
       <div class="sui flex-x gap-2">

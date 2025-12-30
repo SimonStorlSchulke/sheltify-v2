@@ -1,18 +1,18 @@
-<div class="left-sidebar-layout">
-  <div class="left-sidebar">
+<app-left-sidebar-layout #layout>
+  <div class="sidebar">
     <div class="sui flex-x gap-2">
       <h1>Blogeinträge</h1>
       <div class="sui grow-1"></div>
-      <button data-testid="btn-new-blog" class="primary" (click)="newBlog()">Neuer Post</button>
+      <button data-testid="btn-new-blog" class="primary" (click)="newBlog(); layout.mobileOpen.set(true)">Neuer Post</button>
     </div>
-
+    <br>
     <div class="sui flex-y">
       @let blogs = blogService.blogs();
       @for (blog of blogs; track blog) {
-        <div [class.selected]="selectedBlog()?.ID == blogs[$index].ID" class="list-entry sui p-1" (click)="toBlog(blog.ID)">
-          {{blog.Title}}
-          @if(!blog.PublishedAt?.Valid) {
-            <app-bt-icon style="display: inline-block" class="sui ml-1" name="PencilFill" size="s" />
+        <div [class.selected]="selectedBlog()?.ID == blogs[$index].ID" class="list-entry sui p-1" (click)="toBlog(blog.ID); layout.mobileOpen.set(true)">
+          {{ blog.Title }}
+          @if (!blog.PublishedAt?.Valid) {
+            <app-bt-icon style="display: inline-block" class="sui ml-1" name="PencilFill" size="s"/>
           }
         </div>
       }
@@ -20,6 +20,6 @@
 
   </div>
   @if (selectedBlog(); as blog) {
-    <app-blog-editor (deleted)="onDeleted()" [blog]="blog" class="content"/>
+    <app-blog-editor (deleted)="onDeleted(); layout.mobileOpen.set(false)" [blog]="blog" class="content"/>
   }
-</div>
+</app-left-sidebar-layout>

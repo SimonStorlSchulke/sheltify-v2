@@ -52,20 +52,6 @@ export class AnimalService {
       return;
     }
 
-    // if the animal is new, we create a matching mediaTag for it and assign the portrait to it.
-    if(!(animal!.ID)) {
-      const tag = await firstValueFrom(this.cmsRequestService.createTag({
-        Color: randomColor(30),
-        Name: "tier-" + animal!.Name,
-      }));
-
-      const portrait = animal!.Portrait;
-      if(portrait && portrait.MediaTags.findIndex(cTag => cTag.ID == tag.ID) == -1) {
-        portrait.MediaTags.push(tag);
-        await this.cmsRequestService.updateMedia(portrait);
-      }
-    }
-
     const savedAnimal = await firstValueFrom(this.cmsRequestService.saveAnimal(animal!));
     console.log("saved animal", savedAnimal);
     return savedAnimal;

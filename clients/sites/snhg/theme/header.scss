@@ -1,6 +1,9 @@
 :root {
-  --header-height: 72px;
+  --header-height: 64px;
 }
 
 .themable.header {
+  box-shadow: none;
+  font-weight: 300;
+  font-size: 1.15rem;
 }

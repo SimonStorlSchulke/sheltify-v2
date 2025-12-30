@@ -1,7 +1,7 @@
 <div class="left-sidebar-layout">
   <div class="left-sidebar">
     <div class="sui flex-x gap-2">
-      <h1>Teammitglieder</h1>
+      <h1>Team</h1>
       <div class="sui grow-1"></div>
       <button data-testid="btn-new-animal" class="primary" (click)="newTeamMember()">Neues Teammitglied</button>
     </div>
@@ -9,7 +9,12 @@
     <div class="sui flex-y">
       @let teamMembers = teamMembersService.teamMembers();
       @for (teamMember of teamMembers; track teamMember) {
-        <div [class.selected]="selectedTeamMember()?.ID == teamMembers[$index].ID" class="list-entry sui p-1" (click)="toTeamMember(teamMember.ID)">{{teamMember.Name || ' - '}}</div>
+        <div [class.selected]="selectedTeamMember()?.ID == teamMembers[$index].ID" class="list-entry sui flex-x gap-1 ai-center" (click)="toTeamMember(teamMember.ID)">
+          @if (teamMember.Portrait) {
+            <div class="img-wrapper"><img [cmsImage]="teamMember.Portrait" cmsImageSize="thumbnail"></div>
+          }
+          <span>{{teamMember.Name || ' - '}}</span>
+        </div>
       }
     </div>
 

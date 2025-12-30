@@ -22,7 +22,7 @@ func validateRequestBody[K shtypes.Validatable](w http.ResponseWriter, r *http.R
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&content); err != nil {
-		badRequestResponse(w, r, "Invalid request payload")
+		badRequestResponse(w, r, "Invalid request payload: "+err.Error())
 		return zero, errorContentValidation
 	}
 
@@ -49,7 +49,7 @@ func validatePublishable[K shtypes.ValidatableForPublishing](w http.ResponseWrit
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&content); err != nil {
-		badRequestResponse(w, r, "Invalid request payload")
+		badRequestResponse(w, r, "Invalid request payload: "+err.Error())
 		return zero, errorContentValidation
 	}
 

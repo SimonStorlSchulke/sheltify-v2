@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { AnimalsFilter, CmsArticle } from 'sheltify-lib/article-types';
 import { ToastrService } from 'ngx-toastr';
 import { CmsAnimal, CmsBlogEntry, CmsImage, CmsPage, CmsTag, CmsTeamMember, CmsTenantConfiguration } from 'sheltify-lib/cms-types';
+import { sortByPriorityAndUpdatedAt } from 'sheltify-lib/cms-utils';
 import { LoaderService } from 'src/app/layout/loader/loader.service';
 import { AuthService, CmsUser } from './auth.service';
 import { HttpClient } from '@angular/common/http';
@@ -69,7 +70,8 @@ export class CmsRequestService {
   }
 
   public getPages(): Observable<CmsPage[]> {
-    return this.get<CmsPage[]>(`${this.publicTenantsUrl}/pages`).pipe(map((pages) => pages.sort(((a,b) => b.Priority - a.Priority))));
+    return this.get<CmsPage[]>(`${this.publicTenantsUrl}/pages`).pipe(
+      map(response => sortByPriorityAndUpdatedAt(response)))
   }
 
   public getPageByPath(path: string): Observable<CmsPage> {
@@ -94,16 +96,15 @@ export class CmsRequestService {
   }
 
   public getAnimals(): Observable<CollectionResult<CmsAnimal>> {
-    return this.get<CmsAnimal[]>(`${this.publicTenantsUrl}/animals`).pipe(map(response => {
-      response.sort((a, b) => a.Name.localeCompare(b.Name));
-      return {
-        results: response,
-      }
-    }));
+    return this.get<CmsAnimal[]>(`${this.publicTenantsUrl}/animals/home-found`).pipe(
+      map(response => ({
+          results: sortByPriorityAndUpdatedAt(response),
+        })
+      ));
   }
 
   public getLastModifiedAnimals(amount: number): Observable<CmsAnimal[]> {
-    return this.get<CmsAnimal[]>(`${this.publicTenantsUrl}/animals/last-modified?amount=${amount}`)
+    return this.get<CmsAnimal[]>(`${this.publicTenantsUrl}/animals/last-modified?amount=${amount}`);
   }
 
   public getAnimalsByArticleId(articleId: string): Observable<CollectionResult<CmsAnimal>> {
@@ -136,6 +137,10 @@ export class CmsRequestService {
 
   public deleteAnimals(ids: string[]) {
     return this.delete<CmsAnimal>(`animals?ids=${ids.join(',')}`)
+  }
+
+  public deleteHomeFoundEntries(ids: string[]): Observable<void> {
+    return this.delete(`home-found-entries?ids=${ids.join(',')}`)
   }
 
   public createTag(tag: Omit<CmsTag, "ID">): Observable<CmsTag> {
@@ -198,6 +203,33 @@ export class CmsRequestService {
     data.append('FileName', fileName);
     data.append('Title', fileName.replace(/\.[^/.]+$/, ""));
     data.append('FocusY', "0.5");
+    data.append('Description', "");
+    data.append('TenantID', tenantId);
+    data.append('Tags', commaSeparatedTags);
+    data.append('AnimalIDs', commaSeparatedAnimalIds);
+
+    const options = {
+      headers: {
+        Authorization: `Bearer ${this.authService.bearer}`,
+      },
+      withCredentials: true,
+    }
+
+    return this.httpClient.post(url, data, options)
+      .pipe(this.handleRequest(url));
+  }
+
+  public uploadFiles(files: Blob[], fileName: string, commaSeparatedTags: string, commaSeparatedAnimalIds: string) {
+    const url = CmsRequestService.adminApiUrl + 'files';
+    const tenantId = this.authService.getTenantID();
+    const data = new FormData();
+
+    for (const file of files) {
+      data.append('File', file);
+    }
+
+    data.append('FileName', fileName);
+    data.append('Title', fileName);
     data.append('Description', "");
     data.append('TenantID', tenantId);
     data.append('Tags', commaSeparatedTags);

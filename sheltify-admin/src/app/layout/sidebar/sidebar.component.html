@@ -3,23 +3,24 @@
   @if (config?.Name) {
     <span class="sui p-2 text-balance sitename">{{ config!.Name }}</span>
   }
-  <a class="sui flex-x gap-1" routerLink="" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active"> <app-bt-icon name="HouseFill"/> <span>Dashboard</span></a>
-  <a class="sui flex-x gap-1" routerLink="seiten" routerLinkActive="active"> <app-bt-icon name="FileEarmarkFill"/> <span>Seiten</span></a>
-  <a class="sui flex-x gap-1" routerLink="blog" routerLinkActive="active"> <app-bt-icon name="JournalBookmarkFill"/> <span>Blogs</span></a>
-  <a class="sui flex-x gap-1" routerLink="tiere" routerLinkActive="active"> <app-bt-icon name="Paw"/> <span>Tiere</span></a>
-  <a class="sui flex-x gap-1" routerLink="team" routerLinkActive="active"> <app-bt-icon name="PersonFill"/> <span>Team</span></a>
-  <a class="sui flex-x gap-1" routerLink="media" routerLinkActive="active"> <app-bt-icon name="CardImage"/> <span>Medien</span></a>
-  <a class="sui flex-x gap-1" routerLink="optionen" routerLinkActive="active"> <app-bt-icon name="GearFill"/> <span>Organisationsdaten</span></a>
+  <a class="sui flex-x gap-1" title="Dashboard" routerLink="" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active"> <app-bt-icon name="HouseFill"/> <span>Dashboard</span></a>
+  <a class="sui flex-x gap-1" title="Seiten" routerLink="seiten" routerLinkActive="active"> <app-bt-icon name="FileEarmarkFill"/> <span>Seiten</span></a>
+  <a class="sui flex-x gap-1" title="Blogs" routerLink="blog" routerLinkActive="active"> <app-bt-icon name="JournalBookmarkFill"/> <span>Blogs</span></a>
+  <a class="sui flex-x gap-1" title="Tiere" routerLink="tiere" routerLinkActive="active"> <app-bt-icon name="Paw"/> <span>Tiere</span></a>
+  <a class="sui flex-x gap-1" title="Team" routerLink="team" routerLinkActive="active"> <app-bt-icon name="PersonFill"/> <span>Team</span></a>
+  <a class="sui flex-x gap-1" title="Medien" routerLink="media" routerLinkActive="active"> <app-bt-icon name="CardImage"/> <span>Medien</span></a>
+  <a class="sui flex-x gap-1" title="Organisationsdaten" routerLink="optionen" routerLinkActive="active"> <app-bt-icon name="GearFill"/> <span>Organisationsdaten</span></a>
   <div class="sui grow-1"></div>
-  <div class="sui flex-y gap-2 px-2 buttons">
+
+  <div class="sui flex-y gap-2 buttons">
     <app-user-menu/>
 
-    <button class="{{ tenantConfigurationService.needsRebuild() ? 'primary' : 'secondary' }} sui mb-2" (click)="triggerBuild()">
+    <button class="{{ tenantConfigurationService.needsRebuild() ? 'primary' : 'secondary' }} sui mb-2 only-wide" (click)="triggerBuild()">
       <span>
         @if (building()) {
           wird gebaut...
         } @else {
-          Seite bauen
+          <span class="only-wide">Seite bauen</span>
         }
       </span>
       <br>
@@ -29,6 +30,11 @@
        }
       </span>
     </button>
+
+    <button class="{{ tenantConfigurationService.needsRebuild() ? 'primary' : 'secondary' }} sui mb-2 only-narrow" (click)="triggerBuild()">
+      <app-bt-icon class="only-narrow" name="Hammer"/>
+    </button>
+
   </div>
   <!--------------------------------->
 

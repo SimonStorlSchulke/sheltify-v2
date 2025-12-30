@@ -4,7 +4,7 @@ import Page from '@shared/components/Page.astro';
 import SnhgLayout from '../layouts/SnhgLayout.astro';
 
 export async function getStaticPaths() {
-  return cms.getStaticPaths();
+  return cms.getStaticPathsPages();
 }
 
 const { path = '' } = Astro.params;

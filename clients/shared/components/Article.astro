@@ -8,16 +8,26 @@ import SectionRendererImages from './sections/SectionRendererImages.astro';
 
 interface Props {
   article: CmsArticle;
+  isDraft: boolean,
 }
 
-const { article } = Astro.props;
+const { article, isDraft } = Astro.props;
 const fullWidthSections: SectionType[] = ['hero'];
 
 let rowindex = 0;
 
-const topPadding = 48;
+
+const hasTopHero = article.Structure.Rows[0]?.Sections.length == 1 && article.Structure.Rows[0].Sections[0].SectionType == 'hero';
+const topPadding = hasTopHero ? -16 : 48;
+
+const cssClasses = ['themable', 'article', 'sui', 'flex-y'];
+if (isDraft) {
+  cssClasses.push('draft');
+}
+
 ---
-<div style={'margin-top: ' + topPadding + 'px'} class="themable article sui flex-y">
+{ isDraft && <div class="sui wrapper p-1 mt-2 draft-info">Artikel nicht publiziert</div>}
+<div style={'margin-top: ' + topPadding + 'px'} class:list={cssClasses}>
 
 {
   article.Structure.Rows.map(row =>
@@ -51,7 +61,7 @@ const topPadding = 48;
             comp = <div>Sektionstyp nicht unterstützt</div>;
             break;
           }
-        return <div style={isTopHero ? 'margin-top: -' + topPadding + 'px' : ''} class={'section section-' + section.SectionType}>{comp}</div>;
+        return <div style={ (`width: ${100 / row.Sections.length}%; `)} class={'section section-' + section.SectionType}>{comp}</div>;
         })
       return <div class={'row sui flex-x wrap' +  (isFullWidth ? ' full-width' : '')}>{sections}</div>
       }
@@ -59,11 +69,26 @@ const topPadding = 48;
   }
 </div>
 
+<script>
+  const draftArticle = document.querySelector<HTMLElement>('.article.draft')!;
+
+  if(draftArticle) {
+    const showDraftQuery = new URLSearchParams(window.location.search).get('showDraft');
+    if (showDraftQuery === 'true') {
+      draftArticle.classList.remove('draft');
+    }
+  }
+</script>
+
 <style is:global lang="scss">
+  .draft-info {
+    background: #ffeab0;
+  }
   .article {
-    gap: var(--section-gap-y);
+    &.draft {
+      display: none !important;
+    }
     .row {
-      gap: var(--section-gap-x);
 
       &:not(.full-width) {
         width: var(--wrapper-width);
@@ -75,6 +100,8 @@ const topPadding = 48;
 
     .section {
       flex-grow: 1;
+      padding: 16px;
+      min-width: 300px;
     }
 
     .section-text {

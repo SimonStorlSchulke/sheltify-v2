@@ -17,7 +17,7 @@ export class ModalPresenter {
       {
         isPicker: true,
       },
-      'modal-lg-no-padding'
+      'modal-fullscreen',
     )
   }
 }

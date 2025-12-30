@@ -9,12 +9,13 @@ interface Props {
 
 
 const {section} = Astro.props;
-const url = cms.uploadsUrl + `${section.Content.MediaFiles[0].ID}_${section.Content.MediaFiles[0].LargestAvailableSize}.webp`;
+const images = section.Content.MediaFiles;
+const url = cms.uploadsUrl + `${images[0].ID}_${images[0].LargestAvailableSize}.webp`;
 ---
 
-<div class="sui flex-x gap-2 wrap images-wrapper">
+<div class:list={['image-grid', 'count-' + images.length]}>
   {
-    section.Content.MediaFiles.map((image: CmsImage) => {
+    images.map((image: CmsImage) => {
       return <CmsImg img={image} size="medium"/>;
     })
   }
@@ -24,7 +25,7 @@ const url = cms.uploadsUrl + `${section.Content.MediaFiles[0].ID}_${section.Cont
 <div class="themable lightbox">
   <div class="lightbox-images">
   {
-    section.Content.MediaFiles.map((image: CmsImage) => {
+    images.map((image: CmsImage) => {
       return <CmsImg img={image} size="xlarge"/>;
     })
   }
@@ -52,9 +53,42 @@ const url = cms.uploadsUrl + `${section.Content.MediaFiles[0].ID}_${section.Cont
 </script>
 
 <style is:global lang="scss">
-  .article .images-wrapper img {
-    width: 300px;
-    object-fit: cover;
+  .article {
+    .image-grid {
+      column-count: 3;
+      column-gap: 8px;
+
+      &.count-1 {
+        column-count: 1;
+        max-width: 500px;
+      }
+
+      &.count-2 {
+        column-count: 2;
+        max-width: 800px;
+      }
+    }
+
+    .image-grid img {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin-bottom: 8px;
+      break-inside: avoid;
+    }
+
+    @media (max-width: 800px) {
+      .image-grid {
+        column-count: 2 !important;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .image-grid {
+        column-count: 1 !important;
+      }
+    }
+
   }
 
   .lightbox {

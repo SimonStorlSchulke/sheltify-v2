@@ -2,3 +2,14 @@
   margin-top: -56px;
   margin-right: 16px;
 }
+
+.home-found-image {
+  width: 128px;
+  height: 128px;
+}
+
+::ng-deep #homeFoundStatus button {
+  &:last-of-type.primary {
+    background: #e66794;
+  }
+}

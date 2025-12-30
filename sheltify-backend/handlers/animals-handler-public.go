@@ -9,7 +9,7 @@ import (
 
 func GetAnimalById(w http.ResponseWriter, r *http.Request) {
 	var animal shtypes.Animal
-	DefaultGetById(w, r, &animal, "Portrait")
+	DefaultGetById(w, r, &animal, "Portrait", "HomeFoundEntries")
 }
 
 func GetFilteredAnimals(w http.ResponseWriter, r *http.Request) {
@@ -40,6 +40,11 @@ func GetAnimalsByArticleId(w http.ResponseWriter, r *http.Request) {
 func GetAnimals(w http.ResponseWriter, r *http.Request) {
 	animals := []*shtypes.Animal{}
 	DefaultGetAll(w, r, &animals, "Portrait")
+}
+
+func GetAnimalsHomeFound(w http.ResponseWriter, r *http.Request) {
+	animals := []*shtypes.Animal{}
+	DefaultGetAll(w, r, &animals, "Portrait", "HomeFoundEntries")
 }
 
 func GetLastModifiedAnimals(w http.ResponseWriter, r *http.Request) {

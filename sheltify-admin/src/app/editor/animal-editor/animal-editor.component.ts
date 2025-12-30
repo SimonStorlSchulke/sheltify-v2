@@ -1,12 +1,11 @@
-import { DatePipe } from '@angular/common';
 import { Component, input, inject, output, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { firstValueFrom, lastValueFrom, Subject } from 'rxjs';
 import { CmsArticle } from 'sheltify-lib/article-types';
 import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
-import { CmsAnimal, CmsTenantConfiguration } from 'sheltify-lib/cms-types';
+import { CmsAnimal } from 'sheltify-lib/cms-types';
 import { ArticleEditorComponent } from 'src/app/editor/article-editor/article-editor.component';
+import { HomeFoundEditorComponent } from 'src/app/editor/home-found-editor/home-found-editor.component';
 import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-input.component';
 import { DatePickerComponent } from 'src/app/forms/date-picker/date-picker.component';
 import { ImagePickerSingleComponent } from 'src/app/forms/image-picker-single/image-picker-single.component';
@@ -35,6 +34,7 @@ import { CmsRequestService } from '../../services/cms-request.service';
     NumberInputComponent,
     SelectInputComponent,
     LastEditedComponent,
+    HomeFoundEditorComponent,
   ],
   templateUrl: './animal-editor.component.html',
   styleUrl: './animal-editor.component.scss',
@@ -44,12 +44,14 @@ export class AnimalEditorComponent {
 
   private cmsRequestService = inject(CmsRequestService);
 
-  animal = input<CmsAnimal | null>(null);
-  animals = input.required<CmsAnimal[] | null>();
-  saved = output<CmsAnimal | null>();
-  deleted = output();
+  public animal = input<CmsAnimal | null>(null);
+  public animals = input.required<CmsAnimal[] | null>();
+  public saved = output<CmsAnimal | null>();
+  public deleted = output();
 
-  saveArticle$ = new Subject<void>();
+  public saveArticle$ = new Subject<void>();
+  
+  public animalKinds: string[] = [];
 
   constructor(
     public tenantConfigurationService: TenantConfigurationService,
@@ -59,7 +61,6 @@ export class AnimalEditorComponent {
   ) {
   }
 
-  animalKinds: string[] = [];
 
   async ngOnInit() {
     this.animalKinds = (await this.tenantConfigurationService.animalKinds());

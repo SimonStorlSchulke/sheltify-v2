@@ -141,14 +141,17 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
   public async onFilesDropped(files: FileList) {
     this.loaderSv.setLoading('Bilder hochladen...');
     for (let i = 0; i < files.length; i++) {
-      const scaledImages = await this.imageConverterSv.generateAllSizes(files[i]);
+      const imageTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/svg"]);
 
       const tags = this.tagsService.availableTags().filter(tag => this.selectedTags().includes(tag.ID)).map(tag => tag.Name);
-
       const animalIds = this.selectedAnimals().map(animal => animal.ID);
 
-      await lastValueFrom(this.cmsRequestSv.uploadScaledImage(scaledImages, files[i].name, tags.join(","), animalIds.join(",")));
-
+      if(imageTypes.has(files[i].type)) {
+        const scaledImages = await this.imageConverterSv.generateAllSizes(files[i]);
+        await lastValueFrom(this.cmsRequestSv.uploadScaledImage(scaledImages, files[i].name, tags.join(","), animalIds.join(",")));
+      } else {
+        await lastValueFrom(this.cmsRequestSv.uploadFiles([files[i]], files[i].name, tags.join(","), animalIds.join(",")));
+      }
     }
     this.refreshImages.update((i) => i + 1);
     this.loaderSv.unsetLoading('Bilder hochladen...');

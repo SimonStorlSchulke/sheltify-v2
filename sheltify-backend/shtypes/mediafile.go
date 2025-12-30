@@ -2,7 +2,7 @@ package shtypes
 
 type MediaFile struct {
 	CmsType
-	ExternalLink         string
+	NonImage             bool
 	OriginalFileName     string
 	Title                string
 	Description          string

@@ -15,13 +15,14 @@ const allAnimalsByArticle = animalsByArticleId(await cms.animals);
 
 function getLink(animal: CmsAnimal) {
   const animalsInArticle = allAnimalsByArticle[animal.ArticleID ?? ''];
+  animalsInArticle.sort((a: CmsAnimal, b: CmsAnimal) => a.ID.localeCompare(b.ID));
   const names = animalsInArticle.map((animal) => animal.Name).join('-');
   return `/${animalsInArticle[0].AnimalKind}/${names}`
 }
 
 ---
 
-<div class="sui flex-x gap-2 wrap">
+<div class="sui flex-x gap-3 wrap">
 {
   filteredAnimals.map(animal => {
     return <a href={getLink(animal)}><AnimalCard animal={animal}/></a>;

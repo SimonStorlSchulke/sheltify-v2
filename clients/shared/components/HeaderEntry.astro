@@ -9,13 +9,13 @@ const {entry, startPageName} = Astro.props;
 
 {
   /*if*/ entry.children.length == 0 ?
-  <a href={'/' + entry.link} class="sui px-2 py-3">{entry.title || startPageName}</a>
+  <a href={entry.link} class="sui px-2 py-3">{entry.title || startPageName}</a>
 
     /*else*/:
   <div class="sui px-2 py-3 dropdown-container">
 
     {/*if*/ entry.link ?
-      <a href={'/' + entry.link} class="dropdown-button">
+      <a href={entry.link} class="dropdown-button">
         {entry.title}
       </a>
 
@@ -27,7 +27,7 @@ const {entry, startPageName} = Astro.props;
       <div class="entries">
 
         {entry.children.map(entry => (
-          <a href={'/' + entry.link}>{entry.title}</a>
+          <a href={entry.link}>{entry.title}</a>
         ))}
       </div>
     </div>

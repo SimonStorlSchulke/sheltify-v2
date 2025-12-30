@@ -18,25 +18,27 @@ export function createPageStructure(pages: CmsPage[]): Map<string, MenuEntry> {
     }
 
     const isMainPage = parts.length == 1;
+    const isStartPage = page.Path == '';
     const isSubMenu = parts.length == 2;
     const category = parts[0];
     const hasMenu = menu.has(category);
 
     if (!hasMenu) {
       menu.set(category, {
-        title: category,
+        title: isStartPage ? 'Home' : category,
         children: [],
       });
     }
 
     if (isMainPage) {
-      menu.get(category)!.link = page.Path;
+      menu.get(category)!.link = '/' + page.Path;
     }
+
 
     if (isSubMenu) {
       menu.get(category)!.children.push({
         title: parts[1],
-        link: page.Path,
+        link: '/' + page.Path,
         children: [],
       })
     }

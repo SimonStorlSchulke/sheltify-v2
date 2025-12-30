@@ -1,4 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
 import { AuthService } from '../../../services/auth.service';
 import { AsyncPipe } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
@@ -6,9 +7,10 @@ import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-user-menu',
-    imports: [
-        AsyncPipe
-    ],
+  imports: [
+    AsyncPipe,
+    BtIconComponent
+  ],
     templateUrl: './user-menu.component.html',
     styleUrl: './user-menu.component.scss'
 })

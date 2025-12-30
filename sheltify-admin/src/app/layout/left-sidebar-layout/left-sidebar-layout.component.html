@@ -1,0 +1,33 @@
+<div class="left-sidebar-layout" [class.mobile-open]="mobileOpen()">
+  <div class="left-sidebar">
+    <ng-content select=".sidebar"/>
+  </div>
+  <div class="content">
+    <button (click)="mobileOpen.set(false)" class="secondary opener">></button>
+    <ng-content select=".content"/>
+  </div>
+</div>
+
+<style lang="scss">
+  .opener {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    border-radius: 0 6px 6px 0;
+    padding: 16px 12px;
+  }
+
+  @media (max-width: 1000px) {
+    .left-sidebar-layout {
+      &.mobile-open {
+        .left-sidebar {
+          display: none;
+        }
+
+        .opener {
+          display: block;
+        }
+      }
+    }
+  }
+</style>

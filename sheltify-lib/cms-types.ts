@@ -61,6 +61,16 @@ export type CmsAnimal = Publishable & {
   MediaFiles: CmsImage[];
   NoAdoption: boolean,
   FreeRoamer: SqlNullBool,
+  HomeFoundStatus: 'no' | 'reserved' | 'yes',
+  HomeFoundEntries: CmsHomeFoundEntry[],
+}
+
+export type CmsHomeFoundEntry = CmsType & {
+  AnimalID: string,
+  Content: {
+    Html:       string
+    MediaFiles: CmsImage[],
+  }
 }
 
 export type CmsTeamMember = CmsType & {
@@ -77,6 +87,7 @@ export type CmsTeamMember = CmsType & {
 export type CmsImagesSize = 'thumbnail' | 'small' | 'medium' | 'large' | 'xlarge';
 
 export type CmsImage = CmsType & {
+  NonImage?: boolean, // this is horrible but won't fix
   OriginalFileName: string
   Title: string
   Description: string

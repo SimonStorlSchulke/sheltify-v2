@@ -85,6 +85,82 @@ func AddAnimalsToMedia(w http.ResponseWriter, r *http.Request) {
 	emptyOkResponse(w)
 }
 
+func UploadFiles(w http.ResponseWriter, r *http.Request) {
+	// upload 50 MB max
+	r.ParseMultipartForm(50 << 20)
+
+	user := services.UserFromRequest(r)
+
+	uploadedFiles := []multipart.File{}
+
+	uuid := uuid.NewString()
+
+	entity := shtypes.MediaFile{
+		NonImage:         true,
+		OriginalFileName: r.FormValue("FileName"),
+		Title:            r.FormValue("Title"),
+		Description:      r.FormValue("Description"),
+		FocusX:           0.5,
+		FocusY:           0.5,
+	}
+
+	entity.ID = uuid
+	entity.TenantID = r.FormValue("TenantID")
+
+	//for _, sizeLabel := range sizeNames {
+	uploadedFile, _, err := r.FormFile("File")
+	if err == nil {
+		uploadedFiles = append(uploadedFiles, uploadedFile)
+		fmt.Println("Uploaded file")
+		entity.LargestAvailableSize = "original"
+		defer uploadedFile.Close()
+	}
+	//}
+
+	errMessage := entity.Validate()
+	if errMessage != "" {
+		badRequestResponse(w, r, errMessage)
+		return
+	}
+
+	err = repository.CreateMediaFileMeta(&entity)
+	if err != nil {
+		internalServerErrorResponse(w, r, "Failed to store Metadata")
+		return
+	}
+
+	tagsStr := r.FormValue("Tags")
+	fmt.Println("Tags received:", tagsStr)
+
+	fmt.Println("Tags received:", tagsStr)
+	if tagsStr != "" {
+		tags := strings.Split(tagsStr, ",")
+		services.AddTagToMedia(uuid, tags, user.TenantID)
+	}
+
+	animalIDsStr := r.FormValue("AnimalIDs")
+	if animalIDsStr != "" {
+		animalIDs := strings.Split(animalIDsStr, ",")
+		services.AddAnimalsToMedia(uuid, animalIDs, user.TenantID)
+	}
+
+	for _, uploadedFile := range uploadedFiles {
+
+		filename := uuid
+		savePath := filepath.Join("uploads", filename)
+		fmt.Println(savePath)
+
+		err = services.StoreMultiPartFile(uploadedFile, savePath)
+		if err != nil {
+			internalServerErrorResponse(w, r, err.Error())
+			repository.DeleteMediaFileMeta(uuid)
+			return
+		}
+	}
+	logger.Created(r, uuid)
+	createdResponse(w, entity)
+}
+
 func UploadScaledWebps(w http.ResponseWriter, r *http.Request) {
 
 	// upload 50 MB max
@@ -102,6 +178,7 @@ func UploadScaledWebps(w http.ResponseWriter, r *http.Request) {
 	focusY, err2 := strconv.ParseFloat(r.FormValue("FocusY"), 32)
 
 	entity := shtypes.MediaFile{
+		NonImage:         false,
 		OriginalFileName: r.FormValue("FileName"),
 		Title:            r.FormValue("Title"),
 		Description:      r.FormValue("Description"),

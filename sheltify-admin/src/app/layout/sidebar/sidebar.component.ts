@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, NgTemplateOutlet } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
@@ -14,7 +14,8 @@ import { RouterLink, RouterLinkActive, Router } from '@angular/router';
     RouterLink,
     RouterLinkActive,
     DatePipe,
-    BtIconComponent
+    BtIconComponent,
+    NgTemplateOutlet
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'

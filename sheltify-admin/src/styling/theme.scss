@@ -16,6 +16,8 @@ body {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    min-width: 280px;
+    box-sizing: border-box;
   }
 
   .content {
@@ -43,6 +45,7 @@ body {
 .list-entry {
   cursor: pointer;
   font-weight: 400;
+  padding: 4px 8px;
 
   &.striped {
     &:nth-child(3n){background-color: $neutral100;}
@@ -80,13 +83,25 @@ body {
 }
 
 .editor-layout {
-  max-height: calc(100dvh - 100px);
-  height: calc(100dvh - 100px);
+  max-height: calc(100dvh - 80px);
+  height: calc(100dvh - 80px);
   overflow: auto;
   max-width: 1300px;
 
   .overscroll {
     height: 500px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .left-sidebar-layout {
+    overflow-x: hidden;
+    min-width: calc(100dvw - 80px);
+    max-width: calc(100dvw - 80px);
+    .left-sidebar {
+      min-width: calc(100dvw - 80px);
+      max-width: calc(100dvw - 80px);
+    }
   }
 }
 
@@ -100,4 +115,17 @@ body {
 
 .border {
   outline: 1.5px solid $primary;
+}
+
+
+@media (min-width: 1201px) {
+  .only-narrow {
+    display: none;
+  }
+}
+
+@media (max-width: 1200px) {
+  .only-wide {
+    display: none;
+  }
 }

@@ -14,6 +14,14 @@
     background: linear-gradient(#afafaf40, #a7a7a708, transparent);
   }
 
+  a.link {
+    text-decoration: underline;
+
+    &:hover {
+      color: var(--c-primary);
+    }
+  }
+
   h1 {
     font-family: Poppins, system-ui;
     font-size: 40px;

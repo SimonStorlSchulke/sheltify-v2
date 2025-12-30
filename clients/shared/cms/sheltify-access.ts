@@ -1,5 +1,7 @@
 import { type AnimalsFilter, type CmsArticle } from 'sheltify-lib/article-types.ts';
-import type { CmsAnimal, CmsPage, CmsTenantConfiguration } from 'sheltify-lib/cms-types';
+import { type CmsAnimal, type CmsImage, type CmsPage, type CmsTenantConfiguration } from 'sheltify-lib/cms-types';
+import { sortByPriorityAndUpdatedAt } from 'sheltify-lib/cms-utils.ts';
+import { animalsByArticleId } from 'sheltify-lib/animal-util.ts';
 
 export class SheltifyAccess {
 
@@ -16,13 +18,34 @@ export class SheltifyAccess {
   }
 
   public async getPages(): Promise<CmsPage[]> {
-    return this.get<CmsPage[]>('pages');
+    return this.getSortedByPriorityAndUpdatedAt<CmsPage>('pages');
   }
 
-  public async getStaticPaths() {
+  public async getStaticPathsPages() {
     return (await this.getPages()).map(page => ({
       params: { path: page.Path }
     }));
+  }
+
+  public async getStaticPathsAnimals() {
+    const animals = await this.animals;
+    animals.sort((a, b) => a.ID.localeCompare(b.ID));
+
+    const animalsByArticle = animalsByArticleId(animals);
+
+    const defaultAnimalKind = (await this.tenantConfig).DefaultAnimalKind;
+
+    const paths = Object.entries(animalsByArticle).map(entry => {
+      const animals = entry[1];
+      const animalNames = animals.map(animal => animal.Name).join('-');
+
+      return {params: {
+          animalKind: animals[0].AnimalKind ?? defaultAnimalKind,
+          animalNames: animalNames,
+        }}
+    })
+
+    return paths;
   }
 
   public async getPageByPath(path: string): Promise<CmsPage> {
@@ -37,8 +60,12 @@ export class SheltifyAccess {
     return this.get<CmsTenantConfiguration>('configuration');
   }
 
+  public getMediaFilesByIds(ids: string[]): Promise<CmsImage[]> {
+    return this.get<CmsImage[]>('media?ids=' + ids.join(','));
+  }
+
   public get animals(): Promise<CmsAnimal[]> {
-    return this.get<CmsAnimal[]>('animals')
+    return this.getSortedByPriorityAndUpdatedAt<CmsAnimal>('animals')
   }
 
   public getFilteredAnimals(filter: AnimalsFilter): Promise<CmsAnimal[]> {
@@ -59,6 +86,11 @@ export class SheltifyAccess {
     return this.get<CmsAnimal>(`animals/${id}`)
   }
 
+  public async getSortedByPriorityAndUpdatedAt<T extends { Priority: number; UpdatedAt?: string | Date | null}>(path: string) {
+    const result = await this.get<T[]>(path);
+    return sortByPriorityAndUpdatedAt(result);
+  }
+
   private cache = new Map<string, unknown>();
   private isDev = import.meta.env.MY_ENV === 'dev';
   public async get<T>(path: string) {
@@ -67,7 +99,7 @@ export class SheltifyAccess {
       headers: this.headers,
     });
     if (!res.ok) {
-      throw new Error(`Failed to fetch: ${res.status} ${res.statusText}`);
+      throw new Error(`Failed to fetch ${path}: ${res.status} ${res.statusText}`);
     }
     const data = await res.json();
     if(!this.isDev) {

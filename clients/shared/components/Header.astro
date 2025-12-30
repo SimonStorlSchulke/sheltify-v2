@@ -5,18 +5,19 @@ import { createPageStructure } from 'sheltify-lib/page-structure.ts';
 import HeaderEntry from "./HeaderEntry.astro";
 
 const pages = (await cms.getPages())
-  .filter(page => page.ShowInMenu)
+  .filter(page => page.PublishedAt?.Valid && page.ShowInMenu)
   .sort(((a, b) => b.Priority - a.Priority));
 
 const menu = [...createPageStructure(pages).values()];
-const startPage = menu.find(item => item.link == '');
+const startPage = menu.find(item => item.link == '/');
+console.log("aaa", startPage);
 const logo = (await cms.tenantConfig).LogoHeader;
 ---
 
 <nav class="themable header">
   <div class="logo">
-    <a href={startPage && ''}>
-      {logo && <CmsImg img={logo} size="medium"/>}
+    <a href={startPage && '/'}>
+      {logo && <CmsImg img={logo} size="xlarge" refetch={false}/>}
     </a>
   </div>
   <div class="menu">
@@ -55,6 +56,7 @@ const logo = (await cms.tenantConfig).LogoHeader;
       display: flex;
       align-items: center;
       justify-content: space-evenly;
+      height: 100%;
     }
   }
 

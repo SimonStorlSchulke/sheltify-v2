@@ -12,6 +12,10 @@ import {
   bootstrapFileEarmarkFill,
   bootstrapHouseFill,
   bootstrapPencilFill,
+  bootstrapHammer,
+  bootstrapBoxArrowRight,
+  bootstrapGenderMale,
+  bootstrapGenderFemale,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
@@ -29,6 +33,10 @@ export type IconName =
   | 'FileEarmarkFill'
   | 'HouseFill'
   | 'PencilFill'
+  | 'Hammer'
+  | 'BoxArrowRight'
+  | 'bootstrapGenderMale'
+  | 'bootstrapGenderFemale'
 
 @Component({
   selector: 'app-bt-icon',
@@ -50,6 +58,10 @@ export type IconName =
       bootstrapFileEarmarkFill,
       bootstrapHouseFill,
       bootstrapPencilFill,
+      bootstrapHammer,
+      bootstrapBoxArrowRight,
+      bootstrapGenderMale,
+      bootstrapGenderFemale,
     }
   )]
 })

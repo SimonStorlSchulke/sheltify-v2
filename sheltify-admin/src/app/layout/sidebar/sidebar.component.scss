@@ -3,13 +3,13 @@
 .sidebar {
   min-width: 180px;
   max-width: min(275px, 20dvw);
-  width: 275px;
+  width: 220px;
   background: linear-gradient(#553d2d, #8a5b3b);
   color: rgba(255, 255, 255, 0.74);
 
   .sitename {
     color: $text-heading;
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 500;
     background: #4c3123;
     border-bottom: 1px solid transparentize($primary-d1, 0.5);
@@ -20,14 +20,15 @@
   color: $text-heading;
   background: #553a2c;
   border-top: 1px solid transparentize($primary-d1, 0.4);
+  padding: 0 16px;
 }
 
 a {
-  padding: 12px 16px;
+  padding: 8px 12px;
   margin-right: 22px;
   border-radius: 0 12px 12px 0;
   font-weight: 500;
-  font-size: 1.15rem;
+  font-size: 0.9rem;
 
   &.active {
     color: #fff;
@@ -44,6 +45,9 @@ a {
 }
 
 @media (max-width: 1200px) {
+  .buttons {
+    padding: 0 4px;
+  }
   .sidebar {
     max-width: 64px;
     min-width: 64px;

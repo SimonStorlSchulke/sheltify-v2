@@ -1,31 +1,9 @@
-<div class="sui p-3">
-  @if (authService.user$ | async; as user) {
-    <h1>{{ tenantConfigurationService.config()?.Name }}</h1>
-    <h2 data-testid="sidebar-username">Hallo {{ user.Name }}!</h2>
-  }
+<div class="sui p-3 flex-y gap-3">
+<app-recently-edited/>
 
-  <br>
-  <br>
-
-  <h2 class="sui mb-1">Zuletzt bearbeitete Tiere</h2>
-  @if (lastModifiedAnimals | async; as animals) {
-    <div class="sui flex-y gap-1">
-
-    @for (animal of animals; track animal) {
-      <a [routerLink]="['/tiere', animal.ID]" class="sui flex-x gap-2 ai-center list-entry">
-        <div class="img-wrapper">
-          @if (animal.Portrait) {
-            <img [cmsImage]="animal.Portrait" cmsImageSize="thumbnail" class="sui thumbnail">
-          } @else {
-            <div><ng-icon name="bootstrapCardImage" size="2rem" color="#888"/></div>
-          }
-        </div>
-        <div>
-          <span>{{ animal.Name }}</span><br>
-          <span class="text-meta">von {{ animal.LastModifiedBy }} am {{ animal.UpdatedAt | date: 'dd.MM.yyyy HH:mm' }}</span>
-        </div>
-      </a>
-    }
-    </div>
-  }
+<!--
+<app-featured-animals/>
+-->
 </div>
+
+

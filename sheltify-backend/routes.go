@@ -25,6 +25,7 @@ func publicRoutes(r *chi.Mux) {
 	r.Get("/animals/filtered", handlers.GetFilteredAnimals)
 	r.Get("/animals/by-article/{id}", handlers.GetAnimalsByArticleId)
 	r.Get("/animals", handlers.GetAnimals)
+	r.Get("/animals/home-found", handlers.GetAnimalsHomeFound)
 	r.Get("/teammembers", handlers.GetTeamMembers)
 	r.Get("/teammembers/{id}", handlers.GetTeamMemberById)
 
@@ -50,6 +51,8 @@ func adminRoutes(r *chi.Mux) {
 	r.Patch("/animals", handlers.SaveAnimal)
 	r.Delete("/animals", handlers.DeleteAnimalsByIds)
 
+	r.Delete("/home-found-entries", handlers.DeleteHomeFoundEntriesByIds)
+
 	r.Post("/blogs", handlers.SaveBlogEntry)
 	r.Patch("/blogs", handlers.SaveBlogEntry)
 	r.Delete("/blogs", handlers.DeleteBlogEntriesById)
@@ -59,6 +62,7 @@ func adminRoutes(r *chi.Mux) {
 	r.Delete("/teammembers", handlers.DeleteTeamMember)
 
 	r.Post("/media/scaled", handlers.UploadScaledWebps)
+	r.Post("/files", handlers.UploadFiles)
 	r.Post("/media", handlers.SaveMedia)
 	r.Patch("/media", handlers.SaveMedia)
 	r.Delete("/media/{id}", handlers.DeleteMedia) //Todo make into DeletebyIds like DeleteAnimalsByIds

@@ -9,12 +9,16 @@
     "hhg": "cross-env MY_ENV=dev astro dev --root ./sites/hhg --port 4204",
     "build:snhg": "astro build --root ./sites/snhg --config ./astro.config.mjs",
     "build:mft": "astro build --root ./sites/mft --config ./astro.config.mjs",
-    "build:hhg": "astro build --root ./sites/hhg --config ./astro.config.mjs"
+    "build:hhg": "astro build --root ./sites/hhg --config ./astro.config.mjs",
+    "provided-article-theme:snhg": "sass sites/snhg/theme/article.scss sites/snhg/public/provided-article-theme.css"
   },
   "dependencies": {
+    "@astrojs/svelte": "^7.2.4",
     "astro": "^5.12.5",
     "sass": "^1.89.2",
-    "sheltify-lib": "file:../sheltify-lib"
+    "sheltify-lib": "file:../sheltify-lib",
+    "svelte": "^5.46.1",
+    "typescript": "^5.9.3"
   },
   "devDependencies": {
     "cross-env": "^10.1.0"

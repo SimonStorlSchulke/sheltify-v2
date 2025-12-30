@@ -1,0 +1,69 @@
+---
+import { cms } from "@shared/cms/sheltify-access"
+
+const config = await cms.tenantConfig;
+---
+
+<div class="snhg-footer">
+  <div class="sui wrapper flex-y gap-4 ai-center py-4">
+    <a href="https://www.gesetze-im-internet.de/tierschg/__11.html" target="_blank" rel="noopener" class="p11-link">
+      Zertifiziert nach §11 Tierschutzgesetz
+    </a>
+    <div class="sui flex-x jc-center wrap gap-4">
+      <img class="logo" alt="snhg-logo" src="/logo-footer.png">
+      <div>
+        <h2>Kontakt</h2>
+        {config.Name}
+        <br>
+        <br>
+        <b>Vorsitz</b>
+        <br>
+        TODO
+        <br><br>
+        <b>Vereinssitz</b>
+        <br>
+        {config.Address.split('\n').map(line => (
+          <>{line}<br/></>
+        ))}
+        <br>
+        <b>Kontakt</b>
+        <br>
+        {config.Email}
+      </div>
+      <div>
+        <h2>Spendenkonto</h2>
+        {config.Name}
+        <br>
+        IBAN: {config.IBAN}
+        <br>
+        BIC: TODO
+      </div>
+      <div>
+        <h2>Soziale Netzwerke</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<style lang="scss">
+  .snhg-footer {
+    background: #e4ded8;
+    font-size: 0.8rem;
+
+    .logo {
+      height: 180px;
+      width: 180px;
+      object-fit: contain;
+    }
+
+    .p11-link {
+      background: #8a8a8a;
+      padding: 6px 16px;
+      border-radius: 32px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+  }
+</style>

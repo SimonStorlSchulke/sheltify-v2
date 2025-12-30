@@ -1,8 +1,8 @@
 <div class="content-info-header sui flex-x ai-center wrap">
   @if (page(); as page) {
     <div class="sui flex-x ai-center gap-2 grow-1">
-      <h1>{{ page.Path.replace('-', ' ').replaceAll('/', ' › ') }}</h1>
-      <a [href]="pageUrl()" target="_blank"><app-bt-icon name="BoxArrowUpRight" size="ml"/></a>
+      <h1>{{ page.Path.replace('-', ' ').replaceAll('/', ' › ') || 'Startseite'}}</h1>
+      <a [href]="pageUrl() + '?showDraft=true'" target="_blank"><app-bt-icon name="BoxArrowUpRight" size="ml"/></a>
     </div>
     <div class="sui flex-x gap-2">
       <button type="button" class="primary" (click)="save()">Speichern</button>
@@ -18,7 +18,7 @@
     <form class="sui grow-1 flex-y gap-2">
       <div class="sui flex-x gap-2 wrap">
         <app-text-input idName="path" label="Pfad" [(twoWayModel)]="page().Path"/>
-        <app-number-input idName="priority" label="Priorität" [(twoWayModel)]="page().Priority"/>
+        <app-number-input idName="priority" label="Priorität" explanation="Bei höherer Priorität wird diese Seite weiter vorne im Header angezeigt. Auch negative Werte sind möglich. Es ist zu empfehlen in Zehnerschritten zu arbeiten, damit man Notfalls Seiten dazwischenschieben kann." [(twoWayModel)]="page().Priority"/>
         <app-checkbox-input idName="show-in-menu" label="In Menü anzeigen" [(twoWayModel)]="page().ShowInMenu"/>
         <app-checkbox-input idName="show-in-menu" label="Im Footer verlinken" [(twoWayModel)]="page().LinkInFooter"/>
       </div>

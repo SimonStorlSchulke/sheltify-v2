@@ -2,8 +2,8 @@
 
 .img-container {
   background: $neutral100;
-  height: 220px;
-  width: 220px;
+  height: 128px;
+  width: 128px;
   cursor: pointer;
 
   &:not(:has(img)) {

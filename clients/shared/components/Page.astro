@@ -7,17 +7,13 @@ interface Props {
 }
 
 const {path} = Astro.props;
-
-const parts = path.split("/");
-
 const page = await cms.getPageByPath(path);
-
 const article = page.ArticleID ? await cms.getArticle(page.ArticleID) : undefined;
 ---
 
 {
   article ?
-  <Article article={article}/> :
-  <div>Kein Artikel</div>
+  <Article isDraft={!(page.PublishedAt?.Valid)} article={article}/> :
+  <div class="sui wrapper py-2">Kein Artikel</div>
 }
 

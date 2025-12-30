@@ -1,6 +1,7 @@
 @if (user$ | async; as user) {
-  <div class="sui p-2 flex-y gap-1 text-center">
-    <span data-testid="sidebar-username">{{ user.Name }}</span>
-    <button class="secondary" (click)="logout()">Ausloggen</button>
+  <div class="sui flex-y gap-1 text-center">
+    <span class="only-wide" data-testid="sidebar-username">{{ user.Name }}</span>
+    <button class="secondary only-wide" (click)="logout()">Ausloggen</button>
+    <button class="secondary only-narrow sui mt-2" (click)="logout()"><app-bt-icon name="BoxArrowRight"/></button>
   </div>
 }

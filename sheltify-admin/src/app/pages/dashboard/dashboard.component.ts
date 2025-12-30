@@ -1,14 +1,15 @@
 import { AsyncPipe, DatePipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, model } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { bootstrapCardImage } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { firstValueFrom } from 'rxjs';
+import { FeaturedAnimalsComponent } from 'src/app/pages/dashboard/featured-animals/featured-animals.component';
+import { RecentlyEditedComponent } from 'src/app/pages/dashboard/recently-edited/recently-edited.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
 import { CmsImageDirective } from 'src/app/ui/cms-image.directive';
-import { TextEditorComponent } from '../../editor/text-editor/text-editor.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,7 +18,9 @@ import { TextEditorComponent } from '../../editor/text-editor/text-editor.compon
     RouterLink,
     DatePipe,
     CmsImageDirective,
-    NgIcon
+    NgIcon,
+    FeaturedAnimalsComponent,
+    RecentlyEditedComponent
   ],
   providers: [provideIcons({bootstrapCardImage})],
   templateUrl: './dashboard.component.html',
@@ -25,7 +28,11 @@ import { TextEditorComponent } from '../../editor/text-editor/text-editor.compon
 })
 export class DashboardComponent {
 
-  constructor(public authService: AuthService, public tenantConfigurationService: TenantConfigurationService) {
+
+  constructor(
+    public authService: AuthService,
+    public tenantConfigurationService: TenantConfigurationService,
+    ) {
   }
 
   cmsRequestService = inject(CmsRequestService);

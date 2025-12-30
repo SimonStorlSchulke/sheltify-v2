@@ -1,5 +1,6 @@
 ---
 import { getImageSrc } from '@shared/cms/cms-image.ts';
+import { cms } from '@shared/cms/sheltify-access';
 import type { CmsImage, CmsImagesSize } from 'sheltify-lib/cms-types.ts';
 interface Props {
   img: CmsImage,
@@ -7,10 +8,18 @@ interface Props {
   cssClass?: string,
   cssStyle?: string,
   contain?: boolean,
+  refetch?: boolean,
 }
-const {img, size, cssClass, cssStyle, contain} = Astro.props;
+let {img, size, cssClass, cssStyle, contain, refetch = true} = Astro.props;
+
+/* because articles and their images are saved as raw json in the db,
+we need to refetch images to update their data reliably */
+if(refetch) {
+  img = (await cms.getMediaFilesByIds([img.ID]))[0];
+}
 
 const style = `object-fit: ${contain ? 'contain' : 'cover'}; object-position: ${(img.FocusX * 100).toFixed(2)}% ${(img.FocusY * 100).toFixed(2)}%;` + (cssStyle ? ` ${cssStyle}` : '');
+
 ---
 
 <img data-id={img.ID} data-description={img.Description} data-title={img.Title} style={style} class={cssClass} src={getImageSrc(img, size)} alt={img.Description || img.Title} />

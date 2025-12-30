@@ -1,6 +1,12 @@
-@if(media()) {
-    <img [cmsImage]="media()">
-  <span>{{media()!.Title}}</span>
+@if(media(); as media) {
+  @if(media.NonImage) {
+    <div class="sui flex-y jc-center file">
+      <app-bt-icon name="FileEarmarkFill" size="l"/>
+    </div>
+  } @else {
+    <img [cmsImage]="media">
+  }
+  <span>{{media.Title}}</span>
 } @else {
   image not found
 }

@@ -1,0 +1,17 @@
+<div class="sui flex-x gap-2 ai-center wrap mb-2">
+  <button (click)="addEntry()" class="primary">Rückmeldung von Adoptanten hinzufügen</button>
+</div>
+<div class="sui flex-y gap-2">
+  @for (entry of entries(); track entry) {
+    <div class="sui card">
+      <div class="sui flex-x gap-2 jc-space-between">
+        <h3>Eintrag vom {{ entry.CreatedAt ?? Date.now() | date : 'dd.MM.yyyy' }}</h3>
+        <button (click)="removeEntry($index)">X</button>
+      </div>
+      <app-image-picker-multi idName="images" label="Bilder"/>
+      <br>
+      <label>Text</label>
+      <app-text-editor [(htmlModel)]="entry.Content.Html"/>
+    </div>
+  }
+</div>

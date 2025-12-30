@@ -206,6 +206,10 @@ const defaultTextStyle = `
   cursor: pointer;
 }
 
+p {
+  min-height: 1rem;
+}
+
 .article-button.primary {
   background: #0078d4;
   color: white;

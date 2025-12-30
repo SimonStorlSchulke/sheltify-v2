@@ -22,7 +22,7 @@
             <app-text-input [isEmail]="true" idName="name" label="Emailadresse" [(twoWayModel)]="teamMember().EMail"/>
             <app-text-input idName="role" label="Telefonnummer" [(twoWayModel)]="teamMember().Phone"/>
           </div>
-          <app-number-input idName="age" label="Priorität" [(twoWayModel)]="teamMember().Priority"/>
+          <app-number-input idName="age" label="Priorität" explanation="Bei höherer Priorität wird dieses Tier weiter oben in der Liste angezeigt. Auch negative Werte sind möglich. Es ist zu empfehlen in Zehnerschritten zu arbeiten, damit man Notfalls Einträge dazwischenschieben kann. Bei gleicher Priorität wird der zuletzt bearbeitete Artikel weiter vorne angezeigt." [(twoWayModel)]="teamMember().Priority"/>
         </div>
       </div>
       <app-text-input [long]="true" idName="description" label="Beschreibung" [(twoWayModel)]="teamMember().Description"/>

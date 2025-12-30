@@ -1,0 +1,51 @@
+:root {
+  --section-gap-x: 50px;
+  --section-gap-y: 50px;
+  --hero-height: 600px;
+  --hero-top-height: 400px;
+}
+
+.themable.article .section-separator-x hr {
+  height: 30px;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  background: linear-gradient(rgba(175, 175, 175, 0.2509803922), rgba(167, 167, 167, 0.031372549), transparent);
+}
+.themable.article a.link {
+  font-weight: 600;
+  color: var(--c-primary);
+}
+.themable.article h1 {
+  font-family: Poppins, system-ui;
+  font-size: 40px;
+  color: var(--c-primary);
+  font-weight: 500;
+}
+.themable.article h2 {
+  font-family: Poppins, system-ui;
+  font-size: 24px;
+  font-weight: normal;
+  color: #454545;
+}
+.themable.article .section-hero .hero-container {
+  margin-bottom: 50px;
+}
+.themable.article .section-hero .hero-container.top-hero::after {
+  content: "";
+  display: block;
+  height: 100px;
+  background: #fff;
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  transform: skew(0deg, -2deg);
+  top: 350px;
+}
+.themable.article .section-hero h1 {
+  font-weight: 800;
+  left: 20px;
+  font-size: 60px;
+}
+
+/*# sourceMappingURL=provided-article-theme.css.map */

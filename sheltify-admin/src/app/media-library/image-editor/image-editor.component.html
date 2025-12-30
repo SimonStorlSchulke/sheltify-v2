@@ -1,19 +1,21 @@
-<div class="img-container" [class.focus-mode]="editFocusMode">
-  <div class="img-crosshair-wrapper">
-
-    <img
-      (click)="setFocusPoint($event)"
-      [cmsImage]="image()"
-      [useFocusPoint]="false"
-    >
-    <div
-      class="crosshair"
-      [style.top]="image().FocusY * 100 + '%'"
-      [style.left]="image().FocusX * 100 + '%'"
-    ></div>
-  </div>
-
+@if(image().NonImage) {
+  {{ image().Title }}
+} @else {
+  <div class="img-container" [class.focus-mode]="editFocusMode">
+    <div class="img-crosshair-wrapper">
+      <img
+        (click)="setFocusPoint($event)"
+        [cmsImage]="image()"
+        [useFocusPoint]="false"
+      >
+      <div
+        class="crosshair"
+        [style.top]="image().FocusY * 100 + '%'"
+        [style.left]="image().FocusX * 100 + '%'"
+      ></div>
+    </div>
 </div>
+
   <div class="sui flex-x">
     <button class="secondary" (click)="rotateImage(-1)">r-</button>
     <button
@@ -24,6 +26,7 @@
     </button>
     <button class="secondary" (click)="rotateImage(1)">r+</button>
   </div>
+}
 
 <div class="sui flex-y gap-1 grow-1">
   <div class="meta sui flex-y">

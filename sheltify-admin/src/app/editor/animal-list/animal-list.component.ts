@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { createNewAnimal } from 'src/app/cms-types/cms-type.factory';
 import { CmsAnimal } from 'sheltify-lib/cms-types';
 import { TextInputModalComponent } from 'src/app/forms/text-input-modal/text-input-modal.component';
 import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
+import { LeftSidebarLayoutComponent } from 'src/app/layout/left-sidebar-layout/left-sidebar-layout.component';
 import { AnimalService } from 'src/app/services/animal.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
@@ -12,7 +13,7 @@ import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
 import { CmsImageDirective } from 'src/app/ui/cms-image.directive';
 import { AnimalEditorComponent } from '../../editor/animal-editor/animal-editor.component';
 import { CmsRequestService } from '../../services/cms-request.service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 
 @Component({
   selector: 'app-animal-list',
@@ -22,6 +23,7 @@ import { DatePipe } from '@angular/common';
     CmsImageDirective,
     TextInputComponent,
     BtIconComponent,
+    LeftSidebarLayoutComponent,
   ],
   templateUrl: './animal-list.component.html',
   styleUrl: './animal-list.component.scss',
@@ -31,7 +33,7 @@ export class AnimalListComponent implements OnInit {
   private cmsRequestService = inject(CmsRequestService);
 
   private activatedRoute = inject(ActivatedRoute);
-  private router = inject(Router);
+  private location = inject(Location);
 
   public editedAnimals = signal(new Map<string, CmsAnimal>([]));
 
@@ -43,9 +45,13 @@ export class AnimalListComponent implements OnInit {
 
   public pageUrl = computed(() => {
     let url = this.tenantConfigurationService.config()?.SiteUrl;
-    if (!url) return undefined;
+    console.log(url);
+    if (!url) {
+      return undefined;
+    }
     if (!url.endsWith('/')) url += '/';
     const animals = this.animalsWithSameArticle();
+    animals.sort((a, b) => a.ID.localeCompare(b.ID));
     if(!animals[0]?.AnimalKind) return undefined;
     return url + animals[0].AnimalKind + '/' + animals.map(animal => animal.Name).join('-');
   })
@@ -75,7 +81,7 @@ export class AnimalListComponent implements OnInit {
     const animal = await firstValueFrom(this.cmsRequestService.getAnimal(id));
     this.selectedAnimal.set(animal);
 
-    this.router.navigate(['/tiere', id]);
+    this.location.go('/tiere/' + id);
   }
 
   public async newAnimal() {
@@ -89,7 +95,7 @@ export class AnimalListComponent implements OnInit {
     const savedAnimal = await firstValueFrom(this.cmsRequestService.saveAnimal(animal));
     this.animalService.reloadAnimals();
     this.selectedAnimal.set(savedAnimal);
-    this.router.navigate(['/tiere', savedAnimal.ID]);
+    this.location.go('/tiere/' + savedAnimal.ID);
   }
 
   public onSavedAnimal(animal: CmsAnimal | null) {
