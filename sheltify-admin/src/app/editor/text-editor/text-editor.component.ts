@@ -10,17 +10,6 @@ import { ModalService } from 'src/app/services/modal.service';
 import { marks as defaultMarks } from 'ngx-editor';
 import { nodes as defaultNodes } from 'ngx-editor';
 
-const nodes: { [key: string]: NodeSpec } = {
-  doc: { content: "block+" },
-  paragraph: {
-    group: "block",
-    content: "inline*",
-    parseDOM: [{ tag: "p" }],
-    toDOM: () => ["p", 0]
-  },
-  text: { group: "inline" }
-};
-
 const myLink: MarkSpec = {
   attrs: {
     href: {},
@@ -51,11 +40,10 @@ const myLink: MarkSpec = {
 const schema = new Schema({
   nodes: {
     ...defaultNodes,
-    ...nodes
   },
   marks: {
     ...defaultMarks,
-    myLink: myLink,
+    link: myLink,
   }
 });
 
@@ -118,7 +106,7 @@ export class TextEditorComponent implements OnInit {
 
     const view: EditorView = this.editor.view;
 
-    toggleMark(view.state.schema.marks['myLink'], {
+    toggleMark(view.state.schema.marks['link'], {
       href: data.url,
       class: `article-button ${data.buttonTye}`,
       rel: "noopener noreferrer",

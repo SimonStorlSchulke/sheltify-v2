@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { AnimalsFilter, CmsArticle } from 'sheltify-lib/article-types';
 import { ToastrService } from 'ngx-toastr';
-import { CmsAnimal, CmsBlogEntry, CmsImage, CmsPage, CmsTag, CmsTeamMember, CmsTenantConfiguration } from 'sheltify-lib/cms-types';
+import { CmsAnimal, CmsBlogEntry, CmsHomeFoundEntry, CmsImage, CmsPage, CmsTag, CmsTeamMember, CmsTenantConfiguration } from 'sheltify-lib/cms-types';
 import { sortByPriorityAndUpdatedAt } from 'sheltify-lib/cms-utils';
 import { LoaderService } from 'src/app/layout/loader/loader.service';
 import { AuthService, CmsUser } from './auth.service';
@@ -69,6 +69,22 @@ export class CmsRequestService {
     return this.delete(`blogs?ids=${ids.join(',')}`)
   }
 
+  public getHomeFoundEntries(): Observable<CmsHomeFoundEntry[]> {
+    return this.get<CmsHomeFoundEntry[]>(`${this.publicTenantsUrl}/home-found-entries`);
+  }
+
+  public getHomeFoundEntry(id: string): Observable<CmsHomeFoundEntry> {
+    return this.get<CmsHomeFoundEntry>(`${this.publicTenantsUrl}/home-found-entries/` + id);
+  }
+
+  public saveHomeFoundEntry(user: CmsHomeFoundEntry): Observable<CmsHomeFoundEntry> {
+    return this.postOrPatch<CmsHomeFoundEntry>('home-found-entries', user);
+  }
+
+  public deleteHomeFoundEntries(ids: string[]): Observable<void> {
+    return this.delete(`home-found-entries?ids=${ids.join(',')}`)
+  }
+
   public getPages(): Observable<CmsPage[]> {
     return this.get<CmsPage[]>(`${this.publicTenantsUrl}/pages`).pipe(
       map(response => sortByPriorityAndUpdatedAt(response)))
@@ -96,7 +112,7 @@ export class CmsRequestService {
   }
 
   public getAnimals(): Observable<CollectionResult<CmsAnimal>> {
-    return this.get<CmsAnimal[]>(`${this.publicTenantsUrl}/animals/home-found`).pipe(
+    return this.get<CmsAnimal[]>(`${this.publicTenantsUrl}/animals`).pipe(
       map(response => ({
           results: sortByPriorityAndUpdatedAt(response),
         })
@@ -137,10 +153,6 @@ export class CmsRequestService {
 
   public deleteAnimals(ids: string[]) {
     return this.delete<CmsAnimal>(`animals?ids=${ids.join(',')}`)
-  }
-
-  public deleteHomeFoundEntries(ids: string[]): Observable<void> {
-    return this.delete(`home-found-entries?ids=${ids.join(',')}`)
   }
 
   public createTag(tag: Omit<CmsTag, "ID">): Observable<CmsTag> {

@@ -1,6 +1,6 @@
-import { CmsAnimal, CmsImage, CmsType } from './cms-types';
+import { CmsAnimal, CmsImage, CmsType, SqlNullTime } from './cms-types';
 
-export const SectionTypes = ["title", "text", "video", "image", "hero", "animal-list", "html", "separator-x"] as const;
+export const SectionTypes = ["title", "text", "video", "image", "hero", "animal-list", "html", "separator-x", "home-found"] as const;
 
 export type SectionType = (typeof SectionTypes)[number];
 
@@ -27,6 +27,7 @@ export type Section =
   | SectionHtml
   | SectionSeparatorX
   | SectionHero
+  | SectionHomeFound
 
 export type SectionText = {
   SectionType: 'text',
@@ -73,6 +74,14 @@ export type SectionAnimalList = {
   SectionType: 'animal-list',
   Content: AnimalsFilter,
   TempFoundAnimals: CmsAnimal[],
+};
+
+export type SectionHomeFound = {
+  SectionType: 'home-found',
+  Content: {
+    From: Date | undefined,
+    To: Date |undefined,
+  }
 };
 
 export type AnimalsFilter = {

@@ -10,8 +10,8 @@
 
   .img-container {
     width: fit-content;
-    height: 300px;
-    min-height: 300px;
+    height: max(200px, 30dvh);
+    min-height: max(200px, 30dvh);
     position: relative;
     align-self: center;
     display: flex;
@@ -27,7 +27,7 @@
     img {
       width: auto;
       height: auto;
-      max-height: 300px;
+      max-height: max(200px, 30dvh);
     }
 
     &.focus-mode img {
@@ -54,13 +54,7 @@
     }
   }
 
-  .focus-button {
-    border-radius: 0 0 8px 8px;
-    width: 100%;
-  }
-
   .meta {
-    margin-top: 38px;
     font-size: $fontsize-small-2;
     color: $neutral600
   }

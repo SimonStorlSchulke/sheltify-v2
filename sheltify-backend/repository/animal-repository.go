@@ -89,11 +89,8 @@ func SaveAnimal(animal *shtypes.Animal) error {
 	return nil
 }
 
-func SaveHomeFoundEntries(entries *[]shtypes.HomeFoundEntry) error {
-	if len(*entries) == 0 {
-		return nil
-	}
-	if err := db.Save(&entries).Error; err != nil {
+func SaveHomeFoundEntry(entry *shtypes.HomeFoundEntry) error {
+	if err := db.Save(&entry).Error; err != nil {
 		return err
 	}
 	return nil

@@ -62,11 +62,10 @@ export type CmsAnimal = Publishable & {
   NoAdoption: boolean,
   FreeRoamer: SqlNullBool,
   HomeFoundStatus: 'no' | 'reserved' | 'yes',
-  HomeFoundEntries: CmsHomeFoundEntry[],
 }
 
 export type CmsHomeFoundEntry = CmsType & {
-  AnimalID: string,
+  AnimalName: string,
   Content: {
     Html:       string
     MediaFiles: CmsImage[],

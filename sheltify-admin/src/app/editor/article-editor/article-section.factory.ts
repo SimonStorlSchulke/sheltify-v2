@@ -64,6 +64,14 @@ export function createEmptySection(SectionType: SectionType): Section {
         },
         TempFoundAnimals: [],
       };
+    case 'home-found':
+      return {
+        SectionType,
+        Content: {
+          From: undefined,
+          To: undefined,
+        },
+      };
     case 'separator-x':
       return {
         SectionType,

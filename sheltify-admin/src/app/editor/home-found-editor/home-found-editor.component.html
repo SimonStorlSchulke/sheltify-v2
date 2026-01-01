@@ -1,17 +1,18 @@
-<div class="sui flex-x gap-2 ai-center wrap mb-2">
-  <button (click)="addEntry()" class="primary">Rückmeldung von Adoptanten hinzufügen</button>
+@let entryVal = entry();
+<div class="content-info-header sui flex-x">
+  <h1>{{entryVal.CreatedAt | date : 'dd.MM.yyyy'}} - {{entryVal.AnimalName}} </h1>
+  <div class="sui grow-1"></div>
+  <div class="sui flex-x gap-2">
+    <button type="button" class="primary" (click)="save()">Speichern</button>
+    <button type="button" class="red" (click)="delete()">Löschen</button>
+  </div>
 </div>
-<div class="sui flex-y gap-2">
-  @for (entry of entries(); track entry) {
-    <div class="sui card">
-      <div class="sui flex-x gap-2 jc-space-between">
-        <h3>Eintrag vom {{ entry.CreatedAt ?? Date.now() | date : 'dd.MM.yyyy' }}</h3>
-        <button (click)="removeEntry($index)">X</button>
-      </div>
-      <app-image-picker-multi idName="images" label="Bilder"/>
-      <br>
-      <label>Text</label>
-      <app-text-editor [(htmlModel)]="entry.Content.Html"/>
-    </div>
-  }
+
+<div class="editor-layout sui p-2">
+  <app-text-input idName="animalName" label="Tiername" [(twoWayModel)]="entryVal.AnimalName"/>
+  <app-image-picker-multi idName="images" label="Bilder" [(twoWayModel)]="entryVal.Content.MediaFiles"/>
+  <br>
+  <label>Text</label>
+  <app-text-editor [(htmlModel)]="entryVal.Content.Html" />
+
 </div>

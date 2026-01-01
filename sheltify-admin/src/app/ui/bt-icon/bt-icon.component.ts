@@ -16,6 +16,7 @@ import {
   bootstrapBoxArrowRight,
   bootstrapGenderMale,
   bootstrapGenderFemale,
+  bootstrapHeartFill,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
@@ -35,8 +36,9 @@ export type IconName =
   | 'PencilFill'
   | 'Hammer'
   | 'BoxArrowRight'
-  | 'bootstrapGenderMale'
-  | 'bootstrapGenderFemale'
+  | 'GenderMale'
+  | 'GenderFemale'
+  | 'HeartFill'
 
 @Component({
   selector: 'app-bt-icon',
@@ -62,6 +64,7 @@ export type IconName =
       bootstrapBoxArrowRight,
       bootstrapGenderMale,
       bootstrapGenderFemale,
+      bootstrapHeartFill,
     }
   )]
 })

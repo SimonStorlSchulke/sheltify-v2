@@ -1,0 +1,21 @@
+<app-left-sidebar-layout #layout>
+  <div class="sidebar">
+    <div class="sui flex-x gap-2">
+      <h1>Rückmeldungen</h1>
+      <div class="sui grow-1"></div>
+      <button data-testid="btn-new-animal" class="primary" (click)="newEntry(); layout.mobileOpen.set(true)">Neuer Eintrag</button>
+    </div>
+    <br>
+    <div class="sui flex-y">
+      @let entries = homeFoundService.entries();
+      @for (entry of entries; track entry) {
+        <a [class.selected]="selectedEntry()?.ID == entries[$index].ID" class="list-entry" (click)="toEntry(entry.ID); layout.mobileOpen.set(true)">
+          {{entry.AnimalName}} - {{entry.CreatedAt | date : 'dd.MM.yyyy'}}
+        </a>
+      }
+    </div>
+  </div>
+  @if (selectedEntry(); as entry) {
+    <app-home-found-editor (modified)="onModified(); layout.mobileOpen.set(false)" [entry]="entry" class="content"/>
+  }
+</app-left-sidebar-layout>

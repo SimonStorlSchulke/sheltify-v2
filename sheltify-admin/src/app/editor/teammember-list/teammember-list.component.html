@@ -1,15 +1,15 @@
-<div class="left-sidebar-layout">
-  <div class="left-sidebar">
+<app-left-sidebar-layout #layout>
+  <div class="sidebar">
     <div class="sui flex-x gap-2">
       <h1>Team</h1>
       <div class="sui grow-1"></div>
-      <button data-testid="btn-new-animal" class="primary" (click)="newTeamMember()">Neues Teammitglied</button>
+      <button data-testid="btn-new-animal" class="primary" (click)="newTeamMember(); layout.mobileOpen.set(true)">Neues Teammitglied</button>
     </div>
-
+    <br>
     <div class="sui flex-y">
       @let teamMembers = teamMembersService.teamMembers();
       @for (teamMember of teamMembers; track teamMember) {
-        <div [class.selected]="selectedTeamMember()?.ID == teamMembers[$index].ID" class="list-entry sui flex-x gap-1 ai-center" (click)="toTeamMember(teamMember.ID)">
+        <div [class.selected]="selectedTeamMember()?.ID == teamMembers[$index].ID" class="list-entry sui flex-x gap-1 ai-center" (click)="toTeamMember(teamMember.ID); layout.mobileOpen.set(true)">
           @if (teamMember.Portrait) {
             <div class="img-wrapper"><img [cmsImage]="teamMember.Portrait" cmsImageSize="thumbnail"></div>
           }
@@ -20,6 +20,6 @@
 
   </div>
   @if (selectedTeamMember(); as teamMember) {
-    <app-teammember-editor [teamMember]="teamMember" class="content"/>
+    <app-teammember-editor [teamMember]="teamMember" class="content" (deleted)="onDeleted(); layout.mobileOpen.set(false)"/>
   }
-</div>
+</app-left-sidebar-layout>

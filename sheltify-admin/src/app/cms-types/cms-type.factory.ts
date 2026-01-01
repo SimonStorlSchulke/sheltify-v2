@@ -21,14 +21,13 @@ export function createNewAnimal(name: string): CmsAnimal {
     NoAdoption: false,
     FreeRoamer: SqlNullBoolNull,
     HomeFoundStatus: 'no',
-    HomeFoundEntries: [],
   };
 }
 
 export function createHomeFoundEntry(animalID: string): CmsHomeFoundEntry {
   return {
     ID: '',
-    AnimalID: animalID,
+    AnimalName: '',
     Content: {
       Html: '',
       MediaFiles: [],
@@ -49,6 +48,17 @@ export function createNewPage(): CmsPage {
     ShowInMenu: true,
     LinkInFooter: false,
     Priority: 0,
+  }
+}
+
+export function createNewHomeFoundEntry(): CmsHomeFoundEntry {
+  return {
+    ID: '',
+    AnimalName: '',
+    Content: {
+      Html: '',
+      MediaFiles: [],
+    }
   }
 }
 

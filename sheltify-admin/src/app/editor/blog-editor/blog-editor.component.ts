@@ -36,7 +36,7 @@ export class BlogEditorComponent implements OnInit {
     private cmsRequestService: CmsRequestService,
     private blogService: BlogService,
     private alertService: AlertService,
-    private readonly tenantConfigurationService: TenantConfigurationService,
+    private tenantConfigurationService: TenantConfigurationService,
   ) {
   }
 

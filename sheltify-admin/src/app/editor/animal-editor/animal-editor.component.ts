@@ -5,7 +5,6 @@ import { CmsArticle } from 'sheltify-lib/article-types';
 import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
 import { CmsAnimal } from 'sheltify-lib/cms-types';
 import { ArticleEditorComponent } from 'src/app/editor/article-editor/article-editor.component';
-import { HomeFoundEditorComponent } from 'src/app/editor/home-found-editor/home-found-editor.component';
 import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-input.component';
 import { DatePickerComponent } from 'src/app/forms/date-picker/date-picker.component';
 import { ImagePickerSingleComponent } from 'src/app/forms/image-picker-single/image-picker-single.component';
@@ -34,7 +33,6 @@ import { CmsRequestService } from '../../services/cms-request.service';
     NumberInputComponent,
     SelectInputComponent,
     LastEditedComponent,
-    HomeFoundEditorComponent,
   ],
   templateUrl: './animal-editor.component.html',
   styleUrl: './animal-editor.component.scss',
@@ -50,7 +48,7 @@ export class AnimalEditorComponent {
   public deleted = output();
 
   public saveArticle$ = new Subject<void>();
-  
+
   public animalKinds: string[] = [];
 
   constructor(

@@ -30,7 +30,6 @@ type Animal struct {
 	Race             string
 	MediaFiles       []*MediaFile `gorm:"many2many:media_file_animals;constraint:OnDelete:CASCADE;"`
 	HomeFoundStatus  string
-	HomeFoundEntries []HomeFoundEntry `gorm:"constraint:OnDelete:CASCADE;"`
 }
 
 func (a *Animal) Validate() string {

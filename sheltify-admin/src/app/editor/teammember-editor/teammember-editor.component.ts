@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { CmsTeamMember } from 'sheltify-lib/cms-types';
 import { ImagePickerSingleComponent } from 'src/app/forms/image-picker-single/image-picker-single.component';
@@ -18,7 +18,8 @@ import { TeamMembersService } from 'src/app/services/team-members.service';
   styleUrl: './teammember-editor.component.scss',
 })
 export class TeammemberEditorComponent {
-  teamMember = input.required<CmsTeamMember>();
+  public teamMember = input.required<CmsTeamMember>();
+  public deleted = output<void>();
 
   constructor(
     private cmsRequestService: CmsRequestService,
@@ -36,5 +37,6 @@ export class TeammemberEditorComponent {
   public async delete() {
     await firstValueFrom(this.cmsRequestService.deleteTeamMember([this.teamMember().ID]));
     this.teamMembersService.reloadTeamMembers();
+    this.deleted.emit();
   }
 }

@@ -1,56 +1,44 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectorRef, Component, computed, input } from '@angular/core';
+import { Component, input, Input, output } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { CmsAnimal, CmsHomeFoundEntry } from 'sheltify-lib/dist/cms-types';
-import { createHomeFoundEntry } from 'src/app/cms-types/cms-type.factory';
+import { CmsHomeFoundEntry } from 'sheltify-lib/dist/cms-types';
 import { TextEditorComponent } from 'src/app/editor/text-editor/text-editor.component';
 import { ImagePickerMultiComponent } from 'src/app/forms/image-picker-multi/image-picker-multi.component';
+import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
+import { AlertService } from 'src/app/services/alert.service';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 
 @Component({
   selector: 'app-home-found-editor',
   imports: [
+    DatePipe,
     ImagePickerMultiComponent,
     TextEditorComponent,
-    DatePipe
+    TextInputComponent
   ],
   templateUrl: './home-found-editor.component.html',
   styleUrl: './home-found-editor.component.scss',
 })
 export class HomeFoundEditorComponent {
-  public animal = input.required<CmsAnimal>();
+  public entry = input.required<CmsHomeFoundEntry>();
 
-  public entries = computed(() => this.animal().HomeFoundEntries.sort((a, b) => {
-    if (!a.CreatedAt || !b.CreatedAt) {
-      return 0;
-    }
-    const dateA = new Date(a.CreatedAt);
-    const dateB = new Date(b.CreatedAt);
+  public modified = output<void>();
 
-    if (dateA < dateB) {
-      return 1;
-    }
-    if (dateA > dateB) {
-      return -1;
-    }
-    return 0;
-  }));
-
-  constructor(private readonly cmsRequestService: CmsRequestService, private cdRef: ChangeDetectorRef) {
+  constructor(
+    private alertService: AlertService,
+    private cmsRequestService: CmsRequestService,
+  ) {
   }
 
-  public addEntry() {
-    this.animal().HomeFoundEntries.push(createHomeFoundEntry(this.animal().ID));
+  public async save() {
+    await firstValueFrom(this.cmsRequestService.saveHomeFoundEntry(this.entry()));
+    this.modified.emit();
   }
 
-  public readonly Date = Date;
-
-  public async removeEntry(index: number) {
-    const idToDelete = this.animal().HomeFoundEntries[index].ID;
-    if (idToDelete) {
-      await firstValueFrom(this.cmsRequestService.deleteHomeFoundEntries([idToDelete]));
-    }
-    this.animal().HomeFoundEntries.splice(index, 1);
-    this.cdRef.markForCheck();
+  public async delete() {
+    const choice = await this.alertService.openAlert('Seite wirklich entfernen?', 'Aktion kann nicht rückgängig gemacht werden', ['ja', 'nein'])
+    if (choice !== 'ja') return;
+    await firstValueFrom(this.cmsRequestService.deleteHomeFoundEntries([this.entry()!.ID]));
+    this.modified.emit();
   }
 }

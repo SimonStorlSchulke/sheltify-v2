@@ -68,9 +68,7 @@
 
     <br>
 
-    @if (animal.HomeFoundStatus == 'yes') {
-      <app-home-found-editor [animal]="animal"/>
-    } @else if (animal.ArticleID) {
+    @if (animal.ArticleID) {
       <app-article-editor [articleId]="animal.ArticleID ?? ''" [saveArticle]="saveArticle$" class="sui flex-y grow-1 mt-2"/>
     } @else {
       <div class="sui flex-x gap-2">
