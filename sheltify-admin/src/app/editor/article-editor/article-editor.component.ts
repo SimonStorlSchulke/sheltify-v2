@@ -12,6 +12,7 @@ import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
 import { createEmptySection } from 'src/app/editor/article-editor/article-section.factory';
 import { PickNewSectionComponent } from 'src/app/editor/article-editor/pick-new-section/pick-new-section.component';
 import { SectionEditorAnimalListComponent } from 'src/app/editor/article-editor/section-editor-animal-list/section-editor-animal-list.component';
+import { SectionEditorColumnsComponent } from 'src/app/editor/article-editor/section-editor-columns/section-editor-columns.component';
 import { SectionEditorHeroComponent } from 'src/app/editor/article-editor/section-editor-hero/section-editor-hero.component';
 import { SectionEditorHtmlComponent } from 'src/app/editor/article-editor/section-editor-html/section-editor-html.component';
 import { SectionEditorImagesComponent } from 'src/app/editor/article-editor/section-editor-images/section-editor-images.component';
@@ -27,7 +28,7 @@ import { bootstrapEye } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-article-editor',
-  imports: [SectionEditorTextComponent, NgIcon, SectionEditorImagesComponent, SectionEditorTitleComponent, SectionEditorAnimalListComponent, SectionEditorHtmlComponent, SectionEditorHeroComponent, AsyncPipe, SectionEditorVideoComponent, TextInputComponent, FormsModule, NgSelectComponent],
+  imports: [SectionEditorTextComponent, NgIcon, SectionEditorImagesComponent, SectionEditorTitleComponent, SectionEditorAnimalListComponent, SectionEditorHtmlComponent, SectionEditorHeroComponent, AsyncPipe, SectionEditorVideoComponent, TextInputComponent, FormsModule, NgSelectComponent, SectionEditorColumnsComponent],
   providers: [provideIcons({bootstrapGripVertical, bootstrapX, bootstrapPlus, bootstrapEye})],
   templateUrl: './article-editor.component.html',
   styleUrl: './article-editor.component.scss',

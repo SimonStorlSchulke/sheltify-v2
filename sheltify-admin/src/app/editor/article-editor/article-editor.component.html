@@ -38,6 +38,9 @@
                 </div>
                 <div [attr.data-testid]="'section-editor-' + iRow + '-' + iColumn" class="section-editor">
                   @switch (section.SectionType) {
+                    @case ('columns') {
+                      <app-section-editor-columns [section]="section"/>
+                    }
                     @case ('title') {
                       <app-section-editor-title [section]="section"/>
                     }

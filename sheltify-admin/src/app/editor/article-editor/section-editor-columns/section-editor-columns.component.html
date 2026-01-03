@@ -1,0 +1,5 @@
+<div class="columns sui flex-x">
+  @for (column of section().Content.Columns; track column) {
+    <div class="column" [style.flex-grow]="column.Grow">column</div>
+  }
+</div>

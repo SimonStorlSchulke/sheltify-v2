@@ -1,6 +1,6 @@
 import { CmsAnimal, CmsImage, CmsType, SqlNullTime } from './cms-types';
 
-export const SectionTypes = ["title", "text", "video", "image", "hero", "animal-list", "html", "separator-x", "home-found"] as const;
+export const SectionTypes = ["title", "text", "video", "image", "hero", "animal-list", "html", "separator-x", "home-found", "columns"] as const;
 
 export type SectionType = (typeof SectionTypes)[number];
 
@@ -28,6 +28,17 @@ export type Section =
   | SectionSeparatorX
   | SectionHero
   | SectionHomeFound
+  | SectionColumns
+
+export type SectionColumns = {
+  SectionType: 'columns',
+  Content: {
+    Columns: {
+      Sections: Section[],
+      Grow: number,
+    }[]
+  },
+};
 
 export type SectionText = {
   SectionType: 'text',

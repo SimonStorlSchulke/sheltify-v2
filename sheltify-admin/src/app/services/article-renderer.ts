@@ -48,6 +48,7 @@ export const sectionLabels = new Map<SectionType, string>([
   ['animal-list', 'Tierliste (statisch)'],
   ['separator-x', 'Trenner'],
   ['hero', 'Hero'],
+  ['columns', 'Spalten'],
 ]);
 
 function renderTitleSection(section: SectionTitle) {

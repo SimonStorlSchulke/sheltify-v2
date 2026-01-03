@@ -15,5 +15,5 @@ import { TextInputComponent } from 'src/app/forms/text-input/text-input.componen
   styleUrl: './section-editor-hero.component.scss',
 })
 export class SectionEditorHeroComponent {
-  section = input.required<SectionHero>();
+  public section = input.required<SectionHero>();
 }

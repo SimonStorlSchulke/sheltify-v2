@@ -2,6 +2,26 @@ import { Section, SectionType } from 'sheltify-lib/article-types';
 
 export function createEmptySection(SectionType: SectionType): Section {
   switch (SectionType) {
+    case 'columns':
+      return {
+        SectionType,
+        Content: {
+          Columns: [
+            {
+              Sections: [],
+              Grow: 1,
+            },
+            {
+              Sections: [],
+              Grow: 1,
+            },
+            {
+              Sections: [],
+              Grow: 1,
+            },
+          ]
+        }
+      };
     case 'title':
       return {
         SectionType,
