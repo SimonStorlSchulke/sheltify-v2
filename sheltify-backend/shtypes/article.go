@@ -10,16 +10,11 @@ func (a *Article) Validate() string {
 }
 
 type ArticleStructure struct {
-	Rows []*ArticleRow
-}
-
-type ArticleRow struct {
-	Sections []*ArticleSection
+	Rows []*ArticleSection
 }
 
 type ArticleSection struct {
 	BackgroundColor string
-	Width           string
 	SectionType     string
 	Content         interface{}
 }

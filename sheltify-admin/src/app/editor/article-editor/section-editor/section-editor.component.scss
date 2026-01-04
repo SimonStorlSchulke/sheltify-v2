@@ -5,6 +5,13 @@
   opacity: 0;
 }
 
+.section:not(.edit-mode) {
+  cursor: pointer;
+  &:hover {
+    outline: 1px solid $neutral200;
+  }
+}
+
 .edit-mode {
   .only-editmode {
     pointer-events: all;
@@ -39,5 +46,35 @@
     margin-top: -50px;
     min-height: calc(100% + 50px);
     pointer-events: none;
+  }
+}
+
+// Section titlebar
+.section-titlebar {
+  position: relative;
+  background: transparent;
+  z-index: 1;
+
+  b {
+    color: $primary;
+    font-size: 0.9rem;
+  }
+
+  .move-button,
+  .x {
+    z-index: 1000;
+
+    &:hover {
+      &.move-button { background: $primary-h4; }
+      &.x {
+        background: $error;
+        color: #fff;
+      }
+    }
+  }
+
+  .x {
+    cursor: pointer;
+    border-radius: 50%;
   }
 }

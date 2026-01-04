@@ -10,12 +10,8 @@ export type CmsArticle = CmsType & {
   DeletedAt?: string | null;
   TenantID: string;
   Structure: {
-    Rows: CmsArticleRow[];
+    Rows: Section[];
   }
-};
-
-export type CmsArticleRow = {
-  Sections: Section[];
 };
 
 export type Section =

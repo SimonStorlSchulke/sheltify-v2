@@ -1,27 +1,9 @@
 @use "colors" as *;
 
 // --------------------------------------
-// :host hover interactions
-// --------------------------------------
-:host {
-  &:hover {
-    .article-row:not(.previewMode) {
-      .article-column:not(.edit-mode) {
-        cursor: pointer;
-
-        &:hover {
-          outline: 1px solid $neutral200;
-        }
-      }
-    }
-  }
-}
-
-// --------------------------------------
 // Move-to controls
 // --------------------------------------
 .article-container:not(.previewMode) {
-  .move-to-column,
   .move-to-row {
     &:only-of-type {
       outline: 2px dashed mix($primary, transparent, 50%);
@@ -54,102 +36,18 @@
   }
 }
 
-.move-to-column,
 .move-to-row {
   color: #fff;
   font-size: 10px;
   padding: 12px;
 }
 
-.move-to-column { width: 34px; }
 .move-to-row { height: 34px; }
-
-// Article rows/columns
-.article-row {
-  &:not(:first-of-type) {
-    border-top: none;
-  }
-
-  &.previewMode {
-    .section-editor { display: none; }
-    .section-preview { pointer-events: all; }
-    .section-titlebar { pointer-events: none; }
-  }
-
-  &:not(.previewMode) {
-    .article-column:hover .section-titlebar {
-      background: linear-gradient(
-          -90deg,
-          mix(#fff, transparent, 50%) 130px,
-          transparent 180px
-      );
-
-      .move-button,
-      .x {
-        outline: 2px solid $primary;
-        opacity: 1;
-      }
-    }
-  }
-}
-
-.article-column {
-  &.edit-mode {
-    outline: 1px solid transparentize($primary-d1, 0.94) !important;
-    box-shadow: 3px 3px 12px $neutral200;
-    .section-editor {
-      pointer-events: all;
-      opacity: 100%;
-    }
-
-    .section-titlebar b {
-      opacity: 1;
-    }
-
-    .section-preview {
-      opacity: 0;
-    }
-  }
-}
-
-// Section titlebar
-.section-titlebar {
-  position: relative;
-  background: transparent;
-  z-index: 1;
-
-  b {
-    opacity: 0;
-    color: $primary;
-    font-size: 0.9rem;
-  }
-
-  .move-button,
-  .x {
-    opacity: 0;
-    transition: opacity 0.25s;
-    z-index: 1000;
-
-    &:hover {
-      &.move-button { background: $primary-h4; }
-      &.x {
-        background: $error;
-        color: #fff;
-      }
-    }
-  }
-
-  .x {
-    cursor: pointer;
-    border-radius: 50%;
-  }
-}
 
 // Drag mode
 .dragMode {
   cursor: crosshair !important;
 
-  .move-to-column,
   .move-to-row {
     background: $primary-h3;
     outline-offset: -2px;
@@ -158,30 +56,5 @@
       background: $primary;
       cursor: crosshair !important;
     }
-  }
-}
-
-// Section content
-.section-content {
-  display: grid;
-  justify-items: stretch;
-
-  .section-editor,
-  .section-preview {
-    grid-area: 1 / 1;
-    position: relative;
-    box-sizing: border-box;
-  }
-
-  .section-editor {
-    opacity: 0;
-    pointer-events: none;
-    padding: 0 16px 12px;
-  }
-
-  .section-preview {
-    margin-top: -50px;
-    min-height: calc(100% + 50px);
-    pointer-events: none;
   }
 }
