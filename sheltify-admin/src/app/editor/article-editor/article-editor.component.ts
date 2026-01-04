@@ -18,6 +18,7 @@ import { SectionEditorHtmlComponent } from 'src/app/editor/article-editor/sectio
 import { SectionEditorImagesComponent } from 'src/app/editor/article-editor/section-editor-images/section-editor-images.component';
 import { SectionEditorTitleComponent } from 'src/app/editor/article-editor/section-editor-title/section-editor-title.component';
 import { SectionEditorVideoComponent } from 'src/app/editor/article-editor/section-editor-video/section-editor-video.component';
+import { SectionEditorComponent } from 'src/app/editor/article-editor/section-editor/section-editor.component';
 import { SectionEditorTextComponent } from 'src/app/editor/article-editor/text-section-editor/section-editor-text.component';
 import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
 import { AlertService } from 'src/app/services/alert.service';
@@ -28,7 +29,7 @@ import { bootstrapEye } from '@ng-icons/bootstrap-icons';
 
 @Component({
   selector: 'app-article-editor',
-  imports: [SectionEditorTextComponent, NgIcon, SectionEditorImagesComponent, SectionEditorTitleComponent, SectionEditorAnimalListComponent, SectionEditorHtmlComponent, SectionEditorHeroComponent, AsyncPipe, SectionEditorVideoComponent, TextInputComponent, FormsModule, NgSelectComponent, SectionEditorColumnsComponent],
+  imports: [SectionEditorTextComponent, NgIcon, SectionEditorImagesComponent, SectionEditorTitleComponent, SectionEditorAnimalListComponent, SectionEditorHtmlComponent, SectionEditorHeroComponent, AsyncPipe, SectionEditorVideoComponent, TextInputComponent, FormsModule, NgSelectComponent, SectionEditorColumnsComponent, SectionEditorComponent],
   providers: [provideIcons({bootstrapGripVertical, bootstrapX, bootstrapPlus, bootstrapEye})],
   templateUrl: './article-editor.component.html',
   styleUrl: './article-editor.component.scss',
@@ -94,7 +95,7 @@ export class ArticleEditorComponent implements OnInit {
   private editSectionAtPosition(row: number, column: number) {
     const rowElement = document.querySelectorAll('.article-row')[row];
     const sectionElement = rowElement.querySelectorAll<HTMLDivElement>('.article-column')[column];
-    this.editSection(sectionElement)
+    //this.editSection(sectionElement)
   }
 
   public async addSectionAtNewRow(row: number) {
@@ -131,7 +132,6 @@ export class ArticleEditorComponent implements OnInit {
   public exitMoveMode() {
     setTimeout(() => {
       this.movedItem.set(null)
-    this.triggerRerender();
     }, 0);
   }
 
@@ -183,51 +183,4 @@ export class ArticleEditorComponent implements OnInit {
     article.Structure.Rows = article.Structure.Rows.filter((row: CmsArticleRow) => row.Sections.length > 0)
     this.article.set(article);
   }
-
-  protected editSection(articleColumn: HTMLDivElement, mouseEvent?: MouseEvent) {
-    if (this.isPreviewMode()) return;
-    mouseEvent?.stopPropagation();
-    document.querySelectorAll('.article-column').forEach(el => el.classList.remove('edit-mode'));
-    articleColumn.classList.add('edit-mode');
-  }
-
-  @HostListener('document:click', ['$event'])
-  deselectSections(event: any) {
-    const target = event!.target as HTMLElement;
-
-    // Only react if the click occurred inside <main>
-    if (!target.closest('main')) {
-      return;
-    }
-    const wasInEditMode = !!document.querySelector('.article-column.edit-mode');
-    document.querySelectorAll('.article-column').forEach(el => el.classList.remove('edit-mode'));
-    if(wasInEditMode) {
-      this.triggerRerender();
-    }
-  }
-
-  public triggerRerender() {
-    this.triggerRerenderVal.update(v => v + 1);
-  }
-
-  triggerRerenderVal = signal(0);
-  renderedSections = computed(async () => {
-    this.triggerRerenderVal();
-    const article = this.article();
-
-    const sections: SafeHtml[][] = [];
-
-    for (const row of article?.Structure.Rows ?? []) {
-      const rowHtml: SafeHtml[] = [];
-      for (const section of row.Sections) {
-        const html = this.domSanitizer.bypassSecurityTrustHtml(await renderArticleSection(section));
-        rowHtml.push(html);
-      }
-      sections.push(rowHtml);
-    }
-
-    return sections;
-
-  });
-
 }

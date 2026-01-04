@@ -43,6 +43,7 @@ func GetFilteredAnimals(filter AnimalsFilter, tenant string) (*[]shtypes.Animal,
 	if filter.SizeMin > 0 {
 		query = query.Where("shoulder_height_cm >= ?", filter.SizeMin)
 	}
+
 	if filter.SizeMax > 0 {
 		query = query.Where("shoulder_height_cm <= ?", filter.SizeMax)
 	}

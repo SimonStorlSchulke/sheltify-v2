@@ -1,0 +1,43 @@
+@use "colors" as *;
+
+.only-editmode {
+  pointer-events: none;
+  opacity: 0;
+}
+
+.edit-mode {
+  .only-editmode {
+    pointer-events: all;
+    opacity: 100%;
+  }
+
+  outline: 1px solid transparentize($primary-d1, 0.94) !important;
+  box-shadow: 3px 3px 12px $neutral200;
+
+  .section-preview {
+    opacity: 0;
+  }
+
+}
+
+.section-content {
+  display: grid;
+  justify-items: stretch;
+
+  .section-editor,
+  .section-preview {
+    grid-area: 1 / 1;
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  .section-editor {
+    padding: 0 16px 12px;
+  }
+
+  .section-preview {
+    margin-top: -50px;
+    min-height: calc(100% + 50px);
+    pointer-events: none;
+  }
+}

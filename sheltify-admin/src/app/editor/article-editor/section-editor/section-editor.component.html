@@ -1,43 +1,44 @@
 @let sectionVal = section();
-
 @let renderedSectionsVal = renderedSection() | async;
 
 
-<div class="section-titlebar sui flex-x px-2 gap-1 ai-center">
-  <b class="sui py-2 grow-1">{{ sectionLabels.get(sectionVal.SectionType) ?? 'Sektion' }}</b>
-  <button (mousedown)="enterMoveMode()" class="move-button small">verschieben</button>
-  <ng-icon class="x" (click)="deleteSection()" name="bootstrapX" size="22px"/>
-</div>
+<div [class.edit-mode]="editMode()" class="section" (click)="enterEditMode($event)">
+  <div class="section-titlebar sui flex-x px-2 gap-1 ai-center only-editmode">
+    <b class="sui py-2 grow-1">{{ sectionLabels.get(sectionVal.SectionType) ?? 'Sektion' }}</b>
+    <button (mousedown)="enterMoveMode()" class="move-button small">verschieben</button>
+    <ng-icon class="x" (click)="deleteSection()" name="bootstrapX" size="22px"/>
+  </div>
 
-<div class="section-content">
+  <div class="section-content">
 
-  <div class="section-preview" [innerHTML]="renderedSectionsVal ? renderedSectionsVal : ''"></div>
-  <div class="section-editor">
-    @switch (sectionVal.SectionType) {
-      @case ('columns') {
-        <app-section-editor-columns [section]="sectionVal"/>
+    <div class="section-preview" [innerHTML]="renderedSectionsVal ?? ''"></div>
+    <div class="section-editor only-editmode">
+      @switch (sectionVal.SectionType) {
+        @case ('columns') {
+          <app-section-editor-columns [section]="sectionVal"/>
+        }
+        @case ('title') {
+          <app-section-editor-title [section]="sectionVal"/>
+        }
+        @case ('text') {
+          <app-section-editor-text [section]="sectionVal"/>
+        }
+        @case ('image') {
+          <app-section-editor-images [section]="sectionVal"/>
+        }
+        @case ('hero') {
+          <app-section-editor-hero [section]="sectionVal"/>
+        }
+        @case ('animal-list') {
+          <app-section-editor-animal-list [section]="sectionVal" (triggerRerender)="triggerRerender()"/>
+        }
+        @case ('html') {
+          <app-section-editor-html [section]="sectionVal"/>
+        }
+        @case ('video') {
+          <app-section-editor-video [section]="sectionVal"/>
+        }
       }
-      @case ('title') {
-        <app-section-editor-title [section]="sectionVal"/>
-      }
-      @case ('text') {
-        <app-section-editor-text [section]="sectionVal"/>
-      }
-      @case ('image') {
-        <app-section-editor-images [section]="sectionVal"/>
-      }
-      @case ('hero') {
-        <app-section-editor-hero [section]="sectionVal"/>
-      }
-      @case ('animal-list') {
-        <app-section-editor-animal-list [section]="sectionVal" (triggerRerender)="triggerRerender()"/>
-      }
-      @case ('html') {
-        <app-section-editor-html [section]="sectionVal"/>
-      }
-      @case ('video') {
-        <app-section-editor-video [section]="sectionVal"/>
-      }
-    }
+    </div>
   </div>
 </div>

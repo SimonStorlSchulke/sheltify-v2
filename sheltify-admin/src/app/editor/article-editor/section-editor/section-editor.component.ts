@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, computed, input, signal } from '@angular/core';
+import { Component, computed, HostListener, input, signal } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NgIcon } from '@ng-icons/core';
 import { Section } from 'sheltify-lib/article-types';
@@ -32,12 +32,11 @@ import { renderArticleSection, sectionLabels } from 'src/app/services/article-re
 })
 export class SectionEditorComponent {
   public section = input.required<Section>();
-  triggerRerenderVal = signal(0);
+  public triggerRerenderVal = signal(0);
+  public editMode = signal(false);
 
   constructor(private domSanitizer: DomSanitizer) {
-
   }
-
 
   public triggerRerender() {
     this.triggerRerenderVal.update(v => v + 1);
@@ -45,17 +44,10 @@ export class SectionEditorComponent {
 
   public renderedSection = computed(async () => {
     this.triggerRerenderVal();
-
-    const sections: SafeHtml[][] = [];
-
-    const rowHtml: SafeHtml[] = [];
-    const html = this.domSanitizer.bypassSecurityTrustHtml(await renderArticleSection(this.section()));
-    rowHtml.push(html);
-    sections.push(rowHtml);
-
-    return sections;
-
+    const htmlString = await renderArticleSection(this.section());
+    return this.domSanitizer.bypassSecurityTrustHtml(htmlString);
   });
+
   protected readonly sectionLabels = sectionLabels;
 
   public enterMoveMode() {
@@ -64,5 +56,16 @@ export class SectionEditorComponent {
 
   public deleteSection() {
 
+  }
+
+  public enterEditMode(event: MouseEvent) {
+    event.stopPropagation();
+    this.editMode.set(true);
+  }
+
+  @HostListener('document:click', ['$event'])
+  deselectSections(event: any) {
+    this.editMode.set(false);
+    this.triggerRerender();
   }
 }

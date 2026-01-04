@@ -21,7 +21,7 @@ func TriggerAstroSiteBuild(w http.ResponseWriter, r *http.Request) {
 	cmd.Dir = "../clients"
 
 	if err := cmd.Run(); err != nil {
-		internalServerErrorResponse(w, r, "Seite konnte nicht gebaut werden. Bitte Simon melden. Fehler: "+err.Error())
+		internalServerErrorResponse(w, r, "Seite konnte nicht gebaut werden. Bitte Administrator melden. Fehler: "+err.Error())
 		return
 	}
 
@@ -37,7 +37,7 @@ func TriggerAstroSiteBuild(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err != nil {
-		internalServerErrorResponse(w, r, "Seite wurde gebaut, Tenantconfiguration knnte aber nicht gespeichert werden")
+		internalServerErrorResponse(w, r, "Seite wurde gebaut, Tenantconfiguration könnte aber nicht gespeichert werden")
 		return
 	}
 
