@@ -1,7 +1,6 @@
 @let sectionVal = section();
 @let renderedSectionsVal = renderedSection() | async;
 
-
 <div [class.edit-mode]="editMode()" class="section" (click)="enterEditMode($event)">
   <div class="section-titlebar sui flex-x px-2 gap-1 ai-center only-editmode">
     <b class="sui py-2 grow-1">{{ sectionLabels.get(sectionVal.SectionType) ?? 'Sektion' }}</b>
@@ -10,35 +9,9 @@
   </div>
 
   <div class="section-content">
-
     <div class="section-preview" [innerHTML]="renderedSectionsVal ?? ''"></div>
     <div class="section-editor only-editmode">
-      @switch (sectionVal.SectionType) {
-        @case ('columns') {
-          <app-section-editor-columns [section]="sectionVal"/>
-        }
-        @case ('title') {
-          <app-section-editor-title [section]="sectionVal"/>
-        }
-        @case ('text') {
-          <app-section-editor-text [section]="sectionVal"/>
-        }
-        @case ('image') {
-          <app-section-editor-images [section]="sectionVal"/>
-        }
-        @case ('hero') {
-          <app-section-editor-hero [section]="sectionVal"/>
-        }
-        @case ('animal-list') {
-          <app-section-editor-animal-list [section]="sectionVal" (triggerRerender)="triggerRerender()"/>
-        }
-        @case ('html') {
-          <app-section-editor-html [section]="sectionVal"/>
-        }
-        @case ('video') {
-          <app-section-editor-video [section]="sectionVal"/>
-        }
-      }
+      <app-section-editor-all-sections [section]="sectionVal"/>
     </div>
   </div>
 </div>

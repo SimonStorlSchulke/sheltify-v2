@@ -117,6 +117,14 @@ body {
   outline: 1.5px solid $primary;
 }
 
+.x {
+  border-radius: 50%;
+  cursor: pointer;
+  &:hover {
+    background: $alert;
+    color: #fff;
+  }
+}
 
 @media (min-width: 1201px) {
   .only-narrow {

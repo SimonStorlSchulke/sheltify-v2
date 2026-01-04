@@ -1,4 +1,3 @@
-
 <div class="sui flex-y grow-1 article-container card" [class.previewMode]="isPreviewMode()" [class.dragMode]="movedItem()">
 <span class="sui flex-x jc-end grow-1 gap-2">
   @if (!saveArticle()) {
@@ -9,21 +8,18 @@
   </button>
 </span>
 
-  <div (click)="addSectionAtNewRow(0)" (mouseup)="moveToNewRow(0)" data-testid="row-selector-0" class="move-to-row"></div>
+  <div (click)="addSectionAtRow(0)" (mouseup)="moveToNewRow(0)" data-testid="row-selector-0" class="move-to-row"></div>
 
-  @if (article(); as article) {
+  @if (articleEditorService.article(); as article) {
     @for (section of article.Structure.Rows; track section) {
 
-          <div class="sui flex-y grow-1">
-
-            <div #articleColumn class="article-column sui grow-1">
-              <app-section-editor [section]="section"/>
-            </div>
-
-          </div>
-          <div (mouseup)="moveToRow($index)" (click)="addSectionAtNewRow($index)" [attr.data-testid]="'column-selector-' + $index"
-               class="move-to-column"></div>
-      <div (click)="addSectionAtNewRow($index + 1)" (mouseup)="moveToNewRow($index + 1)" [attr.data-testid]="'row-selector-' + $index + 1" class="move-to-row"></div>
+      <app-section-editor [section]="section" [rowIndex]="$index"/>
+      <div (mouseup)="moveToRow($index)"
+           (click)="addSectionAtRow($index)"
+           [attr.data-testid]="'column-selector-' + $index"
+           class="move-to-column">
+      </div>
+      <div (click)="addSectionAtRow($index + 1)" (mouseup)="moveToNewRow($index + 1)" [attr.data-testid]="'row-selector-' + $index + 1" class="move-to-row"></div>
     }
   }
   <span class="overscroll"></span>

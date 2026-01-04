@@ -1,4 +1,4 @@
-import { Section, SectionAnimalList, SectionHero, SectionImages, SectionTitle, SectionType, SectionVideo } from 'sheltify-lib/article-types';
+import { Section, SectionAnimalList, SectionColumns, SectionHero, SectionImages, SectionTitle, SectionType, SectionVideo } from 'sheltify-lib/article-types';
 import { CmsImage, CmsImagesSize } from 'sheltify-lib/cms-types';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 
@@ -31,6 +31,9 @@ export async function renderArticleSection(section: Section) {
       break;
     case 'video':
       contentHtml = renderVideoSection(section);
+      break;
+    case 'columns':
+      contentHtml = await renderColumnsSection(section);
       break;
     default:
       contentHtml = 'Vorschau noch nicht implementiert';
@@ -120,6 +123,21 @@ async function renderHeroSection(section: SectionHero) {
 
 }
 
+async function renderColumnsSection(section: SectionColumns): Promise<string> {
+  let html = `<div class="sui flex-x">`;
+
+  for (const column of section.Content.Columns) {
+    html += `<div class="sui grow-${column.Grow}">`;
+
+    for (const child of column.Sections) {
+      html += `<div>${await renderArticleSection(child)}</div>`;
+    }
+
+    html += `</div>`;
+  }
+
+  return html + `</div>`;
+}
 
 function renderVideoSection(section: SectionVideo) {
   const videoId = getYouTubeVideoId(section.Content.Url);
@@ -141,17 +159,11 @@ function renderVideoSection(section: SectionVideo) {
 }
 
 function getYouTubeVideoId(url: string) {
-  if (typeof url !== 'string') return null;
+  const pattern = /(?:youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/;
 
-  const patterns = [
-    /(?:youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/,
-  ];
-
-  for (const pattern of patterns) {
-    const match = url.match(pattern);
-    if (match) {
-      return match[1];
-    }
+  const match = url.match(pattern);
+  if (match) {
+    return match[1];
   }
 
   return null;

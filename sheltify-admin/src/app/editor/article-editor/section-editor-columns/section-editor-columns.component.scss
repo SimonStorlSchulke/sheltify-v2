@@ -1,3 +1,5 @@
+@use "colors" as *;
+
 .column {
   border-left: 1px solid #ccc;
   border-top: 1px solid #ccc;
@@ -6,5 +8,48 @@
 
   &:last-of-type {
     border-right: 1px solid #ccc;
+  }
+
+  .column-header {
+
+  }
+}
+
+.add-column {
+  border-radius: 0 4px 4px 0;
+}
+
+.move-to-row {
+  color: #fff;
+  font-size: 10px;
+  padding: 12px;
+  height: 34px;
+  cursor: pointer;
+  outline-offset: -2px;
+
+  &:only-of-type {
+    outline: 2px dashed mix($primary, transparent, 50%);
+    position: relative;
+    height: 100px;
+  }
+
+  &:only-of-type:after {
+    content: "Erste Sektion hinzufügen";
+    position: absolute;
+    width: 95%;
+    top: 35px;
+    text-align: center;
+    color: $primary;
+    font-size: 20px;
+    box-sizing: border-box;
+  }
+
+  &:hover {
+    background-image: url("/assets/icons/plus.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 24px;
+    opacity: 0.4;
+    outline: 2px dashed mix($primary, transparent, 50%);
   }
 }

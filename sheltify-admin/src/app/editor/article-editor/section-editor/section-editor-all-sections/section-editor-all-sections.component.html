@@ -1,0 +1,27 @@
+@let sectionVal = section();
+@switch (sectionVal.SectionType) {
+  @case ('columns') {
+    <app-section-editor-columns [section]="sectionVal"/>
+  }
+  @case ('title') {
+    <app-section-editor-title [section]="sectionVal"/>
+  }
+  @case ('text') {
+    <app-section-editor-text [section]="sectionVal"/>
+  }
+  @case ('image') {
+    <app-section-editor-images [section]="sectionVal"/>
+  }
+  @case ('hero') {
+    <app-section-editor-hero [section]="sectionVal"/>
+  }
+  @case ('animal-list') {
+    <app-section-editor-animal-list [section]="sectionVal" (triggerRerender)="triggerRerender()"/>
+  }
+  @case ('html') {
+    <app-section-editor-html [section]="sectionVal"/>
+  }
+  @case ('video') {
+    <app-section-editor-video [section]="sectionVal"/>
+  }
+}

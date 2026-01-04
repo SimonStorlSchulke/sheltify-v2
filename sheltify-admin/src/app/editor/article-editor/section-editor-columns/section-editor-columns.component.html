@@ -1,5 +1,28 @@
 <div class="columns sui flex-x">
   @for (column of section().Content.Columns; track column) {
-    <div class="column" [style.flex-grow]="column.Grow">column</div>
+    @let iCol = $index;
+    <div class="column" [style.flex-grow]="column.Grow">
+      <div class="column-header sui p-1 flex-x">
+        <app-number-input idName="grow" label="grow" [(twoWayModel)]="column.Grow"/>
+        <div class="sui grow-1"></div>
+        <ng-icon class="x" (click)="deleteColumn($index)" name="bootstrapX" size="22px"/>
+      </div>
+
+      <div class="column-sections">
+
+        <div (click)="addSectionAtRow(iCol, 0)" [attr.data-testid]="'row-selector-' + $index + 1" class="move-to-row"></div>
+
+        @for (section of column.Sections; track section) {
+          @let iSection = $index;
+          <app-section-editor-column-sections [section]="section"/>
+          <div (click)="addSectionAtRow(iCol, iSection + 1)" [attr.data-testid]="'row-selector-' + $index + 1" class="move-to-row"></div>
+        }
+      </div>
+
+
+    </div>
   }
+  <button (click)="addColumn()" class="add-column secondary small sui flex-x ai-center">
+    <app-bt-icon class="" name="Plus"/>
+  </button>
 </div>
