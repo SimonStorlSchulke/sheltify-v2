@@ -1,112 +1,18 @@
 ---
 import { cms } from '@shared/cms/sheltify-access.ts';
-import CmsImg from '@shared/components/ui/CmsImg.astro';
+import ImageGrid from '@shared/interactive/ImageGrid.svelte';
 import type { SectionImages } from 'sheltify-lib/article-types.ts';
-import type { CmsImage } from 'sheltify-lib/cms-types.ts';
 interface Props {
   section: SectionImages,
 }
 
 
 const {section} = Astro.props;
-const images = section.Content.MediaFiles;
+let images = section.Content.MediaFiles;
+
+images = await cms.getMediaFilesByIds(images.map(i => i.ID));
+
 const url = cms.uploadsUrl + `${images[0].ID}_${images[0].LargestAvailableSize}.webp`;
 ---
 
-<div class:list={['image-grid', 'count-' + images.length]}>
-  {
-    images.map((image: CmsImage) => {
-      return <CmsImg img={image} size="medium"/>;
-    })
-  }
-</div>
-
-<!-- TODO make global -->
-<div class="themable lightbox">
-  <div class="lightbox-images">
-  {
-    images.map((image: CmsImage) => {
-      return <CmsImg img={image} size="xlarge"/>;
-    })
-  }
-  </div>
-</div>
-
-<script>
-  const lightbox = document.querySelector('.lightbox')!;
-  const images = document.querySelectorAll('.images-wrapper')!.values()
-    .flatMap(wrapper => wrapper.children);
-
-  for (const image of images) {
-    image.addEventListener('click', () => {
-      const id = (image as HTMLImageElement).dataset.id;
-      const title = (image as HTMLImageElement).dataset.title;
-      const description = (image as HTMLImageElement).dataset.description;
-      console.log(id, title, description);
-      lightbox.classList.add('visible');
-    })
-  }
-
-  lightbox.addEventListener('click', () => {
-    lightbox.classList.remove('visible');
-  })
-</script>
-
-<style is:global lang="scss">
-  .article {
-    .image-grid {
-      column-count: 3;
-      column-gap: 8px;
-
-      &.count-1 {
-        column-count: 1;
-        max-width: 500px;
-      }
-
-      &.count-2 {
-        column-count: 2;
-        max-width: 800px;
-      }
-    }
-
-    .image-grid img {
-      width: 100%;
-      height: auto;
-      display: block;
-      margin-bottom: 8px;
-      break-inside: avoid;
-    }
-
-    @media (max-width: 800px) {
-      .image-grid {
-        column-count: 2 !important;
-      }
-    }
-
-    @media (max-width: 500px) {
-      .image-grid {
-        column-count: 1 !important;
-      }
-    }
-
-  }
-
-  .lightbox {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 100;
-
-    &.visible {
-      display: block;
-    }
-
-    .lightbox-images {
-      display: flex;
-    }
-  }
-</style>
+<ImageGrid images={images} layout={section.Content.Layout} client:visible/>

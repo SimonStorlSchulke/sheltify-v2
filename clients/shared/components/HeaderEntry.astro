@@ -9,7 +9,7 @@ const {entry, startPageName} = Astro.props;
 
 {
   /*if*/ entry.children.length == 0 ?
-  <a href={entry.link} class="sui px-2 py-3">{entry.title || startPageName}</a>
+  <a href={entry.link} class="sui px-2 py-3">{entry.title.replaceAll(' und ', ' & ') || startPageName}</a>
 
     /*else*/:
   <div class="sui px-2 py-3 dropdown-container">
@@ -27,7 +27,7 @@ const {entry, startPageName} = Astro.props;
       <div class="entries">
 
         {entry.children.map(entry => (
-          <a href={entry.link}>{entry.title}</a>
+          <a href={entry.link}>{entry.title.replaceAll(' und ', ' & ')}</a>
         ))}
       </div>
     </div>

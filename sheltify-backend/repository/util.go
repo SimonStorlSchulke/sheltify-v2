@@ -1,5 +1,7 @@
 package repository
 
+import "fmt"
+
 func DefaultGetAll[T any](tenant string, out *[]T, preloads ...string) error {
 	q := db
 
@@ -24,15 +26,23 @@ func DefaultGetByID[T any](id string, tenant string, out *T, preloads ...string)
 	return nil
 }
 
-func DefaultGetByIDs[T any](ids []string, tenant string, out *T, preloads ...string) error {
+func DefaultGetByIDs[T any](ids []string, tenant string, out *[]T, preloads ...string) error {
 	q := db
+
 	for _, p := range preloads {
 		q = q.Preload(p)
 	}
-	if err := q.Where("tenant_id = ? AND id IN ?", tenant, ids).Find(out).Error; err != nil {
-		return err
+
+	caseSQL := "CASE id "
+	for i, id := range ids {
+		caseSQL += fmt.Sprintf("WHEN '%s' THEN %d ", id, i)
 	}
-	return nil
+	caseSQL += "END"
+
+	return q.
+		Where("tenant_id = ? AND id IN ?", tenant, ids).
+		Order(caseSQL).
+		Find(out).Error
 }
 
 func DefaultGetLastModified[T any](tenant string, amount int, out *T, preloads ...string) error {

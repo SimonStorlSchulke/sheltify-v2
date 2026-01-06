@@ -91,7 +91,7 @@ export class CmsRequestService {
   }
 
   public getPageByPath(path: string): Observable<CmsPage> {
-    return this.get<CmsPage>(`${this.publicTenantsUrl}/page-by-path?path=${path}`);
+    return this.get<CmsPage>(`${this.publicTenantsUrl}/page-by-path?path=${encodeURIComponent(path)}`);
   }
 
   public savePage(page: CmsPage): Observable<CmsPage> {
@@ -263,26 +263,25 @@ export class CmsRequestService {
   }
 
   private get<T>(path: string): Observable<T> {
-    const url = decodeURIComponent(path);
-    return this.httpClient.get<T>(url, this.options())
-      .pipe(this.handleRequest(url));
+    return this.httpClient.get<T>(path, this.options())
+      .pipe(this.handleRequest(path));
   }
 
   private delete<T>(path: string): Observable<T> {
-    const url = decodeURIComponent(CmsRequestService.adminApiUrl + path);
+    const url = CmsRequestService.adminApiUrl + path;
     return this.httpClient.delete<T>(url, this.options())
       .pipe(this.handleRequest(url, 'Löschen erfolgreich'), tap(() => this.postPatchOrDeleteCalled$.next(path)));
   }
 
   public post<T>(path: string, body: any) {
-    const url = decodeURIComponent(CmsRequestService.adminApiUrl + path);
+    const url = CmsRequestService.adminApiUrl + path;
     if (body.ID) body.ID = undefined;
     return this.httpClient.post<T>(url, body, this.options())
       .pipe(this.handleRequest(url, 'Erstellen erfolgreich'), tap(() => this.postPatchOrDeleteCalled$.next(path)));
   }
 
   public patch<T>(path: string, body: any) {
-    const url = decodeURIComponent(CmsRequestService.adminApiUrl + path);
+    const url = CmsRequestService.adminApiUrl + path;
     return this.httpClient.patch<T>(url, body, this.options())
       .pipe(this.handleRequest(url, 'Speichern erfolgreich'), tap(() => this.postPatchOrDeleteCalled$.next(path)));
   }

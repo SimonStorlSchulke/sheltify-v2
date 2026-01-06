@@ -6,11 +6,8 @@ export function createEmptySection(SectionType: SectionType): Section {
       return {
         SectionType,
         Content: {
+          FullWidth: false,
           Columns: [
-            {
-              Sections: [],
-              Grow: 1,
-            },
             {
               Sections: [],
               Grow: 1,
@@ -51,6 +48,7 @@ export function createEmptySection(SectionType: SectionType): Section {
       return {
         SectionType,
         Content: {
+          Layout: 'vertical',
           MediaFiles: [],
         }
       };

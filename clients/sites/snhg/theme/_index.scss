@@ -3,11 +3,14 @@
 @use "footer";
 @use "font";
 @use "animal-card";
+@use "buttons";
 
 :root {
   --c-primary: #ff9f10;
+  --c-primary-h: #ffdbb3;
+  --padding-article: 64px;
 }
 
 :root {
-  --wrapper-width: min(1250px, 100dvw - 64px);
+  --wrapper-width: min(1250px, 100dvw - var(--padding-article));
 }

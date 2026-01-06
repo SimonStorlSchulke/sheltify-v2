@@ -40,6 +40,7 @@ export class ImagePickerMultiComponent extends InputBaseComponent {
     } else {
       [newArr[index + offset], newArr[index]] = [newArr[index], newArr[index + offset]];
     }
+    console.log(newArr.map(i => i.Title));
     this.twoWayModel.set(newArr);
   }
 }

@@ -91,7 +91,6 @@ function renderAnimalList(section: SectionAnimalList) {
 
 async function renderImageSection(section: SectionImages) {
   const content = section.Content;
-
   content.MediaFiles = await refetchMediaFiles(content.MediaFiles);
 
   if (content.MediaFiles.length === 0) return '';
@@ -124,10 +123,10 @@ async function renderHeroSection(section: SectionHero) {
 }
 
 async function renderColumnsSection(section: SectionColumns): Promise<string> {
-  let html = `<div class="sui flex-x">`;
+  let html = `<div style="display: flex;">`;
 
   for (const column of section.Content.Columns) {
-    html += `<div class="sui grow-${column.Grow}">`;
+    html += `<div style="flex: ${column.Grow} 1 0px">`;
 
     for (const child of column.Sections) {
       html += `<div>${await renderArticleSection(child)}</div>`;

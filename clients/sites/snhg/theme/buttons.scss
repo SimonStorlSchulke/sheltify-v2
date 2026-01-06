@@ -1,0 +1,33 @@
+button {
+  outline: none;
+  border: none;
+  border-radius: 32px;
+  font-family: 'Quicksand', 'Helvetica', sans-serif;
+  font-weight: 200;
+  padding: 8px 16px;
+  transition: background-color 0.35s, color 0.35s;
+
+  &.lg {
+    font-size: 32px;
+  }
+
+  &.primary {
+    background: var(--c-primary);
+    color: #fff;
+
+    &:hover {
+      background: var(--c-primary-h);
+      color: #000;
+    }
+  }
+
+  &.secondary {
+    background: #aaa096;
+    color: #fff;
+
+    &:hover {
+      background: #ffdb7e;
+      color: #000;
+    }
+  }
+}

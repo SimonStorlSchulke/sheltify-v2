@@ -1,1 +1,10 @@
-<app-image-picker-multi [idName]="'bilder'" [label]="'Bilder auswählen'" [(twoWayModel)]="section().Content!.MediaFiles"/>
+<app-radio-buttons-input
+  idName="layout"
+  label="Layout"
+  [(twoWayModel)]="section().Content.Layout"
+  [options]="['vertical', 'horizontal', 'gallery']"
+  [optionTranslations]="['Vertikal', 'Horizontal', 'Gallerie']"
+  [optionImages]="['/assets/img/images_layout_vertical.png', '/assets/img/images_layout_horizontal.png', '/assets/img/images_layout_gallery.png']"
+/>
+<br>
+<app-image-picker-multi idName="bilder" label="Bilder auswählen" (twoWayModelChange)="setImages($event)" [(twoWayModel)]="section().Content!.MediaFiles"/>

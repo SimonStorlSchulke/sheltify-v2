@@ -29,6 +29,7 @@ export type Section =
 export type SectionColumns = {
   SectionType: 'columns',
   Content: {
+    FullWidth: boolean,
     Columns: {
       Sections: Section[],
       Grow: number,
@@ -53,6 +54,7 @@ export type SectionHtml = {
 export type SectionImages = {
   SectionType: 'image',
   Content: {
+    Layout: 'vertical' | 'horizontal' | 'gallery',
     MediaFiles: CmsImage[];
   },
 };

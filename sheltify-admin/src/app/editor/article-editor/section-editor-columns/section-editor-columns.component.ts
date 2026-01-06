@@ -5,6 +5,7 @@ import { createEmptySection } from 'src/app/editor/article-editor/article-sectio
 import { PickNewSectionComponent } from 'src/app/editor/article-editor/pick-new-section/pick-new-section.component';
 import { SectionEditorColumnSectionsComponent } from 'src/app/editor/article-editor/section-editor/section-editor-column-sections/section-editor-column-sections.component';
 import { SectionEditorComponent } from 'src/app/editor/article-editor/section-editor/section-editor.component';
+import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-input.component';
 import { NumberInputComponent } from 'src/app/forms/number-input/number-input.component';
 import { AlertService } from 'src/app/services/alert.service';
 import { ModalService } from 'src/app/services/modal.service';
@@ -19,6 +20,7 @@ const maxColumns = 4;
     NgIcon,
     BtIconComponent,
     SectionEditorColumnSectionsComponent,
+    CheckboxInputComponent,
   ],
   templateUrl: './section-editor-columns.component.html',
   styleUrl: './section-editor-columns.component.scss',

@@ -7,8 +7,10 @@
     <div class="sui flex-x gap-2">
       <button type="button" class="primary" (click)="save()">Speichern</button>
       @let isPublished = page.PublishedAt?.Valid;
-      <button [class.warning]="!isPublished" [class.success]="isPublished" (click)="togglePublished()">{{ page.PublishedAt?.Valid ? 'Depublizieren' : 'Publizieren' }}</button>
-      <button type="button" class="red" (click)="delete()">Löschen</button>
+      @if(page.Path != ''){
+        <button [class.warning]="!isPublished" [class.success]="isPublished" (click)="togglePublished()">{{ page.PublishedAt?.Valid ? 'Depublizieren' : 'Publizieren' }}</button>
+        <button type="button" class="red" (click)="delete()">Löschen</button>
+      }
     </div>
   }
 </div>
@@ -20,7 +22,7 @@
         <app-text-input idName="path" label="Pfad" [(twoWayModel)]="page().Path"/>
         <app-number-input idName="priority" label="Priorität" explanation="Bei höherer Priorität wird diese Seite weiter vorne im Header angezeigt. Auch negative Werte sind möglich. Es ist zu empfehlen in Zehnerschritten zu arbeiten, damit man Notfalls Seiten dazwischenschieben kann." [(twoWayModel)]="page().Priority"/>
         <app-checkbox-input idName="show-in-menu" label="In Menü anzeigen" [(twoWayModel)]="page().ShowInMenu"/>
-        <app-checkbox-input idName="show-in-menu" label="Im Footer verlinken" [(twoWayModel)]="page().LinkInFooter"/>
+        <app-checkbox-input idName="show-in-footer" label="Im Footer verlinken" [(twoWayModel)]="page().LinkInFooter"/>
       </div>
   <app-last-edited [entry]="page()"/>
     </form>

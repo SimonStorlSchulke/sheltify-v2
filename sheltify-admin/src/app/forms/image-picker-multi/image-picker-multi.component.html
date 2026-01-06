@@ -6,18 +6,18 @@
 </div>
 <div class="img-wrapper">
   @if (twoWayModel(); as images) {
-    @for (image of images; track image) {
+    @for (image of images; track $index) {
       <div class="img-container">
         <img [cmsImage]="image">
         <div class="buttons sui flex-x jc-center w-100">
-          <button class="small primary sui grow-1" (click)="moveImage($index, -1)">‹</button>
-          <button class="small alert" (click)="removeImage($index)">x</button>
-          <button class="small primary sui grow-1" (click)="moveImage($index, 1)">›</button>
+          <button type="button" class="small primary sui grow-1" (click)="moveImage($index, -1)">‹</button>
+          <button type="button" class="small alert" (click)="removeImage($index)">x</button>
+          <button type="button" class="small primary sui grow-1" (click)="moveImage($index, 1)">›</button>
         </div>
       </div>
     }
   }
-  <button (click)="addImage()" class="secondary sui flex-x jc-center ai-center h-100 add-image">
+  <button type="button" (click)="addImage()" class="secondary sui flex-x jc-center ai-center h-100 add-image">
     <ng-icon name="bootstrapPlus" size="2rem" color="#888"/>
   </button>
 

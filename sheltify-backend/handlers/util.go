@@ -32,9 +32,7 @@ func idsFromQuery(w http.ResponseWriter, r *http.Request) ([]string, error) {
 	idStrings := strings.Split(idsStringParam, ",")
 
 	ids := make([]string, len(idStrings))
-	for i, id := range idStrings {
-		ids[i] = id
-	}
+	copy(ids, idStrings)
 	return ids, nil
 }
 

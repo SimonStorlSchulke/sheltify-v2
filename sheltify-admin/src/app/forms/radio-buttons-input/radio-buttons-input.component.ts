@@ -10,6 +10,7 @@ import { InputBaseComponent } from 'src/app/forms/input-base.component';
 export class RadioButtonsInputComponent extends InputBaseComponent{
 
   public options = input.required<string[]>();
+  public optionImages = input<string[]>();
   public optionTranslations = input<string[]>([]);
 
   public twoWayModel = model<string | undefined>(undefined);

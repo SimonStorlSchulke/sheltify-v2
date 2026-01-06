@@ -10,7 +10,10 @@
     <button
       [class]="twoWayModel() == option ? 'primary' : 'white'"
       (click)="onInput(option)">
-      {{ optionTranslations()[$index] ?? option }}
+      <span>{{ optionTranslations()[$index] ?? option }}</span>
+      @if(optionImages(); as optionImages) {
+        <img style="height: 96px; width: 96px; object-fit: contain" [src]="optionImages[$index]">
+      }
     </button>
   }
 </div>

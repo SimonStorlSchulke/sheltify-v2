@@ -1,0 +1,49 @@
+---
+import SectionRendererAnimalList from '@shared/components/sections/SectionRendererAnimalList.astro';
+import SectionRendererHero from '@shared/components/sections/SectionRendererHero.astro';
+import SectionRendererImages from '@shared/components/sections/SectionRendererImages.astro';
+import SectionRendererText from '@shared/components/sections/SectionRendererText.astro';
+import SectionRendererTitle from '@shared/components/sections/SectionRendererTitle.astro';
+import type { SectionColumns, SectionText } from 'sheltify-lib/article-types.ts';
+interface Props {
+  section: SectionColumns
+}
+
+const {section} = Astro.props;
+---
+<div class="sui flex-x">
+{
+  section.Content.Columns.map(column => {
+    const sections = column.Sections.map(section => {
+      let comp;
+      switch (section.SectionType) {
+        case 'text':
+          comp = <SectionRendererText section={section}/>;
+          break;
+        case 'title':
+          comp = <SectionRendererTitle section={section}/>;
+          break;
+        case 'separator-x':
+          comp = <hr/>;
+          break;
+        case 'hero':
+          comp = <SectionRendererHero isTopHero={false} section={section}/>;
+          break;
+        case 'animal-list':
+          comp = <SectionRendererAnimalList section={section}/>;
+          break;
+        case 'image':
+          comp = <SectionRendererImages section={section}/>;
+          break;
+        default:
+          comp = <div>Sektionstyp nicht unterstützt</div>;
+          break;
+        }
+
+      return <div style={`flex: ${column.Grow} 1 0px`} class={'column sui flex-x wrap'}>{comp}</div>;
+      })
+
+    return sections
+    })
+}
+</div>

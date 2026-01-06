@@ -1,5 +1,8 @@
 <div class="sui flex-x ai-center gap-1">
   <label>{{label()}}</label>
+  @if(explanation()) {
+    <button class="small secondary questionmark" type="button" (click)="showExplanation()"><span>?</span></button>
+  }
 </div>
 
 @if(nullBoolModel(); as nullBoolModel) {

@@ -1,9 +1,11 @@
+<app-checkbox-input idName="fulLWidth" label="Ganze Breite einnehmen" explanation="Nutzt die ganze Breite des Bildschirms und lässt keinen Rand an den Seiten" [(twoWayModel)]="section().Content.FullWidth"/>
+<br>
 <div class="columns sui flex-x">
   @for (column of section().Content.Columns; track column) {
     @let iCol = $index;
-    <div class="column" [style.flex-grow]="column.Grow">
+    <div class="column" [style.flex]="`${column.Grow} 1 0px`">
       <div class="column-header sui p-1 flex-x">
-        <app-number-input idName="grow" label="grow" [(twoWayModel)]="column.Grow"/>
+        <app-number-input idName="grow" label="Platz" [(twoWayModel)]="column.Grow"/>
         <div class="sui grow-1"></div>
         <ng-icon class="x" (click)="deleteColumn($index)" name="bootstrapX" size="22px"/>
       </div>
