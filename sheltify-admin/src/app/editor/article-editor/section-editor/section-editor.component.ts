@@ -54,6 +54,14 @@ export class SectionEditorComponent {
   @HostListener('document:click', ['$event'])
   deselectSections(event: any) {
     if (this.editMode()) {
+
+      const target = event!.target as HTMLElement;
+
+      // Only react if the click occurred inside <main>
+      if (!target.closest('main')) {
+        return;
+      }
+
       this.editMode.set(false);
       this.triggerRerender();
     }
