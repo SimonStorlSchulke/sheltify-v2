@@ -6,13 +6,12 @@ interface Props {
   section: SectionImages,
 }
 
-
 const {section} = Astro.props;
 let images = section.Content.MediaFiles;
 
+// refetch images because they are only present in the static json of the article, so not guaranteed to be updated
 images = await cms.getMediaFilesByIds(images.map(i => i.ID));
 
-const url = cms.uploadsUrl + `${images[0].ID}_${images[0].LargestAvailableSize}.webp`;
 ---
 
 <ImageGrid images={images} layout={section.Content.Layout} client:visible/>

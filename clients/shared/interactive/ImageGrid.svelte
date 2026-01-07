@@ -6,6 +6,14 @@
 
   let shownId: number | undefined = $state();
 
+  let description = $derived(() => {
+    const counter = `${(shownId ?? 0) + 1} / ${images.length}`;
+    if (shownId === undefined || images[shownId].Description === '') return counter;
+    const description = images[shownId].Description;
+    if (description.length <= 150) return `${counter}<br>${description}`;
+    return `${counter}<br>${images[shownId].Description.substring(0, 150)}...`;
+  })
+
   function openLightBox(id: number) {
     shownId = id;
   }
@@ -52,8 +60,10 @@
   <div on:click={closeLightBox} class="themable lightbox">
     <div class="lightbox-content">
       <button class="previous" on:click={(e) => previous(e)}><span>‹</span></button>
-      <img src={getImageSrc(images[shownId], 'xlarge')} alt={images[shownId].Description || images[shownId].Title}>
-      <span>{images[shownId].Description}</span>
+      <div class="sui flex-y ai-center jc-space-evenly gap-3 w-100">
+        <img src={getImageSrc(images[shownId], 'xlarge')} alt={images[shownId].Description || images[shownId].Title}>
+        <span class="description sui text-center py-1">{@html description()}</span>
+      </div>
       <button class="next" on:click={(e) => next(e)}><span>›</span></button>
     </div>
   </div>
@@ -97,6 +107,7 @@
         margin-bottom: 8px;
         break-inside: avoid;
         object-fit: contain;
+
     }
 
     @media (max-width: 800px) {
@@ -126,18 +137,22 @@
         .lightbox-content {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: stretch;
             width: 100%;
             height: 100%;
+            padding-top: 32px;
 
             img {
-                height: calc(100dvh - 100px);
-                min-height: calc(100dvh - 100px);
-                max-width: min(100%, 85dvw);
                 object-fit: contain;
+                max-width: min(100%, 85dvw);
+                flex-grow: 1;
+                max-height: calc(100% - 80px);
             }
         }
 
+        .description {
+            color: rgba(255, 255, 255, 0.61);
+        }
 
         button {
             background: none;
@@ -148,13 +163,21 @@
             border-radius: 0;
             cursor: pointer;
             height: 100%;
+            position: fixed;
+            top: 0;
 
-            &.previous:hover {
-                background: linear-gradient(-90deg, transparent, rgba(255, 255, 255, .3333333333))
+            &.previous {
+                left: 0;
+                &:hover {
+                    background: linear-gradient(-90deg, transparent, rgba(255, 255, 255, .3333333333))
+                }
             }
 
-            &.next:hover {
-                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .3333333333))
+            &.next {
+                right: 0;
+                &:hover {
+                    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .3333333333))
+                }
             }
         }
     }
