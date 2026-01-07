@@ -39,7 +39,7 @@ export class SectionEditorComponent {
   protected readonly sectionLabels = sectionLabels;
 
   public enterMoveMode() {
-
+    this.articleEditorService.enterMoveMode(this.rowIndex(), this.section())
   }
 
   public deleteSection() {
@@ -53,7 +53,9 @@ export class SectionEditorComponent {
 
   @HostListener('document:click', ['$event'])
   deselectSections(event: any) {
-    this.editMode.set(false);
-    this.triggerRerender();
+    if (this.editMode()) {
+      this.editMode.set(false);
+      this.triggerRerender();
+    }
   }
 }

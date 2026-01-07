@@ -13,6 +13,17 @@ export class ArticleEditorService {
   constructor(private readonly alertService: AlertService) {
   }
 
+  public enterMoveMode(row: number, sectionRef: Section) {
+    this.movedItem.set({
+      row,
+      sectionRef,
+    })
+  }
+
+  public exitMoveMode() {
+    this.movedItem.set(null)
+  }
+
   public async deleteSection(row: number): Promise<void> {
     if (!this.article()) return;
     const answer = await this.alertService.openAlert("Sektion wirklich entfernen?", "", ["nein", "ja"])

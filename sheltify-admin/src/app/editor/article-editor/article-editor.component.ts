@@ -25,7 +25,6 @@ import { bootstrapEye } from '@ng-icons/bootstrap-icons';
 export class ArticleEditorComponent implements OnInit {
 
   public articleId = input.required<string>();
-  public movedItem = signal<{ row: number, column: number, sectionRef: Section } | null>(null);
   public saveArticle = input<Observable<void>>();
   public isPreviewMode = signal<boolean>(false);
 
@@ -53,10 +52,6 @@ export class ArticleEditorComponent implements OnInit {
     this.saveArticle()?.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.save());
   }
 
-  public enterMoveMode(row: number, column: number, sectionRef: Section) {
-    this.movedItem.set({row, column, sectionRef})
-  }
-
   private editSectionAtPosition(row: number, column: number) {
     const rowElement = document.querySelectorAll('.article-row')[row];
     const sectionElement = rowElement.querySelectorAll<HTMLDivElement>('.article-column')[column];
@@ -65,7 +60,7 @@ export class ArticleEditorComponent implements OnInit {
 
   public async addSectionAtRow(row: number) {
     if (!this.articleEditorService.article() || this.isPreviewMode()) return;
-    if (this.movedItem()) return;
+    if (this.articleEditorService.movedItem()) return;
     const article = this.articleEditorService.article()!;
 
     const sectionType = await this.modalService.openFinishable(PickNewSectionComponent);
@@ -74,7 +69,6 @@ export class ArticleEditorComponent implements OnInit {
     const sectionRef = createEmptySection(sectionType);
 
     article.Structure.Rows.splice(row, 0, sectionRef);
-    this.cleanupEmptyRows(article);
 
     this.exitMoveMode();
     setTimeout(() => this.editSectionAtPosition(row, 0), 0);
@@ -93,31 +87,20 @@ export class ArticleEditorComponent implements OnInit {
 
   public exitMoveMode() {
     setTimeout(() => {
-      this.movedItem.set(null)
-    }, 0);
+      this.articleEditorService.exitMoveMode();
+    });
   }
 
-  public moveToNewRow(row: number) {
+  public moveToNewRow(rowTo: number) {
     if (!this.articleEditorService.article()) return;
-    const movedItem = this.movedItem();
+    const movedItem = this.articleEditorService.movedItem();
     if (!movedItem) return;
     const article = this.articleEditorService.article()!;
 
-    if (movedItem.row != -1) {
-      article.Structure.Rows.splice(movedItem.column, 1)
-    }
+    const rowFrom = this.articleEditorService.movedItem()!.row;
 
-    article.Structure.Rows.splice(row, 0, movedItem.sectionRef);
-    this.cleanupEmptyRows(article);
+    article.Structure.Rows.splice(rowTo, 0, movedItem.sectionRef);
+    article.Structure.Rows.splice(rowFrom, 1);
     this.exitMoveMode();
-  }
-
-  public moveToRow(row: number) {
-    if (!this.articleEditorService.article()) return;
-  }
-
-  private cleanupEmptyRows(article: CmsArticle) {
-    //article.Structure.Rows = article.Structure.Rows.filter((row: CmsArticleRow) => row.Sections.length > 0)
-    this.articleEditorService.article.set(article);
   }
 }

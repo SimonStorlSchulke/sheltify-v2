@@ -1,4 +1,4 @@
-<div class="sui flex-y grow-1 article-container card" [class.previewMode]="isPreviewMode()" [class.dragMode]="movedItem()">
+<div class="sui flex-y grow-1 article-container card" [class.previewMode]="isPreviewMode()" [class.dragMode]="articleEditorService.movedItem()">
 <span class="sui flex-x jc-end grow-1 gap-2">
   @if (!saveArticle()) {
     <button data-testid="btn-save-article" class="grow-1 primary" (click)="save()">Speichern</button>
@@ -15,11 +15,6 @@
 
       <app-section-editor [section]="section" [rowIndex]="$index"/>
 
-      <div (mouseup)="moveToRow($index)"
-           (click)="addSectionAtRow($index)"
-           [attr.data-testid]="'column-selector-' + $index"
-           class="move-to-column">
-      </div>
       <div (click)="addSectionAtRow($index + 1)" (mouseup)="moveToNewRow($index + 1)" [attr.data-testid]="'row-selector-' + $index + 1" class="move-to-row"></div>
     }
   }
