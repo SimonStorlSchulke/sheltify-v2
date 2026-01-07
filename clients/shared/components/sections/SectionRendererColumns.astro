@@ -11,9 +11,10 @@ interface Props {
 
 const {section} = Astro.props;
 ---
-<div class="sui flex-x">
+<div class="column-row sui flex-x">
 {
   section.Content.Columns.map(column => {
+
     const sections = column.Sections.map(section => {
       let comp;
       switch (section.SectionType) {
@@ -40,10 +41,21 @@ const {section} = Astro.props;
           break;
         }
 
-      return <div style={`flex: ${column.Grow} 1 0px`} class={'column sui flex-x wrap'}>{comp}</div>;
+      return <div style={`flex: ${column.Grow} 1 0px`} class={'section sui flex-x wrap'}>{comp}</div>;
       })
-
-    return sections
+    return <div class="column">{sections}</div>
     })
 }
 </div>
+
+<style lang="scss">
+  .column-row {
+    flex: 0 0 20px;
+    gap: var(--section-gap-x);
+    min-width: 300px;
+  }
+
+  .column {
+    gap: var(--section-gap-y);
+  }
+</style>

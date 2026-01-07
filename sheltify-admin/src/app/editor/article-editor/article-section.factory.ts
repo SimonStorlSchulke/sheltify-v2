@@ -48,6 +48,7 @@ export function createEmptySection(SectionType: SectionType): Section {
       return {
         SectionType,
         Content: {
+          Size: 'medium',
           Layout: 'vertical',
           MediaFiles: [],
         }

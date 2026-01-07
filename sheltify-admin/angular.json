@@ -35,7 +35,9 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": [],
+            "scripts": [
+              "../article-renderer/dist/web-components.js"
+            ],
             "stylePreprocessorOptions": {
               "includePaths": [
                 "src/styling/includes",

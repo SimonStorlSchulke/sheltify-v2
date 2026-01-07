@@ -1,10 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { AnimalsFilter, CmsArticle } from 'sheltify-lib/article-types';
-import { ToastrService } from 'ngx-toastr';
 import { CmsAnimal, CmsBlogEntry, CmsHomeFoundEntry, CmsImage, CmsPage, CmsTag, CmsTeamMember, CmsTenantConfiguration } from 'sheltify-lib/cms-types';
 import { sortByPriorityAndUpdatedAt } from 'sheltify-lib/cms-utils';
 import { LoaderService } from 'src/app/layout/loader/loader.service';
-import { AuthService, CmsUser } from './auth.service';
+import { AlertService } from 'src/app/services/alert.service';
+import { AuthService } from './auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, timer, tap, OperatorFunction, lastValueFrom, Subject } from 'rxjs';
 
@@ -18,7 +18,7 @@ export class CmsRequestService {
 
   private authService = inject(AuthService);
   private httpClient = inject(HttpClient);
-  private toastrSv = inject(ToastrService);
+  private alertSv = inject(AlertService);
   private loaderSv = inject(LoaderService);
   public postPatchOrDeleteCalled$ = new Subject<string>();
 
@@ -316,15 +316,16 @@ export class CmsRequestService {
         tap({
           next: () => {
               if (message != "") {
-                this.toastrSv.success(new URL(url).pathname, message)
+                this.alertSv.openToast(message, new URL(url).pathname, 'success')
               }
           },
           error: (e) => {
             console.log(e.error);
-            this.toastrSv.error(
+            this.alertSv.openToast(
               e.error.replace ? e.error.replace("\n", "<br>") : '',
               "Fehler",
-              {enableHtml: true, timeOut: 2500}
+              'error',
+              //{enableHtml: true, timeOut: 2500}
             );
           },
           finalize: () => {

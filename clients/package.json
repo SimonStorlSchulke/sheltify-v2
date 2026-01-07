@@ -17,6 +17,7 @@
     "astro": "^5.12.5",
     "sass": "^1.89.2",
     "sheltify-lib": "file:../sheltify-lib",
+    "article-renderer": "file:../article-renderer",
     "svelte": "^5.46.1",
     "typescript": "^5.9.3"
   },

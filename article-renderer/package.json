@@ -1,0 +1,17 @@
+{
+  "name": "svelte-web-components",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "node esbuild-bundle.js"
+  },
+  "dependencies": {
+    "sheltify-lib": "file:../sheltify-lib"
+  },
+  "devDependencies": {
+    "esbuild": "^0.27.2",
+    "esbuild-svelte": "^0.9.4",
+    "svelte": "^5.46.1",
+    "typescript": "^5.9.3"
+  },
+  "type": "module"
+}

@@ -65,7 +65,7 @@ if (isDraft) {
             comp = <div>Sektionstyp nicht unterstützt</div>;
             break;
           }
-      return <div class={'row' +  (isFullWidth ? ' full-width' : '') + (isFullWidthAndPadding ? ' full-width full-width-padding' : '')}>{comp}</div>
+      return <div class={`row section-${section.SectionType}` + (isFullWidth ? ' full-width' : '') + (isFullWidthAndPadding ? ' full-width full-width-padding' : '')}>{comp}</div>
       }
     )
   }
@@ -87,11 +87,12 @@ if (isDraft) {
     background: #ffeab0;
   }
   .article {
+    gap: var(--section-gap-y);
+
     &.draft {
       display: none !important;
     }
     .row {
-
       &:not(.full-width) {
         width: var(--wrapper-width);
         max-width: 100%;

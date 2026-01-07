@@ -15,7 +15,7 @@ export default defineConfig({
         build: {
             rollupOptions: {
                 input: {
-                    article: "theme/provided-article-style.css",
+                    article: "theme/provided-article-theme.css",
                 },
             }
         }

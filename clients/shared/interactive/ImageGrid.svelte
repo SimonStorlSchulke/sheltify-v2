@@ -2,7 +2,7 @@
   import { getImageSrc } from '@shared/cms/cms-image.ts';
   import type { CmsImage } from 'sheltify-lib/cms-types';
 
-  let {images, layout}: { images: CmsImage[], layout: 'vertical' | 'horizontal' | 'gallery' } = $props();
+  let {images, layout, size}: { images: CmsImage[], layout: 'vertical' | 'horizontal' | 'gallery', size: 'small' | 'medium' | 'large' } = $props();
 
   let shownId: number | undefined = $state();
 
@@ -50,7 +50,7 @@
 </script>
 
 
-<div class={`themable image-grid count-${images.length} ${layout}`}>
+<div class={`themable image-grid count-${images.length} ${layout} ${size}`}>
   {#each images as image, index}
     <img on:click={() => openLightBox(index)} src={getImageSrc(image, 'xlarge')} alt={image.Description || image.Title}>
   {/each}
@@ -71,114 +71,136 @@
 
 <svelte:window on:keydown={onKeyDown}/>
 
-<style>
-    .image-grid {
-        &.vertical {
-            column-count: 3;
-            column-gap: 8px;
+<style lang="scss">
+  .image-grid {
+    &.vertical {
+      column-count: 3;
+      column-gap: 8px;
 
-            &.count-1 {
-                column-count: 1;
-                max-width: 500px;
-            }
+      &.count-1 {
+        column-count: 1;
+        max-width: 500px;
+      }
 
-            &.count-2 {
-                column-count: 2;
-                max-width: 800px;
-            }
-        }
-
-        &.horizontal {
-            display: flex;
-            flex-wrap: wrap;
-            column-gap: 8px;
-
-            img {
-                width: unset;
-                max-height: 300px;
-            }
-        }
+      &.count-2 {
+        column-count: 2;
+        max-width: 800px;
+      }
     }
 
-    .image-grid img {
-        width: 100%;
-        height: auto;
-        display: block;
-        margin-bottom: 8px;
-        break-inside: avoid;
+    &.horizontal {
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: 8px;
+
+      img {
+        width: unset;
+      }
+
+      &.small {
+        img {
+          height: 150px;
+        }
+      }
+
+      &.medium {
+        img {
+          height: 400px;
+        }
+      }
+
+      &.large {
+        img {
+          width: 100%;
+        }
+      }
+    }
+
+
+  }
+
+
+  .image-grid img {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-bottom: 8px;
+    break-inside: avoid;
+    object-fit: contain;
+
+  }
+
+  @media (max-width: 800px) {
+    .image-grid.vertical {
+      column-count: 2 !important;
+    }
+  }
+
+  @media (max-width: 500px) {
+    .image-grid.vertical {
+      column-count: 1 !important;
+    }
+  }
+
+  .lightbox {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+
+    .lightbox-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      width: 100%;
+      height: 100%;
+      padding-top: 32px;
+
+      img {
         object-fit: contain;
-
+        max-width: min(100%, 85dvw);
+        flex-grow: 1;
+        max-height: calc(100% - 80px);
+      }
     }
 
-    @media (max-width: 800px) {
-        .image-grid.vertical {
-            column-count: 2 !important;
-        }
+    .description {
+      color: rgba(255, 255, 255, 0.61);
     }
 
-    @media (max-width: 500px) {
-        .image-grid.vertical {
-            column-count: 1 !important;
-        }
-    }
+    button {
+      background: none;
+      width: clamp(150px, 125px, 15dvw);
+      color: #fff;
+      font-weight: bold;
+      font-size: 32px;
+      border-radius: 0;
+      cursor: pointer;
+      height: 100%;
+      position: fixed;
+      top: 0;
 
-    .lightbox {
-        display: flex;
-        position: fixed;
-        top: 0;
+      &.previous {
         left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.85);
-        z-index: 100;
-        align-items: center;
-        justify-content: center;
 
-        .lightbox-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: stretch;
-            width: 100%;
-            height: 100%;
-            padding-top: 32px;
-
-            img {
-                object-fit: contain;
-                max-width: min(100%, 85dvw);
-                flex-grow: 1;
-                max-height: calc(100% - 80px);
-            }
+        &:hover {
+          background: linear-gradient(-90deg, transparent, rgba(255, 255, 255, .3333333333))
         }
+      }
 
-        .description {
-            color: rgba(255, 255, 255, 0.61);
+      &.next {
+        right: 0;
+
+        &:hover {
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .3333333333))
         }
-
-        button {
-            background: none;
-            width: clamp(150px, 125px, 15dvw);
-            color: #fff;
-            font-weight: bold;
-            font-size: 32px;
-            border-radius: 0;
-            cursor: pointer;
-            height: 100%;
-            position: fixed;
-            top: 0;
-
-            &.previous {
-                left: 0;
-                &:hover {
-                    background: linear-gradient(-90deg, transparent, rgba(255, 255, 255, .3333333333))
-                }
-            }
-
-            &.next {
-                right: 0;
-                &:hover {
-                    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .3333333333))
-                }
-            }
-        }
+      }
     }
+  }
 </style>

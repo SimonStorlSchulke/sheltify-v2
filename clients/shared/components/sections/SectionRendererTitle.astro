@@ -1,5 +1,6 @@
 ---
 import type { SectionTitle } from 'sheltify-lib/article-types.ts';
+import RenderSectionTitle from 'article-renderer/components/RenderSectionTitle.svelte';
 
 interface Props {
   section: SectionTitle;
@@ -16,6 +17,8 @@ const attrs = {
   style: content.Centered ? 'text-align: center;' : '',
 };
 ---
+
+<RenderSectionTitle section={section}/>
 
 <Tag {...attrs} class="title">
   {content.Text}

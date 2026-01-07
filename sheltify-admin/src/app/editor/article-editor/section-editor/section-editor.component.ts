@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, computed, HostListener, input, signal } from '@angular/core';
+import { Component, computed, CUSTOM_ELEMENTS_SCHEMA, HostListener, input, signal } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NgIcon } from '@ng-icons/core';
 import { Section } from 'sheltify-lib/article-types';
@@ -16,6 +16,7 @@ import { renderArticleSection, sectionLabels } from 'src/app/services/article-re
   ],
   templateUrl: './section-editor.component.html',
   styleUrl: './section-editor.component.scss',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SectionEditorComponent {
   public section = input.required<Section>();

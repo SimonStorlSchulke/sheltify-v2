@@ -14,4 +14,4 @@ images = await cms.getMediaFilesByIds(images.map(i => i.ID));
 
 ---
 
-<ImageGrid images={images} layout={section.Content.Layout} client:visible/>
+<ImageGrid images={images} layout={section.Content.Layout} size={section.Content.Size} client:visible/>

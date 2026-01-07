@@ -2,7 +2,6 @@ import { Component, inject, OnInit } from '@angular/core';
 import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
 import { AuthService } from '../../../services/auth.service';
 import { AsyncPipe } from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 
 @Component({
@@ -16,7 +15,6 @@ import { Router } from '@angular/router';
 })
 export class UserMenuComponent implements OnInit {
   authService = inject(AuthService);
-  private toastrService = inject(ToastrService);
   private router = inject(Router);
 
   user$ = this.authService.user$;

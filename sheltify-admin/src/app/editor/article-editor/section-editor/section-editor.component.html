@@ -9,6 +9,12 @@
   </div>
 
   <div class="section-content">
+
+    @if(section().SectionType == 'title') {
+      <!--suppress AngularUndefinedBinding -->
+      <section-title [section]="section()"/>
+    }
+
     <div class="section-preview" [innerHTML]="renderedSectionsVal ?? ''"></div>
     <div class="section-editor only-editmode">
       <app-section-editor-all-sections [section]="sectionVal"/>

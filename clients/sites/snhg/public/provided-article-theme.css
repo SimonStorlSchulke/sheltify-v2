@@ -1,5 +1,5 @@
 :root {
-  --section-gap-x: 50px;
+  --section-gap-x: min(50px, 5dvw);
   --section-gap-y: 50px;
   --hero-height: 600px;
   --hero-top-height: 400px;
@@ -13,7 +13,9 @@
   background: linear-gradient(rgba(175, 175, 175, 0.2509803922), rgba(167, 167, 167, 0.031372549), transparent);
 }
 .themable.article a.link {
-  font-weight: 600;
+  text-decoration: underline;
+}
+.themable.article a.link:hover {
   color: var(--c-primary);
 }
 .themable.article h1 {

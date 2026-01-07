@@ -35,9 +35,10 @@ export class ModalService {
 
   private dialog = inject(Dialog);
 
-  public open<T>(component: ComponentType<T>, inputs?: Partial<T>, cssClass = 'modal-lg') {
+  public open<T>(component: ComponentType<T>, inputs?: Partial<T>, cssClass = 'modal-lg', hasBackdrop = true) {
     const dialogRef = this.dialog.open(component, {
       panelClass: cssClass,
+      hasBackdrop,
     });
 
     if (inputs) {

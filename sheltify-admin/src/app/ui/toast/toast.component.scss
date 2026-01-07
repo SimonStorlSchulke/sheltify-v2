@@ -1,0 +1,20 @@
+@use "colors" as *;
+
+.toast {
+  max-width: min(80dvw, 400px);
+  padding: 12px 12px 12px 20px;
+  cursor: pointer;
+}
+
+.info {
+  background: linear-gradient(90deg, #54a3fb 8px, #fff 8px);
+}
+.success {
+  background: linear-gradient(90deg, $success 8px, #fff 8px);
+}
+.warning {
+  background: linear-gradient(90deg, $warning 8px, #fff 8px);
+}
+.error {
+  background: linear-gradient(90deg, $error 8px, #fff 8px);
+}

@@ -54,6 +54,7 @@ export type SectionHtml = {
 export type SectionImages = {
   SectionType: 'image',
   Content: {
+    Size: 'small' | 'medium' | 'large',
     Layout: 'vertical' | 'horizontal' | 'gallery',
     MediaFiles: CmsImage[];
   },

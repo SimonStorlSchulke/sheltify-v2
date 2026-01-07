@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
@@ -17,7 +17,8 @@ import { RouterLink, RouterLinkActive, Router } from '@angular/router';
     BtIconComponent,
   ],
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.scss'
+  styleUrl: './sidebar.component.scss',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SidebarComponent {
   router = inject(Router);

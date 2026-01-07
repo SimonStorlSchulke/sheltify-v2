@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ModalService } from 'src/app/services/modal.service';
 import { AlertChoice, AlertComponent } from 'src/app/ui/alert/alert.component';
+import { ToastComponent, ToastLevel } from 'src/app/ui/toast/toast.component';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,16 @@ export class AlertService {
         message,
         buttons,
       }, 'modal-alert'
+    )
+  }
+
+  public openToast(message: string, title: string = '', level: ToastLevel = 'info'): void {
+    this.modalService.open(ToastComponent, {
+        title,
+        message,
+        level,
+      }, 'modal-toast',
+      false,
     )
   }
 }

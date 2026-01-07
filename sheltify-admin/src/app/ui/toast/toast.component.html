@@ -1,0 +1,6 @@
+<div (click)="dialogRef.close()" [class]="'toast sui flex-y gap-1 ' + level">
+  @if(title) {
+    <b>{{title}}</b>
+  }
+  <span>{{message}}</span>
+</div>

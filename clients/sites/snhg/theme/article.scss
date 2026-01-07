@@ -1,5 +1,5 @@
 :root {
-  --section-gap-x: 50px;
+  --section-gap-x: min(50px, 5dvw);
   --section-gap-y: 50px;
   --hero-height: 600px;
   --hero-top-height: 400px;

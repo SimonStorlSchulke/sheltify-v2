@@ -1,10 +1,19 @@
-<app-radio-buttons-input
-  idName="layout"
-  label="Layout"
-  [(twoWayModel)]="section().Content.Layout"
-  [options]="['vertical', 'horizontal', 'gallery']"
-  [optionTranslations]="['Vertikal', 'Horizontal', 'Gallerie']"
-  [optionImages]="['/assets/img/images_layout_vertical.png', '/assets/img/images_layout_horizontal.png', '/assets/img/images_layout_gallery.png']"
-/>
+<div class="sui flex-x gap-2 wrap">
+  <app-radio-buttons-input
+    idName="layout"
+    label="Layout"
+    [(twoWayModel)]="section().Content.Layout"
+    [options]="['vertical', 'horizontal', 'gallery']"
+    [optionTranslations]="['Vertikal', 'Horizontal', 'Gallerie']"
+    [optionImages]="['/assets/img/images_layout_vertical.png', '/assets/img/images_layout_horizontal.png', '/assets/img/images_layout_gallery.png']"
+  />
+  <app-radio-buttons-input
+    idName="size"
+    label="Größe"
+    [(twoWayModel)]="section().Content.Size"
+    [options]="['small', 'medium', 'large']"
+    [optionTranslations]="['klein', 'mittel', 'groß']"
+  />
+</div>
 <br>
 <app-image-picker-multi idName="bilder" label="Bilder auswählen" (twoWayModelChange)="setImages($event)" [(twoWayModel)]="section().Content!.MediaFiles"/>
