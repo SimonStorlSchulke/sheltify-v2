@@ -255,8 +255,15 @@ func DeleteMedia(w http.ResponseWriter, r *http.Request) {
 		badRequestResponse(w, r, "media id must be provided")
 		return
 	}
+	err := services.DeleteMedia(id)
+
+	if err != nil {
+		logger.RequestError(r, id, err)
+		internalServerErrorResponse(w, r, "Could not delete media: "+err.Error())
+		return
+	}
+
 	logger.Deleted(r, id)
-	services.DeleteMedia(id)
 }
 
 func GetAllTags(w http.ResponseWriter, r *http.Request) {
