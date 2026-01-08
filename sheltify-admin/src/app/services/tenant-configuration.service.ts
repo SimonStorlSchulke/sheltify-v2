@@ -22,6 +22,16 @@ export class TenantConfigurationService {
 
   public config = signal<CmsTenantConfiguration | undefined>(undefined);
 
+  /** returns tenants siteUrl with / at the end or undefined */
+  public async siteUrl(): Promise<string | undefined> {
+    const siteUrl = (await firstValueFrom(this.getOrLoad()))?.SiteUrl;
+
+    if(siteUrl) {
+      return siteUrl.endsWith('/') ? siteUrl : siteUrl + '/';
+    }
+    return undefined;
+  }
+
   public async animalKinds(): Promise<string[]> {
     return (await firstValueFrom(this.getOrLoad()))?.AnimalKinds.split(",") ?? [];
   }

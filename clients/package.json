@@ -10,7 +10,9 @@
     "build:snhg": "astro build --root ./sites/snhg --config ./astro.config.mjs",
     "build:mft": "astro build --root ./sites/mft --config ./astro.config.mjs",
     "build:hhg": "astro build --root ./sites/hhg --config ./astro.config.mjs",
-    "provided-article-theme:snhg": "sass sites/snhg/theme/article.scss sites/snhg/public/provided-article-theme.css"
+    "provided-article-theme:snhg": "sass sites/snhg/theme/article.scss sites/snhg/public/provided-article-theme.css",
+    "provided-article-theme:mft": "sass sites/hhg/theme/article.scss sites/mft/public/provided-article-theme.css",
+    "provided-article-theme:hhg": "sass sites/hhg/theme/article.scss sites/hhg/public/provided-article-theme.css"
   },
   "dependencies": {
     "@astrojs/svelte": "^7.2.4",

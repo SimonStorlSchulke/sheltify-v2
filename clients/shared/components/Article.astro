@@ -1,11 +1,15 @@
 ---
+import { cms } from '@shared/cms/sheltify-access.ts';
 import SectionRendererAnimalList from '@shared/components/sections/SectionRendererAnimalList.astro';
 import SectionRendererColumns from '@shared/components/sections/SectionRendererColumns.astro';
 import SectionRendererHero from '@shared/components/sections/SectionRendererHero.astro';
-import SectionRendererTitle from '@shared/components/sections/SectionRendererTitle.astro';
 import type { CmsArticle, SectionType } from 'sheltify-lib/article-types.ts';
-import SectionRendererText from './sections/SectionRendererText.astro';
 import SectionRendererImages from './sections/SectionRendererImages.astro';
+import RenderSectionTitle from 'article-renderer/components/RenderSectionTitle.svelte';
+import RenderSectionText from 'article-renderer/components/RenderSectionText.svelte';
+import RenderSectionImages from 'article-renderer/components/RenderSectionImages.svelte';
+import RenderSectionHero from 'article-renderer/components/RenderSectionHero.svelte';
+import "article-renderer/styles/_index.scss"
 
 interface Props {
   article: CmsArticle;
@@ -41,22 +45,22 @@ if (isDraft) {
         let comp;
         switch (section.SectionType) {
           case 'text':
-            comp = <SectionRendererText section={section}/>;
+            comp = <RenderSectionText section={section}/>;
             break;
           case 'title':
-            comp = <SectionRendererTitle section={section}/>;
+            comp = <RenderSectionTitle section={section}/>
             break;
           case 'separator-x':
             comp = <hr/>;
             break;
           case 'hero':
-            comp = <SectionRendererHero isTopHero={isTopHero} section={section}/>;
+            comp = <RenderSectionHero uploadsUrl={cms.uploadsUrl} isTopHero={isTopHero} section={section} client:visible/>;
             break;
           case 'animal-list':
             comp = <SectionRendererAnimalList section={section}/>;
             break;
           case 'image':
-            comp = <SectionRendererImages section={section}/>;
+            comp = <RenderSectionImages section={section} uploadsUrl={cms.uploadsUrl} client:visible/>;
             break;
           case 'columns':
             comp = <SectionRendererColumns section={section}/>;
@@ -106,28 +110,6 @@ if (isDraft) {
       }
     }
 
-    .section {
-      flex-grow: 1;
-      padding: 16px;
-      min-width: 300px;
-    }
 
-    .section-text {
-      p {
-        min-height: 1rem;
-      }
-    }
-
-    .section-separator-x hr {
-      border: none;
-      background-color: #ddd;
-      height: 1.5px;
-      margin: 1.5rem 0;
-    }
-
-    .section-hero {
-      width: 100dvw;
-      left: 0;
-    }
   }
 </style>

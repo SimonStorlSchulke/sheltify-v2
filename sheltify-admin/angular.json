@@ -41,7 +41,8 @@
             "stylePreprocessorOptions": {
               "includePaths": [
                 "src/styling/includes",
-                "../sheltify-lib/sui"
+                "../sheltify-lib/sui",
+                "../article-renderer/styles"
               ]
             }
           },

@@ -4,12 +4,8 @@
 @use "font";
 @use "animal-card";
 @use "buttons";
+@use "colors";
 
-:root {
-  --c-primary: #ff9f10;
-  --c-primary-h: #ffdbb3;
-  --padding-article: 64px;
-}
 
 :root {
   --wrapper-width: min(1250px, 100dvw - var(--padding-article));

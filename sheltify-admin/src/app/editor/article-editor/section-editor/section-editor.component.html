@@ -1,5 +1,4 @@
 @let sectionVal = section();
-@let renderedSectionsVal = renderedSection() | async;
 
 <div [class.edit-mode]="editMode()" class="section" (click)="enterEditMode($event)">
   <div class="section-titlebar sui flex-x px-2 gap-1 ai-center only-editmode">
@@ -10,14 +9,22 @@
 
   <div class="section-content">
 
-    @if(section().SectionType == 'title') {
-      <!--suppress AngularUndefinedBinding -->
-      <section-title [section]="section()"/>
-    }
+    <div class="section-preview">
 
-    <div class="section-preview" [innerHTML]="renderedSectionsVal ?? ''"></div>
+      <ng-container
+        #outlet
+        [ngTemplateOutlet]="preview"
+      >
+      </ng-container>
+
+
+    </div>
     <div class="section-editor only-editmode">
       <app-section-editor-all-sections [section]="sectionVal"/>
     </div>
   </div>
 </div>
+
+<ng-template #preview>
+  <app-section-renderer [section]="section()"/>
+</ng-template>

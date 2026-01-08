@@ -2,9 +2,10 @@
 import SectionRendererAnimalList from '@shared/components/sections/SectionRendererAnimalList.astro';
 import SectionRendererHero from '@shared/components/sections/SectionRendererHero.astro';
 import SectionRendererImages from '@shared/components/sections/SectionRendererImages.astro';
-import SectionRendererText from '@shared/components/sections/SectionRendererText.astro';
-import SectionRendererTitle from '@shared/components/sections/SectionRendererTitle.astro';
 import type { SectionColumns, SectionText } from 'sheltify-lib/article-types.ts';
+import RenderSectionTitle from 'article-renderer/components/RenderSectionTitle.svelte';
+import RenderSectionText from 'article-renderer/components/RenderSectionText.svelte';
+
 interface Props {
   section: SectionColumns
 }
@@ -19,10 +20,10 @@ const {section} = Astro.props;
       let comp;
       switch (section.SectionType) {
         case 'text':
-          comp = <SectionRendererText section={section}/>;
+          comp = <RenderSectionText section={section}/>;
           break;
         case 'title':
-          comp = <SectionRendererTitle section={section}/>;
+          comp = <RenderSectionTitle section={section}/>
           break;
         case 'separator-x':
           comp = <hr/>;

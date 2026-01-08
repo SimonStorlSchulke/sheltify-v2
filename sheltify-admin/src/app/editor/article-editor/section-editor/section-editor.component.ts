@@ -1,18 +1,20 @@
-import { AsyncPipe } from '@angular/common';
-import { Component, computed, CUSTOM_ELEMENTS_SCHEMA, HostListener, input, signal } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { ChangeDetectorRef, Component, computed, CUSTOM_ELEMENTS_SCHEMA, HostListener, input, signal, TemplateRef, viewChild, ViewChild, ViewContainerRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NgIcon } from '@ng-icons/core';
 import { Section } from 'sheltify-lib/article-types';
 import { ArticleEditorService } from 'src/app/editor/article-editor/article-editor.service';
 import { SectionEditorAllSectionsComponent } from 'src/app/editor/article-editor/section-editor/section-editor-all-sections/section-editor-all-sections.component';
-import { renderArticleSection, sectionLabels } from 'src/app/services/article-renderer';
+import { SectionRendererComponent } from 'src/app/section-renderer/section-renderer.component';
+import { sectionLabels } from 'src/app/services/article-renderer';
 
 @Component({
   selector: 'app-section-editor',
   imports: [
-    AsyncPipe,
     NgIcon,
     SectionEditorAllSectionsComponent,
+    SectionRendererComponent,
+    NgTemplateOutlet,
   ],
   templateUrl: './section-editor.component.html',
   styleUrl: './section-editor.component.scss',
@@ -24,18 +26,22 @@ export class SectionEditorComponent {
   public triggerRerenderVal = signal(0);
   public editMode = signal(false);
 
-  constructor(private domSanitizer: DomSanitizer, private articleEditorService: ArticleEditorService) {
+  @ViewChild('outlet', { read: ViewContainerRef }) outletRef!: ViewContainerRef;
+  @ViewChild('preview', { read: TemplateRef }) previewRef!: TemplateRef<any>;
+
+  constructor(private domSanitizer: DomSanitizer, private articleEditorService: ArticleEditorService, private cdRef: ChangeDetectorRef) {
   }
+
+  renderedTriggerSection = computed(() => {
+    console.log("s", this.section());
+    return {section: this.section(), trigger: this.triggerRerenderVal()};
+  })
+
 
   public triggerRerender() {
-    this.triggerRerenderVal.update(v => v + 1);
+    this.outletRef.clear();
+    this.outletRef.createEmbeddedView(this.previewRef);
   }
-
-  public renderedSection = computed(async () => {
-    this.triggerRerenderVal();
-    const htmlString = await renderArticleSection(this.section());
-    return this.domSanitizer.bypassSecurityTrustHtml(htmlString);
-  });
 
   protected readonly sectionLabels = sectionLabels;
 

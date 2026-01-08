@@ -4,16 +4,15 @@ import { FormsModule } from '@angular/forms';
 import { bootstrapGripVertical, bootstrapX, bootstrapPlus } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lastValueFrom, Observable } from 'rxjs';
-import { CmsArticle, Section } from 'sheltify-lib/article-types';
 import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
 import { ArticleEditorService } from 'src/app/editor/article-editor/article-editor.service';
 import { createEmptySection } from 'src/app/editor/article-editor/article-section.factory';
 import { PickNewSectionComponent } from 'src/app/editor/article-editor/pick-new-section/pick-new-section.component';
 import { SectionEditorComponent } from 'src/app/editor/article-editor/section-editor/section-editor.component';
-import { createArticleStyle } from 'src/app/services/article-renderer';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { bootstrapEye } from '@ng-icons/bootstrap-icons';
+import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
 
 @Component({
   selector: 'app-article-editor',
@@ -34,9 +33,10 @@ export class ArticleEditorComponent implements OnInit {
     private cmsRequestService: CmsRequestService,
     private renderer: Renderer2,
     private destroyRef: DestroyRef,
+    private readonly tenantConfigurationService: TenantConfigurationService,
   ) {
 
-    this.addGlobalStyle();
+    this.tenantConfigurationService.siteUrl().then(siteUrl => siteUrl ? this.addGlobalStyle(siteUrl + 'provided-article-theme.css') : false);
 
     effect(async () => {
       const articleId = this.articleId();
@@ -74,12 +74,14 @@ export class ArticleEditorComponent implements OnInit {
     setTimeout(() => this.editSectionAtPosition(row, 0), 0);
   }
 
-  addGlobalStyle(css: string = createArticleStyle()) {
-    const styleEl = this.renderer.createElement('style');
-    this.renderer.setProperty(styleEl, 'textContent', css);
-    this.renderer.appendChild(document.head, styleEl);
-  }
+  addGlobalStyle(css: string) {
+    const link = document.createElement( "link" );
+    link.href = css;
+    link.type = "text/css";
+    link.rel = "stylesheet";
 
+    this.renderer.appendChild(document.head, link);
+  }
 
   public async save() {
     await lastValueFrom(this.cmsRequestService.saveArticle(this.articleEditorService.article()!));

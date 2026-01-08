@@ -1,4 +1,10 @@
 :root {
+  --c-primary: #ff9f10;
+  --c-primary-h: #ffdbb3;
+  --padding-article: 64px;
+}
+
+:root {
   --section-gap-x: min(50px, 5dvw);
   --section-gap-y: 50px;
   --hero-height: 600px;
