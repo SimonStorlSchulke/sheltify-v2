@@ -1,29 +1,29 @@
 ---
-import { cms } from "@shared/cms/sheltify-access"
-import SearchBar from '@shared/components/SearchBar.astro';
-import CmsImg from '@shared/components/ui/CmsImg.astro';
-import { createPageStructure } from 'sheltify-lib/page-structure.ts';
+import { cms } from "@shared/cms/sheltify-access";
+import SearchBar from "@shared/components/SearchBar.astro";
+import CmsImg from "@shared/components/ui/CmsImg.astro";
+import { createPageStructure } from "sheltify-lib/page-structure.ts";
 import HeaderEntry from "./HeaderEntry.astro";
 
 const pages = (await cms.getPages())
-  .filter(page => page.PublishedAt?.Valid && page.ShowInMenu)
-  .sort(((a, b) => b.Priority - a.Priority));
+  .filter((page) => page.PublishedAt?.Valid && page.ShowInMenu)
+  .sort((a, b) => b.Priority - a.Priority);
 
 const menu = [...createPageStructure(pages).values()];
-const startPage = menu.find(item => item.link == '/');
+const startPage = menu.find((item) => item.link == "/");
 const logo = (await cms.tenantConfig).LogoHeader;
 ---
 
 <nav class="themable header">
   <div class="logo">
-    <a href={startPage && '/'}>
-      {logo && <CmsImg img={logo} size="xlarge" refetch={false}/>}
+    <a href={startPage && "/"}>
+      {logo && <CmsImg img={logo} size="xlarge" refetch={false} />}
     </a>
   </div>
   <div class="menu">
-    {menu.map((item) => <HeaderEntry entry={item} startPageName="Home"/>)}
+    {menu.map((item) => <HeaderEntry entry={item} startPageName="Home" />)}
   </div>
-  <SearchBar/>
+  <SearchBar />
 </nav>
 
 <style lang="scss">
@@ -60,5 +60,14 @@ const logo = (await cms.tenantConfig).LogoHeader;
       height: 100%;
     }
   }
-
 </style>
+
+<script>
+  const links = document.querySelectorAll<HTMLAnchorElement>(".header a");
+
+  for (const link of links) {
+    if(link.href === window.location.href) {
+      link.classList.add("active");
+    }
+  }
+</script>
