@@ -12,7 +12,7 @@ function getTitle(page: CmsPage): string {
 
 ---
 
-<div class="themable footer">
+<div class="themable footer" data-pagefind-ignore>
   {
     pages.map(page => <a href={'/' + page.Path}>{getTitle(page)}</a>)
   }

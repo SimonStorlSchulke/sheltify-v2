@@ -12,18 +12,20 @@
     "build:hhg": "astro build --root ./sites/hhg --config ./astro.config.mjs",
     "provided-article-theme:snhg": "sass sites/snhg/theme/article.scss sites/snhg/public/provided-article-theme.css",
     "provided-article-theme:mft": "sass sites/hhg/theme/article.scss sites/mft/public/provided-article-theme.css",
-    "provided-article-theme:hhg": "sass sites/hhg/theme/article.scss sites/hhg/public/provided-article-theme.css"
+    "provided-article-theme:hhg": "sass sites/hhg/theme/article.scss sites/hhg/public/provided-article-theme.css",
+    "postbuild": "pagefind --site dist/snhg"
   },
   "dependencies": {
     "@astrojs/svelte": "^7.2.4",
+    "article-renderer": "file:../article-renderer",
     "astro": "^5.12.5",
     "sass": "^1.89.2",
     "sheltify-lib": "file:../sheltify-lib",
-    "article-renderer": "file:../article-renderer",
     "svelte": "^5.46.1",
     "typescript": "^5.9.3"
   },
   "devDependencies": {
-    "cross-env": "^10.1.0"
+    "cross-env": "^10.1.0",
+    "pagefind": "^1.4.0"
   }
 }

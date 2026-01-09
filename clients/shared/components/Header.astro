@@ -1,5 +1,6 @@
 ---
 import { cms } from "@shared/cms/sheltify-access"
+import SearchBar from '@shared/components/SearchBar.astro';
 import CmsImg from '@shared/components/ui/CmsImg.astro';
 import { createPageStructure } from 'sheltify-lib/page-structure.ts';
 import HeaderEntry from "./HeaderEntry.astro";
@@ -10,7 +11,6 @@ const pages = (await cms.getPages())
 
 const menu = [...createPageStructure(pages).values()];
 const startPage = menu.find(item => item.link == '/');
-console.log("aaa", startPage);
 const logo = (await cms.tenantConfig).LogoHeader;
 ---
 
@@ -23,6 +23,7 @@ const logo = (await cms.tenantConfig).LogoHeader;
   <div class="menu">
     {menu.map((item) => <HeaderEntry entry={item} startPageName="Home"/>)}
   </div>
+  <SearchBar/>
 </nav>
 
 <style lang="scss">

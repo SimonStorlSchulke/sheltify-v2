@@ -55,7 +55,7 @@ export class PageListComponent {
     }
 
     // this should really be done in the backend but ¯\_(ツ)_/¯
-    if(this.pagesService.pages().findIndex(page => page.Path === page.Path) != -1) {
+    if(this.pagesService.pages().findIndex(foundPage => foundPage.Path === page.Path) != -1) {
       this.alertService.openAlert('Seite mit diesem Pfad existiert bereits', '')
       return;
     }

@@ -1,0 +1,125 @@
+<button class="search-toggle">
+  <span style="filter: saturate(0) contrast(2)">🔍</span>
+  <input class="search-bar" type="text" placeholder="Suchen...">
+
+  <div class="themable search-results sui flex-y gap-2"/>
+</button>
+
+<script is:inline>
+
+  const isDevMode = window.location.href.includes('://localhost:42');
+
+  if (isDevMode) {
+      const mockEntry= (title) => ({
+        data: () => ({
+          url: '/',
+          meta: {title},
+          excerpt: (title + ' ').repeat(22),
+        })
+      })
+    window.pagefind = {
+      search: () => ({
+        results: [
+          mockEntry('Start'),
+          {
+              data: () => ({
+              url: '/',
+              meta: {title: 'Start'},
+              excerpt: 'startseite '
+              })
+          },
+        ]
+      })
+    }
+  }
+
+  initSearch();
+
+  function initSearch() {
+    const searchBar = document.querySelector('.search-bar');
+    const searchResults = document.querySelector('.search-results');
+    searchBar?.addEventListener('input', async (e) => {
+      // only load the pagefind script once
+      if (e.target.dataset.loaded !== 'true' && !isDevMode) {
+        e.target.dataset.loaded = 'true'
+        // load the pagefind script
+        window.pagefind = await import("/pagefind/pagefind.js");
+      }
+
+      const searchValue = e.target.value;
+
+      searchResults.innerHTML = '';
+
+      if (searchValue.length < 3) return;
+
+      // search the index using the input value
+      const search = await window.pagefind.search(e.target.value);
+
+      // clear the old results
+
+      // add the new results
+      for (const result of search.results) {
+        const data = await result.data()
+        searchResults.innerHTML += `
+          <a href="${data.url}">
+            <h3>${data.meta.title}</h3>
+            <p>${data.excerpt}</p>
+          </a>`
+      }
+    });
+
+    document.querySelector('.search-toggle').addEventListener('click', (e) => {
+      searchBar.focus();
+    })
+  }
+</script>
+
+<style>
+    .search-toggle {
+        width: 64px;
+        margin-right: 8px;
+        cursor: pointer;
+        .search-results, .search-bar {
+            display: none;
+        }
+
+        &:focus-within {
+
+            .search-results, .search-bar {
+                display: flex;
+            }
+        }
+    }
+
+    .search-bar {
+        position: fixed;
+        top: var(--header-height);
+        right: 0;
+        height: 32px;
+        z-index: 10;
+    }
+
+    .search-results {
+        cursor: default;
+        text-align: start;
+        position: fixed;
+        background: #fff;
+        top: calc(var(--header-height));
+        /* outline: 1px solid #000; */
+        width: min(600px, 100%);
+        box-sizing: border-box;
+        right: 0;
+        padding: 48px 16px;
+        max-height: calc(100dvh - var(--header-height));
+        overflow-y: auto;
+        box-shadow: 0 0 12px #0000003d;
+
+        a:hover h3 {
+            color: var(--c-primary);
+        }
+
+        &:empty {
+            display: none !important;
+        }
+    }
+</style>
