@@ -5,9 +5,15 @@ import Layout from '@shared/layouts/Layout.astro';
 
 import '../theme/_index.scss'
 import SnhgFooter from '../components/SnhgFooter.astro';
+import type { SeoData } from '@shared/types/seo-data';
+
+interface Props {
+  seo: SeoData;
+}
+const {seo} = Astro.props;
 ---
 
-<Layout>
+<Layout seo={seo}>
   <Header/>
   <main>
     <slot/>

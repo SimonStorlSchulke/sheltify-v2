@@ -8,8 +8,9 @@ export async function getStaticPaths() {
 }
 
 const {animalKind, animalNames} = Astro.params;
+const title = animalNames.split('-').join(', ');
 ---
 
-<SnhgLayout>
+<SnhgLayout seo={{ title }}>
   <AnimalArticle animalKind={animalKind} animalNames={animalNames}/>
 </SnhgLayout>

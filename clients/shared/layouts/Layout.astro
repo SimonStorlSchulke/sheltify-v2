@@ -2,6 +2,15 @@
 import "../../../sheltify-lib/sui/_index.scss";
 import "@shared/styling/reset.scss"
 import { cms } from '@shared/cms/sheltify-access.ts';
+import type { SeoData } from "@shared/types/seo-data";
+
+interface Props {
+  seo: SeoData;
+}
+
+const {seo} = Astro.props;
+const siteName = (await cms.tenantConfig).Name;
+const title = seo.title ? (seo.title + ' | ' + siteName) : siteName;
 ---
 <!doctype html>
 <html lang="en">
@@ -10,7 +19,8 @@ import { cms } from '@shared/cms/sheltify-access.ts';
   <meta name="viewport" content="width=device-width"/>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
   <meta name="generator" content={Astro.generator}/>
-  <title>{(await cms.tenantConfig).Name}</title>
+  <title>{title}</title>
+  <og:description content={seo.description ?? ''}/>
 </head>
 <body>
 <slot/>

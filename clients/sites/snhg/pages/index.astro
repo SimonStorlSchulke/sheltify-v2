@@ -6,10 +6,10 @@ import SnhgLayout from '../layouts/SnhgLayout.astro';
 export async function getStaticPaths() {
   return cms.getStaticPathsPages();
 }
-
 const { path = '' } = Astro.params;
+const seo = await cms.getSeoByPath(path ?? '');
 ---
 
-<SnhgLayout>
+<SnhgLayout seo={seo}>
   <Page path={path ?? ''} />
 </SnhgLayout>

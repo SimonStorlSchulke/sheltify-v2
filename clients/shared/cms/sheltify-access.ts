@@ -2,6 +2,7 @@ import { type AnimalsFilter, type CmsArticle } from 'sheltify-lib/article-types.
 import { type CmsAnimal, type CmsImage, type CmsPage, type CmsTenantConfiguration } from 'sheltify-lib/cms-types';
 import { filterPublishedAndHasArticle, sortByPriorityAndUpdatedAt } from 'sheltify-lib/cms-utils.ts';
 import { animalsByArticleId } from 'sheltify-lib/animal-util.ts';
+import type { SeoData } from '@shared/types/seo-data';
 
 export class SheltifyAccess {
 
@@ -50,6 +51,17 @@ export class SheltifyAccess {
 
   public async getPageByPath(path: string): Promise<CmsPage> {
     return this.get<CmsPage>(`page-by-path?path=${path}`)
+  }
+
+  public async getSeoByPath(path: string): Promise<SeoData> {
+    const page = await this.getPageByPath(path);
+    const pathParts = path.split('/');
+    const title = pathParts[pathParts.length - 1];
+
+    return {
+      title,
+      description: page.Description,
+    }
   }
 
   public async getArticle(id: string): Promise<CmsArticle> {
