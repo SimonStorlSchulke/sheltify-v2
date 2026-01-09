@@ -1,15 +1,14 @@
 ---
 import { cms } from '@shared/cms/sheltify-access.ts';
-import SectionRendererAnimalList from '@shared/components/sections/SectionRendererAnimalList.astro';
 import SectionRendererColumns from '@shared/components/sections/SectionRendererColumns.astro';
-import SectionRendererHero from '@shared/components/sections/SectionRendererHero.astro';
+import RenderSectionAnimalList from 'article-renderer/components/RenderSectionAnimalList.svelte';
 import type { CmsArticle, SectionType } from 'sheltify-lib/article-types.ts';
-import SectionRendererImages from './sections/SectionRendererImages.astro';
 import RenderSectionTitle from 'article-renderer/components/RenderSectionTitle.svelte';
 import RenderSectionText from 'article-renderer/components/RenderSectionText.svelte';
 import RenderSectionImages from 'article-renderer/components/RenderSectionImages.svelte';
 import RenderSectionHero from 'article-renderer/components/RenderSectionHero.svelte';
 import "article-renderer/styles/_index.scss"
+import { animalsByArticleId } from 'sheltify-lib/animal-util.ts';
 
 interface Props {
   article: CmsArticle;
@@ -17,18 +16,28 @@ interface Props {
 }
 
 const { article, isDraft } = Astro.props;
+
+await populateDynamicData();
+
 const fullWidthSections: SectionType[] = ['hero'];
-
 let rowindex = 0;
-
-
 const hasTopHero = article.Structure.Rows[0]?.SectionType == 'hero';
 const topPadding = hasTopHero ? -16 : 48;
+const cssClasses = ['themable', 'article', 'sui', 'flex-y', ...(isDraft ? ['draft'] : [])];
 
-const cssClasses = ['themable', 'article', 'sui', 'flex-y'];
-if (isDraft) {
-  cssClasses.push('draft');
+async function populateDynamicData() {
+  for (const section of article.Structure.Rows) {
+    switch (section.SectionType) {
+      case 'animal-list':
+        section.TempFoundAnimals = await cms.getFilteredAnimals(section.Content);
+        break;
+      case 'image':
+          section.Content.MediaFiles = await cms.getMediaFilesByIds(section.Content.MediaFiles.map(i => i.ID));
+    }
+  }
 }
+
+const allAnimalsByArticle = animalsByArticleId(await cms.animals);
 
 ---
 { isDraft && <div class="sui wrapper p-1 mt-2 draft-info">Artikel nicht publiziert</div>}
@@ -54,16 +63,19 @@ if (isDraft) {
             comp = <hr/>;
             break;
           case 'hero':
-            comp = <RenderSectionHero uploadsUrl={cms.uploadsUrl} isTopHero={isTopHero} section={section} client:visible/>;
+            comp = <RenderSectionHero section={section} client:visible/>;
             break;
           case 'animal-list':
-            comp = <SectionRendererAnimalList section={section}/>;
+            comp = <RenderSectionAnimalList section={section} allAnimalsByArticle={allAnimalsByArticle}/>;
             break;
           case 'image':
-            comp = <RenderSectionImages section={section} uploadsUrl={cms.uploadsUrl} client:visible/>;
+            comp = <RenderSectionImages section={section} client:visible/>;
             break;
           case 'columns':
             comp = <SectionRendererColumns section={section}/>;
+            break;
+          case 'html':
+            comp = <div set:html={section.Content.Html}/>;
             break;
           default:
             comp = <div>Sektionstyp nicht unterstützt</div>;

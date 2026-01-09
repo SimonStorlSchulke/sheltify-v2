@@ -6,16 +6,10 @@
 />
 
 <script lang="ts">
+  import Image from './Image.svelte';
   import type { SectionHero } from "sheltify-lib/dist/article-types";
-  import type { CmsImage, CmsImagesSize } from "sheltify-lib/dist/cms-types";
-  import { getLargestAvailableImageSize } from "sheltify-lib/image-utils";
 
-  let { section, uploadsUrl }: { section: SectionHero; uploadsUrl: string } = $props();
-
-  function getImageSrc(image: CmsImage, requestedSize: CmsImagesSize): string {
-    const availableSize = getLargestAvailableImageSize(requestedSize, image);
-    return `${uploadsUrl}${image.ID}_${availableSize}.webp`;
-  }
+  let { section }: { section: SectionHero } = $props();
 
   const duration = $derived(() => section.Content.DurationSeconds ?? 5);
   const effectiveImageCount = $derived(
@@ -28,14 +22,21 @@
     if (effectiveImageCount() > 2) {
       let index = 1;
 
-      setInterval(() => {
+      const interval = setInterval(() => {
+        if(!scroller) {
+          clearInterval(interval);
+          return;
+        }
         scroller.style.transition = "transform 1s";
         scroller.style.transform = `translateX(${-index * 100}%)`;
         index++;
-
         if (index === effectiveImageCount()) {
           // After the animation finishes, jump back without transition
-          setTimeout(() => {
+          const timeout = setTimeout(() => {
+            if(!scroller) {
+              clearTimeout(timeout);
+              return;
+            }
             scroller.style.transition = "none";
             scroller.style.transform = "translateX(0%)";
             index = 1;
@@ -57,20 +58,21 @@
 <div class={"hero-container" + (isTopHero ? " top-hero" : "")}>
   <div class="hero-scroller" bind:this={scroller}>
     {#each section.Content.MediaFiles as image, index}
-      <img
-        class="hero-img"
-        src={getImageSrc(image, "xlarge")}
-        alt={image.Description || image.Title}
-        style={`transform: translateX(${index * 100}%)`}
+      <Image
+        img={image}
+        size="xlarge"
+        cssClass="hero-img"
+        contain={true} refetch={true}
+        cssStyle={`transform: translateX(${index * 100}%)`}
       />
     {/each}
 
-    <img
-      style={`transform: translateX(${section.Content.MediaFiles.length * 100}%)`}
-      class="hero-img"
-      alt={section.Content.MediaFiles[0].Description ||
-        section.Content.MediaFiles[0].Title}
-      src={getImageSrc(section.Content.MediaFiles[0], "xlarge")}
+    <Image
+      img={section.Content.MediaFiles[0]}
+      size="xlarge"
+      cssClass="hero-img"
+      contain={true} refetch={true}
+      cssStyle={`transform: translateX(${section.Content.MediaFiles.length * 100}%)`}
     />
   </div>
   {#if section.Content.Text}

@@ -6,11 +6,10 @@
 />
 
 <script lang="ts">
-  import { getLargestAvailableImageSize } from 'sheltify-lib/image-utils';
   import type { SectionImages } from 'sheltify-lib/dist/article-types';
-  import { type CmsImage, type CmsImagesSize } from 'sheltify-lib/dist/cms-types';
+  import { getImageSrc } from '../util';
 
-  let {section, uploadsUrl}: { section: SectionImages, uploadsUrl: string } = $props();
+  let {section}: { section: SectionImages } = $props();
 
   const images = $derived(() => section.Content.MediaFiles);
   const size = $derived(() => section.Content.Size);
@@ -18,10 +17,6 @@
 
   let shownId: number | undefined = $state();
 
-  function getImageSrc(image: CmsImage, requestedSize: CmsImagesSize): string {
-    const availableSize = getLargestAvailableImageSize(requestedSize, image);
-    return `${uploadsUrl}${image.ID}_${availableSize}.webp`;
-  }
 
   let description = $derived(() => {
     const counter = `${(shownId ?? 0) + 1} / ${images.length}`;
@@ -48,20 +43,22 @@
 
   function next(e?: MouseEvent) {
     e?.stopPropagation();
-    if (shownId! >= images.length - 1) {
+    if (shownId! >= images().length - 1) {
       shownId = 0;
       return;
     }
     shownId! += 1;
+    console.log(shownId)
   }
 
   function previous(e?: MouseEvent) {
     e?.stopPropagation();
     if (shownId! <= 0) {
-      shownId = images.length - 1;
+      shownId = images().length - 1;
       return;
     }
     shownId! -= 1;
+    console.log(shownId)
   }
 
 </script>

@@ -16,7 +16,7 @@
     <app-section-editor-hero [section]="sectionVal"/>
   }
   @case ('animal-list') {
-    <app-section-editor-animal-list [section]="sectionVal" (triggerRerender)="triggerRerender()"/>
+    <app-section-editor-animal-list [section]="sectionVal" (triggerRerender)="triggerRerender.emit()"/>
   }
   @case ('html') {
     <app-section-editor-html [section]="sectionVal"/>

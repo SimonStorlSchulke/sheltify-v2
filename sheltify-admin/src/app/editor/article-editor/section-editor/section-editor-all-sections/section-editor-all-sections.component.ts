@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { Section } from 'sheltify-lib/article-types';
 import { SectionEditorAnimalListComponent } from 'src/app/editor/article-editor/section-editor-animal-list/section-editor-animal-list.component';
 import { SectionEditorColumnsComponent } from 'src/app/editor/article-editor/section-editor-columns/section-editor-columns.component';
@@ -25,8 +25,5 @@ import { SectionEditorTextComponent } from 'src/app/editor/article-editor/text-s
 })
 export class SectionEditorAllSectionsComponent {
   public section = input.required<Section>()
-
-  public triggerRerender() {
-
-  }
+  public triggerRerender = output();
 }

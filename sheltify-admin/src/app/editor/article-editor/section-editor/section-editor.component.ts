@@ -1,6 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectorRef, Component, computed, CUSTOM_ELEMENTS_SCHEMA, HostListener, input, signal, TemplateRef, viewChild, ViewChild, ViewContainerRef } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, HostListener, input, signal, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
 import { Section } from 'sheltify-lib/article-types';
 import { ArticleEditorService } from 'src/app/editor/article-editor/article-editor.service';
@@ -23,20 +22,13 @@ import { sectionLabels } from 'src/app/services/article-renderer';
 export class SectionEditorComponent {
   public section = input.required<Section>();
   public rowIndex = input.required<number>();
-  public triggerRerenderVal = signal(0);
   public editMode = signal(false);
 
   @ViewChild('outlet', { read: ViewContainerRef }) outletRef!: ViewContainerRef;
   @ViewChild('preview', { read: TemplateRef }) previewRef!: TemplateRef<any>;
 
-  constructor(private domSanitizer: DomSanitizer, private articleEditorService: ArticleEditorService, private cdRef: ChangeDetectorRef) {
+  constructor(private articleEditorService: ArticleEditorService) {
   }
-
-  renderedTriggerSection = computed(() => {
-    console.log("s", this.section());
-    return {section: this.section(), trigger: this.triggerRerenderVal()};
-  })
-
 
   public triggerRerender() {
     this.outletRef.clear();

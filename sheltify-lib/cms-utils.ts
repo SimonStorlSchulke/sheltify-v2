@@ -8,3 +8,7 @@ export function sortByPriorityAndUpdatedAt<T extends { Priority: number; Updated
     return dateB - dateA;
   });
 }
+
+export function filterPublishedAndHasArticle<T extends {PublishedAt?: { Valid: boolean }, ArticleID?: string}>(list: T[]) {
+  return list.filter(entry => !!entry.ArticleID && entry.PublishedAt?.Valid);
+}

@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { AnimalsFilter, CmsArticle } from 'sheltify-lib/article-types';
 import { CmsAnimal, CmsBlogEntry, CmsHomeFoundEntry, CmsImage, CmsPage, CmsTag, CmsTeamMember, CmsTenantConfiguration } from 'sheltify-lib/cms-types';
-import { sortByPriorityAndUpdatedAt } from 'sheltify-lib/cms-utils';
+import { filterPublishedAndHasArticle, sortByPriorityAndUpdatedAt } from 'sheltify-lib/dist/cms-utils';
 import { LoaderService } from 'src/app/layout/loader/loader.service';
 import { AlertService } from 'src/app/services/alert.service';
 import { AuthService } from './auth.service';
@@ -144,7 +144,8 @@ export class CmsRequestService {
     if(filter.SizeRange[1]) query += `sizeMax=${filter.SizeRange[1]}&`;
     if(filter.Gender != 'both') query += `gender=${filter.Gender}&`;
 
-    return this.get<CmsAnimal[]>(`${this.publicTenantsUrl}/animals/filtered?${query}`);
+    return this.get<CmsAnimal[]>(`${this.publicTenantsUrl}/animals/filtered?${query}`)
+      .pipe(map(response => sortByPriorityAndUpdatedAt(filterPublishedAndHasArticle(response))));
   }
 
   public saveAnimal(animal: CmsAnimal): Observable<CmsAnimal> {

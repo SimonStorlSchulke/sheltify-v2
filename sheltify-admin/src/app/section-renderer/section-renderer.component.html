@@ -21,7 +21,7 @@
         <section-animal-list [section]="section"/>
       }
       @case ('html') {
-        <section-html [section]="section"/>
+        <div [innerHTML]="section.Content.Html"></div>
       }
       @case ('separator-x') {
         <section-separator-x [section]="section"/>

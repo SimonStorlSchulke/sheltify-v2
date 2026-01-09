@@ -1,6 +1,6 @@
 import { type AnimalsFilter, type CmsArticle } from 'sheltify-lib/article-types.ts';
 import { type CmsAnimal, type CmsImage, type CmsPage, type CmsTenantConfiguration } from 'sheltify-lib/cms-types';
-import { sortByPriorityAndUpdatedAt } from 'sheltify-lib/cms-utils.ts';
+import { filterPublishedAndHasArticle, sortByPriorityAndUpdatedAt } from 'sheltify-lib/cms-utils.ts';
 import { animalsByArticleId } from 'sheltify-lib/animal-util.ts';
 
 export class SheltifyAccess {
@@ -68,7 +68,7 @@ export class SheltifyAccess {
     return this.getSortedByPriorityAndUpdatedAt<CmsAnimal>('animals')
   }
 
-  public getFilteredAnimals(filter: AnimalsFilter): Promise<CmsAnimal[]> {
+  public async getFilteredAnimals(filter: AnimalsFilter): Promise<CmsAnimal[]> {
     let query = ``;
 
     if(filter.AnimalKind) query += `kind=${filter.AnimalKind}&`;
@@ -79,7 +79,8 @@ export class SheltifyAccess {
     if(filter.SizeRange[1]) query += `sizeMax=${filter.SizeRange[1]}&`;
     if(filter.Gender != 'both') query += `gender=${filter.Gender}&`;
 
-    return this.get<CmsAnimal[]>(`animals/filtered?${query}`);
+    const animals = await this.get<CmsAnimal[]>(`animals/filtered?${query}`);
+    return sortByPriorityAndUpdatedAt(filterPublishedAndHasArticle(animals));
   }
 
   public animalById(id: number): Promise<CmsAnimal> {

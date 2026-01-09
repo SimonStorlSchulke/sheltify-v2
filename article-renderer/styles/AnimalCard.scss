@@ -1,0 +1,47 @@
+.animal-card {
+  width: 210px;
+  height: 210px;
+  display: block;
+  background-color: #fff;
+  outline: 1px solid var(--c-primary);
+  position: relative;
+  color: inherit;
+  overflow: hidden;
+  cursor: pointer;
+
+  img {
+    height: 160px;
+    width: 210px;
+  }
+
+  .name-row {
+    display: flex;
+    justify-content: center;
+  }
+
+  .bubbles {
+    position: absolute;
+    bottom: 68px;
+    left: 12px;
+    display: flex;
+    padding: 0;
+    flex-direction: column;
+    gap: 8px;
+    align-items: start;
+    font-family: oswald, system-ui;
+
+    color: #fff;
+
+    span {
+      background-color: var(--c-primary);
+      border-radius: 40px;
+      padding: 2px 8px;
+      font-size: 0.9rem;
+      font-weight: 100;
+
+      &.emergency {
+        //background-color: $cto;
+      }
+    }
+  }
+}

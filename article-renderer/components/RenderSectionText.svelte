@@ -5,7 +5,6 @@
   }}
 />
 
-<!-- components/Counter.svelte -->
 <script lang="ts">
   import type { SectionText } from "sheltify-lib/article-types";
   let { section }: { section: SectionText } = $props();

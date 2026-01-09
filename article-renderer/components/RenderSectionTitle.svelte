@@ -5,7 +5,6 @@
   }}
 />
 
-<!-- components/Counter.svelte -->
 <script lang="ts">
   import type { SectionTitle } from "sheltify-lib/article-types";
   let { section }: { section: SectionTitle } = $props();
@@ -21,10 +20,6 @@
       href={`#${anchor()}`}
       class="anchor-link"
       aria-label="Link zur Sektion kopieren"
-      onclick={() =>
-        navigator.clipboard.writeText(
-          window.location.href.split("#")[0] + `#${anchor()}`,
-        )}
     >
       #
     </a>

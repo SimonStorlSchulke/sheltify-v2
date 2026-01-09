@@ -1,10 +1,10 @@
 ---
-import SectionRendererAnimalList from '@shared/components/sections/SectionRendererAnimalList.astro';
 import SectionRendererHero from '@shared/components/sections/SectionRendererHero.astro';
 import SectionRendererImages from '@shared/components/sections/SectionRendererImages.astro';
-import type { SectionColumns, SectionText } from 'sheltify-lib/article-types.ts';
+import type { SectionColumns } from 'sheltify-lib/article-types.ts';
 import RenderSectionTitle from 'article-renderer/components/RenderSectionTitle.svelte';
 import RenderSectionText from 'article-renderer/components/RenderSectionText.svelte';
+import RenderSectionAnimalList from 'article-renderer/components/RenderSectionAnimalList.svelte';
 
 interface Props {
   section: SectionColumns
@@ -32,7 +32,7 @@ const {section} = Astro.props;
           comp = <SectionRendererHero isTopHero={false} section={section}/>;
           break;
         case 'animal-list':
-          comp = <SectionRendererAnimalList section={section}/>;
+          comp = <RenderSectionAnimalList section={section}/>;
           break;
         case 'image':
           comp = <SectionRendererImages section={section}/>;

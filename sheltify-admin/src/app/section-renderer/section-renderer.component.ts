@@ -1,4 +1,5 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, input } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, input } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Section } from 'sheltify-lib/article-types';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 
@@ -12,4 +13,7 @@ import { CmsRequestService } from 'src/app/services/cms-request.service';
 export class SectionRendererComponent {
   public section = input<Section>();
   public uploadsUrl = CmsRequestService.publicApiUrl + 'uploads/';
+
+  public domSanitizer= inject(DomSanitizer);
+
 }

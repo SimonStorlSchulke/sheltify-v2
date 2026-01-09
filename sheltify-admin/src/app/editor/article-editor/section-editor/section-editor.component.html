@@ -20,7 +20,7 @@
 
     </div>
     <div class="section-editor only-editmode">
-      <app-section-editor-all-sections [section]="sectionVal"/>
+      <app-section-editor-all-sections [section]="sectionVal" (triggerRerender)="triggerRerender()"/>
     </div>
   </div>
 </div>
