@@ -12,10 +12,9 @@ import { animalsByArticleId } from 'sheltify-lib/animal-util.ts';
 
 interface Props {
   article: CmsArticle;
-  isDraft: boolean,
 }
 
-const { article, isDraft } = Astro.props;
+const { article } = Astro.props;
 
 await populateDynamicData();
 
@@ -23,7 +22,7 @@ const fullWidthSections: SectionType[] = ['hero'];
 let rowindex = 0;
 const hasTopHero = article.Structure.Rows[0]?.SectionType == 'hero';
 const topPadding = hasTopHero ? -16 : 48;
-const cssClasses = ['themable', 'article', 'sui', 'flex-y', ...(isDraft ? ['draft'] : [])];
+const cssClasses = ['themable', 'article', 'sui', 'flex-y'];
 
 async function populateDynamicData() {
   for (const section of article.Structure.Rows) {
@@ -40,7 +39,6 @@ async function populateDynamicData() {
 const allAnimalsByArticle = animalsByArticleId(await cms.animals);
 
 ---
-{ isDraft && <div class="sui wrapper p-1 mt-2 draft-info">Artikel nicht publiziert</div>}
 <div style={'margin-top: ' + topPadding + 'px'} class:list={cssClasses}>
 
 {
@@ -87,27 +85,9 @@ const allAnimalsByArticle = animalsByArticleId(await cms.animals);
   }
 </div>
 
-<script>
-  const draftArticle = document.querySelector<HTMLElement>('.article.draft')!;
-
-  if(draftArticle) {
-    const showDraftQuery = new URLSearchParams(window.location.search).get('showDraft');
-    if (showDraftQuery === 'true') {
-      draftArticle.classList.remove('draft');
-    }
-  }
-</script>
-
 <style is:global lang="scss">
-  .draft-info {
-    background: #ffeab0;
-  }
   .article {
     gap: var(--section-gap-y);
-
-    &.draft {
-      display: none !important;
-    }
     .row {
       &:not(.full-width) {
         width: var(--wrapper-width);

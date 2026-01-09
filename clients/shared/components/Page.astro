@@ -13,7 +13,6 @@ const article = page.ArticleID ? await cms.getArticle(page.ArticleID) : undefine
 
 {
   article ?
-  <Article isDraft={!(page.PublishedAt?.Valid)} article={article}/> :
+  <Article article={article}/> :
   <div class="sui wrapper py-2">Kein Artikel</div>
 }
-

@@ -23,7 +23,9 @@ export class SheltifyAccess {
   }
 
   public async getStaticPathsPages() {
-    return (await this.getPages()).map(page => ({
+    return (await this.getPages())
+    .filter(page => page.PublishedAt?.Valid)
+    .map(page => ({
       params: { path: page.Path }
     }));
   }

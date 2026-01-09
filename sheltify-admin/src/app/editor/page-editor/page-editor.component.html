@@ -2,7 +2,9 @@
   @if (page(); as page) {
     <div class="sui flex-x ai-center gap-2 grow-1">
       <h1>{{ page.Path.replace('-', ' ').replaceAll('/', ' › ') || 'Startseite'}}</h1>
-      <a [href]="pageUrl() + '?showDraft=true'" target="_blank"><app-bt-icon name="BoxArrowUpRight" size="ml"/></a>
+      @if(page.PublishedAt?.Valid) {
+        <a [href]="pageUrl()" target="_blank"><app-bt-icon name="BoxArrowUpRight" size="ml"/></a>
+      }
     </div>
     <div class="sui flex-x gap-2">
       <button type="button" class="primary" (click)="save()">Speichern</button>
@@ -24,7 +26,7 @@
         <app-checkbox-input idName="show-in-menu" label="In Menü anzeigen" [(twoWayModel)]="page().ShowInMenu"/>
         <app-checkbox-input idName="show-in-footer" label="Im Footer verlinken" [(twoWayModel)]="page().LinkInFooter"/>
       </div>
-  <app-last-edited [entry]="page()"/>
+      <app-last-edited [entry]="page()"/>
     </form>
   </div>
 
@@ -36,7 +38,6 @@
       <app-article-editor [articleId]="page.ArticleID" [saveArticle]="saveArticle$" class="content"/>
     } @else {
       <button data-testid="btn-create-article-for-animal" (click)="createArticle()" class="secondary">Artikel erstellen</button>
-
     }
   }
 </div>
