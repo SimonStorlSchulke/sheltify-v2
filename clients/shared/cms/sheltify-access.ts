@@ -6,7 +6,7 @@ import type { SeoData } from '@shared/types/seo-data';
 
 export class SheltifyAccess {
 
-  constructor(private tenant: string) {}
+  constructor(private tenant: string) { }
 
   private readonly headers = {
     "Content-Type": "application/json",
@@ -17,6 +17,10 @@ export class SheltifyAccess {
   public get apiBaseUrl() {
     return `http://localhost:3000/api/${this.tenant}/`;
   }
+  
+  public get formSubmitUrl() {
+    return `http://localhost:3000/forms/${this.tenant}/submit`;
+  }
 
   public async getPages(): Promise<CmsPage[]> {
     return this.getSortedByPriorityAndUpdatedAt<CmsPage>('pages');
@@ -24,10 +28,10 @@ export class SheltifyAccess {
 
   public async getStaticPathsPages() {
     return (await this.getPages())
-    .filter(page => page.PublishedAt?.Valid)
-    .map(page => ({
-      params: { path: page.Path }
-    }));
+      .filter(page => page.PublishedAt?.Valid && page.ArticleID)
+      .map(page => ({
+        params: { path: page.Path }
+      }));
   }
 
   public async getStaticPathsAnimals() {
@@ -42,10 +46,12 @@ export class SheltifyAccess {
       const animals = entry[1];
       const animalNames = animals.map(animal => animal.Name).join('-');
 
-      return {params: {
+      return {
+        params: {
           animalKind: animals[0].AnimalKind ?? defaultAnimalKind,
           animalNames: animalNames,
-        }}
+        }
+      }
     })
 
     return paths;
@@ -85,23 +91,35 @@ export class SheltifyAccess {
   public async getFilteredAnimals(filter: AnimalsFilter): Promise<CmsAnimal[]> {
     let query = ``;
 
-    if(filter.AnimalKind) query += `kind=${filter.AnimalKind}&`;
-    if(filter.MaxNumber) query += `maxNumber=${filter.MaxNumber}&`;
-    if(filter.AgeRange[0]) query += `ageMin=${filter.AgeRange[0]}&`;
-    if(filter.AgeRange[1]) query += `ageMax=${filter.AgeRange[1]}&`;
-    if(filter.SizeRange[0]) query += `sizeMin=${filter.SizeRange[0]}&`;
-    if(filter.SizeRange[1]) query += `sizeMax=${filter.SizeRange[1]}&`;
-    if(filter.Gender != 'both') query += `gender=${filter.Gender}&`;
+    if (filter.AnimalKind) query += `kind=${filter.AnimalKind}&`;
+    if (filter.MaxNumber) query += `maxNumber=${filter.MaxNumber}&`;
+    if (filter.AgeRange[0]) query += `ageMin=${filter.AgeRange[0]}&`;
+    if (filter.AgeRange[1]) query += `ageMax=${filter.AgeRange[1]}&`;
+    if (filter.SizeRange[0]) query += `sizeMin=${filter.SizeRange[0]}&`;
+    if (filter.SizeRange[1]) query += `sizeMax=${filter.SizeRange[1]}&`;
+    if (filter.Gender != 'both') query += `gender=${filter.Gender}&`;
 
     const animals = await this.get<CmsAnimal[]>(`animals/filtered?${query}`);
     return sortByPriorityAndUpdatedAt(filterPublishedAndHasArticle(animals));
+  }
+
+  public async getAnimalsByNames(animalKind: string, animalNames: string): Promise<CmsAnimal[]> {
+    return this.getFilteredAnimals({
+      AnimalKind: animalKind,
+      MaxNumber: undefined,
+      AgeRange: [undefined, undefined],
+      SizeRange: [undefined, undefined],
+      Gender: "both",
+      InGermany: undefined,
+      Names: animalNames,
+    })
   }
 
   public animalById(id: number): Promise<CmsAnimal> {
     return this.get<CmsAnimal>(`animals/${id}`)
   }
 
-  public async getSortedByPriorityAndUpdatedAt<T extends { Priority: number; UpdatedAt?: string | Date | null}>(path: string) {
+  public async getSortedByPriorityAndUpdatedAt<T extends { Priority: number; UpdatedAt?: string | Date | null }>(path: string) {
     const result = await this.get<T[]>(path);
     return sortByPriorityAndUpdatedAt(result);
   }
@@ -109,7 +127,7 @@ export class SheltifyAccess {
   private cache = new Map<string, unknown>();
   private isDev = import.meta.env.MY_ENV === 'dev';
   public async get<T>(path: string) {
-    if(this.cache.has(path)) return this.cache.get(path) as T;
+    if (this.cache.has(path)) return this.cache.get(path) as T;
     const res = await fetch(this.apiBaseUrl + path, {
       headers: this.headers,
     });
@@ -117,7 +135,7 @@ export class SheltifyAccess {
       throw new Error(`Failed to fetch ${path}: ${res.status} ${res.statusText}`);
     }
     const data = await res.json();
-    if(!this.isDev) {
+    if (!this.isDev) {
       this.cache.set(path, data)
     }
     return data as T;

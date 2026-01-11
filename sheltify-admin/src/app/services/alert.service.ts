@@ -14,12 +14,23 @@ export class AlertService {
 
 
   public async openAlert(title: string, message: string, buttons: AlertChoice[] = ['ok']): Promise<AlertChoice | undefined> {
-    return await this.modalService.openFinishable(AlertComponent, {
+    return (await this.modalService.openFinishable(AlertComponent, {
         title,
         message,
         buttons,
       }, 'modal-alert'
-    )
+    ))?.choice;
+  }
+
+  public async openOptionsPrompt(title: string, message: string, options: string[], optionTranslations?: string[]): Promise<string | undefined> {
+    return (await this.modalService.openFinishable(AlertComponent, {
+        title,
+        message,
+        options,
+        optionTranslations,
+        buttons: ['abbrechen'],
+      }, 'modal-alert'
+    ))?.option;
   }
 
   public openToast(message: string, title: string = '', level: ToastLevel = 'info'): void {

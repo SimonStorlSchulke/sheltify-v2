@@ -16,6 +16,14 @@
   </b>
   <span>{{ message }}</span>
 
+  <div class="sui flex-y gap-1">
+    @if(options) {
+      @for(option of options; track option) {
+        <button class="primary" (click)="selectOption(option)">{{ optionTranslations ? optionTranslations[$index] : option }}</button>
+      }
+    }
+  </div>
+
   <div class="sui flex-x jc-end gap-1">
     @for (button of buttons; track button) {
       <button
@@ -28,5 +36,4 @@
       </button>
     }
   </div>
-
 </div>

@@ -8,6 +8,7 @@ import { SectionEditorImagesComponent } from 'src/app/editor/article-editor/sect
 import { SectionEditorTitleComponent } from 'src/app/editor/article-editor/section-editor-title/section-editor-title.component';
 import { SectionEditorVideoComponent } from 'src/app/editor/article-editor/section-editor-video/section-editor-video.component';
 import { SectionEditorTextComponent } from 'src/app/editor/article-editor/text-section-editor/section-editor-text.component';
+import { SectionEditorFormComponent } from "../../section-editor-form/section-editor-form.component";
 
 @Component({
   selector: 'app-section-editor-all-sections',
@@ -19,8 +20,9 @@ import { SectionEditorTextComponent } from 'src/app/editor/article-editor/text-s
     SectionEditorImagesComponent,
     SectionEditorTextComponent,
     SectionEditorTitleComponent,
-    SectionEditorVideoComponent
-  ],
+    SectionEditorVideoComponent,
+    SectionEditorFormComponent
+],
   templateUrl: './section-editor-all-sections.component.html',
 })
 export class SectionEditorAllSectionsComponent {

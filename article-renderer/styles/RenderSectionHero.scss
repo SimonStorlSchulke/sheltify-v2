@@ -12,11 +12,11 @@
         height: var(--hero-top-height);
       }
     }
-    
+
     .hero-scroller {
       transition: transform 1s;
     }
-    
+
     .hero-img {
       object-fit: cover !important;
       height: var(--hero-height);

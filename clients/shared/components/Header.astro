@@ -6,7 +6,7 @@ import { createPageStructure } from "sheltify-lib/page-structure.ts";
 import HeaderEntry from "./HeaderEntry.astro";
 
 const pages = (await cms.getPages())
-  .filter((page) => page.PublishedAt?.Valid && page.ShowInMenu)
+  .filter((page) => page.PublishedAt?.Valid && page.ArticleID && page.ShowInMenu)
   .sort((a, b) => b.Priority - a.Priority);
 
 const menu = [...createPageStructure(pages).values()];

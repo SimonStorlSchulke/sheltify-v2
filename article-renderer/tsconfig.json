@@ -15,5 +15,5 @@
     "target": "ES2022",
     "module": "ES2022"
   },
-  "include": ["components/**/*"]
+  "include": ["components/**/*", "parameters.ts", "parameters.ts"]
 }

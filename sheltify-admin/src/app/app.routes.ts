@@ -9,6 +9,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { AnimalListComponent } from './editor/animal-list/animal-list.component';
 import { AuthGuard } from './services/auth-guard.service';
+import { SubmittedFormsComponent } from './submitted-forms/submitted-forms.component';
 
 export const routes: Routes = [
   {path: "", component: DashboardComponent, canActivate: [AuthGuard]},
@@ -25,4 +26,6 @@ export const routes: Routes = [
   {path: "optionen", component: TenantConfigurationComponent, canActivate: [AuthGuard]},
   {path: "tiere", component: AnimalListComponent, canActivate: [AuthGuard]},
   {path: "tiere/:id", component: AnimalListComponent, canActivate: [AuthGuard]},
+  {path: "formulare", component: SubmittedFormsComponent, canActivate: [AuthGuard]},
+  {path: "formulare/:id", component: SubmittedFormsComponent, canActivate: [AuthGuard]},
 ];

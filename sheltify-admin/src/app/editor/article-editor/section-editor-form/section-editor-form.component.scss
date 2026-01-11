@@ -1,0 +1,23 @@
+.updown {
+  padding: 5px 0;
+  margin-top: 12px;
+
+  button {
+    width: 48px;
+    font-weight: bold;;
+
+    &.up {
+      border-radius: 6px 6px 0 0;
+    }
+    &.down {
+      border-radius: 0 0 6px 6px;
+    }
+
+  }
+}
+
+.delete {
+  padding: 5px 0;
+  margin-top: 12px;
+  height: 100%;
+}

@@ -22,7 +22,6 @@ body {
 
   .content {
     flex-grow: 1;
-    background: $neutral100;
   }
 }
 
@@ -136,4 +135,9 @@ body {
   .only-wide {
     display: none;
   }
+}
+
+.info-panel {
+  margin: 24px;
+  background-color: $primary-h5;
 }

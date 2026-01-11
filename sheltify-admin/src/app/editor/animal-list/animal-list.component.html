@@ -47,7 +47,6 @@
   </div>
   <div class="content">
     @if (editorOpened) {
-
       <div class="content-info-header">
         <div class="sui flex-x ai-center gap-2 grow-1">
 
@@ -70,6 +69,22 @@
         (saved)="onSavedAnimal($event)"
         (deleted)="onDeletedAnimal(); layout.mobileOpen.set(false)"
       />
+    } @else {
+      <div class="sui p-3">
+        <div class="card">
+          <h1 class="sui flex-x gap-2"><app-bt-icon name="InfoCircle"/>Tiere</h1>
+          <br>
+          <p>In diesem Bereich können die Tiere verwaltet werden, die derzeit auf der Webseite verwaltet werden.
+            Mit 'Neues Tier' kann ein Eintrag für ein Tier erstellt werden, oder in der Liste darunter ein existierendes ausgewählt werden.
+            <br><br>
+
+            Damit ein Tier auf der Webseite sichtbar ist, muss es publiziert werden (Knopf oben rechts) und ein Artikel für es erstellt werden. Die Tiere werden dann z.B. in den Artikelsektionen "Tierliste (statisch)" oder "Tierliste (dynamisch)" angezeigt.
+            <br><br>
+            Tiere können sich auch einen Artikel teilen. Dafür den Knopf "existierendem Tierartikel zuweisen" klicken.
+            Das kann z.B. für Welpenwürfe nützlich sein, die zwar einzeln auf der Webseite angezeigt werden sollen, aber denselben Artikel teilen.
+          </p>
+        </div>
+      </div>
     }
   </div>
 

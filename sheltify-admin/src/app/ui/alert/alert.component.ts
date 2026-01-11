@@ -9,13 +9,19 @@ export type AlertChoice = 'ok' | 'ja' | 'nein' | 'abbrechen';
   templateUrl: './alert.component.html',
   styleUrl: './alert.component.scss'
 })
-export class AlertComponent extends FinishableDialog<AlertChoice> {
+export class AlertComponent extends FinishableDialog<{choice: AlertChoice, option?: string}> {
   title = '';
   message = '';
   type: 'info' | 'error' | 'warning' | '' = '';
   buttons: AlertChoice[] = [];
-
+  options?: string[];
+  optionTranslations?: string[];
+  
   public onButtonClicked(button: AlertChoice) {
-    this.finishWith(button);
+    this.finishWith({choice: button});
+  }
+
+  selectOption(option: string) {
+    this.finishWith({choice: 'ok', option});
   }
 }

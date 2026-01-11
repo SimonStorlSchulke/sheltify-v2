@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { AnimalsFilter, CmsArticle } from 'sheltify-lib/article-types';
-import { CmsAnimal, CmsBlogEntry, CmsHomeFoundEntry, CmsImage, CmsPage, CmsTag, CmsTeamMember, CmsTenantConfiguration } from 'sheltify-lib/cms-types';
+import { CmsAnimal, CmsBlogEntry, CmsFormSubmission, CmsHomeFoundEntry, CmsImage, CmsPage, CmsTag, CmsTeamMember, CmsTenantConfiguration } from 'sheltify-lib/cms-types';
 import { filterPublishedAndHasArticle, sortByPriorityAndUpdatedAt } from 'sheltify-lib/dist/cms-utils';
 import { LoaderService } from 'src/app/layout/loader/loader.service';
 import { AlertService } from 'src/app/services/alert.service';
@@ -201,6 +201,14 @@ export class CmsRequestService {
       },
       withCredentials: true,
     });
+  }
+
+  public getSubmittedForms() {
+    return this.httpClient.get<CmsFormSubmission[]>(CmsRequestService.adminApiUrl + 'forms/submitted', this.options());
+  }
+
+  public getSubmittedForm(id: string) {
+    return this.httpClient.get<CmsFormSubmission>(CmsRequestService.adminApiUrl + 'forms/submitted/' + id, this.options());
   }
 
   public uploadScaledImage(files: { size: string; blob: Blob; }[], fileName: string, commaSeparatedTags: string, commaSeparatedAnimalIds: string) {

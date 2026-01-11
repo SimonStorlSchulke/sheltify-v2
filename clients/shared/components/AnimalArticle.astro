@@ -1,33 +1,22 @@
 ---
-import { cms } from '@shared/cms/sheltify-access.ts';
+import { cms } from "@shared/cms/sheltify-access.ts";
+import Article from "./Article.astro";
 interface Props {
-  animalKind: string,
-  animalNames: string,
+  animalKind: string;
+  animalNames: string;
 }
+const { animalKind, animalNames } = Astro.props;
 
-const {animalKind, animalNames} = Astro.props;
-
-const animals = await cms.getFilteredAnimals({
-  AnimalKind: animalKind,
-  MaxNumber: undefined,
-  AgeRange: [undefined, undefined],
-  SizeRange: [undefined, undefined],
-  Gender: 'both',
-  InGermany: undefined,
-  Names: animalNames,
-})
-
+const animals = await cms.getAnimalsByNames(animalKind, animalNames);
 ---
 
-<div class="wrapper">{animalKind} {animalNames}</div>
+{
+  animals.map((animal) => (
+    <div class="sui wrapper">
+      <h2>{animal.Name}</h2>
+      <p>Art: {animal.AnimalKind}</p>
+    </div>
+  ))
+}
 
-
-<style>
-  .wrapper {
-      padding-top: 32px;
-      width: var(--wrapper-width);
-      max-width: 100%;
-      margin-left: auto;
-      margin-right: auto;
-  }
-</style>
+<Article article={await cms.getArticle(animals[0].ArticleID ?? '')} />

@@ -23,6 +23,12 @@ export type CmsType = {
   LastModifiedBy?: string,
 }
 
+export type CmsFormSubmission = CmsType & {
+  Type: string,
+  SenderMail: string,
+  Text: string,
+}
+
 export type CmsPage = Publishable & {
   Path: string,
   Description: string,

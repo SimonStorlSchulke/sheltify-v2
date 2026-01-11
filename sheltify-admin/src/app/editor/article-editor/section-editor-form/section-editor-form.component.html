@@ -1,0 +1,52 @@
+<div class="sui flex-y gap-2">
+
+    <app-text-input idName="formName" label="Formularname" [(twoWayModel)]="section().Content.Name" />
+
+    @for (input of section().Content.Inputs; track $index) {
+    <div class="sui flex-x ai-center gap-2 wrap">
+
+        <div class=" sui flex-x">
+            <div class="sui flex-y updown">
+                <button (click)="moveInputUp($index)" class="up small">⌃</button>
+                <button (click)="moveInputDown($index)" class="down small">⌄</button>
+            </div>
+        </div>
+
+        <app-text-input idName="" label="Label" [(twoWayModel)]="input.Label" />
+        <app-select-input style="width: 160px;" [clearable]="false" idName="" label="Typ" [(twoWayModel)]="input.Type"
+            [options]="['text', 'email', 'textarea', 'checkbox', 'calendar', 'radio']" [optionTranslations]="{
+            text: 'Text',
+            email: 'E-Mail',
+            textarea: 'Mehrzeiliger Text',
+            checkbox: 'Checkbox',
+            calendar: 'Kalender',
+            radio: 'Radio-Buttons'
+        }" />
+
+        <app-checkbox-input idName="" label="Erforderlich" [(twoWayModel)]="input.Required" />
+
+        @if(input.Type == 'radio') {
+        <app-text-input idName="" label="Radio-Optionen (Kommasepariert)"
+            [twoWayModel]="input.RadioOptions ? input.RadioOptions.join(',') : ''"
+            (twoWayModelChange)="setRadioOptions($index, $event)" />
+        }
+
+        <div class="sui grow-1"></div>
+
+        <button (click)="deleteInput($index)" class="delete small">×</button>
+
+    </div>
+    }
+
+    <button class="secondary" (click)="add()">+ Feld hinzufügen</button>
+
+    <div class="sui flex-x gap-2 wrap">
+        <app-text-input idName="submitButtonText" label="Absende-Button Text"
+            [(twoWayModel)]="section().Content.SubmitButtonText" placeholder="Abschicken" />
+        <app-text-input class="sui grow-1" idName="submitInfo" label="Absendehinweise"
+            [(twoWayModel)]="section().Content.SubmitInfo" />
+        </div>
+        <app-text-input class="sui grow-1" idName="submitInfo" label="Text nach dem Absenden anzeigen"
+        placeholder="Vielen Dank für Ihre Einsendung"
+            [(twoWayModel)]="section().Content.AfterSubmitText" />
+</div>

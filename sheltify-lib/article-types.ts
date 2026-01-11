@@ -1,6 +1,6 @@
 import { CmsAnimal, CmsImage, CmsType, SqlNullTime } from './cms-types';
 
-export const SectionTypes = ["title", "text", "video", "image", "hero", "animal-list", "html", "separator-x", "home-found", "columns"] as const;
+export const SectionTypes = ['title', 'text', 'video', 'image', 'hero', 'animal-list', 'html', 'separator-x', 'home-found', 'columns', 'form'] as const;
 
 export type SectionType = (typeof SectionTypes)[number];
 
@@ -25,6 +25,7 @@ export type Section =
   | SectionHero
   | SectionHomeFound
   | SectionColumns
+  | SectionForm
 
 export type SectionColumns = {
   SectionType: 'columns',
@@ -34,6 +35,23 @@ export type SectionColumns = {
       Sections: Section[],
       Grow: number,
     }[]
+  },
+};
+
+export const FormInputTypes = ['text', 'email', 'textarea', 'checkbox', 'calendar', 'radio'];
+export type SectionForm = {
+  SectionType: 'form',
+  Content: {
+    Name: string,
+    Inputs: {
+      Type: (typeof FormInputTypes)[number],
+      RadioOptions?: string[],
+      Label: string,
+      Required: boolean,
+    }[],
+    SubmitButtonText: string,
+    SubmitInfo: string,
+    AfterSubmitText: string,
   },
 };
 

@@ -37,6 +37,19 @@ func validateRequestBody[K shtypes.Validatable](w http.ResponseWriter, r *http.R
 	return content, nil
 }
 
+func parseRequestBody[K any](w http.ResponseWriter, r *http.Request) (K, error) {
+	var content K
+	var zero K
+
+	if err := json.NewDecoder(r.Body).Decode(&content); err != nil {
+		badRequestResponse(w, r, "Invalid request payload: "+err.Error())
+		return zero, errorContentValidation
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	return content, nil
+}
+
 func validatePublishable[K shtypes.ValidatableForPublishing](w http.ResponseWriter, r *http.Request) (K, error) {
 	var content K
 	var zero K

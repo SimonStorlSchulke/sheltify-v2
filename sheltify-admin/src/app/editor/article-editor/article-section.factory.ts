@@ -19,6 +19,17 @@ export function createEmptySection(SectionType: SectionType): Section {
           ]
         }
       };
+    case 'form':
+      return {
+        SectionType,
+        Content: {
+          Name: '',
+          SubmitButtonText: '',
+          SubmitInfo: '',
+          AfterSubmitText: '',
+          Inputs: [],
+        }
+      };
     case 'title':
       return {
         SectionType,

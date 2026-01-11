@@ -2,8 +2,10 @@ package main
 
 import (
 	"sheltify-new-backend/handlers"
+	"time"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/httprate"
 )
 
 func initRoutes(r *chi.Mux) {
@@ -18,6 +20,11 @@ func initRoutes(r *chi.Mux) {
 	rAdminApi.Use(handlers.SetNeedsRebuild)
 	adminRoutes(rAdminApi)
 	r.Mount("/admin/api", rAdminApi)
+
+	rFormApi := chi.NewRouter()
+	rFormApi.Use(httprate.LimitByIP(5, time.Minute))
+	rFormApi.Post("/submit", handlers.FormSubmit)
+	r.Mount("/forms/{tenant}", rFormApi)
 }
 
 func publicRoutes(r *chi.Mux) {
@@ -87,4 +94,7 @@ func adminRoutes(r *chi.Mux) {
 	r.Patch("/configuration", handlers.SaveTenantConfiguration)
 
 	r.Get("/trigger-build", handlers.TriggerAstroSiteBuild)
+
+	r.Get("/forms/submitted", handlers.GetSubmittedForms)
+	r.Get("/forms/submitted/{id}", handlers.GetFormById)
 }
