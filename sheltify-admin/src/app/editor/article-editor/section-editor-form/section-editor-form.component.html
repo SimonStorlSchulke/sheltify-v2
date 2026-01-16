@@ -45,8 +45,12 @@
             [(twoWayModel)]="section().Content.SubmitButtonText" placeholder="Abschicken" />
         <app-text-input class="sui grow-1" idName="submitInfo" label="Absendehinweise"
             [(twoWayModel)]="section().Content.SubmitInfo" />
-        </div>
-        <app-text-input class="sui grow-1" idName="submitInfo" label="Text nach dem Absenden anzeigen"
-        placeholder="Vielen Dank für Ihre Einsendung"
-            [(twoWayModel)]="section().Content.AfterSubmitText" />
+    </div>
+    <app-text-input class="sui grow-1" idName="submitInfo" label="Text nach dem Absenden anzeigen" explanation="Text, der dem Nutzer angezeigt wird, wenn er das Formulat abgeschickt hat."
+        placeholder="Vielen Dank für Ihre Einsendung" [(twoWayModel)]="section().Content.AfterSubmitText" />
+
+    <app-text-input idName="" label="Weiterleiten an" explanation="An die hier angegebenen Emailadressen werden ausgefüllte Formulare dieser Oberfläche weitergeleitet"
+        [twoWayModel]="section().Content.ForwardToEmails ? section().Content.ForwardToEmails.join(',') : ''"
+        (twoWayModelChange)="setForwardMails($event)" />
+
 </div>

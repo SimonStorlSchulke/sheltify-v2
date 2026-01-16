@@ -101,9 +101,7 @@ export class AnimalEditorComponent {
   }
 
   protected async delete() {
-    const choice = await this.alertService.openAlert('Tier wirklich entfernen?', 'Aktion kann nicht rückgängig gemacht werden', ['ja', 'nein'])
-    if (choice !== 'ja') return;
-
+    if (!await this.alertService.confirmDelete()) return;
     await lastValueFrom(this.cmsRequestService.deleteAnimals([this.animal()!.ID]));
     this.deleted.emit();
   }

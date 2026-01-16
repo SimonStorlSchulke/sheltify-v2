@@ -21,9 +21,9 @@ import { RouterLink, RouterLinkActive, Router } from '@angular/router';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SidebarComponent {
-  router = inject(Router);
-  tenantConfigurationService = inject(TenantConfigurationService);
-  building = signal(false);
+  public router = inject(Router);
+  public tenantConfigurationService = inject(TenantConfigurationService);
+  public building = signal(false);
 
   constructor(private cmsRequestService: CmsRequestService) {
   }

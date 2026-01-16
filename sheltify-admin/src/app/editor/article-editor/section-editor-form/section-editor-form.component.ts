@@ -29,9 +29,13 @@ export class SectionEditorFormComponent {
       });
   }
 
-  public setRadioOptions(_t3: number, $event: string) {
-    const input = this.section().Content.Inputs[_t3];
+  public setRadioOptions(index: number, $event: string) {
+    const input = this.section().Content.Inputs[index];
     input.RadioOptions = $event.split(',').map(o => o.trim());
+  }
+
+  public setForwardMails($event: string) {
+    this.section().Content.ForwardToEmails = $event.split(',').map(o => o.trim());
   }
 
   public moveInputUp(index: number) {

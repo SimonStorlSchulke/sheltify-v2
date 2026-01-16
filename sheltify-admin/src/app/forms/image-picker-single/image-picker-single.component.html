@@ -5,7 +5,12 @@
   }
 </div>
 <div [id]="idName()" (click)="pickImage()" class="img-container">
-  @if(twoWayModel()) {
+  @if(twoWayModel()?.NonImage) {
+    <div class="sui flex-y mt-4">
+      <app-bt-icon name="FileEarmarkFill"/>
+      <span>{{twoWayModel()!.OriginalFileName}}</span>
+    </div>
+  } @else if (twoWayModel()) {
     <img [cmsImage]="twoWayModel()!" [class.fit-contain]="objectFitContain()" [style]="'object-fit: ' + objectFitContain() + ' !important;'">
   } @else {
     <div class="sui flex-x jc-center ai-center h-100">

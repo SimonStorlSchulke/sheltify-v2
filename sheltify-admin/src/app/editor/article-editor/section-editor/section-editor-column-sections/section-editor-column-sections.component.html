@@ -1,4 +1,10 @@
 @let sectionVal = section();
+
+<div class="section-titlebar sui flex-x gap-1 ai-center only-editmode">
+  <b class="sui py-2 grow-1">{{ sectionLabels.get(sectionVal.SectionType) ?? 'Sektion' }}</b>
+  <ng-icon class="x" (click)="deleteSection()" name="bootstrapX" size="22px"/>
+</div>
+
 @switch (sectionVal.SectionType) {
   @case ('title') {
     <app-section-editor-title [section]="sectionVal"/>
@@ -22,3 +28,5 @@
     <app-section-editor-video [section]="sectionVal"/>
   }
 }
+<br>
+<hr>

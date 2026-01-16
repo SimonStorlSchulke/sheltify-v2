@@ -72,9 +72,7 @@ export class PageEditorComponent {
   }
 
   public async delete() {
-    const choice = await this.alertService.openAlert('Seite wirklich entfernen?', 'Aktion kann nicht rückgängig gemacht werden', ['ja', 'nein'])
-    if (choice !== 'ja') return;
-
+    if (!await this.alertService.confirmDelete()) return;
     await firstValueFrom(this.cmsRequestService.deletePages([this.page()!.ID]));
     this.deleted.emit();
   }

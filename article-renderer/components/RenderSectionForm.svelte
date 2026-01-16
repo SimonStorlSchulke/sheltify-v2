@@ -13,6 +13,7 @@
     Type: string;
     SenderMail: string;
     Text: string;
+    SentTo: string;
   }
 
   let submitted = $state(false);
@@ -28,27 +29,28 @@
     const formData = new FormData(formElement);
 
     // Build HTML summary of all form inputs
-    let htmlSummary = "<div>";
+    let htmlSummary = `<h2>${section.Content.Name}</h2>`;
 
     for (const input of section.Content.Inputs) {
       const value = formData.get(input.Label);
-      htmlSummary += `<p><strong>${input.Label}:<br></strong> ${value || ' - '}</p><br>`;
+      htmlSummary += `<strong>${input.Label}</strong><br><span>${value || ' - '}</span><br><br>`;
     }
-
-    htmlSummary += "</div>";
 
     // Get email from form
     const senderMail = (formData.get("email") || formData.get("Email") || "") as string;
+
+    const forwardMails = section.Content.ForwardToEmails.join(",");
 
     // Create the submission object
     const submissionData: FormSubmissionData = {
       Type: section.Content.Name,
       SenderMail: senderMail,
       Text: htmlSummary,
+      SentTo: forwardMails,
     };
 
     console.log("Form Submission Data:", submissionData);
-    
+
     fetch(submitUrl, {
       method: "POST",
       headers: {
@@ -112,7 +114,7 @@
 
     {#if !submitted}
       
-      <button type="button" on:click={handleSubmit} disabled={!isFormValid}>{section.Content.SubmitButtonText || "Abschicken"}</button>
+      <button class="primary" type="button" on:click={handleSubmit} disabled={!isFormValid}>{section.Content.SubmitButtonText || "Abschicken"}</button>
       {#if !isFormValid}
         <span class="required-info">Alle mit <span class="required">*</span> markierten Felder müssen ausgefüllt werden</span>
       {/if}

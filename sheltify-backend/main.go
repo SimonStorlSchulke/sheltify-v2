@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"sheltify-new-backend/handlers"
+	"sheltify-new-backend/services"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
@@ -25,5 +26,7 @@ func main() {
 	filesDir := http.Dir(filepath.Join(workDir, "uploads"))
 	handlers.FileServer(r, "/api/uploads", filesDir)
 
+	services.InitMailDialer()
 	http.ListenAndServe(":3000", r)
+
 }

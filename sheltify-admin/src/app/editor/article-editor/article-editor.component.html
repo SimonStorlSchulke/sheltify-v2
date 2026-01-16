@@ -1,4 +1,4 @@
-<div class="sui flex-y grow-1 article-container themable article card" [class.previewMode]="isPreviewMode()" [class.dragMode]="articleEditorService.movedItem()">
+<div class="sui flex-y grow-1 article-container card" [class.previewMode]="isPreviewMode()" [class.dragMode]="articleEditorService.movedItem()">
 <span class="sui flex-x jc-end grow-1 gap-2">
   @if (!saveArticle()) {
     <button data-testid="btn-save-article" class="grow-1 primary" (click)="save()">Speichern</button>

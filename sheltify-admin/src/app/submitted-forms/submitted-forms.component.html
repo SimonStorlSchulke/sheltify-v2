@@ -1,33 +1,49 @@
 <app-left-sidebar-layout #layout>
-    <div class="sidebar">
-        <div class="sui flex-y gap-2">
-            <h1>Empfangene Formulare</h1>
-            <table>
-                <tbody>
-                    @if(forms(); as forms;) {
-                        @for (form of forms; track $index) {
-                                <tr [class.selected]="selectedForm()?.ID == forms[$index].ID" class="list-entry"
-                                (click)="toForm(form.ID); layout.mobileOpen.set(true)">
-                                <td>{{ form.Type }}</td>
-                                <td>{{ form.SenderMail }}</td>
-                                <td>{{ form.CreatedAt | date: 'dd.MM.yyyy'}}</td>
-                        </tr>
-                            }
-                        }
-                </tbody>
-            </table>
-        </div>
+  <div class="sidebar">
+    <div class="sui flex-y gap-2">
+      <h1>Empfangene Formulare</h1>
+      <table>
+        <tbody>
+          @if (forms(); as forms) { @for (form of forms; track $index) {
+          <tr
+            [class.selected]="selectedForm()?.ID == forms[$index].ID"
+            class="list-entry"
+            (click)="toForm(form.ID); layout.mobileOpen.set(true)"
+          >
+            <td>{{ form.Type }}</td>
+            <td>{{ form.SenderMail }}</td>
+            <td>
+              {{ form.CreatedAt | date : "dd.MM.yyyy" }}
+            </td>
+          </tr>
+          } @empty {
+          <p>Keine eingegangenen Formulare</p>
+          } }
+        </tbody>
+      </table>
     </div>
-    <div class="content editor-layout sui p-3">
-        <div class="sui card">
-            @if(selectedForm(); as selectedForm) {
-            <h2>{{selectedForm.Type}}</h2>
-            <p style="opacity: 0.75;">vom {{selectedForm.CreatedAt | date: 'dd.MM.yyyy - HH:mm'}}</p>
-            <br>
-            <p><b>Absender</b><br> {{selectedForm.SenderMail}}</p>
-            <br>
-            <p class="form-text" [innerHTML]="selectedForm.Text"></p>
-            }
+  </div>
+  <div class="content editor-layout sui p-3">
+    @if (selectedForm(); as selectedForm) {
+    <div class="sui card">
+      <div class="sui flex-x jc-space-between ai-start">
+        <div>
+          <h2>{{ selectedForm.Type }}</h2>
+          <p style="opacity: 0.75">
+            vom
+            {{ selectedForm.CreatedAt | date : "dd.MM.yyyy - HH:mm" }}
+          </p>
         </div>
+        <button class="red" (click)="deleteForm()">Löschen</button>
+      </div>
+      <br />
+      <p>
+        <b>Absender</b><br />
+        {{ selectedForm.SenderMail }}
+      </p>
+      <br />
+      <p class="form-text" [innerHTML]="selectedForm.Text"></p>
     </div>
+    }
+  </div>
 </app-left-sidebar-layout>

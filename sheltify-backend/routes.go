@@ -97,4 +97,5 @@ func adminRoutes(r *chi.Mux) {
 
 	r.Get("/forms/submitted", handlers.GetSubmittedForms)
 	r.Get("/forms/submitted/{id}", handlers.GetFormById)
+	r.Delete("/forms/submitted", handlers.DeleteFormByIds)
 }

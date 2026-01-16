@@ -1,58 +1,56 @@
 @let sectionVal = section();
 <div [class]="'themable section-' + sectionVal.SectionType">
   @if(sectionVal.SectionType == 'columns') {
-
-
-    <div class="column-row sui flex-x">
-      @for(column of sectionVal.Content.Columns; track $index) {
-        <div class="column" [style.flex]="`${column.Grow} 1 0px`">
-          @for(col of column.Sections; track $index) {
-            <div class="column-item sui">
-              <ng-container *ngTemplateOutlet="singleSection; context: { $implicit: col }"></ng-container>
-            </div>
-          }
-        </div>
-      }
+  <div class="column-row sui flex-x">
+    @for(column of sectionVal.Content.Columns; track $index) {
+      <div class="column" [style.flex]="`${column.Grow} 1 0px`">
+        @for(col of column.Sections; track $index) {
+          <div class="column-item sui">
+            <ng-container *ngTemplateOutlet="singleSection; context: { $implicit: col }"></ng-container>
+          </div>
+        }
       </div>
+    }
+  </div>
 
 
-  } @else {
-    <ng-container *ngTemplateOutlet="singleSection; context: { $implicit: sectionVal }"></ng-container>
-  }
+} @else {
+  <ng-container *ngTemplateOutlet="singleSection; context: { $implicit: sectionVal }"></ng-container>
+}
 </div>
 
 <ng-template #singleSection let-sectionVal>
-@switch (sectionVal.SectionType) {
+  @switch (sectionVal.SectionType) {
     @case ('title') {
       <!--suppress AngularUndefinedBinding -->
-      <section-title [section]="sectionVal"/>
+      <section-title [section]="sectionVal" />
     }
     @case ('text') {
-      <section-text [section]="sectionVal"/>
+      <section-text [section]="sectionVal" />
     }
     @case ('image') {
-      <section-images [section]="sectionVal" [uploadsUrl]="uploadsUrl"/>
+      <section-images [section]="sectionVal" [uploadsUrl]="uploadsUrl" />
     }
     @case ('hero') {
-      <section-hero [section]="sectionVal" [uploadsUrl]="uploadsUrl"/>
+      <section-hero [section]="sectionVal" [uploadsUrl]="uploadsUrl" />
     }
     @case ('video') {
-      <section-video [section]="sectionVal"/>
+      <section-video [section]="sectionVal" />
     }
     @case ('animal-list') {
-      <section-animal-list [section]="sectionVal"/>
+      <section-animal-list [section]="sectionVal" />
     }
     @case ('html') {
       <div [innerHTML]="sectionVal.Content.Html"></div>
     }
     @case ('separator-x') {
-      <section-separator-x [section]="sectionVal"/>
+      <section-separator-x [section]="sectionVal" />
     }
     @case ('home-found') {
-      <section-home-found [section]="sectionVal"/>
+      <section-home-found [section]="sectionVal" />
     }
     @case ('form') {
-      <section-form [section]="sectionVal"/>
+      <section-form [section]="sectionVal" />
     }
   }
 </ng-template>

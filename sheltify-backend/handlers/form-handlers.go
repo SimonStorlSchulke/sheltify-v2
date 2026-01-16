@@ -2,6 +2,9 @@ package handlers
 
 import (
 	"net/http"
+	"sort"
+	"strings"
+
 	"sheltify-new-backend/repository"
 	"sheltify-new-backend/services"
 	"sheltify-new-backend/shtypes"
@@ -25,6 +28,12 @@ func FormSubmit(w http.ResponseWriter, r *http.Request) {
 	err = repository.SaveFormSubmission(formSubmission)
 	if err != nil {
 		internalServerErrorResponse(w, r, err.Error())
+		return
+	}
+	recipients := strings.Split(formSubmission.SentTo, ",")
+	err = services.SendMail(r,  recipients, formSubmission.SenderMail, formSubmission.Type, formSubmission.Text)
+	if err != nil {
+		internalServerErrorResponse(w, r, "Failed to forward mail")
 		return
 	}
 	emptyOkResponse(w)
@@ -54,5 +63,12 @@ func GetSubmittedForms(w http.ResponseWriter, r *http.Request) {
 		internalServerErrorResponse(w, r, err.Error())
 		return
 	}
+	sort.Slice(forms, func(i, j int) bool {
+		return forms[i].CreatedAt.After(forms[j].CreatedAt)
+	})
 	okResponse(w, forms)
+}
+
+func DeleteFormByIds(w http.ResponseWriter, r *http.Request) {
+	DefaultDeleteByIds[*shtypes.FormSubmission](w, r, false)
 }

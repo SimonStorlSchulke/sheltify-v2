@@ -211,6 +211,10 @@ export class CmsRequestService {
     return this.httpClient.get<CmsFormSubmission>(CmsRequestService.adminApiUrl + 'forms/submitted/' + id, this.options());
   }
 
+  public  deleteSubmittedForms(ids: string[]): Observable<void> {
+    return this.delete(`forms/submitted?ids=${ids.join(',')}`)
+  }
+
   public uploadScaledImage(files: { size: string; blob: Blob; }[], fileName: string, commaSeparatedTags: string, commaSeparatedAnimalIds: string) {
     const url = CmsRequestService.adminApiUrl + 'media/scaled';
     const tenantId = this.authService.getTenantID();

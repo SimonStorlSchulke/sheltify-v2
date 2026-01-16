@@ -7,10 +7,12 @@
 .themable.animal-card {
   transition: transform 0.23s, box-shadow 0.4s, color 0.23s;
   border-radius: 6px;
+  outline: none;
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.2901960784);
 }
 .themable.animal-card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 16px color-mix(in oklab, var(--c-primary) 65%, rgba(0, 0, 0, 0.2));
+  outline: none;
   color: var(--c-primary) !important;
 }
 .themable.animal-card .name-row {
@@ -36,6 +38,34 @@
   width: 100%;
   left: 0;
   background: linear-gradient(rgba(175, 175, 175, 0.2509803922), rgba(167, 167, 167, 0.031372549), transparent);
+}
+.themable.article button {
+  outline: none;
+  border: none;
+  border-radius: 32px;
+  font-family: "Quicksand", "Helvetica", sans-serif;
+  font-weight: 200;
+  padding: 8px 16px;
+  transition: background-color 0.35s, color 0.35s;
+}
+.themable.article button.lg {
+  font-size: 32px;
+}
+.themable.article button.primary {
+  background: var(--c-primary);
+  color: #fff;
+}
+.themable.article button.primary:hover {
+  background: var(--c-primary-h);
+  color: #000;
+}
+.themable.article button.secondary {
+  background: #aaa096;
+  color: #fff;
+}
+.themable.article button.secondary:hover {
+  background: #ffdb7e;
+  color: #000;
 }
 .themable.article a.link {
   text-decoration: underline;

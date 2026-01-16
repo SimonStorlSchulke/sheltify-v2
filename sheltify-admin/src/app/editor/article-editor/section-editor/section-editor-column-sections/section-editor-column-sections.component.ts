@@ -1,4 +1,5 @@
 import { Component, input } from '@angular/core';
+import { NgIcon } from '@ng-icons/core';
 import { Section } from 'sheltify-lib/article-types';
 import { SectionEditorAnimalListComponent } from 'src/app/editor/article-editor/section-editor-animal-list/section-editor-animal-list.component';
 import { SectionEditorColumnsComponent } from 'src/app/editor/article-editor/section-editor-columns/section-editor-columns.component';
@@ -8,6 +9,7 @@ import { SectionEditorImagesComponent } from 'src/app/editor/article-editor/sect
 import { SectionEditorTitleComponent } from 'src/app/editor/article-editor/section-editor-title/section-editor-title.component';
 import { SectionEditorVideoComponent } from 'src/app/editor/article-editor/section-editor-video/section-editor-video.component';
 import { SectionEditorTextComponent } from 'src/app/editor/article-editor/text-section-editor/section-editor-text.component';
+import { sectionLabels } from 'src/app/services/article-renderer';
 
 @Component({
   selector: 'app-section-editor-column-sections',
@@ -18,7 +20,8 @@ import { SectionEditorTextComponent } from 'src/app/editor/article-editor/text-s
     SectionEditorImagesComponent,
     SectionEditorTextComponent,
     SectionEditorTitleComponent,
-    SectionEditorVideoComponent
+    SectionEditorVideoComponent,
+    NgIcon
   ],
   templateUrl: './section-editor-column-sections.component.html',
 })
@@ -27,5 +30,11 @@ export class SectionEditorColumnSectionsComponent {
 
   public triggerRerender() {
 
+  }
+
+  public readonly sectionLabels = sectionLabels;
+
+  public deleteSection() {
+    //TODO
   }
 }

@@ -5,4 +5,5 @@ type FormSubmission struct {
 	Type       string
 	SenderMail string
 	Text       string
+	SentTo     string
 }

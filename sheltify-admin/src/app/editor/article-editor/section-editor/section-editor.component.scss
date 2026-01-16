@@ -2,7 +2,7 @@
 
 .only-editmode {
   pointer-events: none;
-  opacity: 0;
+  display: none;
 }
 
 
@@ -16,20 +16,19 @@
 .edit-mode {
   .only-editmode {
     pointer-events: all;
-    opacity: 100%;
+    display: flex;
   }
 
   outline: 1px solid transparentize($primary-d1, 0.94) !important;
   box-shadow: 3px 3px 12px $neutral200;
 
   .section-preview {
-    opacity: 0;
+    display: none;
   }
 
 }
 
 .section-content {
-  display: grid;
   justify-items: stretch;
 
   .section-editor,
@@ -44,7 +43,6 @@
   }
 
   .section-preview {
-    margin-top: -50px;
     min-height: calc(100% + 50px);
     pointer-events: none;
   }

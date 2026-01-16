@@ -28,6 +28,7 @@ export function createEmptySection(SectionType: SectionType): Section {
           SubmitInfo: '',
           AfterSubmitText: '',
           Inputs: [],
+          ForwardToEmails: [],
         }
       };
     case 'title':
@@ -105,6 +106,14 @@ export function createEmptySection(SectionType: SectionType): Section {
     case 'separator-x':
       return {
         SectionType,
+      };
+    case 'file':
+      return {
+        SectionType,
+        Content: {
+          File: undefined,
+          Text: '',
+        },
       };
     default:
       assertUnreachable(SectionType);

@@ -1,17 +1,27 @@
 table {
-    border-collapse: collapse;
-    min-width: 320px;
+  border-collapse: collapse;
+  min-width: 320px;
 
-    td {
-      padding: 4px 8px;
-    }
-
+  td {
+    padding: 4px 8px;
   }
 
-  .form-text {
-    line-height: 1.5;
-  }
+}
 
-  .card {
-    overflow-y: auto;
+.form-text {
+  line-height: 1.5;
+
+  p {
+    border-bottom: 12px;
   }
+}
+
+.card {
+  overflow-y: auto;
+}
+
+::ng-deep {
+  .form-text p {
+    padding-bottom: 16px;
+  }
+}
