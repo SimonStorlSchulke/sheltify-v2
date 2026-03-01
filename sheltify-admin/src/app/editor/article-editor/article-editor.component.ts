@@ -4,11 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { bootstrapGripVertical, bootstrapX, bootstrapPlus } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lastValueFrom, Observable } from 'rxjs';
+import { SqlNullTimeNow } from 'sheltify-lib/dist/cms-types';
 import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
 import { ArticleEditorService } from 'src/app/editor/article-editor/article-editor.service';
 import { createEmptySection } from 'src/app/editor/article-editor/article-section.factory';
 import { PickNewSectionComponent } from 'src/app/editor/article-editor/pick-new-section/pick-new-section.component';
 import { SectionEditorComponent } from 'src/app/editor/article-editor/section-editor/section-editor.component';
+import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { bootstrapEye } from '@ng-icons/bootstrap-icons';
@@ -16,15 +18,17 @@ import { TenantConfigurationService } from 'src/app/services/tenant-configuratio
 
 @Component({
   selector: 'app-article-editor',
-  imports: [NgIcon, FormsModule, SectionEditorComponent],
+  imports: [NgIcon, FormsModule, SectionEditorComponent, TextInputComponent],
   providers: [provideIcons({bootstrapGripVertical, bootstrapX, bootstrapPlus, bootstrapEye})],
   templateUrl: './article-editor.component.html',
   styleUrl: './article-editor.component.scss',
 })
 export class ArticleEditorComponent implements OnInit {
 
+  public showUpdateNote = input<boolean>(false);
+
   public articleId = input.required<string>();
-  public saveArticle = input<Observable<void>>();
+  public saveArticle = input<Observable<{updateNote: string, pushUpdate: boolean}>>();
   public isPreviewMode = signal<boolean>(false);
 
   constructor(
@@ -49,7 +53,7 @@ export class ArticleEditorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.saveArticle()?.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.save());
+    this.saveArticle()?.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((saveOptions) => this.save(saveOptions));
   }
 
   private editSectionAtPosition(row: number, column: number) {
@@ -83,8 +87,13 @@ export class ArticleEditorComponent implements OnInit {
     this.renderer.appendChild(document.head, link);
   }
 
-  public async save() {
-    await lastValueFrom(this.cmsRequestService.saveArticle(this.articleEditorService.article()!));
+  public async save(saveOptions: { updateNote: string, pushUpdate: boolean }) {
+    const article = this.articleEditorService.article()!;
+    if(saveOptions.pushUpdate) {
+      article.ContentUpdateNote = saveOptions.updateNote;
+      article.ContentUpdateAt = SqlNullTimeNow();
+    }
+    await lastValueFrom(this.cmsRequestService.saveArticle(article));
   }
 
   public exitMoveMode() {

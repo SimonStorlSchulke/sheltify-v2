@@ -60,6 +60,7 @@ export class TenantConfigurationComponent implements OnInit {
         AnimalFeatureRace: true,
         AnimalFeatureAnimalKind: true,
         AnimalFeatureNoAdoption: true,
+        AnimalShowUpdatesForDays: 1,
         NeedsRebuild: true,
       });
     }

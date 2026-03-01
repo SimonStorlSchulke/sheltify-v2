@@ -9,6 +9,8 @@ export type CmsArticle = CmsType & {
   UpdatedAt?: string;
   DeletedAt?: string | null;
   TenantID: string;
+  ContentUpdateNote: string,
+  ContentUpdateAt: SqlNullTime,
   Structure: {
     Rows: Section[];
   }

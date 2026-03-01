@@ -1,5 +1,5 @@
 import { CmsArticle } from 'sheltify-lib/article-types';
-import { CmsAnimal, CmsBlogEntry, CmsHomeFoundEntry, CmsPage, CmsTeamMember, SqlNullBoolNull } from 'sheltify-lib/cms-types';
+import { CmsAnimal, CmsBlogEntry, CmsHomeFoundEntry, CmsPage, CmsTeamMember, SqlNullBoolNull, SqlNullTimeNull } from 'sheltify-lib/cms-types';
 
 export function createNewAnimal(name: string): CmsAnimal {
   return {
@@ -37,7 +37,12 @@ export function createHomeFoundEntry(animalID: string): CmsHomeFoundEntry {
 }
 
 export function createEmptyArticle(): CmsArticle {
-  return {ID: '', Structure: {Rows: []}, TenantID: ''}
+  return {
+    ID: '',
+    Structure: {Rows: []},
+    TenantID: '', ContentUpdateAt: SqlNullTimeNull,
+    ContentUpdateNote: '',
+  }
 }
 
 export function createNewPage(): CmsPage {

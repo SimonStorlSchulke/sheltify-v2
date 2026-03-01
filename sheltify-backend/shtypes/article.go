@@ -1,7 +1,13 @@
 package shtypes
 
+import (
+	"database/sql"
+)
+
 type Article struct {
 	CmsType
+	ContentUpdateNote string
+    ContentUpdateAt  sql.NullTime
 	Structure ArticleStructure `gorm:"serializer:json"`
 }
 

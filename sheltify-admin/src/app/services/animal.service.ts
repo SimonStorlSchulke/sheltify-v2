@@ -1,14 +1,13 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { CmsAnimal } from 'sheltify-lib/cms-types';
+import { CmsAnimal, SqlNullTimeNow } from 'sheltify-lib/cms-types';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
-import { randomColor } from 'src/app/services/color-utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AnimalService {
-  constructor(private readonly cmsRequestService: CmsRequestService) {
+  constructor(private cmsRequestService: CmsRequestService) {
     this.reloadAnimals();
   }
 
@@ -37,10 +36,7 @@ export class AnimalService {
       };
       return await this.save(animalToSave);
     } else {
-      animalToSave.PublishedAt = {
-        Valid: true,
-        Time: new Date().toISOString(),
-      }
+      animalToSave.PublishedAt = SqlNullTimeNow();
       return await this.save(animalToSave);
     }
 

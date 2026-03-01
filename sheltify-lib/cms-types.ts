@@ -13,6 +13,13 @@ export type SqlNullBool = {
 export const SqlNullBoolNull: SqlNullBool = {Bool: false, Valid: false}
 export const SqlNullBoolTrue: SqlNullBool = {Bool: true, Valid: true}
 export const SqlNullBoolFalse: SqlNullBool = {Bool: false, Valid: true}
+export const SqlNullTimeNull: SqlNullTime = {Time: null, Valid: false}
+export function SqlNullTimeNow(): SqlNullTime {
+  return {
+        Valid: true,
+        Time: new Date().toISOString(),
+      }
+}
 
 export type CmsType = {
   ID: string,
@@ -136,6 +143,7 @@ export type CmsTenantConfiguration = CmsType & {
   AnimalFeatureRace: boolean,
   AnimalFeatureAnimalKind: boolean,
   AnimalFeatureNoAdoption: boolean,
+  AnimalShowUpdatesForDays: number,
 }
 
 export type CmsBlogEntry = Publishable & {

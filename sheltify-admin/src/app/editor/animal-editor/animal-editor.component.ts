@@ -3,7 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { firstValueFrom, lastValueFrom, Subject } from 'rxjs';
 import { CmsArticle } from 'sheltify-lib/article-types';
 import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
-import { CmsAnimal } from 'sheltify-lib/cms-types';
+import { CmsAnimal, SqlNullTimeNow } from 'sheltify-lib/cms-types';
+import { SaveAnimalComponent } from 'src/app/editor/animal-editor/save-animal/save-animal.component';
 import { ArticleEditorComponent } from 'src/app/editor/article-editor/article-editor.component';
 import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-input.component';
 import { DatePickerComponent } from 'src/app/forms/date-picker/date-picker.component';
@@ -19,6 +20,7 @@ import { AnimalPickerDialogComponent } from 'src/app/ui/animal-picker-dialog/ani
 import { LastEditedComponent } from 'src/app/ui/last-edited/last-edited.component';
 import { TextInputComponent } from '../../forms/text-input/text-input.component';
 import { CmsRequestService } from '../../services/cms-request.service';
+import { TextInputModalComponent } from 'src/app/forms/text-input-modal/text-input-modal.component';
 
 @Component({
   selector: 'app-animal-editor',
@@ -47,7 +49,7 @@ export class AnimalEditorComponent {
   public saved = output<CmsAnimal | null>();
   public deleted = output();
 
-  public saveArticle$ = new Subject<void>();
+  public saveArticle$ = new Subject<{updateNote: string, pushUpdate: boolean}>();
 
   public animalKinds: string[] = [];
 
@@ -59,17 +61,22 @@ export class AnimalEditorComponent {
   ) {
   }
 
-
   async ngOnInit() {
     this.animalKinds = (await this.tenantConfigurationService.animalKinds());
   }
 
-  async save() {
+  async saveFromUI() {
+    const saveOptions = await this.modalService.openFinishable(SaveAnimalComponent);
+    if (!saveOptions) return;
+    this.save(saveOptions.pushUpdate, saveOptions.updateNote);
+  }
+
+  async save(pushUpdate: boolean = false, updateNote: string = '') {
     const savedAnimal = await this.animalService.save(this.animal()!);
 
     if (savedAnimal) {
       this.saved.emit(savedAnimal!);
-      this.saveArticle$.next();
+      this.saveArticle$.next({updateNote, pushUpdate});
     }
   }
 
@@ -78,7 +85,7 @@ export class AnimalEditorComponent {
 
     if (savedAnimal) {
       this.saved.emit(savedAnimal!);
-      this.saveArticle$.next();
+      this.saveArticle$.next({pushUpdate: false, updateNote: ''});
     }
   }
 

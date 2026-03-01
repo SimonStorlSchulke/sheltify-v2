@@ -14,7 +14,5 @@ import { CmsRequestService } from 'src/app/services/cms-request.service';
 export class SectionRendererComponent {
   public section = input.required<Section>();
   public uploadsUrl = CmsRequestService.publicApiUrl + 'uploads/';
-
   public domSanitizer= inject(DomSanitizer);
-
 }

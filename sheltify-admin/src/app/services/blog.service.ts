@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { CmsBlogEntry } from 'sheltify-lib/cms-types';
+import { CmsBlogEntry, SqlNullTimeNow } from 'sheltify-lib/cms-types';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 
 @Injectable({
@@ -27,10 +27,7 @@ export class BlogService {
       };
       return await firstValueFrom(this.cmsRequestService.saveBlogEntry(blogToSave));
     } else {
-      blogToSave.PublishedAt = {
-        Valid: true,
-        Time: new Date().toISOString(),
-      }
+      blogToSave.PublishedAt = SqlNullTimeNow();
       return await firstValueFrom(this.cmsRequestService.saveBlogEntry(blogToSave));
     }
 

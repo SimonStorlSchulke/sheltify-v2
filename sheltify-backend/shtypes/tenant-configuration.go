@@ -36,6 +36,7 @@ type TenantConfiguration struct {
 	AnimalFeatureRace         bool
 	AnimalFeatureAnimalKind   bool
 	AnimalFeatureNoAdoption   bool
+	AnimalShowUpdatesForDays  int
 	LastBuild                 sql.NullTime
 	NeedsRebuild              bool
 

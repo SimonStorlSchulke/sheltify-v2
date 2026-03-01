@@ -2,7 +2,7 @@
 @let config = tenantConfigurationService.config();
 @if (animal(); as animal) {
   <div class="sui save-content-buttons flex-x gap-2 jc-end">
-    <button class="primary" data-testid="btn-save-animal" (click)="save()">Speichern</button>
+    <button class="primary" data-testid="btn-save-animal" (click)="saveFromUI()">Speichern</button>
     @let isPublished = animal.PublishedAt?.Valid;
     <button [class.warning]="!isPublished" [class.success]="isPublished" (click)="togglePublished()">{{ animal.PublishedAt?.Valid ? 'Depublizieren' : 'Publizieren' }}</button>
     <button class="red" (click)="delete()">Löschen</button>
@@ -10,7 +10,6 @@
   <div class="editor-layout sui p-2">
     <div class="sui flex-y gap-2 grow-1 card">
       @if (animal.HomeFoundStatus !== 'yes') {
-
 
         <div data-testid="form-animal-editor" class="sui flex-x gap-3 grow-1">
           <app-image-picker-single label="Portrait" idName="portrait" [(twoWayModel)]="animal.Portrait"/>
@@ -69,7 +68,7 @@
     <br>
 
     @if (animal.ArticleID) {
-      <app-article-editor [articleId]="animal.ArticleID ?? ''" [saveArticle]="saveArticle$" class="sui flex-y grow-1 mt-2"/>
+      <app-article-editor [showUpdateNote]="true" [articleId]="animal.ArticleID ?? ''" [saveArticle]="saveArticle$" class="sui flex-y grow-1 mt-2"/>
     } @else {
       <div class="sui flex-x gap-2">
         <button data-testid="btn-create-article-for-animal" (click)="createArticle()" class="secondary">Artikel erstellen</button>

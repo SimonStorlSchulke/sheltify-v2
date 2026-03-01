@@ -11,6 +11,8 @@ import { FinishableDialog } from 'src/app/services/modal.service';
 })
 export class TextInputModalComponent extends FinishableDialog<string>{
   label = '';
+  placeHolder = '';
+  presetText = '';
 
   inputElement = viewChild<ElementRef<HTMLInputElement>>('input');
 
