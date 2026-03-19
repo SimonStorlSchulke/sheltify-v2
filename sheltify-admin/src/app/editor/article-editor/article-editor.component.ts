@@ -33,6 +33,10 @@ export class ArticleEditorComponent implements OnInit {
   public saveArticle = input<Observable<{updateNote: string, pushUpdate: boolean} | undefined>>();
   public isPreviewMode = signal<boolean>(false);
 
+  public selectedFillColor = signal<string | undefined>(undefined);
+  public colorPickerExpanded = signal<boolean>(false);
+
+
   constructor(
     public articleEditorService: ArticleEditorService,
     private modalService: ModalService,
@@ -117,7 +121,6 @@ export class ArticleEditorComponent implements OnInit {
     this.exitMoveMode();
   }
 
-  public selectedFillColor = signal<string | undefined>(undefined);
   public colorFill(color: string | undefined) {
     this.selectedFillColor.set(color);
   }

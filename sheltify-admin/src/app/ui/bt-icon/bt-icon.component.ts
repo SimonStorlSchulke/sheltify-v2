@@ -20,6 +20,7 @@ import {
   bootstrapInfoCircle,
   bootstrapEnvelopeFill,
   bootstrapPaintBucket,
+  bootstrapChevronDown
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
@@ -46,6 +47,7 @@ export type IconName =
   | 'InfoCircle'
   | 'EnvelopeFill'
   | 'PaintBucket'
+  | 'ChevronDown'
 
 @Component({
   selector: 'app-bt-icon',
@@ -75,6 +77,7 @@ export type IconName =
       bootstrapInfoCircle,
       bootstrapEnvelopeFill,
       bootstrapPaintBucket,
+      bootstrapChevronDown,
     }
   )]
 })
