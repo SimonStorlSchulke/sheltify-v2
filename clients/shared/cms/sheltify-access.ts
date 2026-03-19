@@ -98,6 +98,9 @@ export class SheltifyAccess {
     if (filter.SizeRange[0]) query += `sizeMin=${filter.SizeRange[0]}&`;
     if (filter.SizeRange[1]) query += `sizeMax=${filter.SizeRange[1]}&`;
     if (filter.Gender != 'both') query += `gender=${filter.Gender}&`;
+    if (filter.Names != 'both') query += `names=${filter.Names}&`;
+
+    console.log(query);
 
     const animals = await this.get<CmsAnimal[]>(`animals/filtered?${query}`);
     return sortByPriorityAndUpdatedAt(filterPublishedAndHasArticle(animals));
