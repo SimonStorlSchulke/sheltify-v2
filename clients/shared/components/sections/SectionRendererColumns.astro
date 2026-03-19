@@ -47,9 +47,9 @@ const {section} = Astro.props;
           break;
         }
 
-      return <div style={`flex: ${column.Grow} 1 0px`} class={`section-${section.SectionType} sui flex-x wrap`}>{comp}</div>;
+      return <div class={`section-${section.SectionType} sui flex-x wrap`}>{comp}</div>;
       })
-    return <div class="column">{sections}</div>
+    return <div style={`flex: ${column.Grow} 1 0px`}  class="column">{sections}</div>
     })
 }
 </div>
