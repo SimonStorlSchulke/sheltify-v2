@@ -107,3 +107,21 @@ func CreateAnimal(animal *shtypes.Animal) (string, error) {
 func DeleteAnimalsByIds(ids []int) error {
 	return db.Unscoped().Delete(&shtypes.Animal{}, ids).Error
 }
+
+func GetAnimalsByArticleContentUpdatedAt(updatedAt time.Time, tenant string) (*[]shtypes.Animal, error) {
+	var animals []shtypes.Animal
+	if err := db.Where("animals.tenant_id = ?", tenant).Joins("JOIN articles ON articles.id = animals.article_id").
+		Where("articles.content_update_at >= ?", updatedAt).
+		Preload("Article").
+    Preload("Portrait").
+		Find(&animals).Error; err != nil {
+		return nil, err
+	}
+
+	//avoid sending whole article
+	for _, animal := range animals {
+		animal.Article.Structure = shtypes.ArticleStructure{}
+	}
+
+	return &animals, nil
+}

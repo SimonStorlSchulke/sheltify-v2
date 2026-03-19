@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { CmsPage, SqlNullTimeNow } from 'sheltify-lib/cms-types';
+import { CmsPage, SqlNullTimeNow, togglePublishedAt } from 'sheltify-lib/cms-types';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 
 @Injectable({
@@ -39,17 +39,8 @@ export class PagesService {
 
   async togglePublished(page: CmsPage) {
     const pageToSave = structuredClone(page);
-    if(pageToSave.PublishedAt?.Valid) {
-      pageToSave.PublishedAt = {
-        Valid: false,
-        Time: null,
-      };
-      return await firstValueFrom(this.cmsRequestService.savePage(pageToSave));
-    } else {
-      pageToSave.PublishedAt = SqlNullTimeNow();
-      return await firstValueFrom(this.cmsRequestService.savePage(pageToSave));
-    }
-
+    togglePublishedAt(pageToSave);
+    return await firstValueFrom(this.cmsRequestService.savePage(pageToSave));
   }
 }
 

@@ -33,7 +33,7 @@ import { LastEditedComponent } from 'src/app/ui/last-edited/last-edited.componen
 })
 export class PageEditorComponent {
   page = input.required<CmsPage>();
-  saveArticle$ = new Subject<void>();
+  saveArticle$ = new Subject<undefined>();
   deleted = output();
 
   constructor(
@@ -55,7 +55,7 @@ export class PageEditorComponent {
   public async save(skipArticle: boolean = false) {
     this.pagesService.savePage(this.page());
     if (!skipArticle) {
-      this.saveArticle$.next();
+      this.saveArticle$.next(undefined);
     }
   }
 

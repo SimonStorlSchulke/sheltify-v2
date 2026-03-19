@@ -1,4 +1,4 @@
-import type { CmsImage, CmsImagesSize } from 'sheltify-lib/dist/cms-types';
+import type { CmsImage, CmsImagesSize } from 'sheltify-lib/cms-types';
 import { getLargestAvailableImageSize } from 'sheltify-lib/image-utils';
 
 const uploadsUrl = 'http://localhost:3000/api/uploads/' as const;

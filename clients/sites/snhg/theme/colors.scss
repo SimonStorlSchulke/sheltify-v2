@@ -1,5 +1,11 @@
 :root {
   --c-primary: #ff9f10;
   --c-primary-h: #ffdbb3;
+  --c-accent: #e4ded8;
   --padding-article: 64px;
+
+  // required
+  --themable-bg-accent-1: #e4ded8;
+  --themable-bg-accent-2: #ffdbb3;
+  --themable-bg-accent-3: #ff8a80;
 }

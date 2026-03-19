@@ -8,8 +8,10 @@
 
 .section:not(.edit-mode) {
   cursor: pointer;
+  outline: 1px solid $neutral150;
+
   &:hover {
-    outline: 1px solid $neutral200;
+    outline: 1px solid $primary;
   }
 }
 
@@ -43,6 +45,9 @@
   }
 
   .section-preview {
+    &:empty {
+      background: red !important;
+    }
     min-height: calc(100% + 50px);
     pointer-events: none;
   }

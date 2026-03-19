@@ -63,6 +63,8 @@ button:not(.unstyled) {
     background: transparent;
     border-radius: 0;
     font-weight: 500;
+    padding-left: 4px;
+    padding-right: 4px;
 
     &:hover {
       color: $primary;

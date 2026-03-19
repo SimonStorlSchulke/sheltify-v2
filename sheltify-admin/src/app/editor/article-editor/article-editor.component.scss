@@ -57,3 +57,12 @@
     }
   }
 }
+
+.color-filler {
+  width: 100px;
+  background: $neutral100;
+  box-shadow: 0 0 12px #0002;
+  position: fixed;
+  right: 24px;
+  bottom: 12px
+}

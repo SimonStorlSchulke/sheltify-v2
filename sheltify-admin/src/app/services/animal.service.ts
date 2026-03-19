@@ -42,6 +42,10 @@ export class AnimalService {
 
   }
 
+  public hasArticle(animal: CmsAnimal): boolean {
+    return !!animal.ArticleID && animal.ArticleID != 'NoArticle'
+  }
+
   async save(animal: CmsAnimal) {
     if (!animal) {
       console.log("animal is null or undefined");

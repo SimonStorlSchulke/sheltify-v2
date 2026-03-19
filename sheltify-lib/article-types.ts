@@ -1,6 +1,6 @@
 import { CmsAnimal, CmsImage, CmsType, SqlNullTime } from './cms-types';
 
-export const SectionTypes = ['title', 'text', 'video', 'image', 'hero', 'animal-list', 'html', 'separator-x', 'home-found', 'columns', 'form', 'file'] as const;
+export const SectionTypes = ['title', 'text', 'video', 'image', 'hero', 'animal-list', 'html', 'separator-x', 'home-found', 'columns', 'form', 'file', 'animal-updates', 'special'] as const;
 
 export type SectionType = (typeof SectionTypes)[number];
 
@@ -29,9 +29,12 @@ export type Section =
   | SectionColumns
   | SectionForm
   | SectionFile
+  | SectionAnimalUpdates
+  | SectionSpecial
 
 export type SectionColumns = {
   SectionType: 'columns',
+  BackgroundColor: string,
   Content: {
     FullWidth: boolean,
     Columns: {
@@ -44,6 +47,7 @@ export type SectionColumns = {
 export const FormInputTypes = ['text', 'email', 'textarea', 'checkbox', 'calendar', 'radio'];
 export type SectionForm = {
   SectionType: 'form',
+  BackgroundColor: string,
   Content: {
     Name: string,
     Inputs: {
@@ -61,6 +65,7 @@ export type SectionForm = {
 
 export type SectionText = {
   SectionType: 'text',
+  BackgroundColor: string,
   Content: {
     Html: string;
   },
@@ -68,6 +73,7 @@ export type SectionText = {
 
 export type SectionFile = {
   SectionType: 'file',
+  BackgroundColor: string,
   Content: {
     File: CmsImage | undefined;
     Text: string,
@@ -76,6 +82,7 @@ export type SectionFile = {
 
 export type SectionHtml = {
   SectionType: 'html',
+  BackgroundColor: string,
   Content: {
     Html: string;
   },
@@ -83,6 +90,7 @@ export type SectionHtml = {
 
 export type SectionImages = {
   SectionType: 'image',
+  BackgroundColor: string,
   Content: {
     Size: 'small' | 'medium' | 'large',
     Layout: 'vertical' | 'horizontal' | 'gallery',
@@ -92,6 +100,7 @@ export type SectionImages = {
 
 export type SectionHero = {
   SectionType: 'hero',
+  BackgroundColor: string,
   Content: {
     Text: string;
     MediaFiles: CmsImage[];
@@ -101,6 +110,7 @@ export type SectionHero = {
 
 export type SectionTitle = {
   SectionType: 'title',
+  BackgroundColor: string,
   Content: {
     Text: string,
     Type: 'h1' | 'h2' | 'h3' | 'h4',
@@ -112,12 +122,35 @@ export type SectionTitle = {
 
 export type SectionAnimalList = {
   SectionType: 'animal-list',
+  BackgroundColor: string,
   Content: AnimalsFilter,
   TempFoundAnimals: CmsAnimal[],
 };
 
+export type SectionAnimalUpdates = {
+  SectionType: 'animal-updates',
+  BackgroundColor: string,
+  Content: {
+    days: number,
+    layout: 'compact' | 'large',
+  },
+  TempAnimalsByArticle: Record<string, CmsAnimal[]>,
+};
+
+/** For sections that are very specific to an organisations website */
+export type SectionSpecial = {
+  SectionType: 'special',
+  BackgroundColor: string,
+  Content: {
+    Type: string,
+    Properties: [string, string][],
+  },
+  TempData: any,
+}
+
 export type SectionHomeFound = {
   SectionType: 'home-found',
+  BackgroundColor: string,
   Content: {
     From: Date | undefined,
     To: Date |undefined,
@@ -136,6 +169,7 @@ export type AnimalsFilter = {
 
 export type SectionVideo = {
   SectionType: 'video',
+  BackgroundColor: string,
   Content: {
     Title: string,
     Url: string,
@@ -143,5 +177,6 @@ export type SectionVideo = {
 };
 
 export type SectionSeparatorX = {
-  SectionType: 'separator-x'
+  SectionType: 'separator-x',
+  BackgroundColor: string,
 };

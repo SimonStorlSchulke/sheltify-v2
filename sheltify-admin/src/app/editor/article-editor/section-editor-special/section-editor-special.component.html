@@ -1,0 +1,16 @@
+<div class="sui flex-y gap-2">
+  <app-text-input class="sui" idName="text" label="Typ" [(twoWayModel)]="section().Content.Type"/>
+  <label>Eigenschaften</label>
+  @for (property of section().Content.Properties; track $index) {
+    <div class="sui flex-x gap-2 card" style="outline: 1px solid #ccc">
+      <div class="sui flex-y gap-2 grow-1">
+        <div class="sui flex-x gap-2">
+          <app-text-input class="sui grow-1" idName="text" label="Eigenschaftsname" [(twoWayModel)]="property[0]"/>
+          <button class="secondary" (click)="deleteProperty($index)">X</button>
+        </div>
+        <app-text-input class="sui grow-1" idName="text" [long]="true" label="Eigenschaftswert" [(twoWayModel)]="property[1]"/>
+      </div>
+    </div>
+  }
+  <button class="secondary" (click)="addProperty()"><app-bt-icon class="" name="Plus"/></button>
+</div>

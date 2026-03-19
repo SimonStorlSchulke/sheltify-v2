@@ -2,7 +2,7 @@ import { DatePipe, Location } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { CmsHomeFoundEntry } from 'sheltify-lib/dist/cms-types';
+import { CmsHomeFoundEntry } from 'sheltify-lib/cms-types';
 import { createNewHomeFoundEntry } from 'src/app/cms-types/cms-type.factory';
 import { HomeFoundEditorComponent } from 'src/app/editor/home-found-editor/home-found-editor.component';
 import { TextInputModalComponent } from 'src/app/forms/text-input-modal/text-input-modal.component';

@@ -22,6 +22,7 @@ import { sectionLabels } from 'src/app/services/article-renderer';
 export class SectionEditorComponent {
   public section = input.required<Section>();
   public rowIndex = input.required<number>();
+  public editable = input.required<boolean>();
   public editMode = signal(false);
 
   @ViewChild('outlet', { read: ViewContainerRef }) outletRef!: ViewContainerRef;
@@ -46,6 +47,7 @@ export class SectionEditorComponent {
   }
 
   public enterEditMode(event: MouseEvent) {
+    if(!this.editable()) return;
     event.stopPropagation();
     this.editMode.set(true);
   }

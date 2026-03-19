@@ -1,0 +1,14 @@
+---
+import { cms } from '@shared/cms/sheltify-access.ts';
+const animals = await cms.animals;
+---
+
+<div class="themable animal-updates">
+  
+  {
+    animals.map(animal => 
+      <div>{animal.Name}</div>
+    )
+  }
+  
+</div>

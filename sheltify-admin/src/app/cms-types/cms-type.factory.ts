@@ -21,6 +21,7 @@ export function createNewAnimal(name: string): CmsAnimal {
     NoAdoption: false,
     FreeRoamer: SqlNullBoolNull,
     HomeFoundStatus: 'no',
+    Race: '',
   };
 }
 

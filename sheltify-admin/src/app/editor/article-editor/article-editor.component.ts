@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { bootstrapGripVertical, bootstrapX, bootstrapPlus } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lastValueFrom, Observable } from 'rxjs';
-import { SqlNullTimeNow } from 'sheltify-lib/dist/cms-types';
+import { SqlNullTimeNow } from 'sheltify-lib/cms-types';
+import { Section } from 'sheltify-lib/dist/article-types';
 import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
 import { ArticleEditorService } from 'src/app/editor/article-editor/article-editor.service';
 import { createEmptySection } from 'src/app/editor/article-editor/article-section.factory';
@@ -15,10 +16,11 @@ import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { bootstrapEye } from '@ng-icons/bootstrap-icons';
 import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
+import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
 
 @Component({
   selector: 'app-article-editor',
-  imports: [NgIcon, FormsModule, SectionEditorComponent, TextInputComponent],
+  imports: [NgIcon, FormsModule, SectionEditorComponent, TextInputComponent, BtIconComponent],
   providers: [provideIcons({bootstrapGripVertical, bootstrapX, bootstrapPlus, bootstrapEye})],
   templateUrl: './article-editor.component.html',
   styleUrl: './article-editor.component.scss',
@@ -28,7 +30,7 @@ export class ArticleEditorComponent implements OnInit {
   public showUpdateNote = input<boolean>(false);
 
   public articleId = input.required<string>();
-  public saveArticle = input<Observable<{updateNote: string, pushUpdate: boolean}>>();
+  public saveArticle = input<Observable<{updateNote: string, pushUpdate: boolean} | undefined>>();
   public isPreviewMode = signal<boolean>(false);
 
   constructor(
@@ -37,7 +39,7 @@ export class ArticleEditorComponent implements OnInit {
     private cmsRequestService: CmsRequestService,
     private renderer: Renderer2,
     private destroyRef: DestroyRef,
-    private readonly tenantConfigurationService: TenantConfigurationService,
+    private tenantConfigurationService: TenantConfigurationService,
   ) {
 
     this.tenantConfigurationService.siteUrl().then(siteUrl => siteUrl ? this.addGlobalStyle(siteUrl + 'provided-article-theme.css') : false);
@@ -78,7 +80,7 @@ export class ArticleEditorComponent implements OnInit {
     setTimeout(() => this.editSectionAtPosition(row, 0), 0);
   }
 
-  addGlobalStyle(css: string) {
+  private addGlobalStyle(css: string) {
     const link = document.createElement( "link" );
     link.href = css;
     link.type = "text/css";
@@ -87,9 +89,9 @@ export class ArticleEditorComponent implements OnInit {
     this.renderer.appendChild(document.head, link);
   }
 
-  public async save(saveOptions: { updateNote: string, pushUpdate: boolean }) {
+  public async save(saveOptions: { updateNote: string, pushUpdate: boolean } | undefined) {
     const article = this.articleEditorService.article()!;
-    if(saveOptions.pushUpdate) {
+    if(saveOptions?.pushUpdate) {
       article.ContentUpdateNote = saveOptions.updateNote;
       article.ContentUpdateAt = SqlNullTimeNow();
     }
@@ -113,5 +115,18 @@ export class ArticleEditorComponent implements OnInit {
     article.Structure.Rows.splice(rowTo, 0, movedItem.sectionRef);
     article.Structure.Rows.splice(rowFrom, 1);
     this.exitMoveMode();
+  }
+
+  public selectedFillColor = signal<string | undefined>(undefined);
+  public colorFill(color: string | undefined) {
+    this.selectedFillColor.set(color);
+  }
+
+  protected fillWithColor(section: Section) {
+    const selectedColor = this.selectedFillColor();
+    if(selectedColor !== undefined) {
+      section.BackgroundColor = selectedColor;
+      this.selectedFillColor.set(undefined);
+    }
   }
 }

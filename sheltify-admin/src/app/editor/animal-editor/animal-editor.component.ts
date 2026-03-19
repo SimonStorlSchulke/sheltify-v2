@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { firstValueFrom, lastValueFrom, Subject } from 'rxjs';
 import { CmsArticle } from 'sheltify-lib/article-types';
 import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
-import { CmsAnimal, SqlNullTimeNow } from 'sheltify-lib/cms-types';
+import { CmsAnimal, CmsTenantConfiguration, SqlNullTimeNow } from 'sheltify-lib/cms-types';
 import { SaveAnimalComponent } from 'src/app/editor/animal-editor/save-animal/save-animal.component';
 import { ArticleEditorComponent } from 'src/app/editor/article-editor/article-editor.component';
 import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-input.component';
@@ -20,7 +20,6 @@ import { AnimalPickerDialogComponent } from 'src/app/ui/animal-picker-dialog/ani
 import { LastEditedComponent } from 'src/app/ui/last-edited/last-edited.component';
 import { TextInputComponent } from '../../forms/text-input/text-input.component';
 import { CmsRequestService } from '../../services/cms-request.service';
-import { TextInputModalComponent } from 'src/app/forms/text-input-modal/text-input-modal.component';
 
 @Component({
   selector: 'app-animal-editor',
@@ -51,6 +50,7 @@ export class AnimalEditorComponent {
 
   public saveArticle$ = new Subject<{updateNote: string, pushUpdate: boolean}>();
 
+  public animalStati: string[] = [];
   public animalKinds: string[] = [];
 
   constructor(
@@ -63,6 +63,8 @@ export class AnimalEditorComponent {
 
   async ngOnInit() {
     this.animalKinds = (await this.tenantConfigurationService.animalKinds());
+    this.animalStati = (await this.tenantConfigurationService.animalStati());
+    console.log("animalStati", this.animalStati)
   }
 
   async saveFromUI() {
@@ -97,8 +99,11 @@ export class AnimalEditorComponent {
   }
 
   protected async assignExistingArticle() {
+    const selectableAnimals = this.animals()?.filter(animal => (
+      animal.ID !== this.animal()?.ID) && this.animalService.hasArticle(animal)
+    );
     const selectedAnimal = await this.modalService.openFinishable(AnimalPickerDialogComponent, {
-      animals: this.animals()!
+      animals: selectableAnimals,
     });
 
     if (selectedAnimal) {
@@ -111,5 +116,14 @@ export class AnimalEditorComponent {
     if (!await this.alertService.confirmDelete()) return;
     await lastValueFrom(this.cmsRequestService.deleteAnimals([this.animal()!.ID]));
     this.deleted.emit();
+  }
+
+  public setStatus(status: string, active: boolean): void {
+    const animal = this.animal()!;
+    let currentStati = animal.Status?.split(',') ?? []
+    currentStati = currentStati.filter(status => this.animalStati.includes(status));
+    const stati = new Set(currentStati);
+    active ? stati.add(status) : stati.delete(status);
+    animal.Status = [...stati].join(',');
   }
 }

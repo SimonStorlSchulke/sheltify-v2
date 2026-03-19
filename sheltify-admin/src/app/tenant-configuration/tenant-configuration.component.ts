@@ -54,6 +54,7 @@ export class TenantConfigurationComponent implements OnInit {
         LinkYoutube: '',
         PhoneNumber: '',
         AnimalKinds: '',
+        AnimalStati: '',
         BlogCategories: '',
         AnimalFeatureWhere: true,
         AnimalFeaturePatrons: true,

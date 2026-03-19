@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, input, Input, output } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { CmsHomeFoundEntry } from 'sheltify-lib/dist/cms-types';
+import { CmsHomeFoundEntry } from 'sheltify-lib/cms-types';
 import { TextEditorComponent } from 'src/app/editor/text-editor/text-editor.component';
 import { ImagePickerMultiComponent } from 'src/app/forms/image-picker-multi/image-picker-multi.component';
 import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';

@@ -1,4 +1,4 @@
-@let rowClass = "sui flex-x gap-2 grow-1";
+@let rowClass = "sui flex-x gap-2 grow-1 wrap";
 @let config = tenantConfigurationService.config();
 @if (animal(); as animal) {
   <div class="sui save-content-buttons flex-x gap-2 jc-end">
@@ -11,11 +11,20 @@
     <div class="sui flex-y gap-2 grow-1 card">
       @if (animal.HomeFoundStatus !== 'yes') {
 
-        <div data-testid="form-animal-editor" class="sui flex-x gap-3 grow-1">
+        <div data-testid="form-animal-editor" class="sui flex-x gap-3 grow-1 wrap">
           <app-image-picker-single label="Portrait" idName="portrait" [(twoWayModel)]="animal.Portrait"/>
 
-
           <div class="sui flex-y gap-2 grow-1 pr-1">
+
+            <div [class]="rowClass">
+              @if (animalKinds && config?.AnimalFeatureAnimalKind) {
+                <app-select-input style="min-width: 200px;" idName="animalKind" label="Art" [(twoWayModel)]="animal.AnimalKind" [options]="animalKinds"/>
+              }
+              @if (animalKinds && config?.AnimalFeatureRace) {
+                <app-text-input class="sui grow-1" idName="animal-race" label="Rasse" [(twoWayModel)]="animal.Race"/>
+              }
+            </div>
+
             <div [class]="rowClass">
               <app-text-input class="sui grow-1" idName="animal-name" label="Name" [(twoWayModel)]="animal.Name"/>
               <app-radio-buttons-input idName="gender" label="Geschlecht" [options]="['male', 'female']" [optionTranslations]="['Männlich', 'Weiblich']"
@@ -32,10 +41,6 @@
               <app-number-input idName="size" label="Schulterhöhe in cm" [(twoWayModel)]="animal.ShoulderHeightCm"/>
             </div>
 
-            @if (animalKinds && config?.AnimalFeatureAnimalKind) {
-              <app-select-input idName="animalKind" label="Art" [(twoWayModel)]="animal.AnimalKind" [options]="animalKinds"/>
-            }
-
             @if (config?.AnimalFeatureNoAdoption) {
               <app-checkbox-input idName="noAdoption" label="Keine Adoption (nur Paten)" [(twoWayModel)]="animal.NoAdoption"/>
             }
@@ -44,24 +49,40 @@
               <app-checkbox-input idName="noAdoption" label="Freigänger" [(nullBoolModel)]="animal.FreeRoamer"/>
             }
 
-
           </div>
         </div>
+
+        @if (animalStati && animalStati.length > 0) {
+          <label>Status</label>
+          <div class="sui flex-x gap-1">
+            @for(animalStatus of animalStati; track $index) {
+              @let isStatisActive = animal.Status.split(',').includes(animalStatus);
+              <button
+                (click)="setStatus(animalStatus, !isStatisActive)"
+                [class]="isStatisActive ? 'primary' : 'white'">
+                {{ animalStatus }}
+              </button>
+            }
+          </div>
+        }
+
       } @else {
         <div class="sui flex-x ai-center gap-3">
           <app-image-picker-single label="Portrait" idName="portrait" [(twoWayModel)]="animal.Portrait"/>
-          <h3>{{animal.Name}} hat ein Zuhause gefunden ♥</h3>
+          <h3>{{ animal.Name }} hat ein Zuhause gefunden ♥</h3>
         </div>
       }
 
-      <div class="sui flex-x gap-2 wrap jc-space-between ai-end">
-        <app-radio-buttons-input
-          idName="homeFoundStatus" label="Vermittlungsstatus"
-          [(twoWayModel)]="animal.HomeFoundStatus"
-          [options]="['no', 'reserved', 'yes']"
-          [optionTranslations]="['unvermittelt', 'reserviert', animal.HomeFoundStatus == 'yes' ? 'Zuhause gefunden ♥' : 'Zuhause gefunden']"
-        />
-        <app-last-edited class="sui grow-1" [entry]="animal"/>
+      <div class="sui flex-y gap-2 wrap jc-space-between ai-stretch">
+
+
+          <app-radio-buttons-input
+            idName="homeFoundStatus" label="Vermittlungsstatus"
+            [(twoWayModel)]="animal.HomeFoundStatus"
+            [options]="['no', 'reserved', 'yes']"
+            [optionTranslations]="['unvermittelt', 'reserviert', animal.HomeFoundStatus == 'yes' ? 'Zuhause gefunden ♥' : 'Zuhause gefunden']"
+          />
+          <app-last-edited class="sui grow-1" [entry]="animal"/>
       </div>
     </div>
 

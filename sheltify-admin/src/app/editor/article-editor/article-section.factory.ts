@@ -5,6 +5,7 @@ export function createEmptySection(SectionType: SectionType): Section {
     case 'columns':
       return {
         SectionType,
+        BackgroundColor: '',
         Content: {
           FullWidth: false,
           Columns: [
@@ -22,6 +23,7 @@ export function createEmptySection(SectionType: SectionType): Section {
     case 'form':
       return {
         SectionType,
+        BackgroundColor: '',
         Content: {
           Name: '',
           SubmitButtonText: '',
@@ -34,6 +36,7 @@ export function createEmptySection(SectionType: SectionType): Section {
     case 'title':
       return {
         SectionType,
+        BackgroundColor: '',
         Content: {
           Text: '',
           Type: 'h1',
@@ -44,6 +47,7 @@ export function createEmptySection(SectionType: SectionType): Section {
     case 'text':
       return {
         SectionType,
+        BackgroundColor: '',
         Content: {
           Html: '',
         }
@@ -51,6 +55,7 @@ export function createEmptySection(SectionType: SectionType): Section {
     case 'video':
       return {
         SectionType,
+        BackgroundColor: '',
         Content: {
           Title: '',
           Url: '',
@@ -59,6 +64,7 @@ export function createEmptySection(SectionType: SectionType): Section {
     case 'image':
       return {
         SectionType,
+        BackgroundColor: '',
         Content: {
           Size: 'medium',
           Layout: 'vertical',
@@ -68,6 +74,7 @@ export function createEmptySection(SectionType: SectionType): Section {
     case 'hero':
       return {
         SectionType,
+        BackgroundColor: '',
         Content: {
           MediaFiles: [],
           Text: '',
@@ -77,6 +84,7 @@ export function createEmptySection(SectionType: SectionType): Section {
     case 'html':
       return {
         SectionType,
+        BackgroundColor: '',
         Content: {
           Html: '',
         }
@@ -84,6 +92,7 @@ export function createEmptySection(SectionType: SectionType): Section {
     case 'animal-list':
       return {
         SectionType,
+        BackgroundColor: '',
         Content: {
           AnimalKind: undefined,
           MaxNumber: undefined,
@@ -98,6 +107,7 @@ export function createEmptySection(SectionType: SectionType): Section {
     case 'home-found':
       return {
         SectionType,
+        BackgroundColor: '',
         Content: {
           From: undefined,
           To: undefined,
@@ -106,20 +116,41 @@ export function createEmptySection(SectionType: SectionType): Section {
     case 'separator-x':
       return {
         SectionType,
+        BackgroundColor: '',
       };
     case 'file':
       return {
         SectionType,
+        BackgroundColor: '',
         Content: {
           File: undefined,
           Text: '',
         },
       };
+    case 'animal-updates':
+        return {
+          SectionType,
+          BackgroundColor: '',
+          Content: {
+            days: 7,
+            layout: 'compact',
+          },
+          TempAnimalsByArticle: {},
+        };
+    case 'special':
+        return {
+          SectionType,
+          BackgroundColor: '',
+          Content: {
+            Type: '',
+            Properties: [],
+          },
+          TempData: undefined,
+        };
     default:
       assertUnreachable(SectionType);
   }
 }
-
 
 function assertUnreachable(_: never): never {
   throw new Error("Didn't expect to get here");

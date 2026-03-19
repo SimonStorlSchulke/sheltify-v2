@@ -8,27 +8,44 @@
   </button>
 </span>
 
-
-
-
   @if (articleEditorService.article(); as article) {
+
+
 
     @if (showUpdateNote()) {
       <app-text-input
         class="contentUpdateNote" idName="contentUpdateNote" label="letzte Updatenotiz" [long]="true"
         [(twoWayModel)]="article.ContentUpdateNote"
         style="width: 100%;"
-        explanation="z.B: 'Neue Bilder von Snoopy'. Kurzer Text, der in 'Tierupdates'-Sektionen angezeigt wird - dort (z.B. auf der Startseite) werden Tiere für eine gewisse Zeit nachdem man eine sie bearbeitet hat angezeigt."/>
+        explanation="z.B: 'Neue Bilder von Snoopy'. Kurzer Text, der in 'Tierupdates'-Sektionen angezeigt wird - dort (z.B. auf der Startseite) werden Tiere für eine gewisse Zeit nachdem man sie bearbeitet hat angezeigt."/>
     }
 
     <div (click)="addSectionAtRow(0)" (mouseup)="moveToNewRow(0)" data-testid="row-selector-0" class="move-to-row"></div>
 
     @for (section of article.Structure.Rows; track $index) {
 
-      <app-section-editor [section]="section" [rowIndex]="$index"/>
+      <app-section-editor (click)="fillWithColor(section)" [editable]="selectedFillColor() == undefined" [section]="section" [rowIndex]="$index"/>
 
       <div (click)="addSectionAtRow($index + 1)" (mouseup)="moveToNewRow($index + 1)" [attr.data-testid]="'row-selector-' + $index + 1" class="move-to-row"></div>
     }
   }
   <span class="overscroll"></span>
+</div>
+
+<div class="sui flex-y gap-1 color-filler p-2 rounded-1">
+  <span>Sektionen einfärben</span>
+
+  <div class="sui flex-y gap-1 wrap">
+    @let selectedColor = selectedFillColor();
+
+    @if(selectedColor == undefined) {
+
+    @for (colorName of ['accent-1', 'accent-2', 'accent-3']; track $index) {
+      <button [class]="'themable themable-bg-'+colorName" (click)="colorFill(colorName)"><app-bt-icon name="PaintBucket"/></button>
+    }
+    <button style="background: #fff; border: 1px solid #ccc;" [class.active-picker]="'' == selectedColor" (click)="colorFill('')"><app-bt-icon name="PaintBucket"/></button>
+    } @else {
+      <button [class]="'themable themable-bg-'+selectedColor" (click)="colorFill(undefined)"><app-bt-icon name="PaintBucket"/>x</button>
+    }
+  </div>
 </div>

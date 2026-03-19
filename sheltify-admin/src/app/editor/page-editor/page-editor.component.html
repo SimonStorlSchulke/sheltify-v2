@@ -9,10 +9,8 @@
     <div class="sui flex-x gap-2">
       <button type="button" class="primary" (click)="save()">Speichern</button>
       @let isPublished = page.PublishedAt?.Valid;
-      @if(page.Path != ''){
-        <button [class.warning]="!isPublished" [class.success]="isPublished" (click)="togglePublished()">{{ page.PublishedAt?.Valid ? 'Depublizieren' : 'Publizieren' }}</button>
-        <button type="button" class="red" (click)="delete()">Löschen</button>
-      }
+      <button [class.warning]="!isPublished" [class.success]="isPublished" (click)="togglePublished()">{{ page.PublishedAt?.Valid ? 'Depublizieren' : 'Publizieren' }}</button>
+      <button type="button" class="red" (click)="delete()">Löschen</button>
     </div>
   }
 </div>

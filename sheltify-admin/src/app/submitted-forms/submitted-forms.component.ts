@@ -45,5 +45,6 @@ export class SubmittedFormsComponent {
     this.forms.update((forms) =>
       forms.filter((f) => f.ID !== this.selectedForm()!.ID)
     );
+    this.selectedForm.set(this.forms()[0]);
   }
 }

@@ -7,7 +7,7 @@ import (
 type Article struct {
 	CmsType
 	ContentUpdateNote string
-    ContentUpdateAt  sql.NullTime
+  ContentUpdateAt  sql.NullTime
 	Structure ArticleStructure `gorm:"serializer:json"`
 }
 

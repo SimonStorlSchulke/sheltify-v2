@@ -115,6 +115,11 @@ export class SheltifyAccess {
     })
   }
 
+  public async getAnimalUpdates(days: number): Promise<CmsAnimal[]> {
+    const animals = await this.get<CmsAnimal[]>(`animals/updates/${days}`)
+    return sortByPriorityAndUpdatedAt(filterPublishedAndHasArticle(animals));
+  }
+
   public animalById(id: number): Promise<CmsAnimal> {
     return this.get<CmsAnimal>(`animals/${id}`)
   }

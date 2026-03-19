@@ -29,7 +29,7 @@ import { LastEditedComponent } from 'src/app/ui/last-edited/last-edited.componen
 })
 export class BlogEditorComponent implements OnInit {
   blog = input.required<CmsBlogEntry>();
-  saveArticle$ = new Subject<void>();
+  saveArticle$ = new Subject<undefined>();
   deleted = output();
 
   constructor(
@@ -50,7 +50,7 @@ export class BlogEditorComponent implements OnInit {
     const page = await firstValueFrom(this.cmsRequestService.saveBlogEntry(this.blog()));
     if(page) {
       if(!skipArticle) {
-        this.saveArticle$.next();
+        this.saveArticle$.next(undefined);
       }
       this.blogService.reloadBlogs();
     }

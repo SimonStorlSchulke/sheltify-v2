@@ -33,11 +33,23 @@ export class TenantConfigurationService {
   }
 
   public async animalKinds(): Promise<string[]> {
-    return (await firstValueFrom(this.getOrLoad()))?.AnimalKinds.split(",") ?? [];
+    return this.stringValueToArray('AnimalKinds');
   }
 
   public async blogCategories(): Promise<string[]> {
-    return (await firstValueFrom(this.getOrLoad()))?.BlogCategories.split(",") ?? [];
+    return this.stringValueToArray('BlogCategories');
+  }
+
+  public async animalStati(): Promise<string[]> {
+    return this.stringValueToArray('AnimalStati');
+  }
+
+  private async stringValueToArray(key: keyof CmsTenantConfiguration): Promise<string[]> {
+    const config = await firstValueFrom(this.getOrLoad());
+    if(!config) return [];
+    const str = config[key] as string;
+    if(!str) return [];
+    return str.split(",") ?? []
   }
 
   public getOrLoad() {
