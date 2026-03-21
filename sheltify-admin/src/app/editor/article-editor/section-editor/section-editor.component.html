@@ -1,6 +1,6 @@
 @let sectionVal = section();
 
-<div [class.edit-mode]="editMode()" class="section" (click)="enterEditMode($event)">
+<div [class.edit-mode]="editedRow() == rowIndex()" class="section">
   <div class="section-titlebar sui flex-x px-2 gap-1 ai-center only-editmode">
     <b class="sui py-2 grow-1">{{ sectionLabels.get(sectionVal.SectionType) ?? sectionVal.SectionType }}</b>
     <button (mousedown)="enterMoveMode()" class="move-button small">verschieben</button>

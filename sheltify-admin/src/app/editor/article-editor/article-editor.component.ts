@@ -1,4 +1,4 @@
-import { Component, DestroyRef, effect, input, OnInit, Renderer2, signal } from '@angular/core';
+import { Component, DestroyRef, effect, input, model, OnInit, Renderer2, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { bootstrapGripVertical, bootstrapX, bootstrapPlus } from '@ng-icons/bootstrap-icons';
@@ -34,6 +34,7 @@ export class ArticleEditorComponent implements OnInit {
   public isPreviewMode = signal<boolean>(false);
 
   public selectedFillColor = signal<string | undefined>(undefined);
+  public editedRow = model<number | undefined>(undefined);
   public colorPickerExpanded = signal<boolean>(false);
 
 
@@ -62,12 +63,6 @@ export class ArticleEditorComponent implements OnInit {
     this.saveArticle()?.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((saveOptions) => this.save(saveOptions));
   }
 
-  private editSectionAtPosition(row: number, column: number) {
-    const rowElement = document.querySelectorAll('.article-row')[row];
-    const sectionElement = rowElement.querySelectorAll<HTMLDivElement>('.article-column')[column];
-    //this.editSection(sectionElement)
-  }
-
   public async addSectionAtRow(row: number) {
     if (!this.articleEditorService.article() || this.isPreviewMode()) return;
     if (this.articleEditorService.movedItem()) return;
@@ -81,7 +76,7 @@ export class ArticleEditorComponent implements OnInit {
     article.Structure.Rows.splice(row, 0, sectionRef);
 
     this.exitMoveMode();
-    setTimeout(() => this.editSectionAtPosition(row, 0), 0);
+    this.editedRow.set(row);
   }
 
   private addGlobalStyle(css: string) {
@@ -129,11 +124,14 @@ export class ArticleEditorComponent implements OnInit {
     this.selectedFillColor.set(color);
   }
 
-  protected fillWithColor(section: Section) {
+  protected clickSection(section: Section, row: number) {
     const selectedColor = this.selectedFillColor();
-    if(selectedColor !== undefined) {
+    if (selectedColor !== undefined) {
       section.BackgroundColor = selectedColor;
       this.selectedFillColor.set(undefined);
+    } else {
+      // wrap in timeout so the deselect in section-editor.component doesn't trigger after the select
+      setTimeout(() => this.editedRow.set(row), 0);
     }
   }
 }

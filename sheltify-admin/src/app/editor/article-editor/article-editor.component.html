@@ -10,8 +10,6 @@
 
   @if (articleEditorService.article(); as article) {
 
-
-
     @if (showUpdateNote()) {
       <app-text-input
         class="contentUpdateNote" idName="contentUpdateNote" label="letzte Updatenotiz" [long]="true"
@@ -24,7 +22,13 @@
 
     @for (section of article.Structure.Rows; track $index) {
 
-      <app-section-editor (click)="fillWithColor(section)" [editable]="selectedFillColor() == undefined" [section]="section" [rowIndex]="$index"/>
+      <app-section-editor
+        (click)="clickSection(section, $index)"
+        [(editedRow)]="editedRow"
+        [editable]="selectedFillColor() == undefined"
+        [section]="section"
+        [rowIndex]="$index"
+      />
 
       <div (click)="addSectionAtRow($index + 1)" (mouseup)="moveToNewRow($index + 1)" [attr.data-testid]="'row-selector-' + $index + 1" class="move-to-row"></div>
     }
