@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
 import { Section } from 'sheltify-lib/article-types';
 import { SectionEditorAnimalListComponent } from 'src/app/editor/article-editor/section-editor-animal-list/section-editor-animal-list.component';
@@ -21,20 +21,17 @@ import { sectionLabels } from 'src/app/services/article-renderer';
     SectionEditorTextComponent,
     SectionEditorTitleComponent,
     SectionEditorVideoComponent,
-    NgIcon
+    NgIcon,
   ],
   templateUrl: './section-editor-column-sections.component.html',
 })
 export class SectionEditorColumnSectionsComponent {
-  public section = input.required<Section>()
+  public section = input.required<Section>();
+  public deletedSection = output();
 
   public triggerRerender() {
 
   }
 
   public readonly sectionLabels = sectionLabels;
-
-  public deleteSection() {
-    //TODO
-  }
 }

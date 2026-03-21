@@ -4,6 +4,7 @@ import { SectionEditorAnimalListComponent } from 'src/app/editor/article-editor/
 import { SectionEditorAnimalUpdatesComponent } from 'src/app/editor/article-editor/section-editor-animal-updates/section-editor-animal-updates.component';
 import { SectionEditorColumnsComponent } from 'src/app/editor/article-editor/section-editor-columns/section-editor-columns.component';
 import { SectionEditorHeroComponent } from 'src/app/editor/article-editor/section-editor-hero/section-editor-hero.component';
+import { SectionEditorHomeFoundComponent } from 'src/app/editor/article-editor/section-editor-home-found/section-editor-home-found.component';
 import { SectionEditorHtmlComponent } from 'src/app/editor/article-editor/section-editor-html/section-editor-html.component';
 import { SectionEditorImagesComponent } from 'src/app/editor/article-editor/section-editor-images/section-editor-images.component';
 import { SectionEditorSpecialComponent } from 'src/app/editor/article-editor/section-editor-special/section-editor-special.component';
@@ -28,6 +29,7 @@ import { SectionEditorFileComponent } from '../../section-editor-file/section-ed
     SectionEditorFileComponent,
     SectionEditorAnimalUpdatesComponent,
     SectionEditorSpecialComponent,
+    SectionEditorHomeFoundComponent,
   ],
   templateUrl: './section-editor-all-sections.component.html',
 })

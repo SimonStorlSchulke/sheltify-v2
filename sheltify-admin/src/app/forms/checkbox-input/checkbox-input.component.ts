@@ -20,7 +20,7 @@ export class CheckboxInputComponent extends InputBaseComponent {
     const currentIsValid = this.nullBoolModel()!.Valid;
     const currentBool = this.nullBoolModel()!.Bool;
     if ((newBool && currentBool && currentIsValid) || (!newBool && !currentBool && currentIsValid)) {
-      this.nullBoolModel.set(SqlNullBoolNull)
+      this.nullBoolModel.set(SqlNullBoolNull())
     } else {
       this.nullBoolModel.set({Bool: newBool, Valid: true})
     }

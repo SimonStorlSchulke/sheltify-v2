@@ -11,22 +11,18 @@ export type SqlNullBool = {
 }
 
 
-export const SqlNullBoolNull: SqlNullBool = {Bool: false, Valid: false}
-export const SqlNullBoolTrue: SqlNullBool = {Bool: true, Valid: true}
-export const SqlNullBoolFalse: SqlNullBool = {Bool: false, Valid: true}
-export const SqlNullTimeNull: SqlNullTime = {Time: null, Valid: false}
-export function SqlNullTimeNow(): SqlNullTime {
-  return {
-        Valid: true,
-        Time: new Date().toISOString(),
-      }
-}
+export const SqlNullBoolNull: () => SqlNullBool = () => ({Bool: false, Valid: false});
+export const SqlNullBoolTrue: () => SqlNullBool = () => ({Bool: true, Valid: true});
+export const SqlNullBoolFalse:  () => SqlNullBool = () => ({Bool: false, Valid: true});
+export const SqlNullTimeNull:  () => SqlNullTime = () => ({Time: null, Valid: false});
+export const SqlNullTimeNow: () => SqlNullTime = () => ({Valid: true, Time: new Date().toISOString()});
+
 
 export function setPublishedAt(publishable: Publishable, published: boolean) {
   if(published) {
     publishable.PublishedAt = SqlNullTimeNow();
   } else {
-    publishable.PublishedAt = SqlNullTimeNull;
+    publishable.PublishedAt = SqlNullTimeNull();
   }
 }
 
@@ -68,7 +64,7 @@ export type CmsAnimal = Publishable & {
   Name: string;
   AnimalKind?: string,
   Race: string,
-  Birthday?: string;
+  Birthday: SqlNullTime;
   WeightKg: number;
   ShoulderHeightCm: number;
   Castrated: SqlNullBool;

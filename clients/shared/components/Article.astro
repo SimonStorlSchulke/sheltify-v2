@@ -2,6 +2,7 @@
 import { cms } from '@shared/cms/sheltify-access.ts';
 import SectionRendererColumns from '@shared/components/sections/SectionRendererColumns.astro';
 import RenderSectionAnimalList from 'article-renderer/components/RenderSectionAnimalList.svelte';
+import RenderSectionFile from 'article-renderer/components/RenderSectionFile.svelte';
 import type { CmsArticle, Section, SectionType } from 'sheltify-lib/article-types.ts';
 import RenderSectionTitle from 'article-renderer/components/RenderSectionTitle.svelte';
 import RenderSectionText from 'article-renderer/components/RenderSectionText.svelte';
@@ -73,6 +74,9 @@ const allAnimalsByArticle = animalsByArticleId(await cms.animals);
             break;
           case 'image':
             comp = <RenderSectionImages section={section} client:load/>;
+            break;
+          case 'file':
+            comp = <RenderSectionFile section={section} client:load/>;
             break;
           case 'columns':
             comp = <SectionRendererColumns section={section}/>;

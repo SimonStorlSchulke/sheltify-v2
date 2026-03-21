@@ -4,8 +4,8 @@ import { CmsAnimal, CmsBlogEntry, CmsHomeFoundEntry, CmsPage, CmsTeamMember, Sql
 export function createNewAnimal(name: string): CmsAnimal {
   return {
     ID: '',
-    Birthday: "2018-03-29T15:04:05Z", //TODO
-    Castrated: SqlNullBoolNull,
+    Birthday: SqlNullTimeNull(), //TODO
+    Castrated: SqlNullBoolNull(),
     Gender: '',
     Where: '',
     Health: '',
@@ -19,7 +19,7 @@ export function createNewAnimal(name: string): CmsAnimal {
     Description: "",
     MediaFiles: [],
     NoAdoption: false,
-    FreeRoamer: SqlNullBoolNull,
+    FreeRoamer: SqlNullBoolNull(),
     HomeFoundStatus: 'no',
     Race: '',
   };
@@ -41,7 +41,7 @@ export function createEmptyArticle(): CmsArticle {
   return {
     ID: '',
     Structure: {Rows: []},
-    TenantID: '', ContentUpdateAt: SqlNullTimeNull,
+    TenantID: '', ContentUpdateAt: SqlNullTimeNull(),
     ContentUpdateNote: '',
   }
 }

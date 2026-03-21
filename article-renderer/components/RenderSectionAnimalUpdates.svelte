@@ -9,24 +9,14 @@
   import type { CmsAnimal } from 'sheltify-lib/cms-types';
   import type { SectionAnimalUpdates } from 'sheltify-lib/article-types';
   import { getMultiAnimalTitle } from 'sheltify-lib/dist/animal-util';
-  import { getImageSrc } from '../util';
+  import { getImageSrc, getAnimalLink } from '../util';
   let { section, allAnimalsByArticle }: { section: SectionAnimalUpdates; allAnimalsByArticle?: Record<string, CmsAnimal[]> } = $props();
-
-  function getLink(animal: CmsAnimal) {
-    if (!allAnimalsByArticle) {
-      //link not needed for preview in CMS UI
-      return null;
-    }
-    const animalsInArticle = allAnimalsByArticle[animal.ArticleID ?? ''];
-    animalsInArticle.sort((a: CmsAnimal, b: CmsAnimal) => a.ID.localeCompare(b.ID));
-    const names = animalsInArticle.map(animal => animal.Name).join('-');
-    return `/${animalsInArticle[0].AnimalKind}/${names}`;
-  }
+  const animalEntries = Object.entries(section.TempAnimalsByArticle);
 </script>
 
 <div class="sui flex-x gap-2 wrap">
-  {#each Object.entries(section.TempAnimalsByArticle) as [_, animals]}
-    <a href={getLink(animals[0])} class="sui update-entry flex-x">
+  {#each animalEntries as [_, animals]}
+    <a href={getAnimalLink(animals[0], allAnimalsByArticle)} class="sui update-entry flex-x">
       {#each animals as animal}
         {#if animal.Portrait}
         <img src={getImageSrc(animal.Portrait, 'small')} class="sui card-image" />

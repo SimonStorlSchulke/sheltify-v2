@@ -2,7 +2,7 @@
 
 <div class="section-titlebar sui flex-x gap-1 ai-center only-editmode">
   <b class="sui py-2 grow-1">{{ sectionLabels.get(sectionVal.SectionType) ?? 'Sektion' }}</b>
-  <ng-icon class="x" (click)="deleteSection()" name="bootstrapX" size="22px"/>
+  <ng-icon class="x" (click)="deletedSection.emit()" name="bootstrapX" size="22px"/>
 </div>
 
 @switch (sectionVal.SectionType) {

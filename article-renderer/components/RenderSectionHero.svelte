@@ -9,7 +9,7 @@
   import Image from './Image.svelte';
   import type { SectionHero } from "sheltify-lib/dist/article-types";
 
-  let { section }: { section: SectionHero } = $props();
+  let {section}: { section: SectionHero } = $props();
 
   const duration = $derived(() => section.Content.DurationSeconds ?? 5);
   const effectiveImageCount = $derived(
@@ -23,7 +23,7 @@
       let index = 1;
 
       const interval = setInterval(() => {
-        if(!scroller) {
+        if (!scroller) {
           clearInterval(interval);
           return;
         }
@@ -33,7 +33,7 @@
         if (index === effectiveImageCount()) {
           // After the animation finishes, jump back without transition
           const timeout = setTimeout(() => {
-            if(!scroller) {
+            if (!scroller) {
               clearTimeout(timeout);
               return;
             }

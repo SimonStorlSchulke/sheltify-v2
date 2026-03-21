@@ -4,7 +4,6 @@ import { SectionColumns } from 'sheltify-lib/article-types';
 import { createEmptySection } from 'src/app/editor/article-editor/article-section.factory';
 import { PickNewSectionComponent } from 'src/app/editor/article-editor/pick-new-section/pick-new-section.component';
 import { SectionEditorColumnSectionsComponent } from 'src/app/editor/article-editor/section-editor/section-editor-column-sections/section-editor-column-sections.component';
-import { SectionEditorComponent } from 'src/app/editor/article-editor/section-editor/section-editor.component';
 import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-input.component';
 import { NumberInputComponent } from 'src/app/forms/number-input/number-input.component';
 import { AlertService } from 'src/app/services/alert.service';
@@ -17,7 +16,6 @@ const maxColumns = 4;
   selector: 'app-section-editor-columns',
   imports: [
     NumberInputComponent,
-    NgIcon,
     BtIconComponent,
     SectionEditorColumnSectionsComponent,
     CheckboxInputComponent,
@@ -33,6 +31,10 @@ export class SectionEditorColumnsComponent {
 
   public deleteColumn(index: number) {
     this.section().Content.Columns.splice(index, 1);
+  }
+
+  public deleteSection(iColumn: number, iSection: number) {
+    this.section().Content.Columns[iColumn].Sections.splice(iColumn, 1);
   }
 
   public addColumn() {
@@ -56,5 +58,25 @@ export class SectionEditorColumnsComponent {
     this.section().Content.Columns[columnId].Sections.splice(rowId, 0, sectionRef);
 
     //setTimeout(() => this.editSectionAtPosition(rowId, 0), 0);
+  }
+
+  protected moveColumnRight(iColumn: number) {
+    const columns = this.section().Content.Columns;
+
+    if (iColumn < 0 || iColumn >= columns.length - 1) {
+      return;
+    }
+
+    [columns[iColumn], columns[iColumn + 1]] = [columns[iColumn + 1], columns[iColumn]];
+  }
+
+  protected moveColumnLeft(iColumn: number) {
+    const columns = this.section().Content.Columns;
+
+    if (iColumn <= 0 || iColumn >= columns.length) {
+      return;
+    }
+
+    [columns[iColumn], columns[iColumn - 1]] = [columns[iColumn - 1], columns[iColumn]];
   }
 }

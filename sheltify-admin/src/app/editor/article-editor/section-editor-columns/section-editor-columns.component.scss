@@ -11,8 +11,11 @@
     border-right: 1px solid #ccc;
   }
 
-  .column-header {
+}
 
+.column-header {
+  button {
+    height: 32px;
   }
 }
 
