@@ -114,10 +114,14 @@ export class ArticleEditorComponent implements OnInit {
     if (!movedItem) return;
     const article = this.articleEditorService.article()!;
 
-    const rowFrom = this.articleEditorService.movedItem()!.row;
+    let rowFrom = this.articleEditorService.movedItem()!.row;
 
-    article.Structure.Rows.splice(rowTo, 0, movedItem.sectionRef);
+    if (rowFrom < rowTo) {
+      rowTo--;
+    }
+
     article.Structure.Rows.splice(rowFrom, 1);
+    article.Structure.Rows.splice(rowTo, 0, movedItem.sectionRef);
     this.exitMoveMode();
   }
 
