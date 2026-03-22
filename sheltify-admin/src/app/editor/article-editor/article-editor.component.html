@@ -19,7 +19,12 @@
       />
     }
 
-    <div (click)="addSectionAtRow(0)" (mouseup)="moveToNewRow(0)" data-testid="row-selector-0" class="move-to-row"></div>
+    <div
+      (click)="addSectionAtRow(0)"
+      (mouseup)="moveToNewRow(0)"
+      data-testid="row-selector-0"
+      class="move-to-row"
+    ></div>
 
     @for (section of article.Structure.Rows; track $index) {
 
@@ -31,7 +36,14 @@
         [rowIndex]="$index"
       />
 
-      <div (click)="addSectionAtRow($index + 1)" (mouseup)="moveToNewRow($index + 1)" [attr.data-testid]="'row-selector-' + $index + 1" class="move-to-row"></div>
+      @let sectionAfter = article.Structure.Rows[$index + 1];
+      <div
+        (click)="addSectionAtRow($index + 1)"
+        (mouseup)="moveToNewRow($index + 1)"
+        [attr.data-testid]="'row-selector-' + $index + 1"
+        class="move-to-row"
+        [class]="'mt-' + sectionAfter?.BackgroundColor + ' ' + 'mb-' + section.BackgroundColor"
+      ></div>
     }
   }
   <span class="overscroll"></span>

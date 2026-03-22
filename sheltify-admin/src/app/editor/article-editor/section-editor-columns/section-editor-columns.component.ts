@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
-import { SectionColumns } from 'sheltify-lib/article-types';
+import { Section, SectionColumns } from 'sheltify-lib/article-types';
 import { createEmptySection } from 'src/app/editor/article-editor/article-section.factory';
 import { PickNewSectionComponent } from 'src/app/editor/article-editor/pick-new-section/pick-new-section.component';
 import { SectionEditorColumnSectionsComponent } from 'src/app/editor/article-editor/section-editor/section-editor-column-sections/section-editor-column-sections.component';
@@ -50,10 +50,15 @@ export class SectionEditorColumnsComponent {
 
   public async addSectionAtRow(columnId: number, rowId: number) {
 
-    const sectionType = await this.modalService.openFinishable(PickNewSectionComponent);
-    if (!sectionType) return;
+    const sectionPickReturn = await this.modalService.openFinishable(PickNewSectionComponent);
+    if (!sectionPickReturn) return;
 
-    const sectionRef = createEmptySection(sectionType);
+    let sectionRef: Section;
+    if(typeof sectionPickReturn == 'string') {
+      sectionRef = createEmptySection(sectionPickReturn);
+    } else {
+      sectionRef = sectionPickReturn;
+    }
 
     this.section().Content.Columns[columnId].Sections.splice(rowId, 0, sectionRef);
 

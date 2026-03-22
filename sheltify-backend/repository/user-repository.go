@@ -10,11 +10,12 @@ func GetUserByName(name string) (*shtypes.User, error) {
 	return &user, nil
 }
 
-func CreateUser(userName string, email string, hasedPassword string, tenant string) (*shtypes.User, error) {
+func CreateUser(userName string, email string, hasedPassword string, tenant string, role string) (*shtypes.User, error) {
 	user := shtypes.User{
 		Name:           userName,
 		HashedPassword: hasedPassword,
 		Email:          email,
+		Role:           role,
 	}
 	user.SetTenantId(tenant)
 

@@ -1,3 +1,11 @@
 .column-row {
     gap: var(--section-gap-x);
 }
+
+.section-renderer {
+  min-height: 50px;
+
+  &:hover {
+    background: none !important;
+  }
+}

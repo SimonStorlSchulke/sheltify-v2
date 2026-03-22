@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 	"sheltify-new-backend/services"
+	"slices"
 )
 
 func Register(w http.ResponseWriter, r *http.Request) {
@@ -10,8 +11,14 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	email := r.FormValue("email")
 	password := r.FormValue("password")
 	tenant := r.FormValue("tenant")
+	role := r.FormValue("role")
 
-	user := services.RegisterUser(w, userName, email, password, tenant)
+	if !slices.Contains([]string{"ADMIN", "EDITOR", "UPLOADER"}, role) {
+		badRequestResponse(w, r, "Invalid role. Only ADMIN, EDITOR and UPLOADER are allowed.")
+		return
+	}
+
+	user := services.RegisterUser(w, userName, email, password, tenant, role)
 	if user == nil {
 		return
 	}

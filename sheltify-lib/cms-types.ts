@@ -10,13 +10,11 @@ export type SqlNullBool = {
   Valid: boolean, // Valid is true if Bool is not NULL
 }
 
-
 export const SqlNullBoolNull: () => SqlNullBool = () => ({Bool: false, Valid: false});
 export const SqlNullBoolTrue: () => SqlNullBool = () => ({Bool: true, Valid: true});
 export const SqlNullBoolFalse:  () => SqlNullBool = () => ({Bool: false, Valid: true});
 export const SqlNullTimeNull:  () => SqlNullTime = () => ({Time: null, Valid: false});
 export const SqlNullTimeNow: () => SqlNullTime = () => ({Valid: true, Time: new Date().toISOString()});
-
 
 export function setPublishedAt(publishable: Publishable, published: boolean) {
   if(published) {
@@ -153,6 +151,7 @@ export type CmsTenantConfiguration = CmsType & {
   AnimalFeatureAnimalKind: boolean,
   AnimalFeatureNoAdoption: boolean,
   AnimalShowUpdatesForDays: number,
+  SpecialArticleSections: Record<string, {Name: string, Type: "string" | "number" | "boolean" | "image" }[]>
 }
 
 export type CmsBlogEntry = Publishable & {

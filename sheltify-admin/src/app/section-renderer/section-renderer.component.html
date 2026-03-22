@@ -1,5 +1,5 @@
 @let sectionVal = section();
-<div [class]="'themable section-' + sectionVal.SectionType + ' themable-bg-' + (sectionVal.BackgroundColor ?? '')">
+<div [class]="'section-renderer section-' + sectionVal.SectionType + ' themable-bg-' + sectionVal.BackgroundColor">
   @if(sectionVal.SectionType == 'columns') {
   <div class="column-row sui flex-x">
     @for(column of sectionVal.Content.Columns; track $index) {

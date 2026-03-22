@@ -144,6 +144,7 @@ export type SectionSpecial = {
   Content: {
     Type: string,
     Properties: [string, string][],
+    PropertyValues: any[], //yeah, yeah I know...
   },
   TempData: any,
 }

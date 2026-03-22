@@ -68,10 +68,16 @@ export class ArticleEditorComponent implements OnInit {
     if (this.articleEditorService.movedItem()) return;
     const article = this.articleEditorService.article()!;
 
-    const sectionType = await this.modalService.openFinishable(PickNewSectionComponent);
-    if (!sectionType) return;
+    const sectionPickReturn = await this.modalService.openFinishable(PickNewSectionComponent);
+    if (!sectionPickReturn) return;
 
-    const sectionRef = createEmptySection(sectionType);
+    let sectionRef: Section;
+    if(typeof sectionPickReturn == 'string') {
+      sectionRef = createEmptySection(sectionPickReturn);
+    } else {
+      sectionRef = sectionPickReturn;
+    }
+
 
     article.Structure.Rows.splice(row, 0, sectionRef);
 

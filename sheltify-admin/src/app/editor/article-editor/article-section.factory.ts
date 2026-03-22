@@ -1,4 +1,5 @@
-import { Section, SectionType } from 'sheltify-lib/article-types';
+import { Section, SectionSpecial, SectionType } from 'sheltify-lib/article-types';
+import { CmsImage } from 'sheltify-lib/dist/cms-types';
 
 export function createEmptySection(SectionType: SectionType): Section {
   switch (SectionType) {
@@ -144,12 +145,39 @@ export function createEmptySection(SectionType: SectionType): Section {
           Content: {
             Type: '',
             Properties: [],
+            PropertyValues: [],
           },
           TempData: undefined,
         };
     default:
       assertUnreachable(SectionType);
   }
+}
+
+export function newSpecialSection(Name: string, SpecialArticleSections: Record<string, {Name: string, Type: "string" | "number" | "boolean" | "image" }[]>): SectionSpecial {
+  const section = createEmptySection('special') as SectionSpecial;
+  section.Content.Type = Name;
+  console.log("SpecialArticleSections[Name]", SpecialArticleSections[Name])
+  section.Content.Properties = SpecialArticleSections[Name].map(property => (
+    [property.Name, property.Type]
+  ));
+  section.Content.PropertyValues = section.Content.Properties.map(property => {
+    const propertyType = property[1];
+    switch (propertyType) {
+      case 'string':
+        return '';
+      case 'number':
+        return 0;
+      case 'boolean':
+        return false;
+      case 'image':
+        return undefined;
+      default:
+        return undefined;
+    }
+  })
+  console.log(section.Content)
+  return section;
 }
 
 function assertUnreachable(_: never): never {

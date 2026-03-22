@@ -14,7 +14,7 @@ import (
 
 const BCRYPT_COST = 10
 
-func RegisterUser(w http.ResponseWriter, userName string, email string, password string, tenant string) *shtypes.User {
+func RegisterUser(w http.ResponseWriter, userName string, email string, password string, tenant string, role string) *shtypes.User {
 	if len(userName) < 3 || len(password) < 8 {
 		err := http.StatusNotAcceptable
 		http.Error(w, "username or password don't meet the requirements", err)
@@ -35,7 +35,7 @@ func RegisterUser(w http.ResponseWriter, userName string, email string, password
 
 	hashedPassword, _ := HashPassword(password)
 
-	user, err := repository.CreateUser(userName, email, hashedPassword, tenant)
+	user, err := repository.CreateUser(userName, email, hashedPassword, tenant, role)
 
 	if err != nil {
 		http.Error(w, "failed to create user", http.StatusBadRequest)

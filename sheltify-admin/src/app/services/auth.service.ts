@@ -7,7 +7,7 @@ export type CmsUser = {
   CreatedAt: string,
   Name: string,
   Email: string,
-  Role: 'ADMIN' | 'EDITOR' | 'UPLOADED',
+  Role: 'ADMIN' | 'EDITOR' | 'UPLOADER',
   UpdatedAt: string,
   DeletedAt: any,
   ID: string,
@@ -66,6 +66,10 @@ export class AuthService {
 
   public getLoggedInUser() {
     return this._user$.value;
+  }
+
+  public isAdmin() {
+    return this._user$.value?.Role === 'ADMIN';
   }
 
   public getTenantID() {

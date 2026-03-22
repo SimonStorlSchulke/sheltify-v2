@@ -9,3 +9,59 @@
 .themable-bg-accent-3 {
   background: var(--themable-bg-accent-3);
 }
+
+// split colors for the move-to elements between article sections
+@mixin move-to-colors-before($color, $top) {
+  &::before {
+    content: "";
+    height: 50%;
+    width: 100%;
+    left: 0;
+    top: 50%;
+    position: absolute;
+    background-color: $color;
+  }
+}
+
+@mixin move-to-colors-after($color, $top) {
+  &::after {
+    content: "";
+    height: 50%;
+    width: 100%;
+    left: 0;
+    top: 0%;
+    position: absolute;
+    background-color: $color;
+  }
+}
+
+.mt-accent-1 {
+  position: relative;
+  @include move-to-colors-before(var(--themable-bg-accent-1), 50%);
+}
+
+.mt-accent-2 {
+  position: relative;
+  @include move-to-colors-before(var(--themable-bg-accent-2), 50%);
+}
+
+.mt-accent-3 {
+  position: relative;
+  @include move-to-colors-before(var(--themable-bg-accent-3), 50%);
+}
+
+.mb-accent-1 {
+  position: relative;
+  @include move-to-colors-after(var(--themable-bg-accent-1), 50%);
+}
+
+.mb-accent-2 {
+  position: relative;
+  @include move-to-colors-after(var(--themable-bg-accent-2), 50%);
+}
+
+.mb-accent-3 {
+  position: relative;
+  @include move-to-colors-after(var(--themable-bg-accent-3), 50%);
+}
+

@@ -5,6 +5,8 @@
 // --------------------------------------
 .article-container:not(.previewMode) {
   .move-to-row {
+    position: relative;
+
     &:only-of-type {
       outline: 2px dashed mix($primary, transparent, 50%);
       position: relative;
@@ -32,6 +34,10 @@
       background-size: 24px;
       opacity: 0.4;
       outline: 2px dashed mix($primary, transparent, 50%);
+
+      &:before, &:after {
+        opacity: 0.6;
+      }
     }
   }
 }
