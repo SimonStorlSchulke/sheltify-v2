@@ -144,7 +144,7 @@ func Authorize(r *http.Request) (*shtypes.User, error) {
 		return nil, AuthError
 	}
 
-	user, err := repository.GetUserByName(userName.Value)
+	user, err := repository.GetUserBySessionToken(sessionToken.Value)
 
 	if err != nil ||
 		user.SessionToken == nil || *user.SessionToken != sessionToken.Value ||
