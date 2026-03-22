@@ -1,13 +1,13 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap, Subject, BehaviorSubject, catchError, of } from 'rxjs';
+import { Observable, tap, BehaviorSubject, catchError, of } from 'rxjs';
 import { CmsRequestService } from './cms-request.service';
 
 export type CmsUser = {
   CreatedAt: string,
   Name: string,
   Email: string,
-  Role: 'ADMIN' | 'EDITOR' | 'UPLOADER',
+  Role: 'SUPERADMIN' | 'ADMIN' | 'EDITOR' | 'UPLOADER',
   UpdatedAt: string,
   DeletedAt: any,
   ID: string,
@@ -69,7 +69,12 @@ export class AuthService {
   }
 
   public isAdmin() {
-    return this._user$.value?.Role === 'ADMIN';
+    const role = this._user$.value?.Role;
+    return role == 'SUPERADMIN' || role == 'ADMIN';
+  }
+
+  public isSuperAdmin() {
+    return this._user$.value?.Role == 'SUPERADMIN';
   }
 
   public getTenantID() {
