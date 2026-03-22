@@ -219,6 +219,10 @@ export class CmsRequestService {
     });
   }
 
+  public readSubmittedForm(id: string) {
+    return this.post<CmsFormSubmission[]>(`forms/read/${id}`, {});
+  }
+
   public getSubmittedForms() {
     return this.httpClient.get<CmsFormSubmission[]>(CmsRequestService.adminApiUrl + 'forms/submitted', this.options());
   }
