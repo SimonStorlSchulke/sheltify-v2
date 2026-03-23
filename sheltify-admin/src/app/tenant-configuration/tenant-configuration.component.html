@@ -58,9 +58,6 @@
         <app-text-input [(twoWayModel)]="options.AnimalStati" idName="animal-kinds" label="Tier Stati" explanation="Kommaseparierte Liste an Tierarten (z.B. Hund,Katze,Kaninchen)"/>
 
       </form>
-      <h3>Spezial Artikel-Sektionen</h3>
-      <app-text-input [twoWayModel]="JSON.stringify(options.SpecialArticleSections)" (twoWayModelChange)="setSpecialArticleSections($event)" [long]="true" idName="blog-categories" label="Blogkategorien"
-                      explanation="Kommaseparierte Liste an Blogkategorien (z.B. Neuigkeiten,Veranstaltungen,Wissenswertes)"/>
     }
 
   }

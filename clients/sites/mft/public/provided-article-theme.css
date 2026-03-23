@@ -1,0 +1,129 @@
+:root {
+  --c-primary: #95a672;
+  --c-primary-h: #adc38c;
+  --c-accent: #e4ded8;
+  --padding-article: 64px;
+  --themable-bg-accent-1: #adc38c;
+  --themable-bg-accent-2: #ffdbb3;
+  --themable-bg-accent-3: #ff8a80;
+}
+
+.themable.article .themable-bg-accent-1 {
+  background: var(--themable-bg-accent-1);
+  color: #000;
+}
+.themable.article .themable-bg-accent-1 h1, .themable.article .themable-bg-accent-1 h2 {
+  color: #fff;
+}
+.themable.article .themable-bg-accent-2 {
+  background: var(--themable-bg-accent-2);
+}
+.themable.article .themable-bg-accent-3 {
+  background: var(--themable-bg-accent-3);
+}
+
+.themable.animal-card {
+  transition: transform 0.23s, box-shadow 0.4s, color 0.23s;
+  border-radius: 6px;
+  outline: none;
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.2901960784);
+}
+.themable.animal-card:hover {
+  box-shadow: 0 0 16px color-mix(in oklab, var(--c-primary) 65%, rgba(0, 0, 0, 0.2));
+  outline: none;
+  color: var(--c-primary) !important;
+}
+.themable.animal-card .name-row {
+  padding-left: 0.5rem;
+  padding-top: 0.3rem;
+  font-weight: bold;
+}
+.themable.animal-card .gender-icon {
+  font-family: fantasy, sans-serif;
+  font-size: 1.2rem;
+}
+
+:root {
+  --section-gap-x: min(50px, 5dvw);
+  --section-gap-y: 50px;
+  --hero-height: 800px;
+  --hero-top-height: 900px;
+}
+
+.themable.article {
+  line-height: 1.65;
+  font-size: var(--fontsize-default);
+  color: #6b6b6b;
+}
+.themable.article .section-separator-x hr {
+  height: 30px;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  background: linear-gradient(rgba(175, 175, 175, 0.2509803922), rgba(167, 167, 167, 0.031372549), transparent);
+}
+.themable.article button {
+  outline: none;
+  border: none;
+  border-radius: 32px;
+  font-family: "system-ui";
+  font-weight: 200;
+  padding: 8px 16px;
+  transition: background-color 0.35s, color 0.35s;
+}
+.themable.article button.lg {
+  font-size: 32px;
+}
+.themable.article button.primary {
+  background: var(--c-primary);
+  color: #fff;
+}
+.themable.article button.primary:hover {
+  background: var(--c-primary-h);
+  color: #000;
+}
+.themable.article button.secondary {
+  background: #aaa096;
+  color: #fff;
+}
+.themable.article button.secondary:hover {
+  background: #ffdb7e;
+  color: #000;
+}
+.themable.article a.link {
+  text-decoration: underline;
+}
+.themable.article a.link:hover {
+  color: var(--c-primary);
+}
+.themable.article h1 {
+  font-family: Oswald, Arial Narrow, system-ui;
+  font-size: var(--fontsize-h1);
+  color: var(--c-primary);
+  font-weight: bolder;
+}
+.themable.article h2 {
+  font-family: Oswald, Arial Narrow, system-ui;
+  font-size: var(--fontsize-h2);
+  font-weight: bolder;
+  color: var(--c-primary);
+}
+.themable.article .section-hero .hero-container {
+  margin-bottom: 50px;
+}
+.themable.article .section-hero h1 {
+  font-weight: 800;
+  left: 20px;
+  font-size: 60px;
+}
+.themable.article .section-animal-updates .update-entry {
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2117647059);
+  background: var(--c-accent);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.themable.article .section-animal-updates .update-entry:hover {
+  color: var(--c-primary) !important;
+}
+
+/*# sourceMappingURL=provided-article-theme.css.map */

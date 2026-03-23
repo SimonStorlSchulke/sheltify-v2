@@ -47,7 +47,7 @@ export class ArticleEditorComponent implements OnInit {
     private tenantConfigurationService: TenantConfigurationService,
   ) {
 
-    this.tenantConfigurationService.siteUrl().then(siteUrl => siteUrl ? this.addGlobalStyle(siteUrl + 'provided-article-theme.css') : false);
+    this.tenantConfigurationService.providedArticleThemeUrl().then(url => url ? this.addGlobalStyle(url) : false);
 
     effect(async () => {
       const articleId = this.articleId();

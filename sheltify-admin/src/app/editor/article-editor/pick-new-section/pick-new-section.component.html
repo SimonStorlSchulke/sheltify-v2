@@ -10,8 +10,8 @@
     <div class="sui flex-y gap-1 ai-start">
       <h3>Speziell für {{tenantName()}}</h3>
       @if (tenantsSpecialSections(); as tenantsSpecialSections) {
-        @for (section of tenantsSpecialSections; track $index) {
-          <button (click)="pickSpecialSection($index)" class="secondary">{{ section[0] }}</button>
+        @for (specialSectionName of Object.keys(tenantsSpecialSections); track $index) {
+          <button (click)="pickSpecialSection(specialSectionName)" class="secondary">{{ specialSectionName }}</button>
         }
       }
     </div>

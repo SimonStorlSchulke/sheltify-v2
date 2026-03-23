@@ -9,14 +9,10 @@
 
   <div class="section-content">
     <div class="section-preview themable article">
-      <ng-container #outlet [ngTemplateOutlet]="preview"/>
+      <app-section-renderer [section]="section()"/>
     </div>
     <div class="section-editor only-editmode">
       <app-section-editor-all-sections class="sui grow-1" [section]="sectionVal" (triggerRerender)="triggerRerender()"/>
     </div>
   </div>
 </div>
-
-<ng-template #preview>
-  <app-section-renderer [section]="section()"/>
-</ng-template>

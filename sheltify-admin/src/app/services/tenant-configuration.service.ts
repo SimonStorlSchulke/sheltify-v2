@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { firstValueFrom, of, tap } from 'rxjs';
-import { CmsTenantConfiguration } from 'sheltify-lib/cms-types';
+import { CmsTenantConfiguration, SpecialArticleSections } from 'sheltify-lib/cms-types';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 
 @Injectable({
@@ -10,7 +10,7 @@ export class TenantConfigurationService {
 
   public needsRebuild = signal(false);
 
-  constructor(private readonly cmsRequestService: CmsRequestService) {
+  constructor(private cmsRequestService: CmsRequestService) {
     this.reloadConfig();
 
     /* to avoid reloading the config everytime we modify any data, we copy what the backend does here. This is currently
@@ -42,6 +42,19 @@ export class TenantConfigurationService {
 
   public async animalStati(): Promise<string[]> {
     return this.stringValueToArray('AnimalStati');
+  }
+
+  public async providedArticleThemeUrl(): Promise<string> {
+    return await this.siteUrl() + 'provided-article-theme.css';
+  }
+
+  private _specialSections?: SpecialArticleSections;
+  public async providedSpecialSections(): Promise<SpecialArticleSections | undefined> {
+    if(this._specialSections) return this._specialSections;
+    const url = await this.siteUrl() + 'provided-special-sections.js';
+    const module = await import(url);
+    this._specialSections = module.default;
+    return this._specialSections;
   }
 
   private async stringValueToArray(key: keyof CmsTenantConfiguration): Promise<string[]> {

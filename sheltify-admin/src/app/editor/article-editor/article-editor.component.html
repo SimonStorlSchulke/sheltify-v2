@@ -26,7 +26,7 @@
       class="move-to-row"
     ></div>
 
-    @for (section of article.Structure.Rows; track $index) {
+    @for (section of article.Structure.Rows; track section) {
 
       <app-section-editor
         (click)="clickSection(section, $index)"

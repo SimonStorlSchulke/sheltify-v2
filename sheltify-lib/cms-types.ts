@@ -151,8 +151,9 @@ export type CmsTenantConfiguration = CmsType & {
   AnimalFeatureAnimalKind: boolean,
   AnimalFeatureNoAdoption: boolean,
   AnimalShowUpdatesForDays: number,
-  SpecialArticleSections: Record<string, {Name: string, Type: "string" | "number" | "boolean" | "image" }[]>
 }
+
+export type SpecialArticleSections = Record<string, {Name: string, Type: "string" | "number" | "boolean" | "image" }[]>;
 
 export type CmsBlogEntry = Publishable & {
   Title: string,

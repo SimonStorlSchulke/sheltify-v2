@@ -1,5 +1,6 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Observable, tap, BehaviorSubject, catchError, of } from 'rxjs';
 import { CmsRequestService } from './cms-request.service';
 
@@ -32,6 +33,7 @@ export class AuthService {
   private _user$ = new BehaviorSubject<CmsUser | null>(null);
 
   public user$ = this._user$.asObservable();
+  public userSignal = toSignal(this._user$);
 
   public login(username: string, password: string): Observable<CmsUser> {
     const formData: FormData = new FormData();
@@ -68,14 +70,12 @@ export class AuthService {
     return this._user$.value;
   }
 
-  public isAdmin() {
-    const role = this._user$.value?.Role;
-    return role == 'SUPERADMIN' || role == 'ADMIN';
-  }
+  public isSuperAdmin = computed(() => this.userSignal()?.Role == 'SUPERADMIN');
 
-  public isSuperAdmin() {
-    return this._user$.value?.Role == 'SUPERADMIN';
-  }
+  public isAdmin = computed(() => {
+    const role = this.userSignal()?.Role;
+    return role == 'SUPERADMIN' || role == 'ADMIN';
+  })
 
   public getTenantID() {
     return this.getLoggedInUser()?.TenantID ?? "";

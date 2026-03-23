@@ -1,5 +1,6 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { SectionSpecial, SectionType, SectionTypes } from 'sheltify-lib/article-types';
+import { SpecialArticleSections } from 'sheltify-lib/dist/cms-types';
 import { newSpecialSection } from 'src/app/editor/article-editor/article-section.factory';
 import { sectionLabels } from 'src/app/services/article-renderer';
 import { FinishableDialog } from 'src/app/services/modal.service';
@@ -16,22 +17,20 @@ export class PickNewSectionComponent extends FinishableDialog<SectionType | Sect
   public sectionLabels = sectionLabels;
 
   private tenantConfigurationService = inject(TenantConfigurationService);
+  public tenantsSpecialSections = signal<SpecialArticleSections | undefined>(undefined);
 
-  public tenantsSpecialSections = computed(() => {
-    const sections = this.tenantConfigurationService.config()?.SpecialArticleSections;
-    if(sections) {
-      console.log("Section Types ", sections);
-      return Object.entries(sections);
-    }
-      console.log("c ", this.tenantConfigurationService.config());
-    return undefined;
-  })
+  constructor() {
+    super();
+    this.tenantConfigurationService.providedSpecialSections().then(v => this.tenantsSpecialSections.set(v));
+  }
 
   public tenantName = computed(() => this.tenantConfigurationService.config()?.Name)
 
-  public pickSpecialSection(index: number) {
-    const sectionName = this.tenantsSpecialSections()![index][0];
-    const section = newSpecialSection(sectionName, this.tenantConfigurationService.config()!.SpecialArticleSections!)
+  public async pickSpecialSection(sectionName: string) {
+
+    const section = newSpecialSection(sectionName, this.tenantsSpecialSections()!)
     this.finishWith(section)
   }
+
+  protected readonly Object = Object;
 }

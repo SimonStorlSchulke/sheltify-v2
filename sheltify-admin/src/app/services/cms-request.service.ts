@@ -295,7 +295,7 @@ export class CmsRequestService {
     return this.delete('media/' + id);
   }
 
-  private get<T>(path: string): Observable<T> {
+  public get<T>(path: string): Observable<T> {
     return this.httpClient.get<T>(path, this.options())
       .pipe(this.handleRequest(path));
   }

@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
 import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
@@ -23,6 +24,7 @@ import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 export class SidebarComponent {
   public router = inject(Router);
   public tenantConfigurationService = inject(TenantConfigurationService);
+  public isSuperAdmin = inject(AuthService).isSuperAdmin;
   public building = signal(false);
 
   constructor(private cmsRequestService: CmsRequestService) {

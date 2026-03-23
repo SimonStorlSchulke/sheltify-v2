@@ -13,7 +13,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	tenant := r.FormValue("tenant")
 	role := r.FormValue("role")
 
-	if !slices.Contains([]string{"ADMIN", "EDITOR", "UPLOADER"}, role) {
+	if !slices.Contains([]string{"SUPERADMIN", "ADMIN", "EDITOR", "UPLOADER"}, role) {
 		badRequestResponse(w, r, "Invalid role. Only ADMIN, EDITOR and UPLOADER are allowed.")
 		return
 	}

@@ -67,7 +67,6 @@ export class TenantConfigurationComponent implements OnInit {
         AnimalFeatureNoAdoption: true,
         AnimalShowUpdatesForDays: 1,
         NeedsRebuild: true,
-        SpecialArticleSections: {},
       });
     }
   }
@@ -75,16 +74,5 @@ export class TenantConfigurationComponent implements OnInit {
   public async save() {
     await firstValueFrom(this.cmsRequestService.saveTenantConfiguration(this.options()!));
     this.tenantConfigurationService.reloadConfig();
-  }
-
-  protected readonly JSON = JSON;
-
-  protected setSpecialArticleSections(value: string) {
-    try {
-      this.options()!.SpecialArticleSections = JSON.parse(value);
-    } catch (error) {
-      this.alertService.openToast('Fehler', 'Konnte SpecialArticleSections nicht verarbeiten. Open Console for error Info', 'error');
-      console.log(error);
-    }
   }
 }
