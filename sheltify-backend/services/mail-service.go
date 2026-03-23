@@ -20,11 +20,11 @@ func InitMailDialer() {
 
 func SendMail(r *http.Request, recipients []string, replyTo string, subject string, htmlBody string) error {
 
-sanitizedHTML, err := htmlsanitizer.SanitizeString(htmlBody)
+	sanitizedHTML, err := htmlsanitizer.SanitizeString(htmlBody)
 
-if err != nil {
-	return err
-}
+	if err != nil {
+		return err
+	}
 
 	htmlDocument := `<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"></head><body>` + sanitizedHTML + `</body></html>`
 
@@ -40,7 +40,6 @@ if err != nil {
 	if err := mailDialer.DialAndSend(message); err != nil {
 		return err
 	}
-	logger.Info(r, "Email sent to " + strings.Join(recipients, ", "))
+	logger.Info(r, "Email sent to "+strings.Join(recipients, ", "))
 	return nil
 }
-

@@ -1,13 +1,14 @@
 .required {
     color: Red;
 }
+.section-form {
+  input, textarea {
+    border: 1px solid #aaa;
+    border-radius: 16px;
+    width: min(400px, 100%);
 
-
-input, textarea {
-  border: 1px solid #aaa;
-  border-radius: 5px;
-
-  &:focus {
-    outline: none;
+    &:focus {
+      outline: none;
+    }
   }
 }
