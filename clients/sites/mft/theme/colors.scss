@@ -1,0 +1,30 @@
+:root {
+  --c-primary: #95a672;
+  --c-primary-h: #adc38c;
+  --c-accent: #e4ded8;
+  --padding-article: 64px;
+
+  // required
+  --themable-bg-accent-1: #adc38c;
+  --themable-bg-accent-2: #ffdbb3;
+  --themable-bg-accent-3: #ff8a80;
+}
+
+.themable.article {
+  .themable-bg-accent-1 {
+    background: var(--themable-bg-accent-1);
+    color: #000;
+
+    h1, h2 {
+      color: #fff;
+    }
+  }
+
+  .themable-bg-accent-2 {
+    background: var(--themable-bg-accent-2);
+  }
+
+  .themable-bg-accent-3 {
+    background: var(--themable-bg-accent-3);
+  }
+}
