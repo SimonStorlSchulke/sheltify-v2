@@ -1,10 +1,13 @@
 ---
 import SectionRendererHero from '@shared/components/sections/SectionRendererHero.astro';
-import SectionRendererImages from '@shared/components/sections/SectionRendererImages.astro';
 import type { SectionColumns } from 'sheltify-lib/article-types.ts';
 import RenderSectionTitle from 'article-renderer/components/RenderSectionTitle.svelte';
 import RenderSectionText from 'article-renderer/components/RenderSectionText.svelte';
 import RenderSectionAnimalList from 'article-renderer/components/RenderSectionAnimalList.svelte';
+import RenderSectionImages from 'article-renderer/components/RenderSectionImages.svelte';
+import "../article-renderer/styles/_index.scss"
+import RenderSectionAnimalUpdates from 'article-renderer/components/RenderSectionAnimalUpdates.svelte';
+import RenderSectionFile from 'article-renderer/components/RenderSectionFile.svelte';
 
 interface Props {
   section: SectionColumns
@@ -29,22 +32,28 @@ const {section} = Astro.props;
           comp = <hr/>;
           break;
         case 'hero':
-          comp = <SectionRendererHero isTopHero={false} section={section}/>;
+          comp = <SectionRendererHero isTopHero={false} section={section} client:visible/>;
           break;
         case 'animal-list':
           comp = <RenderSectionAnimalList section={section}/>;
           break;
         case 'image':
-          comp = <SectionRendererImages section={section}/>;
+          comp = <RenderSectionImages section={section} client:load/>;
+          break;
+        case 'file':
+          comp = <RenderSectionFile section={section} client:load/>;
+          break;
+        case 'animal-updates':
+          comp = <RenderSectionAnimalUpdates section={section}/>;
           break;
         default:
           comp = <div>Sektionstyp nicht unterstützt</div>;
           break;
         }
 
-      return <div style={`flex: ${column.Grow} 1 0px`} class={'section sui flex-x wrap'}>{comp}</div>;
+      return <div class={`section-${section.SectionType} sui flex-x wrap`}>{comp}</div>;
       })
-    return <div class="column">{sections}</div>
+    return <div style={`flex: ${column.Grow} 1 0px`}  class="column">{sections}</div>
     })
 }
 </div>

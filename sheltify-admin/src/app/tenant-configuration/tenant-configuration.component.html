@@ -36,24 +36,32 @@
       <app-text-input class="sui grow-1" [(twoWayModel)]="options.LinkPaypal" idName="Paypal" label="Paypal"/>
     </form>
 
-    <h2>Administration</h2>
-    <app-text-input [(twoWayModel)]="options.BlogCategories" idName="blog-categories" label="Blogkategorien"
-                    explanation="Kommaseparierte Liste an Blogkategorien (z.B. Neuigkeiten,Veranstaltungen,Wissenswertes)"/>
-    <br>
-    <h3>Tierdatenpflege</h3>
-    <form class="sui flex-y gap-2 grow-1 pr-1 pb-3 pt-1">
+    @if(isAdmin) {
+      <h2>Administration</h2>
+      <app-text-input [(twoWayModel)]="options.BlogCategories" idName="blog-categories" label="Blogkategorien"
+                      explanation="Kommaseparierte Liste an Blogkategorien (z.B. Neuigkeiten,Veranstaltungen,Wissenswertes)"/>
+      <br>
+      <h3>Tierdatenpflege</h3>
+      <form class="sui flex-y gap-2 grow-1 pr-1 pb-3 pt-1">
 
-      <span>Verfügbare Funktionen</span>
-      <div class="sui flex-x wrap gap-2">
-        <app-checkbox-input idName="" label="Tierart auswählbar" [(twoWayModel)]="options.AnimalFeatureAnimalKind"/>
-        <app-checkbox-input idName="" label="Paten" [(twoWayModel)]="options.AnimalFeaturePatrons"/>
-        <app-checkbox-input idName="" label="Rasse" [(twoWayModel)]="options.AnimalFeatureRace"/>
-        <app-checkbox-input idName="" label="Standortangabe" [(twoWayModel)]="options.AnimalFeatureWhere"/>
-        <app-checkbox-input idName="" label="Keine Adoption" [(twoWayModel)]="options.AnimalFeatureNoAdoption"/>
-      </div>
-      @if (options.AnimalFeatureAnimalKind) {
-        <app-text-input [(twoWayModel)]="options.AnimalKinds" idName="animal-kinds" label="Tierarten" explanation="Kommaseparierte Liste an Tierarten (z.B. Hund,Katze,Kaninchen)"/>
-      }
-    </form>
+        <span>Verfügbare Funktionen</span>
+        <div class="sui flex-x wrap gap-2">
+          <app-checkbox-input idName="" label="Tierart auswählbar" [(twoWayModel)]="options.AnimalFeatureAnimalKind"/>
+          <app-checkbox-input idName="" label="Paten" [(twoWayModel)]="options.AnimalFeaturePatrons"/>
+          <app-checkbox-input idName="" label="Rasse" [(twoWayModel)]="options.AnimalFeatureRace"/>
+          <app-checkbox-input idName="" label="Standortangabe" [(twoWayModel)]="options.AnimalFeatureWhere"/>
+          <app-checkbox-input idName="" label="Keine Adoption" [(twoWayModel)]="options.AnimalFeatureNoAdoption"/>
+        </div>
+        @if (options.AnimalFeatureAnimalKind) {
+          <app-text-input [(twoWayModel)]="options.AnimalKinds" idName="animal-kinds" label="Tierarten" explanation="Kommaseparierte Liste an Tierarten (z.B. Hund,Katze,Kaninchen)"/>
+        }
+        <app-text-input [(twoWayModel)]="options.AnimalStati" idName="animal-kinds" label="Tier Stati" explanation="Kommaseparierte Liste an Tierarten (z.B. Hund,Katze,Kaninchen)"/>
+
+      </form>
+      <h3>Spezial Artikel-Sektionen</h3>
+      <app-text-input [twoWayModel]="JSON.stringify(options.SpecialArticleSections)" (twoWayModelChange)="setSpecialArticleSections($event)" [long]="true" idName="blog-categories" label="Blogkategorien"
+                      explanation="Kommaseparierte Liste an Blogkategorien (z.B. Neuigkeiten,Veranstaltungen,Wissenswertes)"/>
+    }
+
   }
 </div>

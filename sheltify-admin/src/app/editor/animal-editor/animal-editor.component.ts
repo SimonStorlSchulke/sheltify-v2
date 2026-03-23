@@ -3,7 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { firstValueFrom, lastValueFrom, Subject } from 'rxjs';
 import { CmsArticle } from 'sheltify-lib/article-types';
 import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
-import { CmsAnimal } from 'sheltify-lib/cms-types';
+import { CmsAnimal, CmsTenantConfiguration, SqlNullTimeNow } from 'sheltify-lib/cms-types';
+import { SaveAnimalComponent } from 'src/app/editor/animal-editor/save-animal/save-animal.component';
 import { ArticleEditorComponent } from 'src/app/editor/article-editor/article-editor.component';
 import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-input.component';
 import { DatePickerComponent } from 'src/app/forms/date-picker/date-picker.component';
@@ -47,8 +48,9 @@ export class AnimalEditorComponent {
   public saved = output<CmsAnimal | null>();
   public deleted = output();
 
-  public saveArticle$ = new Subject<void>();
+  public saveArticle$ = new Subject<{updateNote: string, pushUpdate: boolean}>();
 
+  public animalStati: string[] = [];
   public animalKinds: string[] = [];
 
   constructor(
@@ -59,17 +61,24 @@ export class AnimalEditorComponent {
   ) {
   }
 
-
   async ngOnInit() {
     this.animalKinds = (await this.tenantConfigurationService.animalKinds());
+    this.animalStati = (await this.tenantConfigurationService.animalStati());
+    console.log("animalStati", this.animalStati)
   }
 
-  async save() {
+  async saveFromUI() {
+    const saveOptions = await this.modalService.openFinishable(SaveAnimalComponent);
+    if (!saveOptions) return;
+    this.save(saveOptions.pushUpdate, saveOptions.updateNote);
+  }
+
+  async save(pushUpdate: boolean = false, updateNote: string = '') {
     const savedAnimal = await this.animalService.save(this.animal()!);
 
     if (savedAnimal) {
       this.saved.emit(savedAnimal!);
-      this.saveArticle$.next();
+      this.saveArticle$.next({updateNote, pushUpdate});
     }
   }
 
@@ -78,7 +87,7 @@ export class AnimalEditorComponent {
 
     if (savedAnimal) {
       this.saved.emit(savedAnimal!);
-      this.saveArticle$.next();
+      this.saveArticle$.next({pushUpdate: false, updateNote: ''});
     }
   }
 
@@ -90,8 +99,11 @@ export class AnimalEditorComponent {
   }
 
   protected async assignExistingArticle() {
+    const selectableAnimals = this.animals()?.filter(animal => (
+      animal.ID !== this.animal()?.ID) && this.animalService.hasArticle(animal)
+    );
     const selectedAnimal = await this.modalService.openFinishable(AnimalPickerDialogComponent, {
-      animals: this.animals()!
+      animals: selectableAnimals,
     });
 
     if (selectedAnimal) {
@@ -104,5 +116,14 @@ export class AnimalEditorComponent {
     if (!await this.alertService.confirmDelete()) return;
     await lastValueFrom(this.cmsRequestService.deleteAnimals([this.animal()!.ID]));
     this.deleted.emit();
+  }
+
+  public setStatus(status: string, active: boolean): void {
+    const animal = this.animal()!;
+    let currentStati = animal.Status?.split(',') ?? []
+    currentStati = currentStati.filter(status => this.animalStati.includes(status));
+    const stati = new Set(currentStati);
+    active ? stati.add(status) : stati.delete(status);
+    animal.Status = [...stati].join(',');
   }
 }

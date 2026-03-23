@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, GuardResult, MaybeAsync, RouterStateSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, GuardResult, RouterStateSnapshot, Router } from '@angular/router';
 import { AuthService } from './auth.service';
 import { map, lastValueFrom } from 'rxjs';
 
@@ -18,5 +18,16 @@ export class AuthGuard implements CanActivate {
       }
       return isLoggedIn;
 
+  }
+}
+
+@Injectable({providedIn: 'root'})
+export class SuperAdminAuthGuard implements CanActivate {
+
+  authService = inject(AuthService);
+  router = inject(Router);
+
+  async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<GuardResult> {
+      return await lastValueFrom(this.authService.reLogin().pipe(map(user => user?.Role == 'SUPERADMIN')));
   }
 }

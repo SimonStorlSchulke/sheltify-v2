@@ -9,6 +9,19 @@
 }
 
 .themable.article {
+
+  .themable-bg-accent-1 {
+    background: var(--themable-bg-accent-1);
+  }
+
+  .themable-bg-accent-2 {
+    background: var(--themable-bg-accent-2);
+  }
+
+  .themable-bg-accent-3 {
+    background: var(--themable-bg-accent-3);
+  }
+
   .section-separator-x hr {
     height: 30px;
     position: absolute;
@@ -94,6 +107,19 @@
       font-weight: 800;
       left: 20px;
       font-size: 60px;
+    }
+  }
+
+  .section-animal-updates {
+    .update-entry {
+      box-shadow: 2px 2px 6px #00000036;
+      background: var(--c-accent);
+      border-radius: 10px;
+      overflow: hidden;
+
+      &:hover {
+        color: var(--c-primary) !important;
+      }
     }
   }
 }

@@ -10,9 +10,23 @@ export type SqlNullBool = {
   Valid: boolean, // Valid is true if Bool is not NULL
 }
 
-export const SqlNullBoolNull: SqlNullBool = {Bool: false, Valid: false}
-export const SqlNullBoolTrue: SqlNullBool = {Bool: true, Valid: true}
-export const SqlNullBoolFalse: SqlNullBool = {Bool: false, Valid: true}
+export const SqlNullBoolNull: () => SqlNullBool = () => ({Bool: false, Valid: false});
+export const SqlNullBoolTrue: () => SqlNullBool = () => ({Bool: true, Valid: true});
+export const SqlNullBoolFalse:  () => SqlNullBool = () => ({Bool: false, Valid: true});
+export const SqlNullTimeNull:  () => SqlNullTime = () => ({Time: null, Valid: false});
+export const SqlNullTimeNow: () => SqlNullTime = () => ({Valid: true, Time: new Date().toISOString()});
+
+export function setPublishedAt(publishable: Publishable, published: boolean) {
+  if(published) {
+    publishable.PublishedAt = SqlNullTimeNow();
+  } else {
+    publishable.PublishedAt = SqlNullTimeNull();
+  }
+}
+
+export function togglePublishedAt(publishable: Publishable) {
+  setPublishedAt(publishable, !publishable.PublishedAt?.Valid)
+}
 
 export type CmsType = {
   ID: string,
@@ -43,13 +57,12 @@ export type Publishable = CmsType & {
   PublishedAt?: SqlNullTime,
 }
 
-export type AnimalStatusName = "in-spaichingen" | "in-bulgarien" | "vermittlungshilfe" | "zuhause-gefunden" | "vermisst" | "fundtier";
-
 // New CMS types
 export type CmsAnimal = Publishable & {
   Name: string;
   AnimalKind?: string,
-  Birthday?: string;
+  Race: string,
+  Birthday: SqlNullTime;
   WeightKg: number;
   ShoulderHeightCm: number;
   Castrated: SqlNullBool;
@@ -113,8 +126,9 @@ export type CmsTag = CmsType & {
 export type CmsTenantConfiguration = CmsType & {
   Name: string,
   SiteUrl: string,
-  AnimalKinds: string,
-  BlogCategories: string,
+  AnimalKinds: string, //comma separated list
+  AnimalStati: string, //comma separated list
+  BlogCategories: string, //comma separated list
   DefaultAnimalKind: string,
   CmsShowAnimalKindSelector: boolean,
   Address: string,
@@ -136,6 +150,8 @@ export type CmsTenantConfiguration = CmsType & {
   AnimalFeatureRace: boolean,
   AnimalFeatureAnimalKind: boolean,
   AnimalFeatureNoAdoption: boolean,
+  AnimalShowUpdatesForDays: number,
+  SpecialArticleSections: Record<string, {Name: string, Type: "string" | "number" | "boolean" | "image" }[]>
 }
 
 export type CmsBlogEntry = Publishable & {

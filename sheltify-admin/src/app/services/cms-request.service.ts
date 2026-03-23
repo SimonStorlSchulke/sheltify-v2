@@ -1,6 +1,17 @@
 import { Injectable, inject } from '@angular/core';
 import { AnimalsFilter, CmsArticle } from 'sheltify-lib/article-types';
-import { CmsAnimal, CmsBlogEntry, CmsFormSubmission, CmsHomeFoundEntry, CmsImage, CmsPage, CmsTag, CmsTeamMember, CmsTenantConfiguration } from 'sheltify-lib/cms-types';
+import {
+  CmsAnimal,
+  CmsBlogEntry,
+  CmsFormSubmission,
+  CmsHomeFoundEntry,
+  CmsImage,
+  CmsPage,
+  CmsTag,
+  CmsTeamMember,
+  CmsTenantConfiguration,
+  Publishable, SqlNullTimeNow
+} from 'sheltify-lib/cms-types';
 import { filterPublishedAndHasArticle, sortByPriorityAndUpdatedAt } from 'sheltify-lib/dist/cms-utils';
 import { LoaderService } from 'src/app/layout/loader/loader.service';
 import { AlertService } from 'src/app/services/alert.service';
@@ -148,6 +159,11 @@ export class CmsRequestService {
       .pipe(map(response => sortByPriorityAndUpdatedAt(filterPublishedAndHasArticle(response))));
   }
 
+  public getAnimalUpdates(days: number): Observable<CmsAnimal[]> {
+    return this.get<CmsAnimal[]>(`${this.publicTenantsUrl}/animals/updates/${days}`)
+      .pipe(map(response => sortByPriorityAndUpdatedAt(filterPublishedAndHasArticle(response))));
+  }
+
   public saveAnimal(animal: CmsAnimal): Observable<CmsAnimal> {
     return this.postOrPatch('animals', animal);
   }
@@ -201,6 +217,10 @@ export class CmsRequestService {
       },
       withCredentials: true,
     });
+  }
+
+  public readSubmittedForm(id: string) {
+    return this.post<CmsFormSubmission[]>(`forms/read/${id}`, {});
   }
 
   public getSubmittedForms() {
@@ -350,3 +370,4 @@ export class CmsRequestService {
     }
   }
 }
+

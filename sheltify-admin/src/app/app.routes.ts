@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AdministrationComponent } from 'src/app/administration/administration.component';
 import { PageListComponent } from 'src/app/editor/blog-list/page-list.component';
 import { HomeFoundListComponent } from 'src/app/editor/home-found-list/home-found-list.component';
 import { BlogListComponent } from 'src/app/editor/page-list/blog-list.component';
@@ -8,7 +9,7 @@ import { TenantConfigurationComponent } from 'src/app/tenant-configuration/tenan
 import { LoginComponent } from './pages/login/login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { AnimalListComponent } from './editor/animal-list/animal-list.component';
-import { AuthGuard } from './services/auth-guard.service';
+import { AuthGuard, SuperAdminAuthGuard } from './services/auth-guard.service';
 import { SubmittedFormsComponent } from './submitted-forms/submitted-forms.component';
 
 export const routes: Routes = [
@@ -28,4 +29,5 @@ export const routes: Routes = [
   {path: "tiere/:id", component: AnimalListComponent, canActivate: [AuthGuard]},
   {path: "formulare", component: SubmittedFormsComponent, canActivate: [AuthGuard]},
   {path: "formulare/:id", component: SubmittedFormsComponent, canActivate: [AuthGuard]},
+  {path: "administration", component: AdministrationComponent, canActivate: [SuperAdminAuthGuard]},
 ];

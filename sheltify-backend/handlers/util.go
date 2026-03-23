@@ -18,7 +18,7 @@ import (
 func idFromParameter(w http.ResponseWriter, r *http.Request) (string, error) {
 	id := chi.URLParam(r, "id")
 
-	if id == "nil" {
+	if id == "" {
 		badRequestResponse(w, r, "id must be provided")
 		return "", errors.New("id not provided")
 	}

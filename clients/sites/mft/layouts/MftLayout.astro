@@ -1,0 +1,30 @@
+---
+import Footer from '@shared/components/Footer.astro';
+import Header from '@shared/components/Header.astro';
+import Layout from '@shared/layouts/Layout.astro';
+
+import '../theme/_index.scss'
+import MftFooter from '../components/MftFooter.astro';
+import type { SeoData } from '@shared/types/seo-data';
+
+interface Props {
+  seo: SeoData;
+}
+const {seo} = Astro.props;
+---
+
+<Layout seo={seo}>
+  <Header/>
+  <main>
+    <slot/>
+  </main>
+  <MftFooter/>
+  <Footer/>
+</Layout>
+
+<style>
+    main {
+        padding-top: var(--header-height);
+        min-height: 100dvh;
+    }
+</style>

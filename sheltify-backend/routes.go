@@ -31,6 +31,7 @@ func publicRoutes(r *chi.Mux) {
 	r.Get("/animals/{id}", handlers.GetAnimalById)
 	r.Get("/animals/filtered", handlers.GetFilteredAnimals)
 	r.Get("/animals/by-article/{id}", handlers.GetAnimalsByArticleId)
+	r.Get("/animals/updates/{days}", handlers.GetAnimalUpdates)
 	r.Get("/animals", handlers.GetAnimals)
 	r.Get("/home-found-entries", handlers.GetHomeFoundEntries)
 	r.Get("/home-found-entries/{id}", handlers.GetHomeFoundEntryById)
@@ -98,4 +99,5 @@ func adminRoutes(r *chi.Mux) {
 	r.Get("/forms/submitted", handlers.GetSubmittedForms)
 	r.Get("/forms/submitted/{id}", handlers.GetFormById)
 	r.Delete("/forms/submitted", handlers.DeleteFormByIds)
+	r.Post("/forms/read/{id}", handlers.FormRead)
 }

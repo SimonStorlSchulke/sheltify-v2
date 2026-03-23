@@ -7,16 +7,35 @@ import (
 	"sheltify-new-backend/logger"
 	"sheltify-new-backend/repository"
 	"sheltify-new-backend/services"
+	"sheltify-new-backend/shtypes"
 )
 
 func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		bypassAuth := os.Getenv("API_BEARER") != r.Header.Get("Authorization")
+		expectedBypassBearer := os.Getenv("API_BEARER")
+		sentBypassBearer := r.Header.Get("Authorization")
+
+		bypassAuthEnabled := expectedBypassBearer != ""
+		tryBypassAuth := sentBypassBearer != "" && sentBypassBearer != "Bearer"
+
+		var user *shtypes.User
+
+		if tryBypassAuth && bypassAuthEnabled {
+			if sentBypassBearer == "Bearer "+expectedBypassBearer {
+				logger.Info(r, "Bypassing authentication with valid bearer token")
+				ctx := context.WithValue(r.Context(), "user", &shtypes.BypassAuthUser)
+				next.ServeHTTP(w, r.WithContext(ctx))
+				return
+			} else {
+				http.Error(w, "Invalid Bearer Token", http.StatusForbidden)
+				return;
+			}
+		}
 
 		user, err := services.Authorize(r)
-
-		if err != nil && !bypassAuth {
+		
+		if err != nil {
 			http.Error(w, "Authorization Failed", http.StatusForbidden)
 			return
 		}
@@ -36,6 +55,11 @@ func SetNeedsRebuild(next http.Handler) http.Handler {
 		switch r.Method {
 		case http.MethodPost, http.MethodPatch, http.MethodDelete:
 			user := services.UserFromRequest(r)
+
+			if(user == nil) {
+				logger.Error(r, "No user found in context for SetNeedsRebuild middleware")
+				return
+			}
 
 			config, err := repository.GetConfigByTenantId(user.TenantID)
 			if err != nil {

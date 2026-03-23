@@ -1,0 +1,22 @@
+<div class="sui flex-y gap-2">
+  <b>{{ section().Content.Type }}</b>
+  <label>Eigenschaften</label>
+  <div class="sui flex-y gap-2">
+    @for (property of section().Content.Properties; track $index) {
+      @let propertyName = property[0];
+      @let propertyType = property[1];
+      @if (section().Content.PropertyValues) {
+        @switch (propertyType) {
+          @case ('string') {
+            <app-text-input class="sui grow-1" idName="text" [long]="true" [label]="propertyName" [(twoWayModel)]="section().Content.PropertyValues[$index]"/>
+          }
+          @case ('image') {
+            <app-image-picker-single class="sui grow-1" idName="text" [label]="propertyName" [(twoWayModel)]="section().Content.PropertyValues[$index]"/>
+          }
+        }
+      } @else {
+        <p>Kaputter Zustand - bitte Simon melden / Nochmal probieren</p>
+      }
+    }
+  </div>
+</div>

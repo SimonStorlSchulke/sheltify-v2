@@ -3,4 +3,8 @@
     <span>{{entry[1].title}}</span>
     <button [attr.data-testid]="'btn-select-animalarticle-' + entry[1].title" class="small" (click)="finishWith(entry[1].animals[0])">auswählen ></button>
   </div>
+} @empty {
+  <p>Keine Tiere entsprechen den Anforderungen</p>
+  <br>
+  <button class="secondary" (click)="cancel()">Ok</button>
 }

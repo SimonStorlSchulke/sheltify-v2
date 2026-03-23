@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { CmsImage, CmsImagesSize } from 'sheltify-lib/dist/cms-types';
+  import type { CmsImage, CmsImagesSize } from 'sheltify-lib/cms-types';
   import { getImageSrc } from '../util';
 
   interface Props {

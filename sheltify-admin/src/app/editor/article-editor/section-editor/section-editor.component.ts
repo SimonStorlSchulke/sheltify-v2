@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, HostListener, input, signal, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, HostListener, input, model, signal, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
 import { Section } from 'sheltify-lib/article-types';
 import { ArticleEditorService } from 'src/app/editor/article-editor/article-editor.service';
@@ -22,12 +22,13 @@ import { sectionLabels } from 'src/app/services/article-renderer';
 export class SectionEditorComponent {
   public section = input.required<Section>();
   public rowIndex = input.required<number>();
-  public editMode = signal(false);
+  public editable = input.required<boolean>();
+  public editedRow = model<number>();
 
   @ViewChild('outlet', { read: ViewContainerRef }) outletRef!: ViewContainerRef;
   @ViewChild('preview', { read: TemplateRef }) previewRef!: TemplateRef<any>;
 
-  constructor(private articleEditorService: ArticleEditorService) {
+  constructor(private articleEditorService: ArticleEditorService, private elementRef: ElementRef) {
   }
 
   public triggerRerender() {
@@ -45,23 +46,23 @@ export class SectionEditorComponent {
     this.articleEditorService.deleteSection(this.rowIndex());
   }
 
-  public enterEditMode(event: MouseEvent) {
-    event.stopPropagation();
-    this.editMode.set(true);
-  }
-
   @HostListener('document:click', ['$event'])
-  deselectSections(event: any) {
-    if (this.editMode()) {
+  deselectSection(event: any) {
+    if (this.editedRow() == this.rowIndex()) {
 
       const target = event!.target as HTMLElement;
 
-      // Only react if the click occurred inside <main>
+      // Only react if the click outside this section editor
+      if(this.elementRef.nativeElement.contains(target)) {
+        return
+      }
+
+      // ...and if the inside <main> (not sidebar)
       if (!target.closest('main')) {
         return;
       }
 
-      this.editMode.set(false);
+      this.editedRow.set(-1);
       this.triggerRerender();
     }
   }

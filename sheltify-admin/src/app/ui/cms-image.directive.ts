@@ -1,4 +1,4 @@
-import { Directive, effect, ElementRef, input, OnChanges, Renderer2 } from '@angular/core';
+import { Directive, effect, ElementRef, input, Renderer2 } from '@angular/core';
 import { CmsImage, CmsImagesSize } from 'sheltify-lib/cms-types';
 import { getImageFormatUrl } from 'src/app/services/article-renderer';
 

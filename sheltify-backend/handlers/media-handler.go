@@ -146,7 +146,7 @@ func UploadFiles(w http.ResponseWriter, r *http.Request) {
 
 	for _, uploadedFile := range uploadedFiles {
 
-		filename := uuid
+		filename := uuid + filepath.Ext(entity.OriginalFileName)
 		savePath := filepath.Join("uploads", filename)
 		fmt.Println(savePath)
 

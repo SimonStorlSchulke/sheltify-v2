@@ -1,7 +1,22 @@
 <div class="sui flex-y gap-1">
-  @for (sectionType of SectionTypes; track sectionType) {
-    <button [attr.data-testid]="'btn-add-section-' + sectionType" (click)="finishWith(sectionType)">{{sectionLabels.get(sectionType) ?? sectionType}}</button>
-  }
+  <div class="sui flex-x gap-2">
+    <div class="sui flex-y gap-1">
+      <h3>Sektionstypen</h3>
+      @for (sectionType of SectionTypes; track sectionType) {
+        <button class="secondary" [attr.data-testid]="'btn-add-section-' + sectionType" (click)="finishWith(sectionType)">{{ sectionLabels.get(sectionType) ?? sectionType }}</button>
+      }
+    </div>
+
+    <div class="sui flex-y gap-1 ai-start">
+      <h3>Speziell für {{tenantName()}}</h3>
+      @if (tenantsSpecialSections(); as tenantsSpecialSections) {
+        @for (section of tenantsSpecialSections; track $index) {
+          <button (click)="pickSpecialSection($index)" class="secondary">{{ section[0] }}</button>
+        }
+      }
+    </div>
+  </div>
+
   <br>
   <button (click)="cancel()">Abbrechen</button>
 </div>

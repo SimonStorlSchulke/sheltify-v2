@@ -19,6 +19,10 @@ import {
   bootstrapHeartFill,
   bootstrapInfoCircle,
   bootstrapEnvelopeFill,
+  bootstrapPaintBucket,
+  bootstrapChevronDown,
+  bootstrapChevronLeft,
+  bootstrapChevronRight
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
@@ -27,6 +31,7 @@ export type IconName =
   | 'GripVertical'
   | 'X'
   | 'Plus'
+  | 'Minus'
   | 'Eye'
   | 'CardImage'
   | 'GearFill'
@@ -43,6 +48,10 @@ export type IconName =
   | 'HeartFill'
   | 'InfoCircle'
   | 'EnvelopeFill'
+  | 'PaintBucket'
+  | 'ChevronDown'
+  | 'ChevronLeft'
+  | 'ChevronRight'
 
 @Component({
   selector: 'app-bt-icon',
@@ -71,6 +80,10 @@ export type IconName =
       bootstrapHeartFill,
       bootstrapInfoCircle,
       bootstrapEnvelopeFill,
+      bootstrapPaintBucket,
+      bootstrapChevronDown,
+      bootstrapChevronLeft,
+      bootstrapChevronRight,
     }
   )]
 })

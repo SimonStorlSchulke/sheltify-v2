@@ -39,6 +39,27 @@ func FormSubmit(w http.ResponseWriter, r *http.Request) {
 	emptyOkResponse(w)
 }
 
+func FormRead(w http.ResponseWriter, r *http.Request) {
+	id, err := idFromParameter(w, r)
+	if err != nil {
+		badRequestResponse(w, r, "Invalid form ID")
+		return
+	}
+	user := services.UserFromRequest(r)
+	var form *shtypes.FormSubmission
+	if err := repository.DefaultGetByID(id, user.TenantID, &form); err != nil {
+		http.NotFound(w, r)
+		return
+	}
+
+	form.LastModifiedBy = user.ID
+	if err := repository.SaveFormSubmission(form); err != nil {
+		internalServerErrorResponse(w, r, "Failed to mark form LastModifiedBy")
+		return
+	}
+
+}
+
 func GetFormById(w http.ResponseWriter, r *http.Request) {
 	var form *shtypes.FormSubmission
 	user := services.UserFromRequest(r)

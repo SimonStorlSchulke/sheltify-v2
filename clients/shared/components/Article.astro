@@ -2,12 +2,14 @@
 import { cms } from '@shared/cms/sheltify-access.ts';
 import SectionRendererColumns from '@shared/components/sections/SectionRendererColumns.astro';
 import RenderSectionAnimalList from 'article-renderer/components/RenderSectionAnimalList.svelte';
-import type { CmsArticle, SectionType } from 'sheltify-lib/article-types.ts';
+import RenderSectionFile from 'article-renderer/components/RenderSectionFile.svelte';
+import type { CmsArticle, Section, SectionType } from 'sheltify-lib/article-types.ts';
 import RenderSectionTitle from 'article-renderer/components/RenderSectionTitle.svelte';
 import RenderSectionText from 'article-renderer/components/RenderSectionText.svelte';
 import RenderSectionImages from 'article-renderer/components/RenderSectionImages.svelte';
 import RenderSectionHero from 'article-renderer/components/RenderSectionHero.svelte';
 import RenderSectionForm from 'article-renderer/components/RenderSectionForm.svelte';
+import RenderSectionAnimalUpdates from 'article-renderer/components/RenderSectionAnimalUpdates.svelte';
 import "article-renderer/styles/_index.scss"
 import { animalsByArticleId } from 'sheltify-lib/animal-util.ts';
 
@@ -30,6 +32,9 @@ async function populateDynamicData() {
     switch (section.SectionType) {
       case 'animal-list':
         section.TempFoundAnimals = await cms.getFilteredAnimals(section.Content);
+        break;
+      case 'animal-updates':
+        section.TempAnimalsByArticle = animalsByArticleId(await cms.getAnimalUpdates(section.Content.days));
         break;
       case 'image':
           section.Content.MediaFiles = await cms.getMediaFilesByIds(section.Content.MediaFiles.map(i => i.ID));
@@ -68,22 +73,32 @@ const allAnimalsByArticle = animalsByArticleId(await cms.animals);
             comp = <RenderSectionAnimalList section={section} allAnimalsByArticle={allAnimalsByArticle}/>;
             break;
           case 'image':
-            comp = <RenderSectionImages section={section} client:visible/>;
+            comp = <RenderSectionImages section={section} client:load/>;
+            break;
+          case 'file':
+            comp = <RenderSectionFile section={section} client:load/>;
             break;
           case 'columns':
             comp = <SectionRendererColumns section={section}/>;
             break;
           case 'form':
-            comp = <RenderSectionForm section={section} submitUrl={cms.formSubmitUrl} client:load/>;
+            comp = <RenderSectionForm section={section} submitUrl={cms.formSubmitUrl} client:visible/>;
             break;
           case 'html':
             comp = <div set:html={section.Content.Html}/>;
             break;
+          case 'animal-updates':
+            comp = <RenderSectionAnimalUpdates section={section}  allAnimalsByArticle={allAnimalsByArticle}/>;
+          break;
           default:
             comp = <div>Sektionstyp nicht unterstützt</div>;
             break;
           }
-      return <div class={`row section-${section.SectionType}` + (isFullWidth ? ' full-width' : '') + (isFullWidthAndPadding ? ' full-width full-width-padding' : '')}>{comp}</div>
+      const rowClasses = (isFullWidth ? ' full-width' : '')
+        + (isFullWidthAndPadding ? ' full-width full-width-padding' : '')
+        + (section.BackgroundColor ? ' themable themable-bg-' + section.BackgroundColor : '')
+
+      return <div class={`row section-${section.SectionType}` + rowClasses}><div class={`row-wrapper` + rowClasses}>{comp}</div></div>
       }
     )
   }
@@ -91,19 +106,27 @@ const allAnimalsByArticle = animalsByArticleId(await cms.animals);
 
 <style is:global lang="scss">
   .article {
-    gap: var(--section-gap-y);
+    //gap: var(--section-gap-y);
     .row {
-      &:not(.full-width) {
-        width: var(--wrapper-width);
-        max-width: 100%;
-        margin-left: auto;
-        margin-right: auto;
+      &:not(:first-of-type) {
+        padding-top: calc(var(--section-gap-y) / 2);
+        padding-bottom: calc(var(--section-gap-y) / 2);
       }
 
-      &.full-width-padding {
-        width: 100%;
-        padding: calc(var(--padding-article) / 2);
+      .row-wrapper {
+        &:not(.full-width) {
+          width: var(--wrapper-width);
+          max-width: 100%;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        &.full-width-padding {
+          width: 100%;
+          padding: calc(var(--padding-article) / 2);
+        }
       }
+
     }
 
 

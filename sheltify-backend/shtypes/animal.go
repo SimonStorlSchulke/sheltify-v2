@@ -2,13 +2,12 @@ package shtypes
 
 import (
 	"database/sql"
-	"time"
 )
 
 type Animal struct {
 	Publishable
 	Name             string
-	Birthday         *time.Time
+	Birthday         sql.NullTime
 	WeightKg         uint
 	ShoulderHeightCm uint
 	Castrated        sql.NullBool

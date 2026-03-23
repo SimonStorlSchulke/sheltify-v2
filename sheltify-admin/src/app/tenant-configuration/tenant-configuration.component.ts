@@ -1,10 +1,12 @@
-import { Component, model, OnInit, signal } from '@angular/core';
+import { Component, inject, model, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { CmsTenantConfiguration } from 'sheltify-lib/cms-types';
 import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-input.component';
 import { ImagePickerSingleComponent } from 'src/app/forms/image-picker-single/image-picker-single.component';
 import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
+import { AlertService } from 'src/app/services/alert.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
 
@@ -22,11 +24,13 @@ import { TenantConfigurationService } from 'src/app/services/tenant-configuratio
 export class TenantConfigurationComponent implements OnInit {
 
   public options = model<CmsTenantConfiguration | undefined>(undefined);
+  public isAdmin = inject(AuthService).isAdmin();
 
 
   constructor(
     private cmsRequestService: CmsRequestService,
     private tenantConfigurationService: TenantConfigurationService,
+    private readonly alertService: AlertService,
   ) {
   }
 
@@ -54,13 +58,16 @@ export class TenantConfigurationComponent implements OnInit {
         LinkYoutube: '',
         PhoneNumber: '',
         AnimalKinds: '',
+        AnimalStati: '',
         BlogCategories: '',
         AnimalFeatureWhere: true,
         AnimalFeaturePatrons: true,
         AnimalFeatureRace: true,
         AnimalFeatureAnimalKind: true,
         AnimalFeatureNoAdoption: true,
+        AnimalShowUpdatesForDays: 1,
         NeedsRebuild: true,
+        SpecialArticleSections: {},
       });
     }
   }
@@ -68,5 +75,16 @@ export class TenantConfigurationComponent implements OnInit {
   public async save() {
     await firstValueFrom(this.cmsRequestService.saveTenantConfiguration(this.options()!));
     this.tenantConfigurationService.reloadConfig();
+  }
+
+  protected readonly JSON = JSON;
+
+  protected setSpecialArticleSections(value: string) {
+    try {
+      this.options()!.SpecialArticleSections = JSON.parse(value);
+    } catch (error) {
+      this.alertService.openToast('Fehler', 'Konnte SpecialArticleSections nicht verarbeiten. Open Console for error Info', 'error');
+      console.log(error);
+    }
   }
 }

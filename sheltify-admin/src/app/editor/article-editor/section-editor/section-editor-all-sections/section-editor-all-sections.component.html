@@ -18,6 +18,9 @@
   @case ('animal-list') {
     <app-section-editor-animal-list [section]="sectionVal" (triggerRerender)="triggerRerender.emit()"/>
   }
+  @case ('animal-updates') {
+    <app-section-editor-animal-updates [section]="sectionVal" (triggerRerender)="triggerRerender.emit()"/>
+  }
   @case ('html') {
     <app-section-editor-html [section]="sectionVal"/>
   }
@@ -29,5 +32,11 @@
   }
   @case ('file') {
     <app-section-editor-file [section]="sectionVal"/>
+  }
+  @case ('special') {
+    <app-section-editor-special [section]="sectionVal"/>
+  }
+  @case ('home-found') {
+    <app-section-editor-home-found [section]="sectionVal"/>
   }
 }

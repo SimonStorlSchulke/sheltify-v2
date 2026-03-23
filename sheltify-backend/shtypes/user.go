@@ -9,3 +9,11 @@ type User struct {
 	SessionToken   *string
 	CsrfToken      *string
 }
+
+var BypassAuthUser = User{
+	Name: "BypassAuthUser",
+	Role: "admin",
+	CmsType: CmsType{
+		TenantID: "snhg", //todo
+	},
+}

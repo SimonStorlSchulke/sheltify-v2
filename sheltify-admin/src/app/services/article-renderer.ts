@@ -13,7 +13,8 @@ export const sectionLabels = new Map<SectionType, string>([
   ['hero', 'Hero'],
   ['columns', 'Spalten'],
   ['form', 'Formular'],
-  ['home-found','Rückmeldungen']
+  ['home-found','Rückmeldungen'],
+  ['animal-updates','Tier-Updates'],
 ]);
 
 export function getImageFormatUrl(image: CmsImage, requestedSize: CmsImagesSize): string {

@@ -1,0 +1,16 @@
+@use "header";
+@use "article";
+@use "footer";
+@use "font";
+@use "animal-card";
+@use "buttons";
+@use "colors";
+
+
+:root {
+  --wrapper-width: min(1250px, 100dvw - var(--padding-article));
+}
+body {
+  font-family: system-ui;
+  background-color: #f7f5f3;
+}

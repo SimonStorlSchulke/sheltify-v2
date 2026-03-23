@@ -1,5 +1,5 @@
 @let sectionVal = section();
-<div [class]="'themable section-' + sectionVal.SectionType">
+<div [class]="'section-renderer section-' + sectionVal.SectionType + ' themable-bg-' + sectionVal.BackgroundColor">
   @if(sectionVal.SectionType == 'columns') {
   <div class="column-row sui flex-x">
     @for(column of sectionVal.Content.Columns; track $index) {
@@ -12,8 +12,6 @@
       </div>
     }
   </div>
-
-
 } @else {
   <ng-container *ngTemplateOutlet="singleSection; context: { $implicit: sectionVal }"></ng-container>
 }
@@ -40,6 +38,9 @@
     @case ('animal-list') {
       <section-animal-list [section]="sectionVal" />
     }
+    @case ('animal-updates') {
+      <section-animal-updates [section]="sectionVal"/>
+    }
     @case ('html') {
       <div [innerHTML]="sectionVal.Content.Html"></div>
     }
@@ -51,6 +52,9 @@
     }
     @case ('form') {
       <section-form [section]="sectionVal" />
+    }
+    @case('special') {
+      <span class="sui text-secondary">Spezlaisektion <b>'{{sectionVal.Content.Type}}'</b>. Diese Sektion ist speziell auf die Webseite einer bestimmten Organisation zugeschnitten und hat hier daher keine Vorschau.</span>
     }
   }
 </ng-template>

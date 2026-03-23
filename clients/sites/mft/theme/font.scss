@@ -1,0 +1,35 @@
+@font-face {
+  font-display: swap;
+  font-family: 'oswald';
+  src: url('/oswald.ttf') format('opentype'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+:root {
+  --fontsize-small: 1rem;
+  --fontsize-default: 1.2rem;
+  --fontsize-h1: 3.8rem;
+  --fontsize-h2: 2.8rem;
+  --fontsize-h3: 1.85rem;
+  --fontsize-h4: 1.55rem;
+}
+
+$breakpoint-small: 800px;
+$breakpoint-mobile: 1350px;
+
+@media (max-width: $breakpoint-mobile) {
+  :root {
+    --fontsize-small: 0.9rem;
+    --fontsize-default: 1rem;
+    --fontsize-h1: 2.8rem;
+    --fontsize-h2: 2rem;
+    --fontsize-h3: 1.6rem;
+    --fontsize-h4: 1.35rem;
+  }
+}
+
+$fontsize-small: var(--fontsize-small);
+$fontsize-default: var(--fontsize-default);
+$fontsize-h1: var(--fontsize-h1);
+$fontsize-h2: var(--fontsize-h2);
+$fontsize-h3: var(--fontsize-h3);
+$fontsize-h4: var(--fontsize-h4);

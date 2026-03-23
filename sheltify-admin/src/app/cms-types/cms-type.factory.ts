@@ -1,11 +1,11 @@
 import { CmsArticle } from 'sheltify-lib/article-types';
-import { CmsAnimal, CmsBlogEntry, CmsHomeFoundEntry, CmsPage, CmsTeamMember, SqlNullBoolNull } from 'sheltify-lib/cms-types';
+import { CmsAnimal, CmsBlogEntry, CmsHomeFoundEntry, CmsPage, CmsTeamMember, SqlNullBoolNull, SqlNullTimeNull } from 'sheltify-lib/cms-types';
 
 export function createNewAnimal(name: string): CmsAnimal {
   return {
     ID: '',
-    Birthday: "2018-03-29T15:04:05Z", //TODO
-    Castrated: SqlNullBoolNull,
+    Birthday: SqlNullTimeNull(), //TODO
+    Castrated: SqlNullBoolNull(),
     Gender: '',
     Where: '',
     Health: '',
@@ -19,8 +19,9 @@ export function createNewAnimal(name: string): CmsAnimal {
     Description: "",
     MediaFiles: [],
     NoAdoption: false,
-    FreeRoamer: SqlNullBoolNull,
+    FreeRoamer: SqlNullBoolNull(),
     HomeFoundStatus: 'no',
+    Race: '',
   };
 }
 
@@ -37,7 +38,12 @@ export function createHomeFoundEntry(animalID: string): CmsHomeFoundEntry {
 }
 
 export function createEmptyArticle(): CmsArticle {
-  return {ID: '', Structure: {Rows: []}, TenantID: ''}
+  return {
+    ID: '',
+    Structure: {Rows: []},
+    TenantID: '', ContentUpdateAt: SqlNullTimeNull(),
+    ContentUpdateNote: '',
+  }
 }
 
 export function createNewPage(): CmsPage {

@@ -10,11 +10,20 @@ func GetUserByName(name string) (*shtypes.User, error) {
 	return &user, nil
 }
 
-func CreateUser(userName string, email string, hasedPassword string, tenant string) (*shtypes.User, error) {
+func GetUserBySessionToken(sessionToken string) (*shtypes.User, error) {
+	var user shtypes.User
+	if err := db.Where("session_token = ?", sessionToken).First(&user).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
+func CreateUser(userName string, email string, hasedPassword string, tenant string, role string) (*shtypes.User, error) {
 	user := shtypes.User{
 		Name:           userName,
 		HashedPassword: hasedPassword,
 		Email:          email,
+		Role:           role,
 	}
 	user.SetTenantId(tenant)
 

@@ -1,0 +1,23 @@
+.opener {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  border-radius: 0 6px 6px 0;
+  padding: 16px 12px;
+  font-size: 32px;
+  z-index: 100;
+}
+
+@media (max-width: 1000px) {
+  .left-sidebar-layout {
+    &.mobile-open {
+      .left-sidebar {
+        display: none;
+      }
+
+      .opener {
+        display: block;
+      }
+    }
+  }
+}

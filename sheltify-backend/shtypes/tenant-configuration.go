@@ -36,8 +36,11 @@ type TenantConfiguration struct {
 	AnimalFeatureRace         bool
 	AnimalFeatureAnimalKind   bool
 	AnimalFeatureNoAdoption   bool
+	AnimalShowUpdatesForDays  int
 	LastBuild                 sql.NullTime
 	NeedsRebuild              bool
+	
+	SpecialArticleSections    map[string][]SpecialArticleSectionField `gorm:"serializer:json"`
 
 	AnimalFilterConfigForAnimalKind map[string]AnimalFilterConfiguration `gorm:"serializer:json"`
 }
@@ -75,6 +78,11 @@ func (cmsType *TenantConfiguration) SetLastModifiedBy(userId string) {
 	if userId != "" {
 		cmsType.LastModifiedBy = userId
 	}
+}
+
+type SpecialArticleSectionField struct {
+	Name string
+	Type string // ts types: string, number or boolean
 }
 
 type AnimalFilterConfiguration struct {

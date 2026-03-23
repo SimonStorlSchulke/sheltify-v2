@@ -4,10 +4,14 @@
   @for (column of section().Content.Columns; track column) {
     @let iCol = $index;
     <div class="column" [style.flex]="`${column.Grow} 1 0px`">
+
       <div class="column-header sui p-1 flex-x">
         <app-number-input idName="grow" label="Platz" [(twoWayModel)]="column.Grow"/>
-        <div class="sui grow-1"></div>
-        <ng-icon class="x" (click)="deleteColumn($index)" name="bootstrapX" size="22px"/>
+        <div class="button-group">
+          <button class="small"><app-bt-icon (click)="moveColumnLeft(iCol)" name="ChevronLeft"/></button>
+          <button class="small"><app-bt-icon (click)="moveColumnRight(iCol)" name="ChevronRight"/></button>
+          <button class="small"><app-bt-icon (click)="deleteColumn($index)" name="X"/></button>
+        </div>
       </div>
 
       <div class="column-sections">
@@ -16,12 +20,10 @@
 
         @for (section of column.Sections; track section) {
           @let iSection = $index;
-          <app-section-editor-column-sections [section]="section"/>
+          <app-section-editor-column-sections [section]="section" (deletedSection)="deleteSection(iCol, iSection)"/>
           <div (click)="addSectionAtRow(iCol, iSection + 1)" [attr.data-testid]="'row-selector-' + $index + 1" class="move-to-row"></div>
         }
       </div>
-
-
     </div>
   }
   <button (click)="addColumn()" class="add-column secondary small sui flex-x ai-center">

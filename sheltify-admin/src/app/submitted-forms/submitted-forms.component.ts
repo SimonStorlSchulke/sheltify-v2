@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
 import { LeftSidebarLayoutComponent } from '../layout/left-sidebar-layout/left-sidebar-layout.component';
 import { CmsRequestService } from '../services/cms-request.service';
 import { DatePipe } from '@angular/common';
@@ -19,7 +20,7 @@ export class SubmittedFormsComponent {
   public forms = signal<CmsFormSubmission[]>([]);
   public selectedForm = signal<CmsFormSubmission | undefined>(undefined);
 
-  constructor() {
+  constructor(private readonly authService: AuthService) {
     this.reloadForms();
   }
 
@@ -35,6 +36,23 @@ export class SubmittedFormsComponent {
       this.cmsRequestService.getSubmittedForm(id)
     );
     this.selectedForm.set(form);
+
+    if(!form.LastModifiedBy) {
+      await this.setLastModifiedBy(form, id);
+    }
+  }
+
+  private async setLastModifiedBy(form: CmsFormSubmission, id: string) {
+    await firstValueFrom(this.cmsRequestService.readSubmittedForm(form.ID));
+    const userId = this.authService.getLoggedInUser()?.ID;
+
+    const formInList = this.forms().find(cForm => cForm.ID === id);
+
+    if (formInList) {
+      formInList.LastModifiedBy = userId;
+    }
+
+    this.selectedForm()!.LastModifiedBy = userId;
   }
 
   public async deleteForm() {
@@ -45,5 +63,6 @@ export class SubmittedFormsComponent {
     this.forms.update((forms) =>
       forms.filter((f) => f.ID !== this.selectedForm()!.ID)
     );
+    this.selectedForm.set(this.forms()[0]);
   }
 }

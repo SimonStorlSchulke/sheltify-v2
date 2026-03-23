@@ -1,0 +1,17 @@
+<div class="sui flex-x gap-2" (input)="onInput.next()">
+
+  <app-number-input
+    idName="amount" label="Tage"
+    [(twoWayModel)]="section().Content.days"
+  />
+
+  <app-select-input
+    idName="gender" label="Geschlecht"
+    [options]="['compact', 'large']"
+    [optionTranslations]="{
+      compact: 'kompakt',
+      large: 'groß',
+    }"
+    [(twoWayModel)]="section().Content.layout"
+    (onInputChange)="onInput.next()"/>
+</div>

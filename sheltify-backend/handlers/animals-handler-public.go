@@ -5,6 +5,10 @@ import (
 	"sheltify-new-backend/repository"
 	"sheltify-new-backend/services"
 	"sheltify-new-backend/shtypes"
+	"strconv"
+	"time"
+
+	"github.com/go-chi/chi/v5"
 )
 
 func GetAnimalById(w http.ResponseWriter, r *http.Request) {
@@ -40,6 +44,36 @@ func GetAnimalsByArticleId(w http.ResponseWriter, r *http.Request) {
 func GetAnimals(w http.ResponseWriter, r *http.Request) {
 	var animals []*shtypes.Animal
 	DefaultGetAll(w, r, &animals, "Portrait")
+}
+
+func GetAnimalUpdates(w http.ResponseWriter, r *http.Request) {
+	days := chi.URLParam(r, "days")
+
+	if days == "" {
+		badRequestResponse(w, r, "days must be provided")
+		return
+	}
+
+	daysInt, err := strconv.Atoi(days)
+	if err != nil {
+		badRequestResponse(w, r, "invalid days parameter")
+		return
+	}
+
+	tenant, err := tenantFromParameter(w, r)
+	if err != nil {
+		return
+	}
+
+	date := time.Now().AddDate(0, 0, -daysInt)
+
+	animals, err := repository.GetAnimalsByArticleContentUpdatedAt(date, tenant)
+	if err != nil {
+		internalServerErrorResponse(w, r, "could not fetch animals")
+		return
+	}
+
+	okResponse(w, animals)
 }
 
 func GetLastModifiedAnimals(w http.ResponseWriter, r *http.Request) {

@@ -1,26 +1,18 @@
 @let sectionVal = section();
 
-<div [class.edit-mode]="editMode()" class="section" (click)="enterEditMode($event)">
+<div [class.edit-mode]="editedRow() == rowIndex()" class="section">
   <div class="section-titlebar sui flex-x px-2 gap-1 ai-center only-editmode">
-    <b class="sui py-2 grow-1">{{ sectionLabels.get(sectionVal.SectionType) ?? 'Sektion' }}</b>
+    <b class="sui py-2 grow-1">{{ sectionLabels.get(sectionVal.SectionType) ?? sectionVal.SectionType }}</b>
     <button (mousedown)="enterMoveMode()" class="move-button small">verschieben</button>
     <ng-icon class="x" (click)="deleteSection()" name="bootstrapX" size="22px"/>
   </div>
 
   <div class="section-content">
-
     <div class="section-preview themable article">
-
-      <ng-container
-        #outlet
-        [ngTemplateOutlet]="preview"
-      >
-      </ng-container>
-
-
+      <ng-container #outlet [ngTemplateOutlet]="preview"/>
     </div>
     <div class="section-editor only-editmode">
-      <app-section-editor-all-sections [section]="sectionVal" (triggerRerender)="triggerRerender()"/>
+      <app-section-editor-all-sections class="sui grow-1" [section]="sectionVal" (triggerRerender)="triggerRerender()"/>
     </div>
   </div>
 </div>

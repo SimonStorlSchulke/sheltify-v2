@@ -1,7 +1,11 @@
 :root {
   --c-primary: #ff9f10;
   --c-primary-h: #ffdbb3;
+  --c-accent: #e4ded8;
   --padding-article: 64px;
+  --themable-bg-accent-1: #e4ded8;
+  --themable-bg-accent-2: #ffdbb3;
+  --themable-bg-accent-3: #ff8a80;
 }
 
 .themable.animal-card {
@@ -103,6 +107,15 @@
   font-weight: 800;
   left: 20px;
   font-size: 60px;
+}
+.themable.article .section-animal-updates .update-entry {
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2117647059);
+  background: var(--c-accent);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.themable.article .section-animal-updates .update-entry:hover {
+  color: var(--c-primary) !important;
 }
 
 /*# sourceMappingURL=provided-article-theme.css.map */
