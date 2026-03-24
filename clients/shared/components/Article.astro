@@ -10,6 +10,8 @@ import RenderSectionImages from 'article-renderer/components/RenderSectionImages
 import RenderSectionHero from 'article-renderer/components/RenderSectionHero.svelte';
 import RenderSectionForm from 'article-renderer/components/RenderSectionForm.svelte';
 import RenderSectionSponsor from 'article-renderer/components/special-sections/mft/RenderSectionSponsor.svelte';
+import RenderSectionTierlisteHunde from 'article-renderer/components/special-sections/mft/RenderSectionTierlisteHunde.svelte';
+import RenderSectionTierlisteAuswahl from 'article-renderer/components/special-sections/mft/RenderSectionTierlisteAuswahl.svelte';
 import RenderSectionAnimalUpdates from 'article-renderer/components/RenderSectionAnimalUpdates.svelte';
 import "article-renderer/styles/_index.scss"
 import { animalsByArticleId } from 'sheltify-lib/animal-util.ts';
@@ -45,7 +47,9 @@ async function populateDynamicData() {
 
 
 const SpecialComponentMap: Record<string, any> = {
-  Sponsor: RenderSectionSponsor
+  Sponsor: RenderSectionSponsor,
+  'Tierliste - Hunde': RenderSectionTierlisteHunde,
+  'Tierliste - Auswahl': RenderSectionTierlisteAuswahl,
 };
 
 const allAnimalsByArticle = animalsByArticleId(await cms.animals);

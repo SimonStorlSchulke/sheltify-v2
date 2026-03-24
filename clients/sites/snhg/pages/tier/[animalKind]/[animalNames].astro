@@ -1,7 +1,7 @@
 ---
 import { cms } from '@shared/cms/sheltify-access.ts';
 import AnimalArticle from '@shared/components/AnimalArticle.astro';
-import SnhgLayout from '../../layouts/SnhgLayout.astro';
+import SnhgLayout from '../../../layouts/SnhgLayout.astro';
 
 export async function getStaticPaths() {
   return cms.getStaticPathsAnimals();

@@ -15,7 +15,7 @@ export function getAnimalLink(animal: CmsAnimal, allAnimalsByArticle: Record<str
   const animalsInArticle = allAnimalsByArticle[animal.ArticleID ?? ''];
   animalsInArticle.sort((a: CmsAnimal, b: CmsAnimal) => a.ID.localeCompare(b.ID));
   const names = animalsInArticle.map(animal => animal.Name).join('-');
-  return `/${animalsInArticle[0].AnimalKind}/${names}`;
+  return `/tier/${animalsInArticle[0].AnimalKind}/${names}`;
 }
 
 export async function downloadFile(file: CmsImage): Promise<void> {
