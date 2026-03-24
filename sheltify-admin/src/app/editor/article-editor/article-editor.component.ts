@@ -12,6 +12,7 @@ import { createEmptySection } from 'src/app/editor/article-editor/article-sectio
 import { PickNewSectionComponent } from 'src/app/editor/article-editor/pick-new-section/pick-new-section.component';
 import { SectionEditorComponent } from 'src/app/editor/article-editor/section-editor/section-editor.component';
 import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
+import { sectionLabels } from 'src/app/services/article-renderer';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { bootstrapEye } from '@ng-icons/bootstrap-icons';
@@ -31,7 +32,6 @@ export class ArticleEditorComponent implements OnInit {
 
   public articleId = input.required<string>();
   public saveArticle = input<Observable<{updateNote: string, pushUpdate: boolean} | undefined>>();
-  public isPreviewMode = signal<boolean>(false);
 
   public selectedFillColor = signal<string | undefined>(undefined);
   public editedRow = model<number | undefined>(undefined);
@@ -64,7 +64,7 @@ export class ArticleEditorComponent implements OnInit {
   }
 
   public async addSectionAtRow(row: number) {
-    if (!this.articleEditorService.article() || this.isPreviewMode()) return;
+    if (!this.articleEditorService.article()) return;
     if (this.articleEditorService.movedItem()) return;
     const article = this.articleEditorService.article()!;
 
@@ -139,5 +139,25 @@ export class ArticleEditorComponent implements OnInit {
       // wrap in timeout so the deselect in section-editor.component doesn't trigger after the select
       setTimeout(() => this.editedRow.set(row), 0);
     }
+  }
+
+  protected pasteSectionAtRow(event: MouseEvent, row: number) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (!this.articleEditorService.article()) return;
+    if (!this.articleEditorService.copiedSection()) return;
+    const article = this.articleEditorService.article()!;
+
+    let sectionRef = structuredClone(this.articleEditorService.copiedSection()!);
+    article.Structure.Rows.splice(row, 0, sectionRef);
+  }
+
+  protected readonly sectionLabels = sectionLabels;
+
+  protected cancelPaste(event: MouseEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.articleEditorService.copiedSection.set(null)
   }
 }

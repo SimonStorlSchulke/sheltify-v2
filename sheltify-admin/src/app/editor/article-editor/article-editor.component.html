@@ -1,11 +1,8 @@
-<div class="sui flex-y grow-1 article-container card" [class.previewMode]="isPreviewMode()" [class.dragMode]="articleEditorService.movedItem()">
+<div class="sui flex-y grow-1 article-container card" [class.dragMode]="articleEditorService.movedItem()">
 <span class="sui flex-x jc-end grow-1 gap-2">
   @if (!saveArticle()) {
     <button data-testid="btn-save-article" class="grow-1 primary" (click)="save({pushUpdate: false, updateNote: ''})">Speichern</button>
   }
-  <button data-testid="btn-preview-article" (click)="isPreviewMode.set(!isPreviewMode())" [class]="isPreviewMode() ? 'primary' : 'secondary'">
-    <ng-icon name="bootstrapEye"/>
-  </button>
 </span>
 
   @if (articleEditorService.article(); as article) {
@@ -24,7 +21,16 @@
       (mouseup)="moveToNewRow(0)"
       data-testid="row-selector-0"
       class="move-to-row"
-    ></div>
+    >
+      @if (articleEditorService.copiedSection(); as copied) {
+        <div class="button-group paste-button sui flex-x">
+          <button (click)="pasteSectionAtRow($event, 0)" class="secondary">
+            {{ sectionLabels.get(copied.SectionType) }} Einfügen
+          </button>
+          <button (click)="cancelPaste($event)" class="secondary"><app-bt-icon name="X" size="s" /></button>
+        </div>
+      }
+    </div>
 
     @for (section of article.Structure.Rows; track section) {
 
@@ -43,7 +49,16 @@
         [attr.data-testid]="'row-selector-' + $index + 1"
         class="move-to-row"
         [class]="'mt-' + sectionAfter?.BackgroundColor + ' ' + 'mb-' + section.BackgroundColor"
-      ></div>
+      >
+        @if (articleEditorService.copiedSection(); as copied) {
+          <div class="button-group paste-button sui flex-x">
+            <button (click)="pasteSectionAtRow($event, $index + 1)" class="secondary">
+              {{ sectionLabels.get(copied.SectionType) }} Einfügen
+            </button>
+            <button (click)="cancelPaste($event)" class="secondary"><app-bt-icon name="X" size="s" /></button>
+          </div>
+        }
+      </div>
     }
   }
   <span class="overscroll"></span>
@@ -74,5 +89,16 @@
       }
     </div>
   }
-
 </div>
+
+
+<ng-template let-rowIndex>
+  @if (articleEditorService.copiedSection(); as copied) {
+    <div class="button-group paste-button sui flex-x">
+      <button (click)="pasteSectionAtRow($event, rowIndex)" class="secondary">
+        {{ sectionLabels.get(copied.SectionType) }} Einfügen
+      </button>
+      <button (click)="cancelPaste($event)" class="secondary"><app-bt-icon name="X" size="s" /></button>
+    </div>
+  }
+</ng-template>

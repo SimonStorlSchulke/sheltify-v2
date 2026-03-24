@@ -3,50 +3,57 @@
 // --------------------------------------
 // Move-to controls
 // --------------------------------------
-.article-container:not(.previewMode) {
-  .move-to-row {
-    position: relative;
-
-    &:only-of-type {
-      outline: 2px dashed mix($primary, transparent, 50%);
-      position: relative;
-      height: 100px;
-    }
-
-    &:only-of-type:after {
-      content: "Erste Sektion hinzufügen";
-      position: absolute;
-      width: 95%;
-      top: 35px;
-      text-align: center;
-      color: $primary;
-      font-size: 20px;
-      box-sizing: border-box;
-    }
-
-    cursor: pointer;
-    outline-offset: -2px;
-
-    &:hover {
-      background-image: url("/assets/icons/plus.svg");
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 24px;
-      opacity: 0.4;
-      outline: 2px dashed mix($primary, transparent, 50%);
-
-      &:before, &:after {
-        opacity: 0.6;
-      }
-    }
-  }
-}
-
 .move-to-row {
+  position: relative;
   color: #fff;
   font-size: 10px;
   padding: 12px;
   height: 34px;
+  cursor: pointer;
+  outline-offset: -2px;
+
+  &:only-of-type {
+    outline: 2px dashed mix($primary, transparent, 50%);
+    position: relative;
+    height: 100px;
+  }
+
+  &:only-of-type:after {
+    content: "Erste Sektion hinzufügen";
+    position: absolute;
+    width: 95%;
+    top: 35px;
+    text-align: center;
+    color: $primary;
+    font-size: 20px;
+    box-sizing: border-box;
+  }
+
+  .paste-button {
+    position: absolute;
+    height: 26px;
+    right: 20%;
+    top: 5px;
+    opacity: 0;
+    font-size: 0.7rem;
+  }
+
+  &:hover {
+    background-image: url("/assets/icons/plus.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 24px;
+    opacity: 1;
+    outline: 2px dashed mix($primary, transparent, 50%);
+
+    &:before, &:after {
+      opacity: 0.6;
+    }
+
+    .paste-button {
+      opacity: 1;
+    }
+  }
 }
 
 // Drag mode
