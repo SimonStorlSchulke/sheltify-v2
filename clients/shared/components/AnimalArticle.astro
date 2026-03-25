@@ -1,6 +1,8 @@
 ---
 import { cms } from "@shared/cms/sheltify-access.ts";
 import Article from "./Article.astro";
+import AnimalCV from './svelte-parts/AnimalCV.svelte'
+
 interface Props {
   animalKind: string;
   animalNames: string;
@@ -12,10 +14,7 @@ const animals = await cms.getAnimalsByNames(animalKind, animalNames);
 
 {
   animals.map((animal) => (
-    <div class="sui wrapper">
-      <h2>{animal.Name}</h2>
-      <p>Art: {animal.AnimalKind}</p>
-    </div>
+    <AnimalCV animal={animal}/>
   ))
 }
 

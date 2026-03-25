@@ -4,6 +4,8 @@
       <h1>{{ page.Path.replace('-', ' ').replaceAll('/', ' › ') || 'Startseite'}}</h1>
       @if(page.PublishedAt?.Valid) {
         <a [href]="pageUrl()" target="_blank"><app-bt-icon name="BoxArrowUpRight" size="ml"/></a>
+      } @else {
+        <app-bt-icon name="PencilFill" />
       }
     </div>
     <div class="sui flex-x gap-2">
