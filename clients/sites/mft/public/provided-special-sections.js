@@ -11,6 +11,7 @@ const specialSections = {
         {Name: 'Bild Vermisst', Type: 'image'},
         {Name: 'Bild Zuhause gefunden', Type: 'image'},
         {Name: 'Bild Fundtiere', Type: 'image'},
+        {Name: 'Aktiv', Type: 'string'},
     ],
     'Tierliste - Hunde': [
         {Name: 'Beschreibung "In Spaichingen"', Type: 'string'},

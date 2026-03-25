@@ -1,7 +1,10 @@
+.placeholder {
+  height: 220px;
+}
 .auswahl {
   position: absolute;
   left: 0;
-  top: var(--header-height);
+  top: var(--header-height, 0);
 
   a {
     text-align: center;
@@ -40,5 +43,27 @@
       }
     }
   }
+}
 
+@media (max-width: 900px) {
+  .placeholder {
+    height: 450px;
+  }
+  .auswahl {
+    flex-direction: column;
+    width: 100%;
+
+    a {
+      img {
+        height: 70px;
+        width: 100%;
+      }
+
+      &.active {
+        img {
+          height: 160px;
+        }
+      }
+    }
+  }
 }
