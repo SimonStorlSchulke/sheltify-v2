@@ -3,18 +3,17 @@ import { cms } from '@shared/cms/sheltify-access.ts';
 import SectionRendererColumns from '@shared/components/sections/SectionRendererColumns.astro';
 import RenderSectionAnimalList from 'article-renderer/components/RenderSectionAnimalList.svelte';
 import RenderSectionFile from 'article-renderer/components/RenderSectionFile.svelte';
-import type { CmsArticle, Section, SectionSpecial, SectionType } from 'sheltify-lib/article-types.ts';
+import type { CmsArticle, SectionType } from 'sheltify-lib/article-types.ts';
 import RenderSectionTitle from 'article-renderer/components/RenderSectionTitle.svelte';
 import RenderSectionText from 'article-renderer/components/RenderSectionText.svelte';
 import RenderSectionImages from 'article-renderer/components/RenderSectionImages.svelte';
 import RenderSectionHero from 'article-renderer/components/RenderSectionHero.svelte';
 import RenderSectionForm from 'article-renderer/components/RenderSectionForm.svelte';
-import RenderSectionSponsor from 'article-renderer/components/special-sections/mft/RenderSectionSponsor.svelte';
-import RenderSectionTierlisteHunde from 'article-renderer/components/special-sections/mft/RenderSectionTierlisteHunde.svelte';
-import RenderSectionTierlisteAuswahl from 'article-renderer/components/special-sections/mft/RenderSectionTierlisteAuswahl.svelte';
 import RenderSectionAnimalUpdates from 'article-renderer/components/RenderSectionAnimalUpdates.svelte';
 import "article-renderer/styles/_index.scss"
 import { animalsByArticleId } from 'sheltify-lib/animal-util.ts';
+import { filterPublishedAndHasArticle } from 'sheltify-lib/cms-utils.ts';
+import SpecialSectionRenderer from './SpecialSectionRenderer.astro';
 
 interface Props {
   article: CmsArticle;
@@ -45,14 +44,8 @@ async function populateDynamicData() {
   }
 }
 
-
-const SpecialComponentMap: Record<string, any> = {
-  Sponsor: RenderSectionSponsor,
-  'Tierliste - Hunde': RenderSectionTierlisteHunde,
-  'Tierliste - Auswahl': RenderSectionTierlisteAuswahl,
-};
-
-const allAnimalsByArticle = animalsByArticleId(await cms.animals);
+const allAnimals = filterPublishedAndHasArticle(await cms.animals);
+const allAnimalsByArticle = animalsByArticleId(allAnimals);
 
 ---
 <div style={'margin-top: ' + topPadding + 'px'} class:list={cssClasses}>
@@ -101,8 +94,8 @@ const allAnimalsByArticle = animalsByArticleId(await cms.animals);
             comp = <RenderSectionAnimalUpdates section={section}  allAnimalsByArticle={allAnimalsByArticle}/>;
           break;
           case 'special':
-            const Component = SpecialComponentMap[section.Content.Type];
-            comp = <Component section={section}/>
+            section.TempData = {allAnimals, allAnimalsByArticle};
+            comp = <SpecialSectionRenderer section={section}/>;
             break;
           default:
             comp = <div>Sektionstyp nicht unterstützt</div>;

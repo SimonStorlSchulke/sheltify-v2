@@ -26,8 +26,8 @@
     outline: none;
     border: none;
     border-radius: 32px;
-    font-family: 'system-ui';
-    font-weight: 200;
+    font-family: 'Oswald', system-ui;
+    font-weight: 400;
     padding: 8px 16px;
     transition: background-color 0.35s, color 0.35s;
 
@@ -46,12 +46,12 @@
     }
 
     &.secondary {
-      background: #aaa096;
-      color: #fff;
+      background: #fff;
+      outline: 3px solid var(--c-primary);
+      color: #424242;
 
       &:hover {
-        background: #ffdb7e;
-        color: #000;
+        background: var(--c-primary-h);
       }
     }
   }
@@ -108,4 +108,34 @@
       }
     }
   }
+
+  .button-group {
+    button {
+      border-radius: 0;
+      margin-right: -3px;
+
+      background: #fff;
+      outline: 3px solid var(--c-primary);
+      color: #424242;
+
+      &:hover {
+        background: var(--c-primary-h);
+      }
+
+      &.active {
+        background: var(--c-primary);
+        color: #fff;
+      }
+    }
+
+    :last-child {
+      border-radius: 0 10px 10px 0;
+    }
+
+    :first-child {
+      border-radius: 10px 0 0 10px;
+    }
+  }
+
 }
+

@@ -108,6 +108,11 @@
   font-weight: bolder;
   color: var(--c-primary);
 }
+.themable.article h3 {
+  font-family: Oswald, Arial Narrow, system-ui;
+  font-size: var(--fontsize-h3);
+  font-weight: bolder;
+}
 .themable.article .section-hero .hero-container {
   margin-bottom: 50px;
 }

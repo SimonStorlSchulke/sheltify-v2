@@ -24,27 +24,27 @@
 </script>
 <div class="placeholder"></div>
 <div class="auswahl sui flex-x">
-  <a class:active={Aktiv == 'Hunde'} href="/Tiere/Hunde">
+  <a class:active={Aktiv === 'Hunde'} href="/Tiere/Hunde">
     <img src={getImageSrc(imgHunde, 'medium')} alt=""/>
     <div class="overlay"><h3 class="sui bold px-2">Hunde</h3></div>
   </a>
-  <a class:active={Aktiv == 'Katzen'} href="/Tiere/Katzen">
+  <a class:active={Aktiv === 'Katzen'} href="/Tiere/Katzen">
     <img src={getImageSrc(imgKatzen, 'medium')} alt=""/>
     <div class="overlay"><h3 class="sui bold px-2">Katzen</h3></div>
   </a>
-  <a class:active={Aktiv == 'Kleintiere'} href="/Tiere/Kleintiere">
+  <a class:active={Aktiv === 'Kleintiere'} href="/Tiere/Kleintiere">
     <img src={getImageSrc(imgKleintiere, 'medium')} alt=""/>
     <div class="overlay"><h3 class="sui bold px-2">Kleintiere</h3></div>
   </a>
-  <a class:active={Aktiv == 'Vermisst'} class="active" href="/Tiere/Vermisst">
+  <a class:active={Aktiv === 'Vermisst'} class="active" href="/Tiere/Vermisst">
     <img src={getImageSrc(imgVermisst, 'medium')} alt=""/>
     <div class="overlay"><h3 class="sui bold px-2">Vermisst</h3></div>
   </a>
-  <a class:active={Aktiv == 'Zuhause-Gefunden'} href="/Tiere/Zuhause-Gefunden">
+  <a class:active={Aktiv === 'Zuhause-Gefunden'} href="/Tiere/Zuhause-Gefunden">
     <img src={getImageSrc(imgZuhauseGefunden, 'medium')} alt=""/>
     <div class="overlay"><h3 class="sui bold px-2">Zuhause gefunden</h3></div>
   </a>
-  <a class:active={Aktiv == 'Fundtiere'} href="/Tiere/Fundtiere">
+  <a class:active={Aktiv === 'Fundtiere'} href="/Tiere/Fundtiere">
     <img src={getImageSrc(imgFundtiere, 'medium')} alt=""/>
     <div class="overlay"><h3 class="sui bold px-2">Fundtiere</h3></div>
   </a>

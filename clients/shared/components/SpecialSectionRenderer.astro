@@ -1,0 +1,16 @@
+---
+import type { SectionSpecial } from 'sheltify-lib/dist/article-types.ts';
+import RenderSectionSponsor from 'article-renderer/components/special-sections/mft/RenderSectionSponsor.svelte';
+import RenderSectionTierlisteHunde from 'article-renderer/components/special-sections/mft/RenderSectionTierlisteHunde.svelte';
+import RenderSectionTierlisteAuswahl from 'article-renderer/components/special-sections/mft/RenderSectionTierlisteAuswahl.svelte';
+
+interface Props {
+  section: SectionSpecial;
+}
+
+const { section } = Astro.props;
+---
+
+{section.Content.Type === 'Sponsor' && (<RenderSectionSponsor section={section}/>)}
+{section.Content.Type === 'Tierliste - Auswahl' && (<RenderSectionTierlisteAuswahl section={section}/>)}
+{section.Content.Type === 'Tierliste - Hunde' && (<RenderSectionTierlisteHunde section={section} client:load/>)}

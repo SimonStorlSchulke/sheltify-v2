@@ -34,3 +34,18 @@ export async function downloadFile(file: CmsImage): Promise<void> {
   a.remove();
   window.URL.revokeObjectURL(url);
 }
+
+export function yearsOld(animal: CmsAnimal): number | null {
+  if(!animal.Birthday.Valid) return null;
+  const birthDate = new Date(animal.Birthday.Time!);
+  let months: number = monthDiff(birthDate, new Date());
+  return months / 12;
+}
+
+function monthDiff(d1: Date, d2: Date): number {
+  let months;
+  months = (d2.getFullYear() - d1.getFullYear()) * 12;
+  months -= d1.getMonth();
+  months += d2.getMonth();
+  return months <= 0 ? 0 : months;
+}

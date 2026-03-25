@@ -6,6 +6,7 @@ button {
   font-weight: 200;
   padding: 8px 16px;
   transition: background-color 0.35s, color 0.35s;
+  cursor: pointer;
 
   &.lg {
     font-size: 32px;
@@ -21,13 +22,5 @@ button {
     }
   }
 
-  &.secondary {
-    background: #aaa096;
-    color: #fff;
 
-    &:hover {
-      background: #ffdb7e;
-      color: #000;
-    }
-  }
 }
