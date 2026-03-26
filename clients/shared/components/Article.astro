@@ -1,4 +1,5 @@
 ---
+import { refetchCmsImagesDeep } from '@shared/cms/cms-image.ts';
 import { cms } from '@shared/cms/sheltify-access.ts';
 import SectionRendererColumns from '@shared/components/sections/SectionRendererColumns.astro';
 import RenderSectionAnimalList from 'article-renderer/components/RenderSectionAnimalList.svelte';
@@ -19,9 +20,11 @@ interface Props {
   article: CmsArticle;
 }
 
-const { article } = Astro.props;
+let { article } = Astro.props;
 
 await populateDynamicData();
+
+article = await refetchCmsImagesDeep(article);
 
 const fullWidthSections: SectionType[] = ['hero'];
 let rowindex = 0;
