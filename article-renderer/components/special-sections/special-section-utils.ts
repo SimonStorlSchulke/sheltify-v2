@@ -7,7 +7,7 @@ export function getPropValue<T extends string | number | boolean | CmsImage>(sec
 }
 
 export function searchAnimal(search: string, animalKind: string, allAnimals: CmsAnimal[]): CmsAnimal[] {
-    const dogs = allAnimals.filter(animal => animal.AnimalKind == 'Hund')
+    const dogs = allAnimals.filter(animal => animal.AnimalKind == animalKind)
     return search.length > 0
       ? dogs.filter(animal => animal.Name.toLowerCase().includes(search.toLowerCase()))
       : dogs

@@ -16,13 +16,9 @@
 
   const { allAnimals, allAnimalsByArticle } = section.TempData as {allAnimals: CmsAnimal[], allAnimalsByArticle: Record<string, CmsAnimal[]>};
 
-  // Local state
-  let search = $state('');
-  let size = $state('');
-  let gender = $state('');
-  let age = $state('');
-
   type FilterKey = 'size' | 'gender' | 'age';
+
+  let search = $state('');
 
   let filters = $state<Record<FilterKey, string>>({
     size: '',
@@ -34,22 +30,8 @@
     filters[key] = filters[key] ? '' : value;
   }
 
-  function toggleSize(value: string) {
-    size = size === value ? '' : value;
-  }
-
-  function toggleGender(value: string) {
-    gender = gender === value ? '' : value;
-  }
-
-  function toggleAge(value: string) {
-    age = age === value ? '' : value;
-  }
-
   function resetFilters() {
-    size = '';
-    gender = '';
-    age = '';
+    filters = { size: '', gender: '', age: '' };
   }
 
   let explainer = $derived.by(() => {
@@ -65,16 +47,16 @@
       ["Senioren", "ab 7 Jahren"],
     ]);
 
-    const genderText = gender ? (gender === "male" ? "Rüden" : "Hündinnen") : "Hunde";
-    const sizeText = sizeTexts.get(size) ?? "";
-    const ageText = ageTexts.get(age) ?? "";
+    const genderText = filters.gender ? (filters.gender === "male" ? "Rüden" : "Hündinnen") : "Hunde";
+    const sizeText = sizeTexts.get(filters.size) ?? "";
+    const ageText = ageTexts.get(filters.age) ?? "";
 
     const text = [genderText, sizeText, ageText].join(" ");
     if (text.trim() === "Hunde") return "";
     return text;
   });
 
-  let anyFilterActive = $derived(!!size || !!gender || !!age);
+  let anyFilterActive = $derived(Object.values(filters).some(v => !!v));
 
   const filteredAnimals = $derived.by(() => {
     const bySearch = searchAnimal(search, 'Hund', allAnimals);
@@ -83,25 +65,25 @@
     }
 
     return bySearch.filter(animal => {
-      let matchesSize = !size;
-      let matchesGender = !gender;
-      let matchesAge = !age;
+      let matchesSize = !filters.size;
+      let matchesGender = !filters.gender;
+      let matchesAge = !filters.age;
 
-      if(size && animal.ShoulderHeightCm) {
-        if (size === 'klein' && animal.ShoulderHeightCm <= 40) matchesSize = true;
-        else if (size === 'mittel' && animal.ShoulderHeightCm > 40 && animal.ShoulderHeightCm <= 55) matchesSize = true;
-        else if (size === 'groß' && animal.ShoulderHeightCm > 55) matchesSize = true;
+      if(filters.size && animal.ShoulderHeightCm) {
+        if (filters.size === 'klein' && animal.ShoulderHeightCm <= 40) matchesSize = true;
+        else if (filters.size === 'mittel' && animal.ShoulderHeightCm > 40 && animal.ShoulderHeightCm <= 55) matchesSize = true;
+        else if (filters.size === 'groß' && animal.ShoulderHeightCm > 55) matchesSize = true;
       }
 
-      if(gender && animal.Gender) {
-        if (gender === animal.Gender) matchesGender = true;
+      if(filters.gender && animal.Gender) {
+        if (filters.gender === animal.Gender) matchesGender = true;
       }
 
-      if(age && animal.Birthday.Valid) {
+      if(filters.age && animal.Birthday.Valid) {
         let ageInYears = yearsOld(animal)!;
-        if (age === 'Welpen' && ageInYears < 1) matchesAge = true;
-        else if (age === 'Erwachsen' && ageInYears >= 1 && ageInYears < 7) matchesAge = true;
-        else if (age === 'Senioren' && ageInYears >= 7) matchesAge = true;
+        if (filters.age === 'Welpen' && ageInYears < 1) matchesAge = true;
+        else if (filters.age === 'Erwachsen' && ageInYears >= 1 && ageInYears < 7) matchesAge = true;
+        else if (filters.age === 'Senioren' && ageInYears >= 7) matchesAge = true;
       }
 
       return matchesSize && matchesGender && matchesAge;
@@ -121,26 +103,26 @@
   />
 
   <div class="button-group">
-    <button class:active={size === 'klein'} onclick={() => toggleSize('klein') }>klein</button>
-    <button class:active={size === 'mittel'} onclick={() => toggleSize('mittel')}>mittel</button>
-    <button class:active={size === 'groß'} onclick={() => toggleSize('groß')}>groß</button>
+    <button class:active={filters.size === 'klein'} onclick={() => toggleFilter('size', 'klein') }>klein</button>
+    <button class:active={filters.size === 'mittel'} onclick={() => toggleFilter('size', 'mittel')}>mittel</button>
+    <button class:active={filters.size === 'groß'} onclick={() => toggleFilter('size', 'groß')}>groß</button>
   </div>
 
   <div class="button-group">
-    <button class:active={gender === 'female'} onclick={() => toggleGender('female')}>Hündinnen</button>
-    <button class:active={gender === 'male'} onclick={() => toggleGender('male')}>Rüden</button>
+    <button class:active={filters.gender === 'female'} onclick={() => toggleFilter('gender', 'female')}>Hündinnen</button>
+    <button class:active={filters.gender === 'male'} onclick={() => toggleFilter('gender', 'male')}>Rüden</button>
   </div>
 
   <div class="button-group">
-    <button class:active={age === 'Welpen'} onclick={() => toggleAge('Welpen')} >Welpen</button>
-    <button class:active={age === 'Erwachsen'} onclick={() => toggleAge('Erwachsen')}>Erwachsen</button>
-    <button class:active={age === 'Senioren'} onclick={() => toggleAge('Senioren')}>Senioren</button>
+    <button class:active={filters.age === 'Welpen'} onclick={() => toggleFilter('age', 'Welpen')} >Welpen</button>
+    <button class:active={filters.age === 'Erwachsen'} onclick={() => toggleFilter('age', 'Erwachsen')}>Erwachsen</button>
+    <button class:active={filters.age === 'Senioren'} onclick={() => toggleFilter('age', 'Senioren')}>Senioren</button>
   </div>
 </div>
 
 <p class="sui text-center"><b>{explainer}</b></p>
 
-<div class="sui flex-x gap-2 wrap">
+<div class="sui flex-x gap-4 wrap">
   {#each filteredAnimals as animal}
     <a href={getAnimalLink(animal, allAnimalsByArticle)}>
       <AnimalCard animal="{animal}"/>
