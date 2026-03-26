@@ -6,10 +6,10 @@
 />
 
 <script lang="ts">
+  import Image from '../../Image.svelte';
   import type { SectionSpecial } from 'sheltify-lib/dist/article-types';
   import type { CmsImage } from 'sheltify-lib/dist/cms-types';
   import { getPropValue } from '../special-section-utils';
-  import { getImageSrc } from '../../../util';
 
   let {section}: { section: SectionSpecial } = $props();
 
@@ -25,27 +25,27 @@
 <div class="placeholder"></div>
 <div class="auswahl sui flex-x">
   <a class:active={Aktiv === 'Hunde'} href="/Tiere/Hunde">
-    <img src={getImageSrc(imgHunde, 'medium')} alt=""/>
+    <Image img={imgHunde} size={'medium'}/>
     <div class="overlay"><h3 class="sui bold px-2">Hunde</h3></div>
   </a>
   <a class:active={Aktiv === 'Katzen'} href="/Tiere/Katzen">
-    <img src={getImageSrc(imgKatzen, 'medium')} alt=""/>
+    <Image img={imgKatzen} size={'medium'}/>
     <div class="overlay"><h3 class="sui bold px-2">Katzen</h3></div>
   </a>
   <a class:active={Aktiv === 'Kleintiere'} href="/Tiere/Kleintiere">
-    <img src={getImageSrc(imgKleintiere, 'medium')} alt=""/>
+    <Image img={imgKleintiere} size={'medium'}/>
     <div class="overlay"><h3 class="sui bold px-2">Kleintiere</h3></div>
   </a>
   <a class:active={Aktiv === 'Vermisst'} class="active" href="/Tiere/Vermisst">
-    <img src={getImageSrc(imgVermisst, 'medium')} alt=""/>
+    <Image img={imgVermisst} size={'medium'}/>
     <div class="overlay"><h3 class="sui bold px-2">Vermisst</h3></div>
   </a>
   <a class:active={Aktiv === 'Zuhause-Gefunden'} href="/Tiere/Zuhause-Gefunden">
-    <img src={getImageSrc(imgZuhauseGefunden, 'medium')} alt=""/>
+    <Image img={imgZuhauseGefunden} size={'medium'}/>
     <div class="overlay"><h3 class="sui bold px-2">Zuhause gefunden</h3></div>
   </a>
   <a class:active={Aktiv === 'Fundtiere'} href="/Tiere/Fundtiere">
-    <img src={getImageSrc(imgFundtiere, 'medium')} alt=""/>
+    <Image img={imgFundtiere} size={'medium'}/>
     <div class="overlay"><h3 class="sui bold px-2">Fundtiere</h3></div>
   </a>
 </div>
