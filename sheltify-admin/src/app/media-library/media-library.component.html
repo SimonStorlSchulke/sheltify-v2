@@ -1,17 +1,17 @@
 <div class="sui flex-x gap-2">
   @if (images$() | async; as images) {
     <div appFileDrop (filesDropped)="onFilesDropped($event)" (filesHovered)="onFilesHovered($event)"
-      class="sui flex-x gap-2 grow-1">
+         class="sui flex-x gap-2 grow-1">
       <div class="sui flex-y gap-2 grow-1 p-3">
         <h1 class="sui px-3">Medien</h1>
 
         <div class="sui flex-x gap-2">
           <div class="tag-selector">
             <ng-select [(ngModel)]="selectedTags" (ngModelChange)="selectedAnimals.set([])" [multiple]="true"
-              placeholder="...Tags auswählen">
+                       placeholder="...Tags auswählen">
               @for (tag of tagsService.availableTags(); track tag.ID) {
                 <ng-option [value]="tag.ID">
-                  <app-tag [tag]="tag" />
+                  <app-tag [tag]="tag"/>
                 </ng-option>
               }
             </ng-select>
@@ -20,7 +20,7 @@
 
           <div class="tag-selector">
             <ng-select [(ngModel)]="selectedAnimals" (ngModelChange)="selectedTags.set([])" [multiple]="true"
-              placeholder="...Tiere auswählen">
+                       placeholder="...Tiere auswählen">
               @for (animal of animalService.animals(); track animal) {
                 <ng-option [value]="animal">
                   {{ animal.Name }}
@@ -36,7 +36,7 @@
         </div>
 
         <div class="sui flex-x gap-2 wrap list dropzone" [class.files-hovered]="filesHovered()"
-          [class.with-picker]="true">
+             [class.with-picker]="true">
           @for (image of images; track image.ID) {
             <app-media-entry
               [attr.data-testid]="'media-entry-' + image.Title"
@@ -49,24 +49,33 @@
         </div>
 
         @if (isPicker) {
-              <div class="sui flex-x gap-1 jc-end">
-                <button data-testid="btn-submit" [disabled]="selectedImageIds().size == 0" class="primary"
-                  (click)="pickImages(selectedImageIds(), images)">Auswählen</button>
-              </div>
-            }
-
-        </div>
-
-
+          <div class="sui flex-x gap-1 jc-end">
+            <button
+              data-testid="btn-submit"
+              class="primary" [disabled]="selectedImageIds().size === 0"
+              (click)="pickImages(selectedImageIds(), images)">
+              Auswählen
+            </button>
+            <button
+              data-testid="btn-cancel"
+              class="secondary"
+              (click)="cancel()">
+              Abbrechen
+            </button>
+          </div>
+        }
       </div>
-      @let selection = ({images: images, active: activeImageId(), selected: selectedImageIds()} | mediaSelection);
+
+
+    </div>
+    @let selection = ({images: images, active: activeImageId(), selected: selectedImageIds()} | mediaSelection);
     <div class="sidebar">
       @if (selection.selected!.length == 1) {
         @let image = editedImages().get(selection.active?.ID ?? "") ?? selection.active;
         <app-image-editor class="card" [image]="image!" (editedImage)="addEditedImage($event)" (createdTag)="onTagAdded($event, image!)"/>
       } @else if (selection.selected!.length > 0) {
-          <h2>{{ selectedImageIds().size }} Elemente</h2>
-        }
+        <h2>{{ selectedImageIds().size }} Elemente</h2>
+      }
     </div>
   }
 </div>
