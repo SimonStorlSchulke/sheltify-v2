@@ -78,7 +78,6 @@ export class ArticleEditorComponent implements OnInit {
       sectionRef = sectionPickReturn;
     }
 
-
     article.Structure.Rows.splice(row, 0, sectionRef);
 
     this.exitMoveMode();
@@ -106,7 +105,7 @@ export class ArticleEditorComponent implements OnInit {
   public exitMoveMode() {
     setTimeout(() => {
       this.articleEditorService.exitMoveMode();
-    });
+    }, 1);
   }
 
   public moveToNewRow(rowTo: number) {
