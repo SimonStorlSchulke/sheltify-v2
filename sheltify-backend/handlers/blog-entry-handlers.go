@@ -10,12 +10,27 @@ import (
 
 func GetBlogEntries(w http.ResponseWriter, r *http.Request) {
 	var blogEntries []*shtypes.BlogEntry
-	DefaultGetAll(w, r, &blogEntries)
+	DefaultGetAll(w, r, &blogEntries, "Thumbnail")
 }
 
 func GetBlogEntryById(w http.ResponseWriter, r *http.Request) {
 	var blogEntry *shtypes.BlogEntry
 	DefaultGetById(w, r, &blogEntry, "Thumbnail")
+}
+
+func GetBlogEntryByTitle(w http.ResponseWriter, r *http.Request) {
+	var blogEntry *shtypes.BlogEntry
+	title := r.URL.Query().Get("title")
+	if title == "" {
+		http.Error(w, "Missing title parameter", http.StatusBadRequest)
+		return
+	}
+	blogEntry, err := repository.GetBlogEntryByName(title)
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	okResponse(w, blogEntry)
 }
 
 func SaveBlogEntry(w http.ResponseWriter, r *http.Request) {

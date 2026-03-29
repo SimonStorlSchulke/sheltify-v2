@@ -1,8 +1,8 @@
-import { type AnimalsFilter, type CmsArticle } from 'sheltify-lib/article-types.ts';
-import { type CmsAnimal, type CmsImage, type CmsPage, type CmsTenantConfiguration } from 'sheltify-lib/cms-types';
-import { filterPublishedAndHasArticle, sortByPriorityAndUpdatedAt } from 'sheltify-lib/cms-utils.ts';
-import { animalsByArticleId } from 'sheltify-lib/animal-util.ts';
 import type { SeoData } from '@shared/types/seo-data';
+import { animalsByArticleId } from 'sheltify-lib/animal-util.ts';
+import { type AnimalsFilter, type CmsArticle } from 'sheltify-lib/article-types.ts';
+import { type CmsAnimal, type CmsBlogEntry, type CmsImage, type CmsPage, type CmsTenantConfiguration } from 'sheltify-lib/cms-types';
+import { filterPublishedAndHasArticle, sortByPriorityAndUpdatedAt } from 'sheltify-lib/cms-utils.ts';
 
 export class SheltifyAccess {
 
@@ -55,6 +55,20 @@ export class SheltifyAccess {
     })
 
     return paths;
+  }
+
+  public async getStaticPathsBlogs() {
+    const blogEntries = await this.getBlogEntries();
+    blogEntries.sort((a, b) => a.ID.localeCompare(b.ID));
+
+    return blogEntries.map(entry => {
+    console.log("entry.Titleentry.Titleentry.Titleentry.Titleentry.Titleentry.Titleentry.Titleentry.Titleentry.Title", encodeURIComponent(entry.Title));
+      return {
+        params: {
+          title: this.encodeTitle(entry.Title),
+        },
+      }
+    })
   }
 
   public async getPageByPath(path: string): Promise<CmsPage> {
@@ -131,6 +145,14 @@ export class SheltifyAccess {
     return sortByPriorityAndUpdatedAt(filterPublishedAndHasArticle(animals));
   }
 
+  public async getBlogEntries(categories: string[] = []): Promise<CmsBlogEntry[]> {
+    return await this.get<CmsBlogEntry[]>('blogs');
+  }
+
+  public async getBlogEntrybyTitle(title: string): Promise<CmsBlogEntry> {
+    return await this.get<CmsBlogEntry>(`blogs/by-title?title=${title}`);
+  }
+
   public animalById(id: number): Promise<CmsAnimal> {
     return this.get<CmsAnimal>(`animals/${id}`)
   }
@@ -155,6 +177,24 @@ export class SheltifyAccess {
       this.cache.set(path, data)
     }
     return data as T;
+  }
+
+  public encodeTitle(title: string) {
+    return title
+      .replace(/~/g, "~t")     // escape your escape char first
+      .replace(/\?/g, "~q")
+      .replace(/\//g, "~s")
+      .replace(/%/g, "~p")
+      .replace(/\s+/g, "-");
+  }
+
+  public decodeTitle(slug: string) {
+    return slug
+      .replace(/-/g, " ")
+      .replace(/~p/g, "%")
+      .replace(/~s/g, "/")
+      .replace(/~q/g, "?")
+      .replace(/~t/g, "~");
   }
 }
 

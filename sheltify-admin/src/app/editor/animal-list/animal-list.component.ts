@@ -52,7 +52,7 @@ export class AnimalListComponent implements OnInit {
     const animals = this.animalsWithSameArticle();
     animals.sort((a, b) => a.ID.localeCompare(b.ID));
     if(!animals[0]?.AnimalKind) return undefined;
-    return url + 'tier/' + animals[0].AnimalKind + '/' + animals.map(animal => animal.Name).join('-');
+    return url + 'tierartikel/' + animals.map(animal => animal.Name).join('-');
   })
 
   public search = signal('');

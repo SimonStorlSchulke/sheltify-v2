@@ -16,7 +16,7 @@
 
 </script>
 
-<div class="themable animal-card" id={"animal-card-" + animal.ID}>
+<div class="themable animal-card sui fade-in" id={"animal-card-" + animal.ID}>
   <Image cssClass="portrait" img={animal.Portrait} size={"medium"} />
 
   <div class="sui flex-x center ai-center name-row">

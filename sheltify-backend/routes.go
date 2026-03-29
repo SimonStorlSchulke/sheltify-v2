@@ -48,6 +48,7 @@ func publicRoutes(r *chi.Mux) {
 	r.Get("/page-by-path", handlers.GetPageByPath)
 	r.Get("/blogs", handlers.GetBlogEntries)
 	r.Get("/blogs/{id}", handlers.GetBlogEntryById)
+	r.Get("/blogs/by-title", handlers.GetBlogEntryByTitle)
 
 	r.Get("/animals/last-modified", handlers.GetLastModifiedAnimals)
 }

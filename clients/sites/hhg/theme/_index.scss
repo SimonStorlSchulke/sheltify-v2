@@ -4,6 +4,6 @@
 @use "fonts";
 
 body {
-  background-color: #eee;
+  background-color: var(--neutral200);
   color: var(--c-text);
 }

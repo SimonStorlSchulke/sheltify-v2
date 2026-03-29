@@ -1,0 +1,24 @@
+---
+import { cms } from '@shared/cms/sheltify-access.ts';
+import Article from '@shared/components/Article.astro';
+import AnimateArticle from '@shared/interactive/AnimateArticle.astro';
+import HhgLayout from '../../layouts/HhgLayout.astro';
+
+export async function getStaticPaths() {
+  return cms.getStaticPathsBlogs();
+}
+
+const {title} = Astro.params;
+console.log("title:titletitletitletitletitle", title)
+const blogEntry = await cms.getBlogEntrybyTitle(cms.decodeTitle(title));
+---
+
+<HhgLayout seo={{ title }}>
+  {
+    blogEntry.Article ?
+      <Article article={blogEntry.Article}/> :
+      <div class="sui wrapper py-2">Kein Artikel</div>
+  }
+</HhgLayout>
+
+<AnimateArticle/>

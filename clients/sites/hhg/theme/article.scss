@@ -19,6 +19,12 @@
     font-weight: 500;
   }
 
+  h3 {
+    font-family: "more-sugar";
+    font-size: var(--fontsize-h3);
+    font-weight: 500;
+  }
+
   .section-hero {
     .hero-container {
 
@@ -31,6 +37,23 @@
       }
 
       margin-bottom: 50px;
+    }
+  }
+
+  .section-blogs {
+    .blogtile {
+      h3 {
+        font-family: "more-sugar";
+      }
+      border-radius: 12px;
+      transition: transform .23s, box-shadow .4s;
+      background: var(--neutral100);
+
+      &:hover {
+        transform: scale(1.01);
+        box-shadow: 2px 4px 12px #0002;
+
+      }
     }
   }
 
@@ -63,7 +86,7 @@
       color: #424242;
 
       &:hover {
-        background: var(--c-primary-h);
+        background: var(--c-primary-h2);
       }
     }
   }
@@ -112,9 +135,70 @@
 
   .animal-card {
     font-family: "more-sugar", system-ui;
+    width: 230px;
+    height: 290px;
+    transition: transform 0.23s, box-shadow 0.4s;
+    display: block;
+    background-color: #fff;
+    position: relative;
+    color: inherit;
+    border-radius: 12px;
+    overflow: hidden;
+    outline: none;
+    box-shadow: 0 0 16px #00000034;
 
+    img {
+      width: 100%;
+      height: 230px;
+      object-fit: cover;
+    }
+
+    &:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 16px #0006;
+    }
+
+    .name-row {
+      padding-left: 0.5rem;
+      padding-top: 0.3rem;
+      font-size: var(--fontsize-h3);
+      display: flex;
+      justify-content: center;
+    }
+
+    .gender-icon {
+      width: 1.6rem;
+      height: 1.6rem;
+    }
     .bubbles {
-      font-weight: 100;
+      position: absolute;
+      bottom: 68px;
+      left: 12px;
+      display: flex;
+      padding: 0;
+      flex-direction: column;
+      gap: 8px;
+      align-items: start;
+      color: #fff;
+
+      span {
+        border-radius: 40px;
+        padding: 2px 8px;
+        font-size: var(--fontsize-small);
+        font-weight: 100;
+      }
+    }
+  }
+
+  @media (max-width: 700px) {
+    .animal-card {
+      width: calc(50dvw - 50px);
+    }
+  }
+
+  @media (max-width: 550px) {
+    .animal-card {
+      width: calc(100dvw - 60px);
     }
   }
 }

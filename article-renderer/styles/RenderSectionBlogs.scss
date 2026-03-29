@@ -1,0 +1,17 @@
+.section-blogs {
+  .blogtile {
+    display: flex;
+    background: #eee;
+    height: var(--blog-preview-height, 300px);
+    border-radius: 6px;
+    position: relative;
+    box-shadow: 4px 4px 16px #0002;
+    overflow: hidden;
+
+    img {
+      width: var(--blog-preview-height, 300px);
+      min-width: var(--blog-preview-height, 300px);
+      height: var(--blog-preview-height, 300px);
+    }
+  }
+}

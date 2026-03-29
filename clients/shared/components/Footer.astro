@@ -5,17 +5,24 @@ const pages = (await cms.getPages())
   .filter(page => page.LinkInFooter)
   .sort(((a,b) => b.Priority - a.Priority));
 
-function getTitle(page: CmsPage): string {
+function getPageTitle(page: CmsPage): string {
   const parts = page.Path.split('/');
   return parts[parts.length - 1];
 }
 
+const siteName = import.meta.env.SITE_NAME ?? (await cms.tenantConfig).Name;
+
 ---
 
-<div class="themable footer" data-pagefind-ignore>
+<div class="themable footer sui wrapper flex-x gap-2 py-1" data-pagefind-ignore>
+  <span class="site-name">
+    © {siteName} {new Date().getFullYear()}
+  </span>
+  <span class="pages">
   {
-    pages.map(page => <a href={'/' + page.Path}>{getTitle(page)}</a>)
+    pages.map(page => <a href={'/' + page.Path}>{getPageTitle(page)}</a>)
   }
+  </span>
 
   <a href="/sitemap">Sitemap</a>
 

@@ -1,0 +1,25 @@
+<div class="sui flex-y wrap gap-2">
+
+  <div class="sui flex-y gap-1">
+    <label class="tags-label">Kategorien (ist keine ausgewählt werden alle verfügbaren auf der Seite angezeigt)</label>
+    <ng-select [notFoundText]="'keine'" [(ngModel)]="section().Content.Categories" [multiple]="true" placeholder="...ist keine Kategorie ausgewählt, werden alle angezeigt">
+      @for (category of allCategories(); track category) {
+        <ng-option [value]="category">{{ category }}</ng-option>
+      }
+    </ng-select>
+  </div>
+
+  <app-checkbox-input
+    [(twoWayModel)]="section().Content.ShowAllCategoriesButton"
+    idName="ShowAllCategoriesButton"
+    label="'Alle'-Button anzeigen"
+    explanation="Zeige einen 'Alle' Button an, der Blogs aus allen Kategorien anzeigt"
+  />
+
+  <app-number-input
+    [(twoWayModel)]="section().Content.PageSize"
+    idName="PageSize"
+    label="Einträge pro Seite"
+  />
+
+</div>

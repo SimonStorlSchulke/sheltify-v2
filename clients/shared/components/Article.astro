@@ -11,6 +11,7 @@ import RenderSectionImages from 'article-renderer/components/RenderSectionImages
 import RenderSectionHero from 'article-renderer/components/RenderSectionHero.svelte';
 import RenderSectionForm from 'article-renderer/components/RenderSectionForm.svelte';
 import RenderSectionAnimalUpdates from 'article-renderer/components/RenderSectionAnimalUpdates.svelte';
+import RenderSectionBlogs from 'article-renderer/components/RenderSectionBlogs.svelte';
 import "article-renderer/styles/_index.scss"
 import { animalsByArticleId } from 'sheltify-lib/animal-util.ts';
 import SpecialSectionRenderer from './SpecialSectionRenderer.astro';
@@ -42,6 +43,9 @@ async function populateDynamicData() {
         break;
       case 'image':
           section.Content.MediaFiles = await cms.getMediaFilesByIds(section.Content.MediaFiles.map(i => i.ID));
+          break;
+      case 'blogs':
+          section.TempBlogs = await cms.getBlogEntries(section.Content.Categories ?? []);
     }
   }
 }
@@ -96,6 +100,9 @@ const publishedAnimals = await cms.getPublishedAnimals();
             break;
           case 'animal-updates':
             comp = <RenderSectionAnimalUpdates section={section}  allAnimalsByArticle={allAnimalsByArticle}/>;
+          break;
+          case 'blogs':
+            comp = <RenderSectionBlogs section={section} client:visible/>;
           break;
           case 'special':
             section.TempData = {allAnimals: publishedAnimals, allAnimalsByArticle};

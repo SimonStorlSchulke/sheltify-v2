@@ -19,4 +19,6 @@
 
 {#if img}
   <img style={style} class={cssClass} src={getImageSrc(img, size)} alt={img.Description || img.Title} />
+  {:else}
+  <div>bild nicht gefunden</div>
 {/if}

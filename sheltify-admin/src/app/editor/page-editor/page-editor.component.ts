@@ -24,7 +24,6 @@ import { LastEditedComponent } from 'src/app/ui/last-edited/last-edited.componen
     CheckboxInputComponent,
     LastEditedComponent,
     NumberInputComponent,
-    NgIcon,
     BtIconComponent,
   ],
   providers: [provideIcons({bootstrapBoxArrowUpRight})],

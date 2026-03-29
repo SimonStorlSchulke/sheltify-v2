@@ -138,6 +138,17 @@ export function createEmptySection(SectionType: SectionType): Section {
           },
           TempAnimalsByArticle: {},
         };
+    case 'blogs':
+        return {
+          SectionType,
+          BackgroundColor: '',
+          Content: {
+            Categories: undefined,
+            PageSize: 10,
+            ShowAllCategoriesButton: true,
+          },
+          TempBlogs: [],
+        };
     case 'special':
         return {
           SectionType,

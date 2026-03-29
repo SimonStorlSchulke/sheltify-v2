@@ -15,14 +15,16 @@
   <div data-testid="form-animal-editor" class="sui flex-y gap-1 grow-1 card">
     <form class="sui grow-1 flex-x gap-2">
       <app-image-picker-single [cropped]="true" label="Vorschaubild" idName="thumbnail" [(twoWayModel)]="blog().Thumbnail"/>
-      <div class="sui flex-y gap-2">
+      <div class="sui flex-y gap-2 grow-1">
         <app-text-input idName="title" label="Titel" [(twoWayModel)]="blog().Title"/>
 
         @if (blogCategories) {
-          <app-select-input idName="blogCategory" label="Kategorie" [(twoWayModel)]="blog().Category" [options]="blogCategories"/>
+          <app-select-input style="max-width: 300px;" idName="blogCategory" label="Kategorie" [(twoWayModel)]="blog().Category" [options]="blogCategories"/>
         }
         <app-checkbox-input idName="show-in-menu" label="Als Popup anzeigen" [(twoWayModel)]="blog().ShowPopup"/>
+        <app-text-input class="sui w-100" idName="description" [(twoWayModel)]="blog().Description" label="Vorschautext" [long]="true"/>
       </div>
+
     </form>
       <app-last-edited [entry]="blog()"/>
   </div>
