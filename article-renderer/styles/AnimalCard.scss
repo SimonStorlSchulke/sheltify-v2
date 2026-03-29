@@ -28,7 +28,6 @@
     flex-direction: column;
     gap: 8px;
     align-items: start;
-    font-family: Oswald, Arial Narrow, system-ui;
 
     color: #fff;
 
@@ -36,12 +35,24 @@
       background-color: var(--c-primary);
       border-radius: 40px;
       padding: 2px 8px;
-      font-size: 0.9rem;
+      font-size: var(--fontsize-small);
       font-weight: 100;
 
       &.emergency {
         //background-color: $cto;
       }
     }
+  }
+
+  .bubbles {
+    position: absolute;
+    bottom: 68px;
+    left: 12px;
+    display: flex;
+    padding: 0;
+    flex-direction: column;
+    gap: 8px;
+    align-items: start;
+    color: #fff;
   }
 }

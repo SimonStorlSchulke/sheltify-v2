@@ -11,7 +11,7 @@
       <span>{{twoWayModel()!.OriginalFileName}}</span>
     </div>
   } @else if (twoWayModel()) {
-    <img [cmsImage]="twoWayModel()!" [class.fit-contain]="objectFitContain()" [style]="'object-fit: ' + objectFitContain() + ' !important;'">
+    <img [cmsImage]="twoWayModel()!" [class.cropped]="cropped()">
   } @else {
     <div class="sui flex-x jc-center ai-center h-100">
       <ng-icon name="bootstrapCardImage" size="2rem" color="#888"/>

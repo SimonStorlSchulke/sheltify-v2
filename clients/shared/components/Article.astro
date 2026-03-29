@@ -13,7 +13,6 @@ import RenderSectionForm from 'article-renderer/components/RenderSectionForm.sve
 import RenderSectionAnimalUpdates from 'article-renderer/components/RenderSectionAnimalUpdates.svelte';
 import "article-renderer/styles/_index.scss"
 import { animalsByArticleId } from 'sheltify-lib/animal-util.ts';
-import { filterPublishedAndHasArticle } from 'sheltify-lib/cms-utils.ts';
 import SpecialSectionRenderer from './SpecialSectionRenderer.astro';
 
 interface Props {
@@ -47,8 +46,10 @@ async function populateDynamicData() {
   }
 }
 
-const allAnimals = filterPublishedAndHasArticle(await cms.animals);
+//TODO - wenn mehrere tiere einem artikel zugewieen sind und nicht alle valide published sind, schlägt das fehl weil der link nicht stimmt.
+const allAnimals = await cms.animals;
 const allAnimalsByArticle = animalsByArticleId(allAnimals);
+const publishedAnimals = await cms.getPublishedAnimals();
 
 ---
 <div style={'margin-top: ' + topPadding + 'px'} class:list={cssClasses}>
@@ -97,7 +98,7 @@ const allAnimalsByArticle = animalsByArticleId(allAnimals);
             comp = <RenderSectionAnimalUpdates section={section}  allAnimalsByArticle={allAnimalsByArticle}/>;
           break;
           case 'special':
-            section.TempData = {allAnimals, allAnimalsByArticle};
+            section.TempData = {allAnimals: publishedAnimals, allAnimalsByArticle};
             comp = <SpecialSectionRenderer section={section}/>;
             break;
           default:

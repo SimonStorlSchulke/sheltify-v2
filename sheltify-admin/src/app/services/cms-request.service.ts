@@ -130,6 +130,11 @@ export class CmsRequestService {
       ));
   }
 
+  public getPublishedAnimals() {
+    return this.getAnimals().pipe(map(animals => animals
+      .results?.filter(animal => animal.PublishedAt?.Valid && !!animal.ArticleID && animal.ArticleID != 'NoArticle')));
+  }
+
   public getLastModifiedAnimals(amount: number): Observable<CmsAnimal[]> {
     return this.get<CmsAnimal[]>(`${this.publicTenantsUrl}/animals/last-modified?amount=${amount}`);
   }

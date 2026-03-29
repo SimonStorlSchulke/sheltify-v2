@@ -1,16 +1,15 @@
 ---
 import { cms } from '@shared/cms/sheltify-access.ts';
 import AnimalArticle from '@shared/components/AnimalArticle.astro';
-import MftLayout from '../../../layouts/MftLayout.astro';
-
+import MftLayout from '../../layouts/MftLayout.astro';
 export async function getStaticPaths() {
   return cms.getStaticPathsAnimals();
 }
 
-const {animalKind, animalNames} = Astro.params;
+const {animalNames} = Astro.params;
 const title = animalNames.split('-').join(', ');
 ---
 
 <MftLayout seo={{ title }}>
-  <AnimalArticle animalKind={animalKind} animalNames={animalNames}/>
+  <AnimalArticle animalNames={animalNames}/>
 </MftLayout>

@@ -1,0 +1,28 @@
+---
+import { cms } from '@shared/cms/sheltify-access.ts';
+import AnimalArticle from '@shared/components/AnimalArticle.astro';
+import '../../../../theme/_index.scss'
+import Layout from '@shared/layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  return cms.getStaticPathsAnimals();
+}
+
+const {animalKind, animalNames} = Astro.params;
+---
+<Layout seo={{title: animalNames}}>
+  <div class="sui wrapper">
+    <AnimalArticle animalKind={animalKind} animalNames={animalNames}/>
+  </div>
+</Layout>
+
+<style is:global>
+  .sui.wrapper {
+      width: 100% !important;
+      max-width: 100% !important;
+  }
+
+  body {
+      background: unset;
+  }
+</style>

@@ -1,11 +1,12 @@
 @use "colors";
 @use "animal-card";
+@use "font";
 
 :root {
   --section-gap-x: min(50px, 5dvw);
   --section-gap-y: 50px;
   --hero-height: 800px;
-  --hero-top-height: 900px;
+  --hero-top-height: 70dvh;
 }
 
 .themable.article {
@@ -30,6 +31,7 @@
     font-weight: 400;
     padding: 8px 16px;
     transition: background-color 0.35s, color 0.35s;
+    cursor: pointer;
 
     &.lg {
       font-size: 32px;

@@ -1,0 +1,16 @@
+:root {
+  // required variables
+  --header-height: 86px;
+  --padding-article: 64px;
+  --wrapper-width: min(1250px, 100dvw - var(--padding-article));
+  --hero-height: 800px;
+  --hero-top-height: 900px;
+  --section-gap-x: min(50px, 5dvw);
+  --section-gap-y: 50px;
+  --c-primary: #365e32;
+  --c-primary-h1: #45893e;
+  --c-primary-h2: #c8dfac;
+  --c-cto: #ff7863;
+  --c-cto-d: #fa644d;
+  --c-text: #6b6b6b;
+}

@@ -42,8 +42,8 @@ export class AnimalService {
 
   }
 
-  public hasArticle(animal: CmsAnimal): boolean {
-    return !!animal.ArticleID && animal.ArticleID != 'NoArticle'
+  public isPublished(animal: CmsAnimal): boolean {
+    return !!animal.PublishedAt?.Valid && !!animal.ArticleID && animal.ArticleID != 'NoArticle'
   }
 
   async save(animal: CmsAnimal) {

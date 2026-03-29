@@ -4,12 +4,11 @@ import Article from "./Article.astro";
 import AnimalCV from './svelte-parts/AnimalCV.svelte'
 
 interface Props {
-  animalKind: string;
   animalNames: string;
 }
-const { animalKind, animalNames } = Astro.props;
+const { animalNames } = Astro.props;
 
-const animals = await cms.getAnimalsByNames(animalKind, animalNames);
+const animals = await cms.getAnimalsByNames(animalNames);
 ---
 
 {

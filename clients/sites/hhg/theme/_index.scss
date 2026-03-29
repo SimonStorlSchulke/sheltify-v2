@@ -1,0 +1,9 @@
+@use "variables";
+@use "article";
+@use "header";
+@use "fonts";
+
+body {
+  background-color: #eee;
+  color: var(--c-text);
+}

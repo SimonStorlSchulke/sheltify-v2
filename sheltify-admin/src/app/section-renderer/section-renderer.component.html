@@ -61,6 +61,9 @@
         @case('Tierliste - Auswahl') {
           <section-special-mft-tierliste-auswahl [section]="sectionVal" />
         }
+        @case('Dynamische Hundeliste') {
+          <section-special-hhg-hundeliste [section]="sectionVal" />
+        }
         @default {
           <span class="sui text-secondary">Spezlaisektion <b>'{{sectionVal.Content.Type}}'</b>. Diese Sektion ist speziell auf die Webseite einer bestimmten Organisation zugeschnitten und hat hier daher keine Vorschau.</span>
         }

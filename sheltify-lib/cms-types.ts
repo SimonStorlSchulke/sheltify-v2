@@ -10,11 +10,25 @@ export type SqlNullBool = {
   Valid: boolean, // Valid is true if Bool is not NULL
 }
 
-export const SqlNullBoolNull: () => SqlNullBool = () => ({Bool: false, Valid: false});
-export const SqlNullBoolTrue: () => SqlNullBool = () => ({Bool: true, Valid: true});
-export const SqlNullBoolFalse:  () => SqlNullBool = () => ({Bool: false, Valid: true});
-export const SqlNullTimeNull:  () => SqlNullTime = () => ({Time: null, Valid: false});
-export const SqlNullTimeNow: () => SqlNullTime = () => ({Valid: true, Time: new Date().toISOString()});
+export function SqlNullBoolNull(): SqlNullBool {
+  return ({Bool: false, Valid: false});
+}
+
+export function SqlNullBoolTrue(): SqlNullBool {
+  return ({Bool: true, Valid: true});
+}
+
+export function SqlNullBoolFalse(): SqlNullBool {
+  return ({Bool: false, Valid: true});
+}
+
+export function SqlNullTimeNull(): SqlNullTime {
+  return ({Time: null, Valid: false});
+}
+
+export function SqlNullTimeNow(): SqlNullTime {
+  return ({Valid: true, Time: new Date().toISOString()});
+}
 
 export function setPublishedAt(publishable: Publishable, published: boolean) {
   if(published) {
@@ -79,6 +93,7 @@ export type CmsAnimal = Publishable & {
   Portrait?: CmsImage;
   MediaFiles: CmsImage[];
   NoAdoption: boolean,
+  PatronsNeeded: boolean,
   FreeRoamer: SqlNullBool,
   HomeFoundStatus: 'no' | 'reserved' | 'yes',
 }
@@ -148,7 +163,6 @@ export type CmsTenantConfiguration = CmsType & {
   AnimalFeatureWhere: boolean,
   AnimalFeaturePatrons: boolean,
   AnimalFeatureRace: boolean,
-  AnimalFeatureAnimalKind: boolean,
   AnimalFeatureNoAdoption: boolean,
   AnimalShowUpdatesForDays: number,
 }

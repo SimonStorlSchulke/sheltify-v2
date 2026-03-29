@@ -25,6 +25,7 @@ type Animal struct {
 	Portrait         *MediaFile `gorm:"->"`
 	AnimalKind       string
 	FreeRoamer       sql.NullBool
+	PatronsNeeded    bool
 	NoAdoption       bool
 	Race             string
 	MediaFiles       []*MediaFile `gorm:"many2many:media_file_animals;constraint:OnDelete:CASCADE;"`
@@ -41,7 +42,6 @@ func (a *Animal) ValidateForPublishing() string {
 		articleIDErr = "Artikel zum Tier muss bestehen\n"
 	}
 	return a.Validate() +
-		valNotEmpty("Status", a.Status) +
 		valMaxLength("Beschreibung", a.Description, 500) +
 		valIsInList("Geschlecht", a.Gender, []string{"male", "female"}) +
 		valNotEmpty("Tierart", a.AnimalKind) +

@@ -1,44 +1,25 @@
 <div class="sui flex-x ai-center gap-1">
-  <label>{{label()}}</label>
-  @if(explanation()) {
+  <label>{{ label() }}</label>
+  @if (explanation()) {
     <button class="small secondary questionmark" type="button" (click)="showExplanation()"><span>?</span></button>
   }
 </div>
 
-@if(nullBoolModel(); as nullBoolModel) {
+@if (showYesNo()) {
   <div class="button-group">
     <button
       type="button"
-      [class]="
-    !nullBoolModel.Valid
-      ? 'white'
-      : nullBoolModel.Bool
-        ? 'primary'
-        : 'white'
-  "
-      (click)="tooggleNullBool(true)">
+      [class]="(checkedState() === true) ? 'primary' : 'white'"
+      (click)="toggle(true)">
       Ja
     </button>
     <button
       type="button"
-      [class]="(nullBoolModel.Valid && !nullBoolModel.Bool) ? 'primary' : 'white'"
-      (click)="tooggleNullBool(false)">
+      [class]="checkedState() === false ? 'primary' : 'white'"
+      (click)="toggle(false)">
       Nein
     </button>
   </div>
 } @else {
-  <div class="button-group">
-    <button
-      type="button"
-      [class]="twoWayModel() ? 'primary' : 'white'"
-      (click)="onInput(true)">
-      Ja
-    </button>
-    <button
-      type="button"
-      [class]="twoWayModel() ? 'white' : 'primary'"
-      (click)="onInput(false)">
-      Nein
-    </button>
-  </div>
+  <input type="checkbox" [(ngModel)]="twoWayModel">
 }

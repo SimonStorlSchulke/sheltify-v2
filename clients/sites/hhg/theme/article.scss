@@ -1,0 +1,120 @@
+// article.scss muss alles (auch imports) enthalten was für die article-preview im cms relevant ist
+@use "variables";
+@use "fonts";
+
+.themable.article {
+
+  color: var(--c-text);
+
+  h1 {
+    font-family: "more-sugar";
+    font-size: var(--fontsize-h1);
+    color: var(--c-primary);
+    font-weight: 500;
+  }
+
+  h2 {
+    font-family: "more-sugar";
+    font-size: var(--fontsize-h2);
+    font-weight: 500;
+  }
+
+  .section-hero {
+    .hero-container {
+
+      &::after {
+        content: url(/hero-wave.svg);
+        position: absolute;
+        bottom: -2px;
+        transform: scaleY(.4) translateY(80%);
+        width: 100%;
+      }
+
+      margin-bottom: 50px;
+    }
+  }
+
+  button {
+    outline: none;
+    border: none;
+    border-radius: 32px;
+    font-family: 'more-sugar', system-ui;
+    font-weight: 400;
+    padding: 8px 16px;
+    transition: background-color 0.35s, color 0.35s;
+    cursor: pointer;
+
+    &.lg {
+      font-size: 32px;
+    }
+
+    &.primary {
+      background: var(--c-primary);
+      color: #fff;
+
+      &:hover {
+        background: var(--c-primary-h1);
+      }
+    }
+
+    &.secondary {
+      background: #fff;
+      outline: 3px solid var(--c-primary);
+      color: #424242;
+
+      &:hover {
+        background: var(--c-primary-h);
+      }
+    }
+  }
+
+  input {
+    color: #424242;
+    outline: 3px solid #365e32;
+    outline-offset: -1px;
+    border-radius: 100px;
+    font-family: 'more-sugar', system-ui;
+    padding: 4px 12px;
+  }
+
+  .button-group {
+    button {
+      border-radius: 0;
+      margin-right: -3px;
+
+      background: #fff;
+      outline: 3px solid var(--c-primary);
+      outline-offset: -1px;
+      color: #424242;
+
+      &:hover {
+        background: var(--c-primary-h2);
+      }
+
+      &.active {
+        background: var(--c-primary);
+        color: #fff;
+
+        &:hover {
+          background: var(--c-primary-h1);
+        }
+      }
+    }
+
+    :last-child {
+      border-radius: 0 100px 100px 0;
+    }
+
+    :first-child {
+      border-radius: 100px 0 0 100px;
+    }
+  }
+
+  .animal-card {
+    font-family: "more-sugar", system-ui;
+
+    .bubbles {
+      font-weight: 100;
+    }
+  }
+}

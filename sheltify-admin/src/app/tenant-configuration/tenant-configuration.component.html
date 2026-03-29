@@ -9,7 +9,7 @@
 
     <form class="sui flex-y gap-2 grow-1 pr-1 pb-3 pt-1">
       <div [class]="rowClass">
-        <app-image-picker-single [objectFitContain]="true" label="Logo" idName="logo" [(twoWayModel)]="options.LogoHeader"/>
+        <app-image-picker-single [cropped]="true" label="Logo" idName="logo" [(twoWayModel)]="options.LogoHeader"/>
         <div class="sui flex-y gap-2 grow-1">
           <app-text-input class="sui grow-1" idName="name" label="Name" [(twoWayModel)]="options.Name"/>
           <app-text-input class="sui grow-1" idName="siteUrl" label="Webseiten-Url" [(twoWayModel)]="options.SiteUrl"/>
@@ -46,15 +46,12 @@
 
         <span>Verfügbare Funktionen</span>
         <div class="sui flex-x wrap gap-2">
-          <app-checkbox-input idName="" label="Tierart auswählbar" [(twoWayModel)]="options.AnimalFeatureAnimalKind"/>
           <app-checkbox-input idName="" label="Paten" [(twoWayModel)]="options.AnimalFeaturePatrons"/>
           <app-checkbox-input idName="" label="Rasse" [(twoWayModel)]="options.AnimalFeatureRace"/>
           <app-checkbox-input idName="" label="Standortangabe" [(twoWayModel)]="options.AnimalFeatureWhere"/>
           <app-checkbox-input idName="" label="Keine Adoption" [(twoWayModel)]="options.AnimalFeatureNoAdoption"/>
         </div>
-        @if (options.AnimalFeatureAnimalKind) {
-          <app-text-input [(twoWayModel)]="options.AnimalKinds" idName="animal-kinds" label="Tierarten" explanation="Kommaseparierte Liste an Tierarten (z.B. Hund,Katze,Kaninchen)"/>
-        }
+        <app-text-input [(twoWayModel)]="options.AnimalKinds" idName="animal-kinds" label="Tierarten" explanation="Kommaseparierte Liste an Tierarten (z.B. Hund,Katze,Kaninchen). Ist hier nur eine Art angegeben, wird diese jedem Tier automatisch vergeben und ist nicht auswählbar."/>
         <app-text-input [(twoWayModel)]="options.AnimalStati" idName="animal-kinds" label="Tier Stati" explanation="Kommaseparierte Liste an Tierarten (z.B. Hund,Katze,Kaninchen)"/>
 
       </form>

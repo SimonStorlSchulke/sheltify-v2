@@ -12,12 +12,12 @@
       @if (animal.HomeFoundStatus !== 'yes') {
 
         <div data-testid="form-animal-editor" class="sui flex-x gap-3 grow-1 wrap">
-          <app-image-picker-single label="Portrait" idName="portrait" [(twoWayModel)]="animal.Portrait"/>
+          <app-image-picker-single label="Portrait" idName="portrait" [(twoWayModel)]="animal.Portrait" [cropped]="true"/>
 
           <div class="sui flex-y gap-2 grow-1 pr-1">
 
             <div [class]="rowClass">
-              @if (animalKinds && config?.AnimalFeatureAnimalKind) {
+              @if (animalKinds.length > 1) {
                 <app-select-input style="min-width: 200px;" idName="animalKind" label="Art" [(twoWayModel)]="animal.AnimalKind" [options]="animalKinds"/>
               }
               @if (animalKinds && config?.AnimalFeatureRace) {
@@ -41,9 +41,16 @@
               <app-number-input idName="size" label="Schulterhöhe in cm" [(twoWayModel)]="animal.ShoulderHeightCm"/>
             </div>
 
-            @if (config?.AnimalFeatureNoAdoption) {
-              <app-checkbox-input idName="noAdoption" label="Keine Adoption (nur Paten)" [(twoWayModel)]="animal.NoAdoption"/>
-            }
+            <app-text-input idName="where" label="Wo in Deutschland?" [(twoWayModel)]="animal.Where"/>
+
+            <div class="sui flex-x gap-3">
+              @if (config?.AnimalFeatureNoAdoption) {
+                <app-checkbox-input idName="noAdoption" label="Keine Adoption (nur Paten)" [showYesNo]="false" [(twoWayModel)]="animal.NoAdoption"/>
+              }
+              @if (config?.AnimalFeaturePatrons) {
+                <app-checkbox-input idName="noAdoption" label="Paten gesucht" [showYesNo]="false" [(twoWayModel)]="animal.PatronsNeeded"/>
+              }
+            </div>
 
             @if (animal.AnimalKind == 'Katze') {
               <app-checkbox-input idName="noAdoption" label="Freigänger" [(nullBoolModel)]="animal.FreeRoamer"/>

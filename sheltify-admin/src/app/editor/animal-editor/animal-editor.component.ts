@@ -100,7 +100,7 @@ export class AnimalEditorComponent {
 
   protected async assignExistingArticle() {
     const selectableAnimals = this.animals()?.filter(animal => (
-      animal.ID !== this.animal()?.ID) && this.animalService.hasArticle(animal)
+      animal.ID !== this.animal()?.ID) && this.animalService.isPublished(animal)
     );
     const selectedAnimal = await this.modalService.openFinishable(AnimalPickerDialogComponent, {
       animals: selectableAnimals,
@@ -125,5 +125,6 @@ export class AnimalEditorComponent {
     const stati = new Set(currentStati);
     active ? stati.add(status) : stati.delete(status);
     animal.Status = [...stati].join(',');
+    console.log(animal.Status)
   }
 }

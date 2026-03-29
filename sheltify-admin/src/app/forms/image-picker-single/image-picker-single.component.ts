@@ -1,4 +1,4 @@
-import { Component, inject, input, model, signal } from '@angular/core';
+import { Component, inject, Input, input, model, signal } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { CmsImage } from 'sheltify-lib/cms-types';
 import { InputBaseComponent } from 'src/app/forms/input-base.component';
@@ -16,7 +16,7 @@ import { BtIconComponent } from "src/app/ui/bt-icon/bt-icon.component";
 })
 export class ImagePickerSingleComponent extends InputBaseComponent {
   public twoWayModel = model<CmsImage>();
-  public objectFitContain = input(false);
+  public cropped = input(false);
 
   private modalPresenter = inject(ModalPresenter);
 

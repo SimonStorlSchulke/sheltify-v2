@@ -12,10 +12,10 @@ export function getAnimalLink(animal: CmsAnimal, allAnimalsByArticle: Record<str
     //link not needed for preview in CMS UI
     return null;
   }
-  const animalsInArticle = allAnimalsByArticle[animal.ArticleID ?? ''];
-  animalsInArticle.sort((a: CmsAnimal, b: CmsAnimal) => a.ID.localeCompare(b.ID));
+  const animalsInArticle = [...(allAnimalsByArticle[animal.ArticleID ?? ''] ?? [])];
+  animalsInArticle.sort((a, b) => a.ID.localeCompare(b.ID));
   const names = animalsInArticle.map(animal => animal.Name).join('-');
-  return `/tier/${animalsInArticle[0].AnimalKind}/${names}`;
+  return `/tierartikel/${names}`;
 }
 
 export async function downloadFile(file: CmsImage): Promise<void> {
@@ -30,7 +30,6 @@ export async function downloadFile(file: CmsImage): Promise<void> {
   a.download = file.Title + '.' + extension;
   document.body.appendChild(a);
   a.click();
-
   a.remove();
   window.URL.revokeObjectURL(url);
 }

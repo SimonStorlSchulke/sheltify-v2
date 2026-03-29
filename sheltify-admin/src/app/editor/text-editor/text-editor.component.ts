@@ -5,10 +5,13 @@ import { toggleMark } from 'prosemirror-commands';
 import { Plugin } from 'prosemirror-state';
 import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
 import { Schema, NodeSpec, MarkSpec, Mark, DOMOutputSpec } from 'prosemirror-model';
+import { firstValueFrom } from 'rxjs';
 import { ButtonLinkDialogComponent } from 'src/app/editor/text-editor/button-link-dialog/button-link-dialog.component';
+import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { marks as defaultMarks } from 'ngx-editor';
 import { nodes as defaultNodes } from 'ngx-editor';
+import { AnimalPickerDialogComponent } from 'src/app/ui/animal-picker-dialog/animal-picker-dialog.component';
 
 const myLink: MarkSpec = {
   attrs: {
@@ -73,7 +76,10 @@ export class TextEditorComponent implements OnInit {
     ['align_left', 'align_center', 'align_right', 'align_justify'],
   ];
 
-  constructor(private readonly modalService: ModalService) {
+  constructor(
+    private modalService: ModalService,
+    private cmsRequestService: CmsRequestService,
+  ) {
     const plainTextOnlyPaste = new Plugin({
       props: {
         transformPastedHTML(html: string): string {
@@ -111,6 +117,27 @@ export class TextEditorComponent implements OnInit {
       class: `article-button ${data.buttonTye}`,
       rel: "noopener noreferrer",
     })(view.state, view.dispatch);
+
+    view.focus();
+  }
+
+  async addAnimalLink(event: MouseEvent) {
+    event.preventDefault();
+    const animal = await this.modalService.openFinishable(AnimalPickerDialogComponent, {
+      animals : (await firstValueFrom(this.cmsRequestService.getPublishedAnimals())),
+    });
+    if (!animal) return;
+
+    const view: EditorView = this.editor.view;
+
+
+    toggleMark(view.state.schema.marks['link'], {
+      href: '', // filled in by articleRenderer
+      class: `animal-link`,
+      rel: "noopener noreferrer",
+      title: animal.ID,
+    })(view.state, view.dispatch);
+
 
     view.focus();
   }

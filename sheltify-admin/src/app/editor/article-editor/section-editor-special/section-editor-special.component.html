@@ -1,6 +1,10 @@
 <div class="sui flex-y gap-2">
   <b>{{ section().Content.Type }}</b>
-  <label>Eigenschaften</label>
+  @if(section().Content.Properties.length > 0) {
+    <label>Eigenschaften</label>
+  } @else {
+    <span class="sui text-secondary">Hier gibt es nichts einzustellen - Änderungswünsche bitte an Simon</span>
+  }
   <div class="sui flex-x wrap jc-start gap-2">
     @for (property of section().Content.Properties; track $index) {
       @let propertyName = property[0];

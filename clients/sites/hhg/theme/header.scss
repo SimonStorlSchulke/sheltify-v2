@@ -1,0 +1,11 @@
+.themable.header {
+  font-family: 'more-sugar';
+  font-size: var(--fontsize-h4);
+  font-weight: 300;
+
+  .logo a {
+    img {
+      height: 100%;
+    }
+  }
+}

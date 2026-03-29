@@ -14,7 +14,7 @@
 
   let {section}: { section: SectionSpecial } = $props();
 
-  const { allAnimals, allAnimalsByArticle } = section.TempData as {allAnimals: CmsAnimal[], allAnimalsByArticle: Record<string, CmsAnimal[]>};
+  const {allAnimals, allAnimalsByArticle} = section.TempData as { allAnimals: CmsAnimal[], allAnimalsByArticle: Record<string, CmsAnimal[]> };
 
   type FilterKey = 'size' | 'gender' | 'age';
 
@@ -60,7 +60,7 @@
 
   const filteredAnimals = $derived.by(() => {
     const bySearch = searchAnimal(search, 'Hund', allAnimals);
-    if(!anyFilterActive) {
+    if (!anyFilterActive) {
       return bySearch;
     }
 
@@ -69,17 +69,17 @@
       let matchesGender = !filters.gender;
       let matchesAge = !filters.age;
 
-      if(filters.size && animal.ShoulderHeightCm) {
+      if (filters.size && animal.ShoulderHeightCm) {
         if (filters.size === 'klein' && animal.ShoulderHeightCm <= 40) matchesSize = true;
         else if (filters.size === 'mittel' && animal.ShoulderHeightCm > 40 && animal.ShoulderHeightCm <= 55) matchesSize = true;
         else if (filters.size === 'groß' && animal.ShoulderHeightCm > 55) matchesSize = true;
       }
 
-      if(filters.gender && animal.Gender) {
+      if (filters.gender && animal.Gender) {
         if (filters.gender === animal.Gender) matchesGender = true;
       }
 
-      if(filters.age && animal.Birthday.Valid) {
+      if (filters.age && animal.Birthday.Valid) {
         let ageInYears = yearsOld(animal)!;
         if (filters.age === 'Welpen' && ageInYears < 1) matchesAge = true;
         else if (filters.age === 'Erwachsen' && ageInYears >= 1 && ageInYears < 7) matchesAge = true;
@@ -94,39 +94,39 @@
 
 <div class="sui flex-y gap-3">
 
-<div class="sui flex-x wrap gap-4">
-  <input
-    type="text"
-    placeholder="Search animals..."
-    oninput={() => resetFilters()}
-    bind:value={search}
-  />
+  <div class="sui flex-x wrap gap-4">
+    <input
+      type="text"
+      placeholder="Search animals..."
+      oninput={() => resetFilters()}
+      bind:value={search}
+    />
 
-  <div class="button-group">
-    <button class:active={filters.size === 'klein'} onclick={() => toggleFilter('size', 'klein') }>klein</button>
-    <button class:active={filters.size === 'mittel'} onclick={() => toggleFilter('size', 'mittel')}>mittel</button>
-    <button class:active={filters.size === 'groß'} onclick={() => toggleFilter('size', 'groß')}>groß</button>
+    <div class="button-group">
+      <button class:active={filters.size === 'klein'} onclick={() => toggleFilter('size', 'klein') }>klein</button>
+      <button class:active={filters.size === 'mittel'} onclick={() => toggleFilter('size', 'mittel')}>mittel</button>
+      <button class:active={filters.size === 'groß'} onclick={() => toggleFilter('size', 'groß')}>groß</button>
+    </div>
+
+    <div class="button-group">
+      <button class:active={filters.gender === 'female'} onclick={() => toggleFilter('gender', 'female')}>Hündinnen</button>
+      <button class:active={filters.gender === 'male'} onclick={() => toggleFilter('gender', 'male')}>Rüden</button>
+    </div>
+
+    <div class="button-group">
+      <button class:active={filters.age === 'Welpen'} onclick={() => toggleFilter('age', 'Welpen')}>Welpen</button>
+      <button class:active={filters.age === 'Erwachsen'} onclick={() => toggleFilter('age', 'Erwachsen')}>Erwachsen</button>
+      <button class:active={filters.age === 'Senioren'} onclick={() => toggleFilter('age', 'Senioren')}>Senioren</button>
+    </div>
   </div>
 
-  <div class="button-group">
-    <button class:active={filters.gender === 'female'} onclick={() => toggleFilter('gender', 'female')}>Hündinnen</button>
-    <button class:active={filters.gender === 'male'} onclick={() => toggleFilter('gender', 'male')}>Rüden</button>
+  <p class="sui text-center"><b>{explainer}</b></p>
+
+  <div class="sui flex-x gap-4 wrap">
+    {#each filteredAnimals as animal}
+      <a href={getAnimalLink(animal, allAnimalsByArticle)}>
+        <AnimalCard animal={animal}/>
+      </a>
+    {/each}
   </div>
-
-  <div class="button-group">
-    <button class:active={filters.age === 'Welpen'} onclick={() => toggleFilter('age', 'Welpen')} >Welpen</button>
-    <button class:active={filters.age === 'Erwachsen'} onclick={() => toggleFilter('age', 'Erwachsen')}>Erwachsen</button>
-    <button class:active={filters.age === 'Senioren'} onclick={() => toggleFilter('age', 'Senioren')}>Senioren</button>
-  </div>
-</div>
-
-<p class="sui text-center"><b>{explainer}</b></p>
-
-<div class="sui flex-x gap-4 wrap">
-  {#each filteredAnimals as animal}
-    <a href={getAnimalLink(animal, allAnimalsByArticle)}>
-      <AnimalCard animal="{animal}"/>
-    </a>
-  {/each}
-</div>
 </div>

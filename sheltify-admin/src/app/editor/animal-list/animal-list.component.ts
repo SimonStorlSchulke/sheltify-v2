@@ -45,7 +45,6 @@ export class AnimalListComponent implements OnInit {
 
   public pageUrl = computed(() => {
     let url = this.tenantConfigurationService.config()?.SiteUrl;
-    console.log(url);
     if (!url) {
       return undefined;
     }
@@ -53,7 +52,7 @@ export class AnimalListComponent implements OnInit {
     const animals = this.animalsWithSameArticle();
     animals.sort((a, b) => a.ID.localeCompare(b.ID));
     if(!animals[0]?.AnimalKind) return undefined;
-    return url + animals[0].AnimalKind + '/' + animals.map(animal => animal.Name).join('-');
+    return url + 'tier/' + animals[0].AnimalKind + '/' + animals.map(animal => animal.Name).join('-');
   })
 
   public search = signal('');
@@ -85,12 +84,16 @@ export class AnimalListComponent implements OnInit {
   }
 
   public async newAnimal() {
+
     const name = await this.modalService.openFinishable(TextInputModalComponent, {
       label: "Name eingeben"
     });
     if(!name) return;
-    // TODO most data should be undefined at start
-    const animal = createNewAnimal(name);
+    const animalKinds = await this.tenantConfigurationService.animalKinds();
+
+    const useDefaultAnimalKind = animalKinds.length == 1;
+
+    const animal = createNewAnimal(name, useDefaultAnimalKind ? animalKinds[0] : undefined);
 
     const savedAnimal = await firstValueFrom(this.cmsRequestService.saveAnimal(animal));
     this.animalService.reloadAnimals();

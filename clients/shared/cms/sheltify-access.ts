@@ -35,7 +35,7 @@ export class SheltifyAccess {
   }
 
   public async getStaticPathsAnimals() {
-    const animals = await this.animals;
+    const animals = await this.getPublishedAnimals();
     animals.sort((a, b) => a.ID.localeCompare(b.ID));
 
     const animalsByArticle = animalsByArticleId(animals);
@@ -88,6 +88,16 @@ export class SheltifyAccess {
     return this.getSortedByPriorityAndUpdatedAt<CmsAnimal>('animals')
   }
 
+  public async getPublishedAnimals(): Promise<CmsAnimal[]> {
+    const allAnimals = await this.getSortedByPriorityAndUpdatedAt<CmsAnimal>('animals');
+
+    const animals = allAnimals.filter(animal => {
+      return !!animal.AnimalKind && !!animal.Name && !!animal.ArticleID && !!animal.PublishedAt?.Valid;
+    })
+
+    return animals;
+  }
+
   public async getFilteredAnimals(filter: AnimalsFilter): Promise<CmsAnimal[]> {
     let query = ``;
 
@@ -104,9 +114,9 @@ export class SheltifyAccess {
     return sortByPriorityAndUpdatedAt(filterPublishedAndHasArticle(animals));
   }
 
-  public async getAnimalsByNames(animalKind: string, animalNames: string): Promise<CmsAnimal[]> {
+  public async getAnimalsByNames(animalNames: string): Promise<CmsAnimal[]> {
     return this.getFilteredAnimals({
-      AnimalKind: animalKind,
+      AnimalKind: undefined,
       MaxNumber: undefined,
       AgeRange: [undefined, undefined],
       SizeRange: [undefined, undefined],

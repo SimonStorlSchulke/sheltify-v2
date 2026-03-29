@@ -3,12 +3,22 @@
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 
-import { cms } from '@shared/cms';
-const animals = await cms.animals;
+import { cms } from '@shared/cms/sheltify-access.ts';
+import Page from '@shared/components/Page.astro';
+import AnimateArticle from '@shared/interactive/AnimateArticle.astro';
+import HhgLayout from '../layouts/HhgLayout.astro';
+
+export async function getStaticPaths() {
+  return cms.getStaticPathsPages();
+}
+
+const { path = '' } = Astro.params;
+const seo = await cms.getSeoByPath(path ?? '');
+
 ---
 
-<h1>HHG!</h1>
+<HhgLayout seo={seo}>
+  <Page path={path ?? ''} />
+</HhgLayout>
 
-{animals.map(a => <div>
-  {a.name}
-</div>)}
+<AnimateArticle/>

@@ -1,0 +1,19 @@
+---
+import { cms } from '@shared/cms/sheltify-access.ts';
+import AnimalArticle from '@shared/components/AnimalArticle.astro';
+import AnimateArticle from '@shared/interactive/AnimateArticle.astro';
+import HhgLayout from '../../layouts/HhgLayout.astro';
+
+export async function getStaticPaths() {
+  return cms.getStaticPathsAnimals();
+}
+
+const {animalNames} = Astro.params;
+const title = animalNames.split('-').join(', ');
+---
+
+<HhgLayout seo={{ title }}>
+  <AnimalArticle animalNames={animalNames}/>
+</HhgLayout>
+
+<AnimateArticle/>
