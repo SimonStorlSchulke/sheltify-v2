@@ -4,7 +4,7 @@ import { cms } from '@shared/cms/sheltify-access.ts';
 import SectionRendererColumns from '@shared/components/sections/SectionRendererColumns.astro';
 import RenderSectionAnimalList from 'article-renderer/components/RenderSectionAnimalList.svelte';
 import RenderSectionFile from 'article-renderer/components/RenderSectionFile.svelte';
-import type { CmsArticle, SectionType } from 'sheltify-lib/article-types.ts';
+import type { CmsArticle, SectionTitle, SectionType } from 'sheltify-lib/article-types.ts';
 import RenderSectionTitle from 'article-renderer/components/RenderSectionTitle.svelte';
 import RenderSectionText from 'article-renderer/components/RenderSectionText.svelte';
 import RenderSectionImages from 'article-renderer/components/RenderSectionImages.svelte';
@@ -18,9 +18,10 @@ import SpecialSectionRenderer from './SpecialSectionRenderer.astro';
 
 interface Props {
   article: CmsArticle;
+  title?: string,
 }
 
-let { article } = Astro.props;
+let { article, title } = Astro.props;
 
 await populateDynamicData();
 
@@ -31,6 +32,22 @@ let rowindex = 0;
 const hasTopHero = article.Structure.Rows[0]?.SectionType == 'hero';
 const topPadding = hasTopHero ? -16 : 48;
 const cssClasses = ['themable', 'article', 'sui', 'flex-y'];
+
+// if there is a title defined, insert it as section either at the top or below the top-hero
+if (title) {
+  const titleSection: SectionTitle = {
+    BackgroundColor: '',
+    SectionType: 'title',
+    Content: {
+      Text: title,
+      Type: 'h1',
+      Anchor: '',
+      Centered: false,
+    }
+  }
+
+  article.Structure.Rows.splice(hasTopHero ? 1 : 0, 0, titleSection);
+}
 
 async function populateDynamicData() {
   for (const section of article.Structure.Rows) {
@@ -57,7 +74,6 @@ const publishedAnimals = await cms.getPublishedAnimals();
 
 ---
 <div style={'margin-top: ' + topPadding + 'px'} class:list={cssClasses}>
-
 {
   article.Structure.Rows.map(section =>
     {

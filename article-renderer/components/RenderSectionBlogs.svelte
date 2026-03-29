@@ -22,7 +22,7 @@
 
   function encodeTitle(title: string) {
     return title
-      .replace(/~/g, "~t")     // escape your escape char first
+      .replace(/~/g, "~t")
       .replace(/\?/g, "~q")
       .replace(/\//g, "~s")
       .replace(/%/g, "~p")
