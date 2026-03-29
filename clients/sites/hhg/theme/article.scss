@@ -89,6 +89,22 @@
         background: var(--c-primary-h2);
       }
     }
+
+    &.paypal {
+      background: linear-gradient(-70deg, rgb(86, 86, 233) 57px, var(--c-cto) 58px);
+      color: #fff;
+      padding-right: 12px;
+      transition: filter 0.25s;
+
+      img {
+        width: 2.2rem;
+        height: 2.2rem;
+      }
+
+      &:hover {
+        filter: saturate(1.5);
+      }
+    }
   }
 
   input {

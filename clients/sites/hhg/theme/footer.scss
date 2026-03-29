@@ -1,0 +1,38 @@
+.themable.footer {
+  background-color: #20381e;
+  padding: 22px;
+  color: white;
+  font-size: var(--fontsize-small);
+
+  a {
+    text-decoration: underline;
+  }
+}
+
+.themable.hhg-footer {
+  background: var(--c-primary);
+  color: #fff;
+
+  h1, h2, h3 {
+    font-family: "more-sugar", system-ui;
+    font-weight: 200;
+  }
+
+  h2 {
+    font-size: 1.45rem;
+  }
+
+  .logo {
+    height: 180px;
+    width: 180px;
+    object-fit: contain;
+  }
+
+  .p11-link {
+    background: #8a8a8a;
+    padding: 6px 16px;
+    border-radius: 32px;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+}

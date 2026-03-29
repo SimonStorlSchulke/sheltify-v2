@@ -7,6 +7,7 @@
 
 <script lang="ts">
   import Image from './Image.svelte';
+  import { onMount } from 'svelte';
   import type { SectionBlogs } from "sheltify-lib/article-types";
 
   let {section}: { section: SectionBlogs } = $props();
@@ -18,7 +19,23 @@
   let entriesForCategory = $derived.by(() => {
     if (!selectedCategory) return section.TempBlogs;
     return section.TempBlogs.filter(blog => blog.Category == selectedCategory);
-  })
+  });
+
+  onMount(() => {
+    const urlParams = new URLSearchParams(window?.location.search);
+    const preselectedCategory = urlParams.get('category');
+    if (preselectedCategory) {
+      selectedCategory = preselectedCategory;
+    }
+  });
+
+  function setCategory(category: string) {
+    selectedCategory = category;
+    const url = new URL(window.location.href);
+    url.search = category ? `?category=${category}` : '';
+    history.pushState({}, '', url);
+  }
+
 
   function encodeTitle(title: string) {
     return title
@@ -38,13 +55,13 @@
 <div class="sui flex-y gap-3">
   <div class="sui flex-x wrap gap-2">
     {#if section.Content.ShowAllCategoriesButton}
-      <button class={selectedCategory === '' ? 'primary' : 'secondary'} onclick={() => selectedCategory = ''}>Alle Artikel</button>
+      <button class={selectedCategory === '' ? 'primary' : 'secondary'} onclick={() => setCategory('')}>Alle Artikel</button>
     {/if}
 
     <div class="button-group">
       {#if !allCategories}
         {#each section.Content.Categories as category}
-          <button class:active={selectedCategory === category} onclick={() => selectedCategory = category}>{category}</button>
+          <button class:active={selectedCategory === category} onclick={() => setCategory(category)}>{category}</button>
         {/each}
       {/if}
     </div>

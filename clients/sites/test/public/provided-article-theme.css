@@ -1,0 +1,219 @@
+:root {
+  --header-height: 86px;
+  --padding-article: 64px;
+  --wrapper-width: min(1250px, 100dvw - var(--padding-article));
+  --hero-height: 800px;
+  --hero-top-height: 900px;
+  --section-gap-x: min(50px, 5dvw);
+  --section-gap-y: 50px;
+  --c-primary: #365e32;
+  --c-primary-h1: #45893e;
+  --c-primary-h2: #c8dfac;
+  --c-cto: #ff7863;
+  --c-cto-d: #fa644d;
+  --c-text: #6b6b6b;
+  --themable-bg-accent-1: #c8dfac;
+  --themable-bg-accent-2: #fdecd0;
+  --themable-bg-accent-3: #ff8a80;
+  --blog-preview-height: 310px;
+  --neutral100: #f7f5f3;
+  --neutral200: #eee;
+}
+
+.themable.article .themable-bg-accent-1 {
+  background: var(--themable-bg-accent-1);
+}
+.themable.article .themable-bg-accent-2 {
+  background: var(--themable-bg-accent-2);
+}
+.themable.article .themable-bg-accent-3 {
+  background: var(--themable-bg-accent-3);
+}
+
+@font-face {
+  font-family: "more-sugar";
+  src: url("/more-sugar.regular.woff2") format("woff2");
+}
+:root {
+  --fontsize-small: 1rem;
+  --fontsize-default: 1.2rem;
+  --fontsize-h1: 3.8rem;
+  --fontsize-h2: 2.8rem;
+  --fontsize-h3: 1.85rem;
+  --fontsize-h4: 1.55rem;
+}
+
+@media (max-width: 1350px) {
+  :root {
+    --fontsize-small: 0.9rem;
+    --fontsize-default: 1rem;
+    --fontsize-h1: 2.8rem;
+    --fontsize-h2: 2rem;
+    --fontsize-h3: 1.6rem;
+    --fontsize-h4: 1.35rem;
+  }
+}
+.themable.article {
+  color: var(--c-text);
+}
+.themable.article h1 {
+  font-family: "more-sugar";
+  font-size: var(--fontsize-h1);
+  color: var(--c-primary);
+  font-weight: 500;
+}
+.themable.article h2 {
+  font-family: "more-sugar";
+  font-size: var(--fontsize-h2);
+  font-weight: 500;
+}
+.themable.article h3 {
+  font-family: "more-sugar";
+  font-size: var(--fontsize-h3);
+  font-weight: 500;
+}
+.themable.article .section-hero .hero-container::after {
+  content: url(/hero-wave.svg);
+  position: absolute;
+  bottom: -2px;
+  transform: scaleY(0.4) translateY(80%);
+  width: 100%;
+}
+.themable.article .section-hero .hero-container {
+  margin-bottom: 50px;
+}
+.themable.article .section-blogs .blogtile h3 {
+  font-family: "more-sugar";
+}
+.themable.article .section-blogs .blogtile {
+  border-radius: 12px;
+  transition: transform 0.23s, box-shadow 0.4s;
+  background: var(--neutral100);
+}
+.themable.article .section-blogs .blogtile:hover {
+  transform: scale(1.01);
+  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.1333333333);
+}
+.themable.article button {
+  outline: none;
+  border: none;
+  border-radius: 32px;
+  font-family: "more-sugar", system-ui;
+  font-weight: 400;
+  padding: 8px 16px;
+  transition: background-color 0.35s, color 0.35s;
+  cursor: pointer;
+}
+.themable.article button.lg {
+  font-size: 32px;
+}
+.themable.article button.primary {
+  background: var(--c-primary);
+  color: #fff;
+}
+.themable.article button.primary:hover {
+  background: var(--c-primary-h1);
+}
+.themable.article button.secondary {
+  background: #fff;
+  outline: 3px solid var(--c-primary);
+  color: #424242;
+}
+.themable.article button.secondary:hover {
+  background: var(--c-primary-h2);
+}
+.themable.article input {
+  color: #424242;
+  outline: 3px solid #365e32;
+  outline-offset: -1px;
+  border-radius: 100px;
+  font-family: "more-sugar", system-ui;
+  padding: 4px 12px;
+}
+.themable.article .button-group button {
+  border-radius: 0;
+  margin-right: -3px;
+  background: #fff;
+  outline: 3px solid var(--c-primary);
+  outline-offset: -1px;
+  color: #424242;
+}
+.themable.article .button-group button:hover {
+  background: var(--c-primary-h2);
+}
+.themable.article .button-group button.active {
+  background: var(--c-primary);
+  color: #fff;
+}
+.themable.article .button-group button.active:hover {
+  background: var(--c-primary-h1);
+}
+.themable.article .button-group :last-child {
+  border-radius: 0 100px 100px 0;
+}
+.themable.article .button-group :first-child {
+  border-radius: 100px 0 0 100px;
+}
+.themable.article .animal-card {
+  font-family: "more-sugar", system-ui;
+  width: 230px;
+  height: 290px;
+  transition: transform 0.23s, box-shadow 0.4s;
+  display: block;
+  background-color: #fff;
+  position: relative;
+  color: inherit;
+  border-radius: 12px;
+  overflow: hidden;
+  outline: none;
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.2039215686);
+}
+.themable.article .animal-card img {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+}
+.themable.article .animal-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.4);
+}
+.themable.article .animal-card .name-row {
+  padding-left: 0.5rem;
+  padding-top: 0.3rem;
+  font-size: var(--fontsize-h3);
+  display: flex;
+  justify-content: center;
+}
+.themable.article .animal-card .gender-icon {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+.themable.article .animal-card .bubbles {
+  position: absolute;
+  bottom: 68px;
+  left: 12px;
+  display: flex;
+  padding: 0;
+  flex-direction: column;
+  gap: 8px;
+  align-items: start;
+  color: #fff;
+}
+.themable.article .animal-card .bubbles span {
+  border-radius: 40px;
+  padding: 2px 8px;
+  font-size: var(--fontsize-small);
+  font-weight: 100;
+}
+@media (max-width: 700px) {
+  .themable.article .animal-card {
+    width: calc(50dvw - 50px);
+  }
+}
+@media (max-width: 550px) {
+  .themable.article .animal-card {
+    width: calc(100dvw - 60px);
+  }
+}
+
+/*# sourceMappingURL=provided-article-theme.css.map */

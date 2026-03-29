@@ -1,4 +1,4 @@
-import { Component, input, OnInit, output } from '@angular/core';
+import { Component, computed, input, model, OnInit, output } from '@angular/core';
 import { firstValueFrom, Subject } from 'rxjs';
 import { CmsArticle } from 'sheltify-lib/article-types';
 import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
@@ -12,6 +12,7 @@ import { AlertService } from 'src/app/services/alert.service';
 import { BlogService } from 'src/app/services/blog.service';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
+import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
 import { LastEditedComponent } from 'src/app/ui/last-edited/last-edited.component';
 
 @Component({
@@ -22,13 +23,14 @@ import { LastEditedComponent } from 'src/app/ui/last-edited/last-edited.componen
     CheckboxInputComponent,
     ImagePickerSingleComponent,
     SelectInputComponent,
-    LastEditedComponent
+    LastEditedComponent,
+    BtIconComponent
   ],
   templateUrl: './blog-editor.component.html',
   styleUrl: './blog-editor.component.scss',
 })
 export class BlogEditorComponent implements OnInit {
-  blog = input.required<CmsBlogEntry>();
+  blog = model.required<CmsBlogEntry>();
   saveArticle$ = new Subject<undefined>();
   deleted = output();
 
@@ -42,9 +44,27 @@ export class BlogEditorComponent implements OnInit {
 
   blogCategories: string[] = [];
 
+
   async ngOnInit() {
     this.blogCategories = await this.tenantConfigurationService.blogCategories();
   }
+
+  public link = computed(() => {
+    let url = this.tenantConfigurationService.config()?.SiteUrl;
+    if (!url || this.blog().PublishedAt?.Valid == false) return undefined;
+
+    if (!url.endsWith('/')) url += '/';
+
+    const title = this.blog().Title;
+    const encodedTitle = title
+      .replace(/~/g, "~t")
+      .replace(/\?/g, "~q")
+      .replace(/\//g, "~s")
+      .replace(/%/g, "~p")
+      .replace(/\s+/g, "-");
+
+    return `${url}blog/${encodedTitle}`;
+  })
 
   public async save(skipArticle: boolean = false) {
     const page = await firstValueFrom(this.cmsRequestService.saveBlogEntry(this.blog()));
@@ -65,7 +85,10 @@ export class BlogEditorComponent implements OnInit {
 
   public async togglePublished() {
     const savedPage = await this.blogService.togglePublished(this.blog()!);
-    this.blog().PublishedAt = savedPage?.PublishedAt;
+    this.blog.update(blog => {
+      blog.PublishedAt = savedPage?.PublishedAt
+      return structuredClone(blog)
+    });
   }
 
   public async delete() {

@@ -7,6 +7,10 @@
       <button data-testid="btn-new-animal" class="primary" (click)="newAnimal(); layout.mobileOpen.set(true)">Neues Tier</button>
     </div>
 
+    @if(this.animalKinds().length > 2) { <!-- 2 because 'alle' is an option -->
+      <app-radio-buttons-input idName="selectedAnimalKind" [(twoWayModel)]="selectedAnimalKind" label="" [options]="animalKinds()" />
+    }
+
     <app-text-input idName="filter" placeholder="Suche" label="" [(twoWayModel)]="search"/>
 
     <div class="animals sui flex-x ai-start wrap gap-4">

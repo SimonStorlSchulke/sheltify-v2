@@ -25,7 +25,6 @@ export class SectionEditorBlogsComponent {
 
   constructor(tenantConfigurationService: TenantConfigurationService) {
     tenantConfigurationService.blogCategories().then(result => {
-      console.log(result);
       this.allCategories.set(result)
     });
   }

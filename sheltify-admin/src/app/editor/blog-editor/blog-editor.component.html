@@ -1,6 +1,10 @@
-<div class="content-info-header sui flex-x">
+<div class="content-info-header sui flex-x ai-center gap-2">
   @if (blog(); as blog) {
-    <h1 class="sui grow-1">{{ blog.Title }}</h1>
+      <h1>{{ blog.Title }}</h1>
+      @if (link()) {
+        <a [href]="link()" target="_blank"><app-bt-icon name="BoxArrowUpRight" size="ml"/></a>
+      }
+    <div class="sui grow-1"></div>
 
     <div class="sui flex-x gap-2">
       <button type="button" class="primary" (click)="save()">Speichern</button>

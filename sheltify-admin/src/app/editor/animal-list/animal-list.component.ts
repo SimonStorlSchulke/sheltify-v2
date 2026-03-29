@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, model, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { createNewAnimal } from 'src/app/cms-types/cms-type.factory';
 import { CmsAnimal } from 'sheltify-lib/cms-types';
+import { RadioButtonsInputComponent } from 'src/app/forms/radio-buttons-input/radio-buttons-input.component';
 import { TextInputModalComponent } from 'src/app/forms/text-input-modal/text-input-modal.component';
 import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
 import { LeftSidebarLayoutComponent } from 'src/app/layout/left-sidebar-layout/left-sidebar-layout.component';
@@ -24,6 +25,7 @@ import { DatePipe, Location } from '@angular/common';
     TextInputComponent,
     BtIconComponent,
     LeftSidebarLayoutComponent,
+    RadioButtonsInputComponent,
   ],
   templateUrl: './animal-list.component.html',
   styleUrl: './animal-list.component.scss',
@@ -45,27 +47,37 @@ export class AnimalListComponent implements OnInit {
 
   public pageUrl = computed(() => {
     let url = this.tenantConfigurationService.config()?.SiteUrl;
-    if (!url) {
-      return undefined;
-    }
+    if (!url) return undefined;
+
     if (!url.endsWith('/')) url += '/';
+
     const animals = this.animalsWithSameArticle();
     animals.sort((a, b) => a.ID.localeCompare(b.ID));
+
     if(!animals[0]?.AnimalKind) return undefined;
+
     return url + 'tierartikel/' + animals.map(animal => animal.Name).join('-');
   })
 
   public search = signal('');
+
+  public animalKinds = signal<string[]>(['alle']);
+  public selectedAnimalKind = model<string>('alle');
 
   constructor(
     public animalService: AnimalService,
     private modalService: ModalService,
     private tenantConfigurationService: TenantConfigurationService,
     ) {
+    this.tenantConfigurationService.animalKinds().then(animalKinds => this.animalKinds.set(['alle', ...animalKinds]));
   }
 
   public animalList = computed(() => {
-    return this.animalService.animals().filter(animal => animal.Name?.toLowerCase().includes(this.search().toLowerCase()));
+    return this.animalService.animals().filter(animal => {
+      const matchesSearch = animal.Name?.toLowerCase().includes(this.search().toLowerCase());
+      const matchesAnimalKind = this.selectedAnimalKind() == 'alle' || this.selectedAnimalKind() == animal.AnimalKind;
+      return matchesSearch && matchesAnimalKind;
+    });
   })
 
   ngOnInit() {
@@ -89,7 +101,7 @@ export class AnimalListComponent implements OnInit {
       label: "Name eingeben"
     });
     if(!name) return;
-    const animalKinds = await this.tenantConfigurationService.animalKinds();
+    const animalKinds = this.animalKinds();
 
     const useDefaultAnimalKind = animalKinds.length == 1;
 

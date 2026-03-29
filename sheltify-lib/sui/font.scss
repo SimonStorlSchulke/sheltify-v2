@@ -15,4 +15,8 @@
   &.text-balance {
     text-wrap: balance;
   }
+
+  &.text-pre-wrap {
+    white-space: pre-wrap;
+  }
 }
