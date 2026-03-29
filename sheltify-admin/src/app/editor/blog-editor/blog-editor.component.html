@@ -22,9 +22,18 @@
       <div class="sui flex-y gap-2 grow-1">
         <app-text-input idName="title" label="Titel" [(twoWayModel)]="blog().Title"/>
 
-        @if (blogCategories) {
+        <div class="sui flex-x gap-2 wrap">
+          <app-number-input
+            [(twoWayModel)]="blog().Priority"
+            idName="priority"
+            label="Priorität"
+            explanation="Bei höherer Priorität wird dieser Eintrag weiter vorne in der Übersicht angezeigt. Ansonsten werden die neusten Artikel oben angezeigt. Auch negative Werte sind möglich."
+          />
+
+          @if (blogCategories) {
           <app-select-input style="max-width: 300px;" idName="blogCategory" label="Kategorie" [(twoWayModel)]="blog().Category" [options]="blogCategories"/>
         }
+        </div>
         <app-checkbox-input idName="show-in-menu" label="Als Popup anzeigen" [(twoWayModel)]="blog().ShowPopup"/>
         <app-text-input class="sui w-100" idName="description" [(twoWayModel)]="blog().Description" label="Vorschautext" [long]="true"/>
       </div>

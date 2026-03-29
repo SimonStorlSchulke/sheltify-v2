@@ -174,6 +174,7 @@ export type CmsBlogEntry = Publishable & {
   Category: string,
   Description: string,
   ShowPopup: boolean,
+  Priority: number,
   ThumbnailID?: string,
   Thumbnail?: CmsImage,
   ArticleID?: string;

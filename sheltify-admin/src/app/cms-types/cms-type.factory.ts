@@ -65,6 +65,7 @@ export function createNewBlog(): CmsBlogEntry {
     Title: '',
     ShowPopup: false,
     Category: '',
+    Priority: 0,
   }
 }
 

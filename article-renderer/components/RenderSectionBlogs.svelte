@@ -21,6 +21,14 @@
     return section.TempBlogs.filter(blog => blog.Category == selectedCategory);
   });
 
+  let pageIndex = $state(1);
+
+  let entryPagesForCategory = $derived.by(() => {
+    return entriesForCategory.slice((pageIndex - 1) * section.Content.PageSize, pageIndex * section.Content.PageSize);
+  })
+
+  let pageAmount = $derived(Math.ceil(entriesForCategory.length / section.Content.PageSize));
+
   onMount(() => {
     const urlParams = new URLSearchParams(window?.location.search);
     const preselectedCategory = urlParams.get('category');
@@ -31,6 +39,7 @@
 
   function setCategory(category: string) {
     selectedCategory = category;
+    pageIndex = 1;
     const url = new URL(window.location.href);
     url.search = category ? `?category=${category}` : '';
     history.pushState({}, '', url);
@@ -65,11 +74,19 @@
         {/each}
       {/if}
     </div>
+    <div class="sui grow-1"></div>
+    <div class="button-group">
+      {#if pageAmount > 1}
+        {#each {length: pageAmount} as _, i}
+          <button class:active={pageIndex === i+1} onclick={() => pageIndex = i+1}>&nbsp;{i + 1}&nbsp;</button>
+        {/each}
+      {/if}
+    </div>
   </div>
 
-  <div class="sui flex-y gap-4">
-    {#each entriesForCategory as entry}
 
+  <div class="sui flex-y gap-4">
+    {#each entryPagesForCategory as entry}
       <a class="blogtile" href={pathFromTitle(entry.Title)}>
         <Image img={entry.Thumbnail} size={"medium"}/>
         <div class="tile-content sui flex-y pb-2 pt-3 pl-3 pr-3">
@@ -82,7 +99,6 @@
           <span class="date"></span>
         </div>
       </a>
-
     {/each}
   </div>
 </div>

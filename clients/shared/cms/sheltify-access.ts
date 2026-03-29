@@ -149,6 +149,10 @@ export class SheltifyAccess {
     return await this.get<CmsBlogEntry[]>('blogs');
   }
 
+  public async getPaginatedBlogEntries(pageSize: number, pageIndex: number, category: string): Promise<CmsBlogEntry[]> {
+    return await this.get<CmsBlogEntry[]>(`blogs/by-pagination?pageSize=${pageSize}&pageIndex=${pageIndex}&category=${category}`);
+  }
+
   public async getBlogEntrybyTitle(title: string): Promise<CmsBlogEntry> {
     return await this.get<CmsBlogEntry>(`blogs/by-title?title=${title}`);
   }

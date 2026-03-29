@@ -62,7 +62,7 @@ async function populateDynamicData() {
           section.Content.MediaFiles = await cms.getMediaFilesByIds(section.Content.MediaFiles.map(i => i.ID));
           break;
       case 'blogs':
-          section.TempBlogs = await cms.getBlogEntries(section.Content.Categories ?? []);
+          section.TempBlogs = await cms.getPaginatedBlogEntries(300, 1, '');
     }
   }
 }

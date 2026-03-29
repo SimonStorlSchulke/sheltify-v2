@@ -6,6 +6,7 @@ type BlogEntry struct {
 	Category    string
 	Description string
 	ShowPopup   bool
+	Priority    int
 	ThumbnailID *string
 	Thumbnail   *MediaFile `gorm:"->"`
 	ArticleID   *string

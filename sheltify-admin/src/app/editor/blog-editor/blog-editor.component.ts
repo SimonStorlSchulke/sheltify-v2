@@ -6,6 +6,7 @@ import { CmsBlogEntry } from 'sheltify-lib/cms-types';
 import { ArticleEditorComponent } from 'src/app/editor/article-editor/article-editor.component';
 import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-input.component';
 import { ImagePickerSingleComponent } from 'src/app/forms/image-picker-single/image-picker-single.component';
+import { NumberInputComponent } from 'src/app/forms/number-input/number-input.component';
 import { SelectInputComponent } from 'src/app/forms/select-input/select-input.component';
 import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
 import { AlertService } from 'src/app/services/alert.service';
@@ -24,7 +25,8 @@ import { LastEditedComponent } from 'src/app/ui/last-edited/last-edited.componen
     ImagePickerSingleComponent,
     SelectInputComponent,
     LastEditedComponent,
-    BtIconComponent
+    BtIconComponent,
+    NumberInputComponent
   ],
   templateUrl: './blog-editor.component.html',
   styleUrl: './blog-editor.component.scss',
