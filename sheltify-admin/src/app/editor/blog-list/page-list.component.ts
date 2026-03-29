@@ -38,9 +38,7 @@ export class PageListComponent {
 
   ngOnInit() {
     const path = this.activatedRoute.snapshot.paramMap.get('path');
-    if(path != null) {
-      this.toPage(path);
-    }
+    this.toPage(path ?? '');
   }
 
   selectedPage = signal<CmsPage | null>(null);
