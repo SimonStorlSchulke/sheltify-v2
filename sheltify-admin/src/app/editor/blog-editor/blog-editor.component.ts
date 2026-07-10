@@ -66,7 +66,7 @@ export class BlogEditorComponent implements OnInit {
       .replace(/\s+/g, "-");
 
     return `${url}blog/${encodedTitle}`;
-  })
+  });
 
   public async save(skipArticle: boolean = false) {
     const page = await firstValueFrom(this.cmsRequestService.saveBlogEntry(this.blog()));

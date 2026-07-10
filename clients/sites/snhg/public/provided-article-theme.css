@@ -36,6 +36,15 @@
   --hero-top-height: 400px;
 }
 
+.themable.article .themable-bg-accent-1 {
+  background: var(--themable-bg-accent-1);
+}
+.themable.article .themable-bg-accent-2 {
+  background: var(--themable-bg-accent-2);
+}
+.themable.article .themable-bg-accent-3 {
+  background: var(--themable-bg-accent-3);
+}
 .themable.article .section-separator-x hr {
   height: 30px;
   position: absolute;

@@ -6,6 +6,7 @@
       <img
         (click)="setFocusPoint($event)"
         [cmsImage]="image()"
+        [withCacheInvalidation]="true"
         [useFocusPoint]="false"
       >
       <div
@@ -16,14 +17,12 @@
     </div>
 </div>
 
-  <div class="sui flex-x">
-    <button
+    <app-explained-button
       (click)="editFocusPoint()"
-      title="Der Fokuspunkt bestimmt, zu welchem Punkt hingezoomt wird, wenn aufgrund des Seitenverhältnisses ein Teil des Bildes abgeschnitten wird."
-      class="primary small secondary sui w-100">
-      Fokuspunkt setzen
-    </button>
-  </div>
+      text="Fokuspunkt setzen"
+      explainer="Der Fokuspunkt bestimmt, zu welchem Punkt hingezoomt wird, wenn aufgrund des Seitenverhältnisses ein Teil des Bildes abgeschnitten wird."
+      class="primary small secondary sui w-100"
+    />
 }
 
 <div class="sui flex-y gap-1 grow-1">
@@ -31,6 +30,15 @@
     <span>Hochgeladen: {{ image().CreatedAt | date }}</span>
     <span>Dateiname: {{ image().OriginalFileName }}</span>
     <span>Größe: {{ getSizeString(image().LargestAvailableSize) }}</span>
+  </div>
+  <div class="button-group">
+    <app-explained-button
+      (action)="replaceImage()"
+      text="Bild ersetzen"
+      explainer="Der Fokuspunkt bestimmt, zu welchem Punkt hingezoomt wird, wenn aufgrund des Seitenverhältnisses ein Teil des Bildes abgeschnitten wird."
+      [small]="true"
+      [secondary]="true"
+    />
   </div>
   <app-text-input idName="title" label="Titel"
                   [twoWayModel]="image().Title" (twoWayModelChange)="image().Title = $event"/>

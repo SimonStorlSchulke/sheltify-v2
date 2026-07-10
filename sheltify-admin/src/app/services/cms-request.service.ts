@@ -10,14 +10,13 @@ import {
   CmsTag,
   CmsTeamMember,
   CmsTenantConfiguration,
-  Publishable, SqlNullTimeNow
 } from 'sheltify-lib/cms-types';
-import { filterPublishedAndHasArticle, sortByPriorityAndUpdatedAt } from 'sheltify-lib/dist/cms-utils';
+import { collectCmsImageGuidsDeep, filterPublishedAndHasArticle, sortByPriorityAndUpdatedAt } from 'sheltify-lib/cms-utils';
 import { LoaderService } from 'src/app/layout/loader/loader.service';
 import { AlertService } from 'src/app/services/alert.service';
 import { AuthService } from './auth.service';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map, timer, tap, OperatorFunction, lastValueFrom, Subject } from 'rxjs';
+import { Observable, map, timer, tap, OperatorFunction, lastValueFrom, Subject, firstValueFrom } from 'rxjs';
 
 
 export type CollectionResult<T> = {
@@ -197,8 +196,19 @@ export class CmsRequestService {
     return this.get<CmsImage[]>(`${this.publicTenantsUrl}/media-by-tags?tags=` + tags.join(','));
   }
 
+  public async getUnlinkedMediaFiles(): Promise<CmsImage[]> {
+    const unlinkedFiles = await firstValueFrom(this.get<CmsImage[]>(`${CmsRequestService.adminApiUrl}media/unlinked`));
+    const allTenantsArticles = await firstValueFrom(this.getArticles())
+    const imgageIdsInArticles = collectCmsImageGuidsDeep(allTenantsArticles);
+    return unlinkedFiles.filter(mediaFile => !imgageIdsInArticles.includes(mediaFile.ID))
+  }
+
   public getMediaByAnimalIDs(animalIds: string[]): Observable<CmsImage[]> {
     return this.get<CmsImage[]>(`${this.publicTenantsUrl}/media-by-animals?animalIds=` + animalIds.join(','));
+  }
+
+  public getArticles() {
+    return this.get<CmsArticle[]>(`${this.publicTenantsUrl}/articles`)
   }
 
   public getArticle(id: string) {
@@ -242,7 +252,6 @@ export class CmsRequestService {
 
   public uploadScaledImage(files: { size: string; blob: Blob; }[], fileName: string, commaSeparatedTags: string, commaSeparatedAnimalIds: string) {
     const url = CmsRequestService.adminApiUrl + 'media/scaled';
-    const tenantId = this.authService.getTenantID();
     const data = new FormData();
 
     for (const file of files) {
@@ -254,7 +263,6 @@ export class CmsRequestService {
     data.append('Title', fileName.replace(/\.[^/.]+$/, ""));
     data.append('FocusY', "0.5");
     data.append('Description', "");
-    data.append('TenantID', tenantId);
     data.append('Tags', commaSeparatedTags);
     data.append('AnimalIDs', commaSeparatedAnimalIds);
 
@@ -266,6 +274,25 @@ export class CmsRequestService {
     }
 
     return this.httpClient.post(url, data, options)
+      .pipe(this.handleRequest(url));
+  }
+
+  public replaceScaledImage(files: { size: string; blob: Blob; }[], imageId: string): Observable<CmsImage> {
+    const url = CmsRequestService.adminApiUrl + `media/replace-scaled/${imageId}`;
+    const data = new FormData();
+
+    for (const file of files) {
+      data.append(file.size, file.blob);
+    }
+
+    const options = {
+      headers: {
+        Authorization: `Bearer ${this.authService.bearer}`,
+      },
+      withCredentials: true,
+    }
+
+    return this.httpClient.post<CmsImage>(url, data, options)
       .pipe(this.handleRequest(url));
   }
 
@@ -296,8 +323,8 @@ export class CmsRequestService {
       .pipe(this.handleRequest(url));
   }
 
-  public deleteImage(id: string): Observable<void> {
-    return this.delete('media/' + id);
+  public deleteImages(ids: string[]): Observable<void> {
+    return this.delete(`media?ids=${ids.join(',')}`);
   }
 
   public get<T>(path: string): Observable<T> {

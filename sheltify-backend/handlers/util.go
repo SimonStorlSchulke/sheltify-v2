@@ -28,6 +28,9 @@ func idFromParameter(w http.ResponseWriter, r *http.Request) (string, error) {
 // returns list of ids from comma separated queryparameter (?ids=1,2,3,4)
 func idsFromQuery(w http.ResponseWriter, r *http.Request) ([]string, error) {
 	idsStringParam := r.URL.Query().Get("ids")
+	if idsStringParam == "" {
+		return []string{}, nil
+	}
 
 	idStrings := strings.Split(idsStringParam, ",")
 

@@ -43,3 +43,12 @@
 .tag-selector {
   height: 34px;
 }
+
+.unused-images-alert {
+  background-color: mix($alert, transparent, 15%);
+  padding: 16px;
+  border-radius: 8px;
+  outline: 1px solid $alert;
+  cursor: pointer;
+  color: $alert;
+}

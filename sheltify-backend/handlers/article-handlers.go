@@ -13,6 +13,11 @@ func GetArticle(w http.ResponseWriter, r *http.Request) {
 	DefaultGetById(w, r, &article)
 }
 
+func GetArticles(w http.ResponseWriter, r *http.Request) {
+	var articles []*shtypes.Article
+	DefaultGetAll(w, r, &articles)
+}
+
 func SaveArticle(w http.ResponseWriter, r *http.Request) {
 	article, err := validateRequestBody[*shtypes.Article](w, r)
 	if err != nil {

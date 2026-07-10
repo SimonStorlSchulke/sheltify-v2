@@ -1,4 +1,4 @@
-import { Component, HostBinding, input } from '@angular/core';
+import { Component, computed, HostBinding, input } from '@angular/core';
 import { CmsImage } from 'sheltify-lib/cms-types';
 import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
 import { CmsImageDirective } from 'src/app/ui/cms-image.directive';

@@ -1,0 +1,94 @@
+---
+import type { MenuEntry } from 'sheltify-lib/page-structure';
+interface Props {
+  entry: MenuEntry,
+  startPageName: string,
+}
+const {entry, startPageName} = Astro.props;
+---
+
+{
+  /*if*/ entry.children.length == 0 ?
+  <a href={entry.link} class="sui px-2 py-3">{entry.title.replaceAll(' und ', ' & ') || startPageName}</a>
+
+  /*else*/:
+  <div class="sui px-2 py-3 dropdown-container">
+    {/*if*/ entry.link ?
+        <a href={entry.link}>
+          {entry.title}
+        </a>
+      /*else*/ :
+      <span>{entry.title}</span>
+    }
+
+    {entry.children?.length > 0 &&
+      <button class="dropdown-button">O</button>
+    }
+
+    <div class="dropdown-content">
+      <div class="entries">
+        {entry.children.map(entry => (
+          <a href={entry.link}>{entry.title.replaceAll(' und ', ' & ')}</a>
+        ))}
+      </div>
+    </div>
+
+  </div>
+}
+
+<style lang="scss">
+  a:hover, a.active {
+    color: var(--c-primary);
+    cursor: pointer;
+  }
+
+  .dropdown-container {
+    .dropdown-button {
+      cursor: pointer;
+    }
+
+    .dropdown-content {
+      height: 0;
+      overflow: hidden;
+      pointer-events: none;
+      transition: opacity 0.1s;
+      z-index: 1;
+      margin-top: -1px;
+
+      .entries {
+
+        // triangle
+        &::before {
+          content: "";
+          width: 0;
+          height: 0;
+          margin-left: 30px;
+          border-left: 10px solid transparent;
+          border-right: 10px solid transparent;
+
+          border-bottom: 10px solid #fff;
+        }
+
+        background-color: #fff;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 5px 6px #0003;
+        overflow: hidden;
+
+        a {
+          padding: 8px 12px;
+        }
+      }
+    }
+
+    &.open .dropdown-content {
+      height: auto;
+      pointer-events: all;
+    }
+  }
+
+  .dropdown-container:hover .dropdown-content {
+    opacity: 1;
+    pointer-events: all;
+  }
+</style>

@@ -6,11 +6,13 @@ import { LoaderService } from 'src/app/layout/loader/loader.service';
 import { FileDropDirective } from 'src/app/media-library/file-drop.directive';
 import { ImageEditorComponent } from 'src/app/media-library/image-editor/image-editor.component';
 import { MediaEntryComponent } from 'src/app/media-library/media-entry/media-entry.component';
+import { UnusedMediafilesComponent } from 'src/app/media-library/unused-mediafiles/unused-mediafiles.component';
+import { AlertService } from 'src/app/services/alert.service';
 import { AnimalService } from 'src/app/services/animal.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { ImageConverterService } from 'src/app/services/image-converter.service';
-import { FinishableDialog } from 'src/app/services/modal.service';
+import { FinishableDialog, ModalService } from 'src/app/services/modal.service';
 import { TagsService } from 'src/app/services/tags.service';
 import { TagComponent } from 'src/app/ui/tag/tag.component';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
@@ -82,24 +84,73 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
     );
   });
 
+  public async getUnusedMediaFiles(): Promise<CmsImage[]> {
+    return await this.cmsRequestSv.getUnlinkedMediaFiles();
+  }
+
+  public async getOldUnusedMediaFiles(): Promise<CmsImage[]> {
+    let unlinkedMediaFiles = await this.cmsRequestSv.getUnlinkedMediaFiles();
+    const oldUnlinkedMediaFiles = unlinkedMediaFiles.filter(mediaFile => {
+      const diffMs = new Date().getTime() - new Date(mediaFile.CreatedAt as any).getTime();
+      const minutes = diffMs / 60000;
+      const hours = minutes / 60;
+      const days = hours / 24;
+      return days > 7
+    })
+    return oldUnlinkedMediaFiles;
+
+  }
+
+  public async openUnusedMediaDeleter() {
+    await this.modalService.openFinishable(UnusedMediafilesComponent, {
+      unusedMediafiles: this.unusedImages(),
+    });
+    this.refreshImages.update((i) => i + 1);
+  }
+
   public editedImages = signal(new Map<string, CmsImage>([]));
 
   public pickedImages = output<string[]>();
 
   constructor(
-    private loaderSv: LoaderService,
+    private loaderService: LoaderService,
     private cmsRequestSv: CmsRequestService,
     private authSv: AuthService,
-    private imageConverterSv: ImageConverterService,
+    private imageConverterService: ImageConverterService,
     public tagsService: TagsService,
     public animalService: AnimalService,
+    private readonly modalService: ModalService,
+    private readonly alertService: AlertService,
   ) {
     super();
   }
 
+  public unusedImages = signal<CmsImage[] | undefined>(undefined);
 
   async ngOnInit() {
     this.tagsService.updateAvailableTags();
+    await this.checkUnusedMediaFilesOnceAWeek();
+  }
+
+  private async checkUnusedMediaFilesOnceAWeek() {
+    const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+
+    const lastCheck = Number(localStorage.getItem('unusedMediaLastCheck'));
+    const now = Date.now();
+
+    if (!lastCheck || now - lastCheck > ONE_WEEK_MS) {
+      this.unusedImages.set(await this.getOldUnusedMediaFiles());
+      localStorage.setItem('unusedMediaLastCheck', String(now));
+    }
+  }
+
+  public async updateUnusedMediaFiles() {
+    this.unusedImages.set(await this.getUnusedMediaFiles());
+    if(this.unusedImages()!.length > 0) {
+      await this.openUnusedMediaDeleter();
+    } else {
+      this.alertService.openToast('Keine unverwendeten Bilder gefunden', '', 'success')
+    }
   }
 
   public toggleSelect(id: string, e: MouseEvent, currentImageList: CmsImage[]) {
@@ -139,7 +190,7 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
   }
 
   public async onFilesDropped(files: FileList) {
-    this.loaderSv.setLoading('Bilder hochladen...');
+    this.loaderService.setLoading('Bilder hochladen...');
     for (let i = 0; i < files.length; i++) {
       const imageTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/svg"]);
 
@@ -147,14 +198,14 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
       const animalIds = this.selectedAnimals().map(animal => animal.ID);
 
       if(imageTypes.has(files[i].type)) {
-        const scaledImages = await this.imageConverterSv.generateAllSizes(files[i]);
+        const scaledImages = await this.imageConverterService.generateAllSizes(files[i]);
         await lastValueFrom(this.cmsRequestSv.uploadScaledImage(scaledImages, files[i].name, tags.join(","), animalIds.join(",")));
       } else {
         await lastValueFrom(this.cmsRequestSv.uploadFiles([files[i]], files[i].name, tags.join(","), animalIds.join(",")));
       }
     }
     this.refreshImages.update((i) => i + 1);
-    this.loaderSv.unsetLoading('Bilder hochladen...');
+    this.loaderService.unsetLoading('Bilder hochladen...');
   }
 
   onFilesHovered($event: boolean) {
@@ -162,12 +213,31 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
   }
 
   public async deleteSelectedImages() {
-    for (const argument of this.selectedImageIds()) {
-      await lastValueFrom(this.cmsRequestSv.deleteImage(argument));
-    }
-    this.refreshImages.update((i) => i + 1);
-  }
 
+    if(this.unusedImages() === undefined) {
+      this.unusedImages.set(await this.getUnusedMediaFiles());
+    }
+
+    if(this.unusedImages()!.length > 0) {
+
+    }
+
+    const toDelete = Array.from(this.selectedImageIds()).filter(id => this.unusedImages()!.map(img => img.ID).includes(id))
+
+    if(toDelete.length !== this.selectedImageIds().size) {
+      if(this.selectedImageIds().size == 1) {
+        await this.alertService.openAlert("Bild wird noch verwendet", "Dieses Bild wird noch verwendet und kann nicht gelöscht werden")
+      } else if(this.selectedImageIds().size > 1) {
+        await this.alertService.openAlert("Bilder werden noch verwendet", "Einige dieser Bilder werden noch verwendet und können nicht gelöscht werden")
+      }
+    }
+
+    try {
+      await lastValueFrom(this.cmsRequestSv.deleteImages(toDelete));
+    } finally {
+      this.refreshImages.update((i) => i + 1);
+    }
+  }
 
   addEditedImage(image: CmsImage) {
     this.editedImages.update(map => map.set(image.ID, image));
