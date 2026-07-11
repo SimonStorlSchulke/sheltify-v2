@@ -9,7 +9,7 @@
     <div class="sui flex-y">
       @let pages = pagesService.pages();
       @for (page of pages; track $index) {
-        <a [class.selected]="selectedPage()?.ID == pages[$index].ID" class="list-entry" [routerLink]="['/seiten', page.Path]">
+        <a [class.selected]="selectedPage()?.ID == pages[$index].ID" class="list-entry"(click)="toPage(page.Path); layout.mobileOpen.set(true)">
           {{page.Path || 'Startseite' }}
           @if(!page.PublishedAt?.Valid) {
             <app-bt-icon style="display: inline-block" class="sui ml-1" name="PencilFill" size="s" />

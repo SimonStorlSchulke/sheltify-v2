@@ -1,5 +1,5 @@
-import { Component, signal } from '@angular/core';
-import { Location  } from '@angular/common';
+import { Component, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { distinctUntilChanged, firstValueFrom, map } from 'rxjs';
 import { createNewPage } from 'src/app/cms-types/cms-type.factory';
@@ -32,28 +32,13 @@ export class PageListComponent {
     private modalService: ModalService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private location: Location,
-    private readonly alertService: AlertService,
+    private alertService: AlertService,
   ) {
+    this.activatedRoute.data.pipe(takeUntilDestroyed())
+      .subscribe(({page}) => this.selectedPage.set(page));
   }
-
 
   selectedPage = signal<CmsPage | null>(null);
-
-  ngOnInit() {
-    this.activatedRoute.paramMap
-      .pipe(
-        map(params => params.get('path') ?? ''),
-        distinctUntilChanged()
-      )
-      .subscribe(async path => {
-        const page = await firstValueFrom(
-          this.cmsRequestService.getPageByPath(path)
-        );
-
-        this.selectedPage.set(page);
-      });
-  }
 
   public async newPage() {
     const page = createNewPage();
@@ -71,15 +56,12 @@ export class PageListComponent {
     }
 
     const savedPage = await firstValueFrom(this.cmsRequestService.savePage(page));
-    this.toPage(savedPage.ID);
+    await this.toPage(savedPage.Path);
     this.pagesService.reloadPages();
   }
 
   public async toPage(path: string) {
-    await this.router.navigate([
-      'seiten',
-      encodeURIComponent(path)
-    ]);
+    await this.router.navigate(['seiten', path]);
   }
 
   protected onDeleted() {

@@ -1,4 +1,4 @@
-<div class="sui flex-x gap-2">
+<div class="sui flex-x gap-2 jc-end">
   <button [disabled]="!dirty()" type="button" class="primary" (click)="triggerSave()">Speichern</button>
   @let publishable = !!entry()?.PublishedAt;
   @let isPublished = entry()?.PublishedAt?.Valid;

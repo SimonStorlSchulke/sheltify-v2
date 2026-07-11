@@ -1,4 +1,6 @@
-import { Routes } from '@angular/router';
+import { inject } from '@angular/core';
+import { ActivatedRouteSnapshot, ResolveFn, Routes } from '@angular/router';
+import { CmsAnimal, CmsPage } from 'sheltify-lib/dist/cms-types';
 import { AdministrationComponent } from 'src/app/administration/administration.component';
 import { PageListComponent } from 'src/app/editor/blog-list/page-list.component';
 import { HomeFoundListComponent } from 'src/app/editor/home-found-list/home-found-list.component';
@@ -6,6 +8,7 @@ import { BlogListComponent } from 'src/app/editor/page-list/blog-list.component'
 import { TeammemberListComponent } from 'src/app/editor/teammember-list/teammember-list.component';
 import { MediaLibraryComponent } from 'src/app/media-library/media-library.component';
 import { askSaveGuard } from 'src/app/services/ask-save.guard';
+import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { TenantConfigurationComponent } from 'src/app/tenant-configuration/tenant-configuration.component';
 import { LoginComponent } from './pages/login/login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
@@ -13,11 +16,21 @@ import { AnimalListComponent } from './editor/animal-list/animal-list.component'
 import { AuthGuard, SuperAdminAuthGuard } from './services/auth-guard.service';
 import { SubmittedFormsComponent } from './submitted-forms/submitted-forms.component';
 
+const animalResolver: ResolveFn<CmsAnimal> = (route: ActivatedRouteSnapshot) => {
+  const id = route.paramMap.get('id')!;
+  return inject(CmsRequestService).getAnimal(id);
+}
+
+const pageResolver: ResolveFn<CmsPage> = (route: ActivatedRouteSnapshot) => {
+  const path = route.paramMap.get('path')!;
+  return inject(CmsRequestService).getPageByPath(path);
+}
+
 export const routes: Routes = [
   {path: "", component: DashboardComponent, canActivate: [AuthGuard]},
   {path: "login", component: LoginComponent},
   {path: "seiten", component: PageListComponent, canActivate: [AuthGuard]},
-  {path: "seiten/:path", component: PageListComponent, canActivate: [AuthGuard], canDeactivate: [askSaveGuard]},
+  {path: "seiten/:path", component: PageListComponent, canActivate: [AuthGuard], canDeactivate: [askSaveGuard], resolve: {page: pageResolver}},
   {path: "blog", component: BlogListComponent, canActivate: [AuthGuard]},
   {path: "blog/:id", component: BlogListComponent, canActivate: [AuthGuard]},
   {path: "rueckmeldungen", component: HomeFoundListComponent, canActivate: [AuthGuard]},
@@ -27,7 +40,7 @@ export const routes: Routes = [
   {path: "media", component: MediaLibraryComponent, canActivate: [AuthGuard]},
   {path: "optionen", component: TenantConfigurationComponent, canActivate: [AuthGuard]},
   {path: "tiere", component: AnimalListComponent, canActivate: [AuthGuard]},
-  {path: "tiere/:id", component: AnimalListComponent, canActivate: [AuthGuard]},
+  {path: "tiere/:id", component: AnimalListComponent, canActivate: [AuthGuard], canDeactivate: [askSaveGuard], resolve: {animal: animalResolver}},
   {path: "formulare", component: SubmittedFormsComponent, canActivate: [AuthGuard]},
   {path: "formulare/:id", component: SubmittedFormsComponent, canActivate: [AuthGuard]},
   {path: "administration", component: AdministrationComponent, canActivate: [SuperAdminAuthGuard]},

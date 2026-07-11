@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, model, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot, CanDeactivate, GuardResult, MaybeAsync, RouterStateSnapshot } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, ActivatedRouteSnapshot, CanDeactivate, GuardResult, MaybeAsync, Router, RouterStateSnapshot } from '@angular/router';
+import { distinctUntilChanged, firstValueFrom, map } from 'rxjs';
 import { createNewAnimal } from 'src/app/cms-types/cms-type.factory';
 import { CmsAnimal } from 'sheltify-lib/cms-types';
 import { RadioButtonsInputComponent } from 'src/app/forms/radio-buttons-input/radio-buttons-input.component';
@@ -31,11 +32,8 @@ import { DatePipe, Location } from '@angular/common';
   styleUrl: './animal-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AnimalListComponent implements OnInit, CanDeactivate<AnimalListComponent> {
+export class AnimalListComponent implements CanDeactivate<AnimalListComponent> {
   private cmsRequestService = inject(CmsRequestService);
-
-  private activatedRoute = inject(ActivatedRoute);
-  private location = inject(Location);
 
   public editedAnimals = signal(new Map<string, CmsAnimal>([]));
 
@@ -68,8 +66,15 @@ export class AnimalListComponent implements OnInit, CanDeactivate<AnimalListComp
     public animalService: AnimalService,
     private modalService: ModalService,
     private tenantConfigurationService: TenantConfigurationService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+
   ) {
     this.tenantConfigurationService.animalKinds().then(animalKinds => this.animalKinds.set(['alle', ...animalKinds]));
+
+    this.activatedRoute.data.pipe(takeUntilDestroyed())
+      .subscribe(({animal}) => this.selectedAnimal.set(animal));
+
   }
 
   canDeactivate(component: AnimalListComponent, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState: RouterStateSnapshot): MaybeAsync<GuardResult> {
@@ -85,19 +90,8 @@ export class AnimalListComponent implements OnInit, CanDeactivate<AnimalListComp
     });
   })
 
-  ngOnInit() {
-    const id = this.activatedRoute.snapshot.paramMap.get('id');
-
-    if(id != null) {
-      this.toAnimal(id);
-    }
-  }
-
-  async toAnimal(id: string) {
-    const animal = await firstValueFrom(this.cmsRequestService.getAnimal(id));
-    this.selectedAnimal.set(animal);
-
-    this.location.go('/tiere/' + id);
+  public async toAnimal(id: string) {
+    await this.router.navigate(['tiere', id]);
   }
 
   public async newAnimal() {
@@ -113,9 +107,9 @@ export class AnimalListComponent implements OnInit, CanDeactivate<AnimalListComp
     const animal = createNewAnimal(name, useDefaultAnimalKind ? animalKinds[0] : undefined);
 
     const savedAnimal = await firstValueFrom(this.cmsRequestService.saveAnimal(animal));
-    this.animalService.reloadAnimals();
+    await this.animalService.reloadAnimals();
     this.selectedAnimal.set(savedAnimal);
-    this.location.go('/tiere/' + savedAnimal.ID);
+    await this.toAnimal(savedAnimal.ID);
   }
 
   public onSavedAnimal(animal: CmsAnimal | null) {
@@ -123,7 +117,6 @@ export class AnimalListComponent implements OnInit, CanDeactivate<AnimalListComp
       //TODO wenn deployed: gucken ob das wirklich sinnvoll ist oder ob ein einfacher reload besser wäre.
       // structurecClone hier sinnvoll? Wenns fehlt wird liste bei jeder änderung geupdated, auch wenn nicht gespeichert wurde...
       this.editedAnimals.update(map => map.set(animal.ID!, structuredClone(animal)));
-      this.selectedAnimal.set(animal);
       this.animalService.reloadAnimals();
     }
   }

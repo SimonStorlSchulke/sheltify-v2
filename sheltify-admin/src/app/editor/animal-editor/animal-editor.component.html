@@ -1,12 +1,12 @@
 @let rowClass = "sui flex-x gap-2 grow-1 wrap";
 @let config = tenantConfigurationService.config();
 @if (animal(); as animal) {
-  <div class="sui save-content-buttons flex-x gap-2 jc-end">
-    <button class="primary" data-testid="btn-save-animal" (click)="saveFromUI()">Speichern</button>
-    @let isPublished = animal.PublishedAt?.Valid;
-    <button [class.warning]="!isPublished" [class.success]="isPublished" (click)="togglePublished()">{{ animal.PublishedAt?.Valid ? 'Depublizieren' : 'Publizieren' }}</button>
-    <button class="red" (click)="delete()">Löschen</button>
-  </div>
+  <app-manage-entry-buttons
+    [entry]="animal"
+    (save)="saveFromUI()"
+    (togglePublished)="togglePublished()"
+    (delete)="delete()"
+  />
   <div class="editor-layout sui p-2">
     <div class="sui flex-y gap-2 grow-1 card">
       @if (animal.HomeFoundStatus !== 'yes') {

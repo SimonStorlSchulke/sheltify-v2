@@ -1,4 +1,5 @@
 import { Component, input, inject, output, ChangeDetectionStrategy } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom, lastValueFrom, Subject } from 'rxjs';
 import { CmsArticle } from 'sheltify-lib/article-types';
@@ -14,10 +15,12 @@ import { RadioButtonsInputComponent } from 'src/app/forms/radio-buttons-input/ra
 import { SelectInputComponent } from 'src/app/forms/select-input/select-input.component';
 import { AlertService } from 'src/app/services/alert.service';
 import { AnimalService } from 'src/app/services/animal.service';
+import { AskSaveService } from 'src/app/services/ask-save.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
 import { AnimalPickerDialogComponent } from 'src/app/ui/animal-picker-dialog/animal-picker-dialog.component';
 import { LastEditedComponent } from 'src/app/ui/last-edited/last-edited.component';
+import { ManageEntryButtonsComponent } from 'src/app/ui/manage-entry-buttons/manage-entry-buttons.component';
 import { TextInputComponent } from '../../forms/text-input/text-input.component';
 import { CmsRequestService } from '../../services/cms-request.service';
 
@@ -34,6 +37,7 @@ import { CmsRequestService } from '../../services/cms-request.service';
     NumberInputComponent,
     SelectInputComponent,
     LastEditedComponent,
+    ManageEntryButtonsComponent,
   ],
   templateUrl: './animal-editor.component.html',
   styleUrl: './animal-editor.component.scss',
@@ -58,7 +62,9 @@ export class AnimalEditorComponent {
     private modalService: ModalService,
     private animalService: AnimalService,
     private alertService: AlertService,
+    private askSaveService: AskSaveService,
   ) {
+    this.askSaveService.triggerSave.pipe(takeUntilDestroyed()).subscribe(() => this.save());
   }
 
   async ngOnInit() {
