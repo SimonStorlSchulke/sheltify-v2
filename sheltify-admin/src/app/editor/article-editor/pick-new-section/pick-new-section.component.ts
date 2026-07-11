@@ -32,5 +32,5 @@ export class PickNewSectionComponent extends FinishableDialog<SectionType | Sect
     this.finishWith(section)
   }
 
-  protected readonly Object = Object;
+  readonly Object = Object;
 }

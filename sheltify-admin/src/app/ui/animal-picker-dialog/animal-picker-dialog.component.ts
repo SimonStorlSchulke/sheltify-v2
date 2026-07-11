@@ -46,5 +46,5 @@ export class AnimalPickerDialogComponent extends FinishableDialog<CmsAnimal> imp
   }
 
 
-  protected readonly Object = Object;
+  readonly Object = Object;
 }

@@ -45,17 +45,17 @@ import { CmsRequestService } from '../../services/cms-request.service';
 })
 export class AnimalEditorComponent {
 
+
+  animal = input<CmsAnimal | null>(null);
+  animals = input.required<CmsAnimal[] | null>();
+  saved = output<CmsAnimal | null>();
+  deleted = output();
+
+  saveArticle$ = new Subject<{ updateNote: string, pushUpdate: boolean }>();
+  animalStati: string[] = [];
+  animalKinds: string[] = [];
+
   private cmsRequestService = inject(CmsRequestService);
-
-  public animal = input<CmsAnimal | null>(null);
-  public animals = input.required<CmsAnimal[] | null>();
-  public saved = output<CmsAnimal | null>();
-  public deleted = output();
-
-  public saveArticle$ = new Subject<{ updateNote: string, pushUpdate: boolean }>();
-
-  public animalStati: string[] = [];
-  public animalKinds: string[] = [];
 
   constructor(
     public tenantConfigurationService: TenantConfigurationService,
@@ -97,14 +97,14 @@ export class AnimalEditorComponent {
     }
   }
 
-  protected async createArticle() {
+  async createArticle() {
     const article: CmsArticle = createEmptyArticle();
     const savedArticle = await firstValueFrom(this.cmsRequestService.saveArticle(article));
     this.animal()!.ArticleID = savedArticle.ID;
     this.save();
   }
 
-  protected async assignExistingArticle() {
+  async assignExistingArticle() {
     const selectableAnimals = this.animals()?.filter(animal => (
       animal.ID !== this.animal()?.ID) && this.animalService.isPublished(animal)
     );
@@ -118,7 +118,7 @@ export class AnimalEditorComponent {
     }
   }
 
-  protected async delete() {
+  async delete() {
     if (!await this.alertService.confirmDelete()) return;
     await lastValueFrom(this.cmsRequestService.deleteAnimals([this.animal()!.ID]));
     this.deleted.emit();

@@ -64,10 +64,10 @@ export class PageListComponent {
     await this.router.navigate(['seiten', path]);
   }
 
-  protected onDeleted() {
+  onDeleted() {
     this.pagesService.reloadPages();
     this.selectedPage.set(null);
   }
 
-  protected readonly encodeURIComponent = encodeURIComponent;
+  readonly encodeURIComponent = encodeURIComponent;
 }

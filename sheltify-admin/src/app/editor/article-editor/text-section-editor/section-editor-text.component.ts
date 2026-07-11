@@ -15,7 +15,7 @@ export class SectionEditorTextComponent {
 
   html = output<SectionText>();
 
-  protected onInput(value: string) {
+  onInput(value: string) {
     this.section().Content.Html = value;
   }
 }

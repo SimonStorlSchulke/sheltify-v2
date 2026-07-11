@@ -121,7 +121,7 @@ export class AnimalListComponent implements CanDeactivate<AnimalListComponent> {
     }
   }
 
-  protected onDeletedAnimal() {
+  onDeletedAnimal() {
     this.selectedAnimal.set(null);
     this.animalService.reloadAnimals();
   }

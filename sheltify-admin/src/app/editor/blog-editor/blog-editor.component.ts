@@ -78,7 +78,7 @@ export class BlogEditorComponent implements OnInit {
     }
   }
 
-  protected async createArticle() {
+  async createArticle() {
     const article: CmsArticle = createEmptyArticle();
     const savedArticle = await firstValueFrom(this.cmsRequestService.saveArticle(article));
     this.blog()!.ArticleID = savedArticle.ID;

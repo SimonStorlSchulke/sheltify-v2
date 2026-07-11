@@ -17,7 +17,7 @@ export class SectionEditorHtmlComponent implements AfterViewInit {
   textarea = viewChild<ElementRef>('textarea');
   wrapper = viewChild<ElementRef>('wrapper');
 
-  protected onInput(event: Event) {
+  onInput(event: Event) {
     this.section().Content.Html = (event.target as HTMLTextAreaElement).value;
     this.adjustTextareaHeight();
   }

@@ -16,7 +16,7 @@ import { RadioButtonsInputComponent } from 'src/app/forms/radio-buttons-input/ra
 export class SectionEditorImagesComponent {
   public section = input.required<SectionImages>();
 
-  protected setImages(images: CmsImage[]) {
+  setImages(images: CmsImage[]) {
     this.section().Content.MediaFiles = images;
     console.log("AAA", images.map(i => i.Title));
   }

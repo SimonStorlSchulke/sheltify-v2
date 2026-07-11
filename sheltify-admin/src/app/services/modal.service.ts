@@ -10,15 +10,15 @@ export interface Finishable<TValue> {
 
 @Directive()
 export abstract class FinishableDialog<TValue> implements Finishable<TValue>, OnDestroy {
-  protected readonly finishSubject = new Subject<TValue | undefined>();
+  readonly finishSubject = new Subject<TValue | undefined>();
   readonly finish = this.finishSubject.asObservable();
 
-  protected finishWith(value: TValue) {
+  finishWith(value: TValue) {
     this.finishSubject.next(value);
     this.finishSubject.complete();
   }
 
-  protected cancel() {
+  cancel() {
     this.finishSubject.next(undefined);
     this.finishSubject.complete();
   }

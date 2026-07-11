@@ -65,7 +65,7 @@ export class SectionEditorColumnsComponent {
     //setTimeout(() => this.editSectionAtPosition(rowId, 0), 0);
   }
 
-  protected moveColumnRight(iColumn: number) {
+  moveColumnRight(iColumn: number) {
     const columns = this.section().Content.Columns;
 
     if (iColumn < 0 || iColumn >= columns.length - 1) {
@@ -75,7 +75,7 @@ export class SectionEditorColumnsComponent {
     [columns[iColumn], columns[iColumn + 1]] = [columns[iColumn + 1], columns[iColumn]];
   }
 
-  protected moveColumnLeft(iColumn: number) {
+  moveColumnLeft(iColumn: number) {
     const columns = this.section().Content.Columns;
 
     if (iColumn <= 0 || iColumn >= columns.length) {

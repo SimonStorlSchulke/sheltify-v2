@@ -40,7 +40,7 @@ export class SectionEditorComponent {
     this.outletRef.createEmbeddedView(this.previewRef);
   }
 
-  protected readonly sectionLabels = sectionLabels;
+  readonly sectionLabels = sectionLabels;
 
   public copySection() {
     this.articleEditorService.copiedSection.set(this.section());

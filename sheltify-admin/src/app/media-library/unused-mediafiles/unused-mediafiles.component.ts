@@ -21,7 +21,7 @@ export class UnusedMediafilesComponent extends FinishableDialog<string[]> {
 
   constructor(
     private cmsRequestService: CmsRequestService,
-    protected dialogRef: DialogRef,
+    public dialogRef: DialogRef,
     ) {
     super();
   }

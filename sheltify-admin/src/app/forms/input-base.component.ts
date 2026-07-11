@@ -12,7 +12,7 @@ export abstract class InputBaseComponent {
   public abstract twoWayModel: ModelSignal<any>;
 
   private alertService = inject(AlertService);
-  protected askSaveService = inject(AskSaveService);
+  askSaveService = inject(AskSaveService);
 
   public showExplanation() {
     this.alertService.openAlert(this.label(), this.explanation()!)

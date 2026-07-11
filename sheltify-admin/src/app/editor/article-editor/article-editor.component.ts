@@ -129,7 +129,7 @@ export class ArticleEditorComponent implements OnInit {
     this.selectedFillColor.set(color);
   }
 
-  protected clickSection(section: Section, row: number) {
+  clickSection(section: Section, row: number) {
     const selectedColor = this.selectedFillColor();
     if (selectedColor !== undefined) {
       section.BackgroundColor = selectedColor;
@@ -140,7 +140,7 @@ export class ArticleEditorComponent implements OnInit {
     }
   }
 
-  protected pasteSectionAtRow(event: MouseEvent, row: number) {
+  pasteSectionAtRow(event: MouseEvent, row: number) {
     event.preventDefault();
     event.stopPropagation();
 
@@ -152,9 +152,9 @@ export class ArticleEditorComponent implements OnInit {
     article.Structure.Rows.splice(row, 0, sectionRef);
   }
 
-  protected readonly sectionLabels = sectionLabels;
+  readonly sectionLabels = sectionLabels;
 
-  protected cancelPaste(event: MouseEvent) {
+  cancelPaste(event: MouseEvent) {
     event.preventDefault();
     event.stopPropagation();
     this.articleEditorService.copiedSection.set(null)
