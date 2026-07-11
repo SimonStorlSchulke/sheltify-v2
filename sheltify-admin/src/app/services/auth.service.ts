@@ -20,9 +20,7 @@ export type CmsUser = {
 }
 
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({providedIn: 'root'})
 export class AuthService {
   private httpClient = inject(HttpClient);
   private _bearer = "";

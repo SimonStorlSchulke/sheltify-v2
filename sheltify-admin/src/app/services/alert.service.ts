@@ -3,9 +3,7 @@ import { ModalService } from 'src/app/services/modal.service';
 import { AlertChoice, AlertComponent } from 'src/app/ui/alert/alert.component';
 import { ToastComponent, ToastLevel } from 'src/app/ui/toast/toast.component';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({providedIn: 'root'})
 export class AlertService {
 
   constructor(private modalService: ModalService) {

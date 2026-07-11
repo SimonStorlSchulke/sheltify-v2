@@ -28,9 +28,7 @@ export abstract class FinishableDialog<TValue> implements Finishable<TValue>, On
   }
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({providedIn: 'root'})
 export class ModalService {
 
   private dialog = inject(Dialog);
