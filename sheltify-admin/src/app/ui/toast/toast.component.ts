@@ -19,7 +19,7 @@ export class ToastComponent {
   constructor(public dialogRef: DialogRef<ToastComponent>) {
   }
 
-  public ngOnInit() {
+  ngOnInit() {
     const readingTime = Math.max((this.title.length + this.message.length) * readingTimeMsPerChar, 1000);
     setTimeout(() => {
       this.dialogRef.close();

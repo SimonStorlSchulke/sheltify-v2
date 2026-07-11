@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, inject, model, OnInit, signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, inject, model, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, ActivatedRouteSnapshot, CanDeactivate, GuardResult, MaybeAsync, Router, RouterStateSnapshot } from '@angular/router';
-import { distinctUntilChanged, firstValueFrom, map } from 'rxjs';
-import { createNewAnimal } from 'src/app/cms-types/cms-type.factory';
+import { ActivatedRoute, Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { CmsAnimal } from 'sheltify-lib/cms-types';
+import { createNewAnimal } from 'src/app/cms-types/cms-type.factory';
 import { RadioButtonsInputComponent } from 'src/app/forms/radio-buttons-input/radio-buttons-input.component';
 import { TextInputModalComponent } from 'src/app/forms/text-input-modal/text-input-modal.component';
 import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
@@ -15,7 +16,6 @@ import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
 import { CmsImageDirective } from 'src/app/ui/cms-image.directive';
 import { AnimalEditorComponent } from '../../editor/animal-editor/animal-editor.component';
 import { CmsRequestService } from '../../services/cms-request.service';
-import { DatePipe, Location } from '@angular/common';
 
 @Component({
   selector: 'app-animal-list',
@@ -32,7 +32,7 @@ import { DatePipe, Location } from '@angular/common';
   styleUrl: './animal-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AnimalListComponent implements CanDeactivate<AnimalListComponent> {
+export class AnimalListComponent {
   private cmsRequestService = inject(CmsRequestService);
 
   public editedAnimals = signal(new Map<string, CmsAnimal>([]));
@@ -62,25 +62,19 @@ export class AnimalListComponent implements CanDeactivate<AnimalListComponent> {
   public animalKinds = signal<string[]>(['alle']);
   public selectedAnimalKind = model<string>('alle');
 
-  constructor(
-    public animalService: AnimalService,
-    private modalService: ModalService,
-    private tenantConfigurationService: TenantConfigurationService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
+  animalService = inject(AnimalService);
+  private modalService = inject(ModalService);
+  private tenantConfigurationService = inject(TenantConfigurationService);
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
 
+  constructor(
   ) {
     this.tenantConfigurationService.animalKinds().then(animalKinds => this.animalKinds.set(['alle', ...animalKinds]));
 
     this.activatedRoute.data.pipe(takeUntilDestroyed())
       .subscribe(({animal}) => this.selectedAnimal.set(animal));
-
   }
-
-  canDeactivate(component: AnimalListComponent, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState: RouterStateSnapshot): MaybeAsync<GuardResult> {
-       console.log("WWWTF");
-       return false;
-    }
 
   public animalList = computed(() => {
     return this.animalService.animals().filter(animal => {

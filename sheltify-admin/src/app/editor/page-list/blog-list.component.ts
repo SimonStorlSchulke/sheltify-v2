@@ -1,9 +1,9 @@
+import { Location } from '@angular/common';
 import { Component, signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Location  } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { createNewBlog } from 'src/app/cms-types/cms-type.factory';
 import { CmsBlogEntry } from 'sheltify-lib/cms-types';
+import { createNewBlog } from 'src/app/cms-types/cms-type.factory';
 import { BlogEditorComponent } from 'src/app/editor/blog-editor/blog-editor.component';
 import { TextInputModalComponent } from 'src/app/forms/text-input-modal/text-input-modal.component';
 import { LeftSidebarLayoutComponent } from 'src/app/layout/left-sidebar-layout/left-sidebar-layout.component';

@@ -60,7 +60,7 @@ export class ImageEditorComponent implements OnInit {
     });
   }
 
-  public ngOnInit() {
+  ngOnInit() {
     this.selectedTags.set(this.image().MediaTags.map(tag => tag.ID));
   }
 

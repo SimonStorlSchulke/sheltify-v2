@@ -26,11 +26,11 @@ export class UnusedMediafilesComponent extends FinishableDialog<string[]> {
     super();
   }
 
-  public ngOnInit() {
+  ngOnInit() {
     this.selectedEntries.set(new Set(this.unusedMediafiles.map(m => m.ID)))
   }
 
-  public toggleSelectEntry(ID: string): void {
+  public toggleSelectEntry(ID: string) {
     this.selectedEntries.update(entries => {
 
       if(entries.has(ID)) {

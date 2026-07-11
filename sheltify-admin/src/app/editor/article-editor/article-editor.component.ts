@@ -1,8 +1,8 @@
 import { Component, DestroyRef, effect, input, model, OnInit, Renderer2, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { bootstrapGripVertical, bootstrapX, bootstrapPlus } from '@ng-icons/bootstrap-icons';
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { bootstrapEye, bootstrapGripVertical, bootstrapPlus, bootstrapX } from '@ng-icons/bootstrap-icons';
+import { provideIcons } from '@ng-icons/core';
 import { lastValueFrom, Observable } from 'rxjs';
 import { SqlNullTimeNow } from 'sheltify-lib/cms-types';
 import { Section } from 'sheltify-lib/dist/article-types';
@@ -15,13 +15,12 @@ import { TextInputComponent } from 'src/app/forms/text-input/text-input.componen
 import { sectionLabels } from 'src/app/services/article-renderer';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { ModalService } from 'src/app/services/modal.service';
-import { bootstrapEye } from '@ng-icons/bootstrap-icons';
 import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
 import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
 
 @Component({
   selector: 'app-article-editor',
-  imports: [NgIcon, FormsModule, SectionEditorComponent, TextInputComponent, BtIconComponent],
+  imports: [FormsModule, SectionEditorComponent, TextInputComponent, BtIconComponent],
   providers: [provideIcons({bootstrapGripVertical, bootstrapX, bootstrapPlus, bootstrapEye})],
   templateUrl: './article-editor.component.html',
   styleUrl: './article-editor.component.scss',

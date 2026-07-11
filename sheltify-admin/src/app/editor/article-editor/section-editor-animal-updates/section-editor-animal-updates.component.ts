@@ -30,7 +30,7 @@ export class SectionEditorAnimalUpdatesComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  public ngOnInit() {
+  ngOnInit() {
     this.updateSubscription = this.onInput.pipe(debounceTime(1000)).subscribe(() => this.updateAnimals());
     this.updateAnimals();
   }

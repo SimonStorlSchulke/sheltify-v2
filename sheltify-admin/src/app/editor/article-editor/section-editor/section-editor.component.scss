@@ -1,4 +1,6 @@
 @use "colors" as *;
+@use "sass:color";
+
 
 .only-editmode {
   pointer-events: none;
@@ -20,7 +22,7 @@
     display: flex;
   }
 
-  outline: 1px solid transparentize($primary-d1, 0.94) !important;
+  outline: 1px solid color.adjust($primary-d1, $alpha: -0.94) !important;
   box-shadow: 3px 3px 12px $neutral200;
 
   .section-preview {

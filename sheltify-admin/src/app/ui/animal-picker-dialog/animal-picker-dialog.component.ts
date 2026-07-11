@@ -17,13 +17,13 @@ export class AnimalPickerDialogComponent extends FinishableDialog<CmsAnimal> imp
 
   public animalsByArticleID = signal(new Map<string, { animals: CmsAnimal[], title: string }>());
 
-  public ngOnInit() {
+  ngOnInit() {
     if(this.byArticle) {
       this.sortByAnimalsByArticleID();
     }
   }
 
-  private sortByAnimalsByArticleID(): void {
+  private sortByAnimalsByArticleID() {
     this.animalsByArticleID.update(animalsByArticleID => {
         for (const animal of this.animals) {
           if (!animal.ArticleID) continue;

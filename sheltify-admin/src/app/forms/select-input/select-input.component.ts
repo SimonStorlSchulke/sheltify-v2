@@ -14,7 +14,7 @@ import { InputBaseComponent } from 'src/app/forms/input-base.component';
   styleUrls: ['../form-base.component.scss', './select-input.component.scss']
 })
 export class SelectInputComponent extends InputBaseComponent {
-  public placeholder = input<string>();
+  public placeholder = input<string>('');
   public twoWayModel = model<string | undefined>('');
   public onInputChange = output<string | undefined>();
   public options = input.required<string[]>();

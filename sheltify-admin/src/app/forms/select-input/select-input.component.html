@@ -5,12 +5,12 @@
   }
 </div>
 
-<ng-select [clearable]="clearable()" [(ngModel)]="twoWayModel" [placeholder]="placeholder() ?? ''" (ngModelChange)="onInput()">
+<ng-select [clearable]="clearable()" [(ngModel)]="twoWayModel" [placeholder]="placeholder()" (ngModelChange)="onInput()">
   @for (option of options(); track option) {
     <ng-option [value]="option">
       {{
         optionTranslations() ?
-          (optionTranslations()![option] ?? option)
+          (optionTranslations()![option] || option)
           : option
       }}
     </ng-option>
