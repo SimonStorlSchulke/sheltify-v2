@@ -1,4 +1,5 @@
 import { Component, computed, input, output } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { bootstrapBoxArrowUpRight } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { firstValueFrom, Subject } from 'rxjs';
@@ -10,6 +11,7 @@ import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-in
 import { NumberInputComponent } from 'src/app/forms/number-input/number-input.component';
 import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
 import { AlertService } from 'src/app/services/alert.service';
+import { AskSaveService } from 'src/app/services/ask-save.service';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { PagesService } from 'src/app/services/pages.service';
 import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
@@ -42,7 +44,9 @@ export class PageEditorComponent {
     private cmsRequestService: CmsRequestService,
     private pagesService: PagesService,
     private alertService: AlertService,
+    private askSaveService: AskSaveService,
   ) {
+    this.askSaveService.triggerSave.pipe(takeUntilDestroyed()).subscribe(() => this.save());
   }
 
   public pageUrl = computed(() => {

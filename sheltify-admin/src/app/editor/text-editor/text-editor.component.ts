@@ -7,6 +7,7 @@ import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
 import { Schema, NodeSpec, MarkSpec, Mark, DOMOutputSpec } from 'prosemirror-model';
 import { firstValueFrom } from 'rxjs';
 import { ButtonLinkDialogComponent } from 'src/app/editor/text-editor/button-link-dialog/button-link-dialog.component';
+import { AskSaveService } from 'src/app/services/ask-save.service';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { marks as defaultMarks } from 'ngx-editor';
@@ -79,6 +80,7 @@ export class TextEditorComponent implements OnInit {
   constructor(
     private modalService: ModalService,
     private cmsRequestService: CmsRequestService,
+    private readonly askSaveService: AskSaveService,
   ) {
     const plainTextOnlyPaste = new Plugin({
       props: {
@@ -147,4 +149,10 @@ export class TextEditorComponent implements OnInit {
     this.htmlModel.set(value);
     this.htmlInput.emit(value);
   }
+
+  public markDirty() {
+    console.log("value");
+    this.askSaveService.markDirty();
+  };
+
 }

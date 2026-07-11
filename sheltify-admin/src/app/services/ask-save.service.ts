@@ -26,7 +26,7 @@ export class AskSaveService {
 
   public async askSave(): Promise<boolean> {
     if(!this.dirty()) return true;
-    const answer = await this.alertService.openAlert('Änderungen speichern?', '', ['abbrechen', 'nein', 'ja']);
+    const answer = await this.alertService.openAlert('Änderungen speichern?', '', ['ja', 'nein', 'abbrechen']);
 
     this.clean();
 

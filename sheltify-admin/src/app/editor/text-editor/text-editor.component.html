@@ -5,6 +5,7 @@
     [editor]="editor"
     [ngModel]="html"
     (ngModelChange)="onChange($event)"
+    (input)="markDirty()"
     [placeholder]="'Text eingeben...'">
   </ngx-editor>
 </div>

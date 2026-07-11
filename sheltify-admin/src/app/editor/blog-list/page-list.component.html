@@ -6,7 +6,7 @@
       <button data-testid="btn-new-page" class="primary" (click)="newPage(); layout.mobileOpen.set(true)">Neue Seite</button>
     </div>
     <br>
-    <div class="sui flex-y">
+    <div class="list">
       @let pages = pagesService.pages();
       @for (page of pages; track $index) {
         <a [class.selected]="selectedPage()?.ID == pages[$index].ID" class="list-entry"(click)="toPage(page.Path); layout.mobileOpen.set(true)">
