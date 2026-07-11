@@ -1,13 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ModalService } from 'src/app/services/modal.service';
 import { AlertChoice, AlertComponent } from 'src/app/ui/alert/alert.component';
 import { ToastComponent, ToastLevel } from 'src/app/ui/toast/toast.component';
 
 @Injectable({providedIn: 'root'})
 export class AlertService {
+  private modalService = inject(ModalService);
 
-  constructor(private modalService: ModalService) {
-  }
 
   async openAlert(title: string, message: string, buttons: AlertChoice[] = ['ok']): Promise<AlertChoice | undefined> {
     return (await this.modalService.openFinishable(AlertComponent, {

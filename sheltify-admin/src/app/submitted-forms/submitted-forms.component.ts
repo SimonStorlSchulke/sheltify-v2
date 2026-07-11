@@ -14,13 +14,15 @@ import { AlertService } from '../services/alert.service';
   styleUrl: './submitted-forms.component.scss',
 })
 export class SubmittedFormsComponent {
+  private readonly authService = inject(AuthService);
+
   public animals = signal<CmsFormSubmission[]>([]);
   private cmsRequestService = inject(CmsRequestService);
   private alertService = inject(AlertService);
   public forms = signal<CmsFormSubmission[]>([]);
   public selectedForm = signal<CmsFormSubmission | undefined>(undefined);
 
-  constructor(private readonly authService: AuthService) {
+  constructor() {
     this.reloadForms();
   }
 

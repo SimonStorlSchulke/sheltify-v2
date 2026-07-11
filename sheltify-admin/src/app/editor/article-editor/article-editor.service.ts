@@ -1,16 +1,15 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { CmsArticle, Section } from 'sheltify-lib/article-types';
 import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
 import { AlertService } from 'src/app/services/alert.service';
 
 @Injectable({providedIn: 'root'})
 export class ArticleEditorService {
+  private alertService = inject(AlertService);
+
   article = signal<CmsArticle | undefined>(createEmptyArticle());
   movedItem = signal<{ row: number, sectionRef: Section } | null>(null);
   copiedSection = signal<Section | null>(null);
-
-  constructor(private alertService: AlertService) {
-  }
 
   enterMoveMode(row: number, sectionRef: Section) {
     this.movedItem.set({

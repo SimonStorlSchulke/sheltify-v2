@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, computed, OnInit, output, Pipe, PipeTransform, Signal, signal } from '@angular/core';
+import { Component, computed, OnInit, output, Pipe, PipeTransform, Signal, signal, inject } from '@angular/core';
 import { lastValueFrom, map, Observable } from 'rxjs';
 import { CmsAnimal, CmsImage, CmsTag } from 'sheltify-lib/cms-types';
 import { LoaderService } from 'src/app/layout/loader/loader.service';
@@ -45,6 +45,15 @@ class MediaSelectionPipe implements PipeTransform {
   styleUrl: './media-library.component.scss'
 })
 export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implements OnInit {
+  private loaderService = inject(LoaderService);
+  private cmsRequestSv = inject(CmsRequestService);
+  private authSv = inject(AuthService);
+  private imageConverterService = inject(ImageConverterService);
+  tagsService = inject(TagsService);
+  animalService = inject(AnimalService);
+  private readonly modalService = inject(ModalService);
+  private readonly alertService = inject(AlertService);
+
   public selectedTags = signal<string[]>([]);
   public selectedAnimals = signal<CmsAnimal[]>([]);
   public activeImageId = signal<string>("");
@@ -111,19 +120,6 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
   public editedImages = signal(new Map<string, CmsImage>([]));
 
   public pickedImages = output<string[]>();
-
-  constructor(
-    private loaderService: LoaderService,
-    private cmsRequestSv: CmsRequestService,
-    private authSv: AuthService,
-    private imageConverterService: ImageConverterService,
-    public tagsService: TagsService,
-    public animalService: AnimalService,
-    private readonly modalService: ModalService,
-    private readonly alertService: AlertService,
-  ) {
-    super();
-  }
 
   public unusedImages = signal<CmsImage[] | undefined>(undefined);
 

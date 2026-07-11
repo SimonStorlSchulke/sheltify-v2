@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, inject } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
 import { Section, SectionColumns } from 'sheltify-lib/article-types';
 import { createEmptySection } from 'src/app/editor/article-editor/article-section.factory';
@@ -24,10 +24,10 @@ const maxColumns = 4;
   styleUrl: './section-editor-columns.component.scss',
 })
 export class SectionEditorColumnsComponent {
-  public section = input.required<SectionColumns>();
+  private readonly alertService = inject(AlertService);
+  private modalService = inject(ModalService);
 
-  constructor(private readonly alertService: AlertService, private modalService: ModalService) {
-  }
+  public section = input.required<SectionColumns>();
 
   public deleteColumn(index: number) {
     this.section().Content.Columns.splice(index, 1);

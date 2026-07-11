@@ -1,4 +1,4 @@
-import { Component, computed, input, model, OnInit, output } from '@angular/core';
+import { Component, computed, input, model, OnInit, output, inject } from '@angular/core';
 import { firstValueFrom, Subject } from 'rxjs';
 import { CmsArticle } from 'sheltify-lib/article-types';
 import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
@@ -32,17 +32,14 @@ import { LastEditedComponent } from 'src/app/ui/last-edited/last-edited.componen
   styleUrl: './blog-editor.component.scss',
 })
 export class BlogEditorComponent implements OnInit {
+  private cmsRequestService = inject(CmsRequestService);
+  private blogService = inject(BlogService);
+  private alertService = inject(AlertService);
+  private tenantConfigurationService = inject(TenantConfigurationService);
+
   blog = model.required<CmsBlogEntry>();
   saveArticle$ = new Subject<undefined>();
   deleted = output();
-
-  constructor(
-    private cmsRequestService: CmsRequestService,
-    private blogService: BlogService,
-    private alertService: AlertService,
-    private tenantConfigurationService: TenantConfigurationService,
-  ) {
-  }
 
   blogCategories: string[] = [];
 

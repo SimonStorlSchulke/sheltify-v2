@@ -1,5 +1,5 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
 import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
@@ -16,13 +16,10 @@ import { TagComponent } from 'src/app/ui/tag/tag.component';
   styleUrl: './tags-manager.component.scss'
 })
 export class TagsManagerComponent implements OnInit {
+  private cmsRequestSv = inject(CmsRequestService);
+  private dialogRef = inject(DialogRef);
+  tagsService = inject(TagsService);
 
-  constructor(
-    private cmsRequestSv: CmsRequestService,
-    private dialogRef: DialogRef,
-    public tagsService: TagsService,
-  ) {
-  }
 
   async ngOnInit() {
     await this.tagsService.updateAvailableTags();

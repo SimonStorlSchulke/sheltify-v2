@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { CmsBlogEntry } from 'sheltify-lib/cms-types';
@@ -23,15 +23,12 @@ import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
   styleUrl: './blog-list.component.scss',
 })
 export class BlogListComponent {
+  blogService = inject(BlogService);
+  private cmsRequestService = inject(CmsRequestService);
+  private modalService = inject(ModalService);
+  private activatedRoute = inject(ActivatedRoute);
+  private location = inject(Location);
 
-  constructor(
-    public blogService: BlogService,
-    private cmsRequestService: CmsRequestService,
-    private modalService: ModalService,
-    private activatedRoute: ActivatedRoute,
-    private location: Location,
-  ) {
-  }
 
   ngOnInit() {
     const path = this.activatedRoute.snapshot.paramMap.get('id');

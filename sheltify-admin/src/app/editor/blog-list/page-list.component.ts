@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
@@ -24,15 +24,15 @@ import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
   styleUrl: './page-list.component.scss',
 })
 export class PageListComponent {
+  pagesService = inject(PagesService);
+  private cmsRequestService = inject(CmsRequestService);
+  private modalService = inject(ModalService);
+  private activatedRoute = inject(ActivatedRoute);
+  private router = inject(Router);
+  private alertService = inject(AlertService);
 
-  constructor(
-    public pagesService: PagesService,
-    private cmsRequestService: CmsRequestService,
-    private modalService: ModalService,
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private alertService: AlertService,
-  ) {
+
+  constructor() {
     this.activatedRoute.data.pipe(takeUntilDestroyed())
       .subscribe(({page}) => this.selectedPage.set(page));
   }

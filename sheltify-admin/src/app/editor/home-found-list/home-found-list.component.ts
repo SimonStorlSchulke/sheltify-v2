@@ -1,5 +1,5 @@
 import { DatePipe, Location } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { CmsHomeFoundEntry } from 'sheltify-lib/cms-types';
@@ -22,16 +22,13 @@ import { ModalService } from 'src/app/services/modal.service';
   styleUrl: './home-found-list.component.scss',
 })
 export class HomeFoundListComponent {
-  selectedEntry = signal<CmsHomeFoundEntry | null>(null);
+  homeFoundService = inject(HomeFoundService);
+  private cmsRequestService = inject(CmsRequestService);
+  private location = inject(Location);
+  private modalService = inject(ModalService);
+  private activatedRoute = inject(ActivatedRoute);
 
-  constructor(
-    public homeFoundService: HomeFoundService,
-    private cmsRequestService: CmsRequestService,
-    private location: Location,
-    private modalService: ModalService,
-    private activatedRoute: ActivatedRoute,
-  ) {
-  }
+  selectedEntry = signal<CmsHomeFoundEntry | null>(null);
 
   ngOnInit() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');

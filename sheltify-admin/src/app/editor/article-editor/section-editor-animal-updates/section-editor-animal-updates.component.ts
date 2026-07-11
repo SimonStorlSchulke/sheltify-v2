@@ -1,4 +1,4 @@
-import { Component, input, OnDestroy, OnInit, output } from '@angular/core';
+import { Component, input, OnDestroy, OnInit, output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { debounceTime, firstValueFrom, Subject, Subscription } from 'rxjs';
 import { SectionAnimalUpdates } from 'sheltify-lib/article-types';
@@ -18,17 +18,14 @@ import { CmsRequestService } from 'src/app/services/cms-request.service';
   styleUrl: './section-editor-animal-updates.component.scss',
 })
 export class SectionEditorAnimalUpdatesComponent implements OnInit, OnDestroy {
+  private cmsRequestService = inject(CmsRequestService);
+
   section = input.required<SectionAnimalUpdates>();
   triggerRerender = output<void>();
 
   onInput = new Subject<void>();
 
   updateSubscription?: Subscription;
-
-  constructor(
-    private cmsRequestService: CmsRequestService,
-  ) {
-  }
 
   ngOnInit() {
     this.updateSubscription = this.onInput.pipe(debounceTime(1000)).subscribe(() => this.updateAnimals());

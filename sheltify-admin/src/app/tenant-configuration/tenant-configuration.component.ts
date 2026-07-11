@@ -22,17 +22,13 @@ import { TenantConfigurationService } from 'src/app/services/tenant-configuratio
   styleUrl: './tenant-configuration.component.scss',
 })
 export class TenantConfigurationComponent implements OnInit {
+  private cmsRequestService = inject(CmsRequestService);
+  private tenantConfigurationService = inject(TenantConfigurationService);
+  private readonly alertService = inject(AlertService);
+
 
   public options = model<CmsTenantConfiguration | undefined>(undefined);
   public isAdmin = inject(AuthService).isAdmin();
-
-
-  constructor(
-    private cmsRequestService: CmsRequestService,
-    private tenantConfigurationService: TenantConfigurationService,
-    private readonly alertService: AlertService,
-  ) {
-  }
 
   async ngOnInit() {
     try {

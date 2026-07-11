@@ -1,4 +1,4 @@
-import { Component, DestroyRef, effect, input, model, OnInit, Renderer2, signal } from '@angular/core';
+import { Component, DestroyRef, effect, input, model, OnInit, Renderer2, signal, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { bootstrapEye, bootstrapGripVertical, bootstrapPlus, bootstrapX } from '@ng-icons/bootstrap-icons';
@@ -26,6 +26,13 @@ import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
   styleUrl: './article-editor.component.scss',
 })
 export class ArticleEditorComponent implements OnInit {
+  articleEditorService = inject(ArticleEditorService);
+  private modalService = inject(ModalService);
+  private cmsRequestService = inject(CmsRequestService);
+  private renderer = inject(Renderer2);
+  private destroyRef = inject(DestroyRef);
+  private tenantConfigurationService = inject(TenantConfigurationService);
+
 
   public showUpdateNote = input<boolean>(false);
 
@@ -37,14 +44,7 @@ export class ArticleEditorComponent implements OnInit {
   public colorPickerExpanded = signal<boolean>(false);
 
 
-  constructor(
-    public articleEditorService: ArticleEditorService,
-    private modalService: ModalService,
-    private cmsRequestService: CmsRequestService,
-    private renderer: Renderer2,
-    private destroyRef: DestroyRef,
-    private tenantConfigurationService: TenantConfigurationService,
-  ) {
+  constructor() {
 
     this.tenantConfigurationService.providedArticleThemeUrl().then(url => url ? this.addGlobalStyle(url) : false);
 

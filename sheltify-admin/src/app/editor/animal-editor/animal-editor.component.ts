@@ -44,6 +44,12 @@ import { CmsRequestService } from '../../services/cms-request.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AnimalEditorComponent {
+  tenantConfigurationService = inject(TenantConfigurationService);
+  private modalService = inject(ModalService);
+  private animalService = inject(AnimalService);
+  private alertService = inject(AlertService);
+  private askSaveService = inject(AskSaveService);
+
 
 
   animal = input<CmsAnimal | null>(null);
@@ -57,13 +63,7 @@ export class AnimalEditorComponent {
 
   private cmsRequestService = inject(CmsRequestService);
 
-  constructor(
-    public tenantConfigurationService: TenantConfigurationService,
-    private modalService: ModalService,
-    private animalService: AnimalService,
-    private alertService: AlertService,
-    private askSaveService: AskSaveService,
-  ) {
+  constructor() {
     this.askSaveService.triggerSave.pipe(takeUntilDestroyed()).subscribe(() => this.saveFromUI());
   }
 

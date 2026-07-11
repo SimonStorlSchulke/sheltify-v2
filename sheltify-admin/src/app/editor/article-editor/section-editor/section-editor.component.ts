@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, HostListener, input, model, signal, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, HostListener, input, model, signal, TemplateRef, ViewChild, ViewContainerRef, inject } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
 import { Section } from 'sheltify-lib/article-types';
 import { ArticleEditorService } from 'src/app/editor/article-editor/article-editor.service';
@@ -21,6 +21,10 @@ import { sectionLabels } from 'src/app/services/article-renderer';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SectionEditorComponent {
+  private articleEditorService = inject(ArticleEditorService);
+  private elementRef = inject(ElementRef);
+  private alertService = inject(AlertService);
+
   public section = input.required<Section>();
   public rowIndex = input.required<number>();
   public editable = input.required<boolean>();
@@ -28,12 +32,6 @@ export class SectionEditorComponent {
 
   @ViewChild('outlet', { read: ViewContainerRef }) outletRef!: ViewContainerRef;
   @ViewChild('preview', { read: TemplateRef }) previewRef!: TemplateRef<any>;
-
-  constructor(
-    private articleEditorService: ArticleEditorService,
-    private elementRef: ElementRef,
-    private alertService: AlertService) {
-  }
 
   public triggerRerender() {
     this.outletRef.clear();

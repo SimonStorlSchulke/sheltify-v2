@@ -1,15 +1,14 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { AlertService } from 'src/app/services/alert.service';
 
 @Injectable({providedIn: 'root'})
 export class AskSaveService {
+  private alertService = inject(AlertService);
+
 
   public readonly dirty = signal(false);
   public readonly triggerSave = new Subject<void>();
-
-  constructor(private alertService: AlertService) {
-  }
 
   public markDirty() {
     console.log("Eintrag editiert")

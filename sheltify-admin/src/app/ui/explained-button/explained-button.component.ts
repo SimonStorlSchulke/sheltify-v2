@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, inject } from '@angular/core';
 import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
@@ -7,14 +7,13 @@ import { AlertService } from 'src/app/services/alert.service';
   templateUrl: './explained-button.component.html',
 })
 export class ExplainedButtonComponent {
+  private readonly alertService = inject(AlertService);
+
   public action = output();
   public text = input<string>('');
   public explainer = input<string>('');
   public secondary = input<boolean>(false);
   public small = input<boolean>(false);
-
-  constructor(private readonly alertService: AlertService) {
-  }
 
   public showExplainer() {
     this.alertService.openAlert(this.text(), this.explainer()!)

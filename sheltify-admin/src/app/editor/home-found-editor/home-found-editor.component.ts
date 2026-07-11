@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, input, Input, output } from '@angular/core';
+import { Component, input, Input, output, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { CmsHomeFoundEntry } from 'sheltify-lib/cms-types';
 import { TextEditorComponent } from 'src/app/editor/text-editor/text-editor.component';
@@ -20,15 +20,12 @@ import { CmsRequestService } from 'src/app/services/cms-request.service';
   styleUrl: './home-found-editor.component.scss',
 })
 export class HomeFoundEditorComponent {
+  private alertService = inject(AlertService);
+  private cmsRequestService = inject(CmsRequestService);
+
   public entry = input.required<CmsHomeFoundEntry>();
 
   public modified = output<void>();
-
-  constructor(
-    private alertService: AlertService,
-    private cmsRequestService: CmsRequestService,
-  ) {
-  }
 
   async save() {
     await firstValueFrom(this.cmsRequestService.saveHomeFoundEntry(this.entry()));

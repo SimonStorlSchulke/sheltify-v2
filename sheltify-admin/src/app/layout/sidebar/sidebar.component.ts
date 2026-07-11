@@ -22,13 +22,12 @@ import { RouterLink, RouterLinkActive, Router } from '@angular/router';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SidebarComponent {
+  private cmsRequestService = inject(CmsRequestService);
+
   public router = inject(Router);
   public tenantConfigurationService = inject(TenantConfigurationService);
   public isSuperAdmin = inject(AuthService).isSuperAdmin;
   public building = signal(false);
-
-  constructor(private cmsRequestService: CmsRequestService) {
-  }
 
   async triggerBuild() {
     this.building.set(true);

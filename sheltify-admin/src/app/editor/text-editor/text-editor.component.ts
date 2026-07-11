@@ -1,4 +1,4 @@
-import { Component, model, OnInit, output } from '@angular/core';
+import { Component, model, OnInit, output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { EditorView } from 'prosemirror-view';
 import { toggleMark } from 'prosemirror-commands';
@@ -61,6 +61,10 @@ const schema = new Schema({
   styleUrls: ['./text-editor.component.scss']
 })
 export class TextEditorComponent implements OnInit {
+  private modalService = inject(ModalService);
+  private cmsRequestService = inject(CmsRequestService);
+  private readonly askSaveService = inject(AskSaveService);
+
   editor: Editor;
 
   htmlModel = model<string>('');
@@ -77,11 +81,7 @@ export class TextEditorComponent implements OnInit {
     ['align_left', 'align_center', 'align_right', 'align_justify'],
   ];
 
-  constructor(
-    private modalService: ModalService,
-    private cmsRequestService: CmsRequestService,
-    private readonly askSaveService: AskSaveService,
-  ) {
+  constructor() {
     const plainTextOnlyPaste = new Plugin({
       props: {
         transformPastedHTML(html: string): string {

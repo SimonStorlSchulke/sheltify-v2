@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, effect, input, OnInit, output, signal } from '@angular/core';
+import { Component, effect, input, OnInit, output, signal, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { lastValueFrom } from 'rxjs';
@@ -33,6 +33,14 @@ import { TagComponent } from 'src/app/ui/tag/tag.component';
   styleUrl: './image-editor.component.scss'
 })
 export class ImageEditorComponent implements OnInit {
+  private cmsRequestSv = inject(CmsRequestService);
+  private modalService = inject(ModalService);
+  tagsService = inject(TagsService);
+  animalService = inject(AnimalService);
+  private loaderService = inject(LoaderService);
+  private imageConverterService = inject(ImageConverterService);
+  private alertService = inject(AlertService);
+
   public image = input.required<CmsImage>();
   public selectedTags = signal<string[]>([]);
   public selectedAnimals = signal<string[]>([]);
@@ -42,15 +50,7 @@ export class ImageEditorComponent implements OnInit {
 
   public editFocusMode = false;
 
-  constructor(
-    private cmsRequestSv: CmsRequestService,
-    private modalService: ModalService,
-    public tagsService: TagsService,
-    public animalService: AnimalService,
-    private loaderService: LoaderService,
-    private imageConverterService: ImageConverterService,
-    private alertService: AlertService,
-  ) {
+  constructor() {
     effect(() => {
       const img = this.image();
       if (this.image()) {

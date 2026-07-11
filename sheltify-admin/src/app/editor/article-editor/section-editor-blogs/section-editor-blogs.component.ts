@@ -1,4 +1,4 @@
-import { Component, input, model, signal } from '@angular/core';
+import { Component, input, model, signal, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { SectionBlogs } from 'sheltify-lib/article-types';
@@ -23,7 +23,9 @@ export class SectionEditorBlogsComponent {
   allCategories = signal<string[]>([]);
   selectedCategories = model<string[]>([]);
 
-  constructor(tenantConfigurationService: TenantConfigurationService) {
+  constructor() {
+    const tenantConfigurationService = inject(TenantConfigurationService);
+
     tenantConfigurationService.blogCategories().then(result => {
       this.allCategories.set(result)
     });

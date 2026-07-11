@@ -1,14 +1,16 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { firstValueFrom, of, tap } from 'rxjs';
 import { CmsTenantConfiguration, SpecialArticleSections } from 'sheltify-lib/cms-types';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 
 @Injectable({providedIn: 'root'})
 export class TenantConfigurationService {
+  private cmsRequestService = inject(CmsRequestService);
+
 
   public needsRebuild = signal(false);
 
-  constructor(private cmsRequestService: CmsRequestService) {
+  constructor() {
     this.reloadConfig();
 
     /* to avoid reloading the config everytime we modify any data, we copy what the backend does here. This is currently

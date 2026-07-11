@@ -1,5 +1,5 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { CmsImage } from 'sheltify-lib/dist/cms-types';
 import { MediaEntryComponent } from 'src/app/media-library/media-entry/media-entry.component';
@@ -15,16 +15,12 @@ import { FinishableDialog } from 'src/app/services/modal.service';
   styleUrl: './unused-mediafiles.component.scss',
 })
 export class UnusedMediafilesComponent extends FinishableDialog<string[]> {
+  private cmsRequestService = inject(CmsRequestService);
+  dialogRef = inject(DialogRef);
+
   public unusedMediafiles: CmsImage[] = [];
 
   public selectedEntries = signal<Set<string>>(new Set());
-
-  constructor(
-    private cmsRequestService: CmsRequestService,
-    public dialogRef: DialogRef,
-    ) {
-    super();
-  }
 
   ngOnInit() {
     this.selectedEntries.set(new Set(this.unusedMediafiles.map(m => m.ID)))

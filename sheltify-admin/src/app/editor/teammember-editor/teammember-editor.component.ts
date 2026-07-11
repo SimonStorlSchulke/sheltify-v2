@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { CmsTeamMember } from 'sheltify-lib/cms-types';
 import { ImagePickerSingleComponent } from 'src/app/forms/image-picker-single/image-picker-single.component';
@@ -18,14 +18,11 @@ import { TeamMembersService } from 'src/app/services/team-members.service';
   styleUrl: './teammember-editor.component.scss',
 })
 export class TeammemberEditorComponent {
+  private cmsRequestService = inject(CmsRequestService);
+  private teamMembersService = inject(TeamMembersService);
+
   public teamMember = input.required<CmsTeamMember>();
   public deleted = output<void>();
-
-  constructor(
-    private cmsRequestService: CmsRequestService,
-    private teamMembersService: TeamMembersService,
-  ) {
-  }
 
   async save() {
     const teamMember = await firstValueFrom(this.cmsRequestService.saveTeamMember(this.teamMember()));

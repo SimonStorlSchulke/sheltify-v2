@@ -1,4 +1,4 @@
-import { Component, computed, input, output } from '@angular/core';
+import { Component, computed, input, output, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { bootstrapBoxArrowUpRight } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -35,17 +35,17 @@ import { ManageEntryButtonsComponent } from 'src/app/ui/manage-entry-buttons/man
   styleUrl: './page-editor.component.scss',
 })
 export class PageEditorComponent {
+  tenantConfigurationService = inject(TenantConfigurationService);
+  private cmsRequestService = inject(CmsRequestService);
+  private pagesService = inject(PagesService);
+  private alertService = inject(AlertService);
+  private askSaveService = inject(AskSaveService);
+
   page = input.required<CmsPage>();
   saveArticle$ = new Subject<undefined>();
   deleted = output();
 
-  constructor(
-    public tenantConfigurationService: TenantConfigurationService,
-    private cmsRequestService: CmsRequestService,
-    private pagesService: PagesService,
-    private alertService: AlertService,
-    private askSaveService: AskSaveService,
-  ) {
+  constructor() {
     this.askSaveService.triggerSave.pipe(takeUntilDestroyed()).subscribe(() => this.save());
   }
 

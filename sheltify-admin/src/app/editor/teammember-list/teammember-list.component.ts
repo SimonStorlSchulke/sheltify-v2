@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { createNewTeamMember } from 'src/app/cms-types/cms-type.factory';
@@ -23,14 +23,12 @@ import { CmsImageDirective } from 'src/app/ui/cms-image.directive';
   styleUrl: './teammember-list.component.scss',
 })
 export class TeammemberListComponent {
-  constructor(
-    public teamMembersService: TeamMembersService,
-    private cmsRequestService: CmsRequestService,
-    private modalService: ModalService,
-    private activatedRoute: ActivatedRoute,
-    private location: Location,
-  ) {
-  }
+  teamMembersService = inject(TeamMembersService);
+  private cmsRequestService = inject(CmsRequestService);
+  private modalService = inject(ModalService);
+  private activatedRoute = inject(ActivatedRoute);
+  private location = inject(Location);
+
 
   ngOnInit() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
