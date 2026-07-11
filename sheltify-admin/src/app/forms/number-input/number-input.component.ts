@@ -16,6 +16,7 @@ export class NumberInputComponent extends InputBaseComponent {
   public stepSize = input<number>(1);
 
   public onInput(event: Event) {
+    this.askSaveService.markDirty();
     const numberString = (event.target as HTMLInputElement).value;
     const value = numberString ? parseInt(numberString) : undefined;
     this.twoWayModel.set(value);

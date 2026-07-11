@@ -5,6 +5,7 @@ import { HomeFoundListComponent } from 'src/app/editor/home-found-list/home-foun
 import { BlogListComponent } from 'src/app/editor/page-list/blog-list.component';
 import { TeammemberListComponent } from 'src/app/editor/teammember-list/teammember-list.component';
 import { MediaLibraryComponent } from 'src/app/media-library/media-library.component';
+import { askSaveGuard } from 'src/app/services/ask-save.guard';
 import { TenantConfigurationComponent } from 'src/app/tenant-configuration/tenant-configuration.component';
 import { LoginComponent } from './pages/login/login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
@@ -16,7 +17,7 @@ export const routes: Routes = [
   {path: "", component: DashboardComponent, canActivate: [AuthGuard]},
   {path: "login", component: LoginComponent},
   {path: "seiten", component: PageListComponent, canActivate: [AuthGuard]},
-  {path: "seiten/:path", component: PageListComponent, canActivate: [AuthGuard]},
+  {path: "seiten/:path", component: PageListComponent, canActivate: [AuthGuard], canDeactivate: [askSaveGuard]},
   {path: "blog", component: BlogListComponent, canActivate: [AuthGuard]},
   {path: "blog/:id", component: BlogListComponent, canActivate: [AuthGuard]},
   {path: "rueckmeldungen", component: HomeFoundListComponent, canActivate: [AuthGuard]},

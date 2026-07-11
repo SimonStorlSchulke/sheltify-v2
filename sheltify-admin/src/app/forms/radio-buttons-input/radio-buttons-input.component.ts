@@ -16,6 +16,7 @@ export class RadioButtonsInputComponent extends InputBaseComponent{
   public twoWayModel = model<string | undefined>(undefined);
 
   public onInput(option: string) {
+    this.askSaveService.markDirty();
     this.twoWayModel.set(option);
   }
 }

@@ -1,15 +1,18 @@
-import { Component, input } from '@angular/core';
+import { Component, effect, inject, input, ModelSignal } from '@angular/core';
 import { AlertService } from 'src/app/services/alert.service';
+import { AskSaveService } from 'src/app/services/ask-save.service';
 
 @Component({
   template: '',
 })
-export class InputBaseComponent {
+export abstract class InputBaseComponent {
   public idName = input.required<string>();
   public explanation = input<string>();
   public label = input.required<string>();
+  public abstract twoWayModel: ModelSignal<any>;
 
-  constructor(private alertService: AlertService) {}
+  private alertService = inject(AlertService);
+  protected askSaveService = inject(AskSaveService);
 
   public showExplanation() {
     this.alertService.openAlert(this.label(), this.explanation()!)

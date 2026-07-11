@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { firstValueFrom, lastValueFrom, Subject } from 'rxjs';
 import { CmsArticle } from 'sheltify-lib/article-types';
 import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
-import { CmsAnimal, CmsTenantConfiguration, SqlNullTimeNow } from 'sheltify-lib/cms-types';
+import { CmsAnimal } from 'sheltify-lib/cms-types';
 import { SaveAnimalComponent } from 'src/app/editor/animal-editor/save-animal/save-animal.component';
 import { ArticleEditorComponent } from 'src/app/editor/article-editor/article-editor.component';
 import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-input.component';
@@ -48,7 +48,7 @@ export class AnimalEditorComponent {
   public saved = output<CmsAnimal | null>();
   public deleted = output();
 
-  public saveArticle$ = new Subject<{updateNote: string, pushUpdate: boolean}>();
+  public saveArticle$ = new Subject<{ updateNote: string, pushUpdate: boolean }>();
 
   public animalStati: string[] = [];
   public animalKinds: string[] = [];

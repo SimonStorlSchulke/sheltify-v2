@@ -31,6 +31,7 @@ export class DatePickerComponent extends InputBaseComponent {
   });
 
   public onInput(event: Event) {
+    this.askSaveService.markDirty();
     const date = new Date((event.target as any).value);
     this.twoWayModel.set(date);
     const dateString = date.toISOString();

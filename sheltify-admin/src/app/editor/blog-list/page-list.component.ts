@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { Location  } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { distinctUntilChanged, firstValueFrom, map } from 'rxjs';
 import { createNewPage } from 'src/app/cms-types/cms-type.factory';
 import { CmsPage } from 'sheltify-lib/cms-types';
 import { PageEditorComponent } from 'src/app/editor/page-editor/page-editor.component';
@@ -19,6 +19,7 @@ import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
     PageEditorComponent,
     BtIconComponent,
     LeftSidebarLayoutComponent,
+    RouterLink,
   ],
   templateUrl: './page-list.component.html',
   styleUrl: './page-list.component.scss',
@@ -36,12 +37,23 @@ export class PageListComponent {
   ) {
   }
 
-  ngOnInit() {
-    const path = this.activatedRoute.snapshot.paramMap.get('path');
-    this.toPage(path ?? '');
-  }
 
   selectedPage = signal<CmsPage | null>(null);
+
+  ngOnInit() {
+    this.activatedRoute.paramMap
+      .pipe(
+        map(params => params.get('path') ?? ''),
+        distinctUntilChanged()
+      )
+      .subscribe(async path => {
+        const page = await firstValueFrom(
+          this.cmsRequestService.getPageByPath(path)
+        );
+
+        this.selectedPage.set(page);
+      });
+  }
 
   public async newPage() {
     const page = createNewPage();
@@ -64,13 +76,16 @@ export class PageListComponent {
   }
 
   public async toPage(path: string) {
-    const page = await firstValueFrom(this.cmsRequestService.getPageByPath(path));
-    this.selectedPage.set(page);
-    this.location.go('/seiten/' + encodeURIComponent(path));
+    await this.router.navigate([
+      'seiten',
+      encodeURIComponent(path)
+    ]);
   }
 
   protected onDeleted() {
     this.pagesService.reloadPages();
     this.selectedPage.set(null);
   }
+
+  protected readonly encodeURIComponent = encodeURIComponent;
 }

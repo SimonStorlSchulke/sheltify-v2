@@ -21,6 +21,7 @@ export class ImagePickerSingleComponent extends InputBaseComponent {
   private modalPresenter = inject(ModalPresenter);
 
   public async pickImage() {
+    this.askSaveService.markDirty();
     const portraits = await this.modalPresenter.openMediaLibrary();
     if(!portraits) return;
     this.twoWayModel.set(portraits[0]);

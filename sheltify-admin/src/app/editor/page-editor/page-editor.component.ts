@@ -15,6 +15,7 @@ import { PagesService } from 'src/app/services/pages.service';
 import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
 import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
 import { LastEditedComponent } from 'src/app/ui/last-edited/last-edited.component';
+import { ManageEntryButtonsComponent } from 'src/app/ui/manage-entry-buttons/manage-entry-buttons.component';
 
 @Component({
   selector: 'app-page-editor',
@@ -25,6 +26,7 @@ import { LastEditedComponent } from 'src/app/ui/last-edited/last-edited.componen
     LastEditedComponent,
     NumberInputComponent,
     BtIconComponent,
+    ManageEntryButtonsComponent,
   ],
   providers: [provideIcons({bootstrapBoxArrowUpRight})],
   templateUrl: './page-editor.component.html',

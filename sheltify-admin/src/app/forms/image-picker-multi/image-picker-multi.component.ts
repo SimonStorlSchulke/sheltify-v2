@@ -20,16 +20,19 @@ export class ImagePickerMultiComponent extends InputBaseComponent {
   private modalPresenter = inject(ModalPresenter);
 
   public async addImage() {
+    this.askSaveService.markDirty();
     const images = await this.modalPresenter.openMediaLibrary();
     if(!images) return;
     this.twoWayModel.set([...this.twoWayModel()!, ...images]);
   }
 
   public removeImage(index: number) {
+    this.askSaveService.markDirty();
     this.twoWayModel().splice(index, 1);
   }
 
   public moveImage(index: number, offset: number) {
+    this.askSaveService.markDirty();
     const newArr = [...this.twoWayModel()];
     if (offset < 0 && index <= 0) {
       const item = newArr.shift();

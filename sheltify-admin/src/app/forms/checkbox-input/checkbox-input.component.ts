@@ -30,6 +30,7 @@ export class CheckboxInputComponent extends InputBaseComponent {
   });
 
   public toggle(newBool: boolean) {
+    this.askSaveService.markDirty();
     this.twoWayModel.set(newBool);
 
     const nullBool = this.nullBoolModel();

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, model, OnInit, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, CanDeactivate, GuardResult, MaybeAsync, RouterStateSnapshot } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { createNewAnimal } from 'src/app/cms-types/cms-type.factory';
 import { CmsAnimal } from 'sheltify-lib/cms-types';
@@ -31,7 +31,7 @@ import { DatePipe, Location } from '@angular/common';
   styleUrl: './animal-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AnimalListComponent implements OnInit {
+export class AnimalListComponent implements OnInit, CanDeactivate<AnimalListComponent> {
   private cmsRequestService = inject(CmsRequestService);
 
   private activatedRoute = inject(ActivatedRoute);
@@ -54,7 +54,7 @@ export class AnimalListComponent implements OnInit {
     const animals = this.animalsWithSameArticle();
     animals.sort((a, b) => a.ID.localeCompare(b.ID));
 
-    if(!animals[0]?.AnimalKind) return undefined;
+    if (!animals[0]?.AnimalKind) return undefined;
 
     return url + 'tierartikel/' + animals.map(animal => animal.Name).join('-');
   })
@@ -68,9 +68,14 @@ export class AnimalListComponent implements OnInit {
     public animalService: AnimalService,
     private modalService: ModalService,
     private tenantConfigurationService: TenantConfigurationService,
-    ) {
+  ) {
     this.tenantConfigurationService.animalKinds().then(animalKinds => this.animalKinds.set(['alle', ...animalKinds]));
   }
+
+  canDeactivate(component: AnimalListComponent, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState: RouterStateSnapshot): MaybeAsync<GuardResult> {
+       console.log("WWWTF");
+       return false;
+    }
 
   public animalList = computed(() => {
     return this.animalService.animals().filter(animal => {
