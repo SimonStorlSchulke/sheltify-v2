@@ -5,25 +5,25 @@ import { AlertService } from 'src/app/services/alert.service';
 
 @Injectable({providedIn: 'root'})
 export class ArticleEditorService {
-  public article = signal<CmsArticle | undefined>(createEmptyArticle());
-  public movedItem = signal<{ row: number, sectionRef: Section } | null>(null);
-  public copiedSection = signal<Section | null>(null);
+  article = signal<CmsArticle | undefined>(createEmptyArticle());
+  movedItem = signal<{ row: number, sectionRef: Section } | null>(null);
+  copiedSection = signal<Section | null>(null);
 
-  constructor(private readonly alertService: AlertService) {
+  constructor(private alertService: AlertService) {
   }
 
-  public enterMoveMode(row: number, sectionRef: Section) {
+  enterMoveMode(row: number, sectionRef: Section) {
     this.movedItem.set({
       row,
       sectionRef,
     })
   }
 
-  public exitMoveMode() {
+  exitMoveMode() {
     this.movedItem.set(null)
   }
 
-  async deleteSection(row: number, withConfirm = true): Promise<void> {
+  async deleteSection(row: number, withConfirm = true) {
     const article = this.article()!;
     if (!article) return;
 

@@ -18,7 +18,7 @@ export function getAnimalLink(animal: CmsAnimal, allAnimalsByArticle: Record<str
   return `/tierartikel/${names}`;
 }
 
-export async function downloadFile(file: CmsImage): Promise<void> {
+export async function downloadFile(file: CmsImage) {
   // TODO replace with default download once deployed
   const response = await fetch(config.uploadsUrl + file.ID);
   const blob = await response.blob();
