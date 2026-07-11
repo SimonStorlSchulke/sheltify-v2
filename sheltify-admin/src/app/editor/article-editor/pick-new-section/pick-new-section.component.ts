@@ -1,15 +1,16 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { SectionSpecial, SectionType, SectionTypes } from 'sheltify-lib/article-types';
 import { SpecialArticleSections } from 'sheltify-lib/dist/cms-types';
-import { newSpecialSection } from 'src/app/editor/article-editor/article-section.factory';
-import { sectionLabels } from 'src/app/services/article-renderer';
-import { FinishableDialog } from 'src/app/services/modal.service';
-import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
+import { newSpecialSection } from '@app/editor/article-editor/article-section.factory';
+import { sectionLabels } from '@app/services/article-renderer';
+import { FinishableDialog } from '@app/services/modal.service';
+import { TenantConfigurationService } from '@app/services/tenant-configuration.service';
 
 @Component({
   selector: 'app-pick-new-section',
   imports: [],
   templateUrl: './pick-new-section.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './pick-new-section.component.scss'
 })
 export class PickNewSectionComponent extends FinishableDialog<SectionType | SectionSpecial> {

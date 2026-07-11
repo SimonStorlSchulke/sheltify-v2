@@ -1,5 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
 import { AuthService } from '../../../services/auth.service';
 import { AsyncPipe } from '@angular/common';
 import { Router } from '@angular/router';
@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
     BtIconComponent
   ],
     templateUrl: './user-menu.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './user-menu.component.scss'
 })
 export class UserMenuComponent implements OnInit {

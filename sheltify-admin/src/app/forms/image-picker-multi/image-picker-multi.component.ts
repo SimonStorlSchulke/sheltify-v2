@@ -1,9 +1,9 @@
-import { Component, inject, model } from '@angular/core';
+import { Component, inject, model, ChangeDetectionStrategy } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { CmsImage } from 'sheltify-lib/cms-types';
-import { InputBaseComponent } from 'src/app/forms/input-base.component';
-import { ModalPresenter } from 'src/app/services/modal.presenter';
-import { CmsImageDirective } from 'src/app/ui/cms-image.directive';
+import { InputBaseComponent } from '@app/forms/input-base.component';
+import { ModalPresenter } from '@app/services/modal.presenter';
+import { CmsImageDirective } from '@app/ui/cms-image.directive';
 import { bootstrapCardImage, bootstrapPlus } from '@ng-icons/bootstrap-icons'
 
 @Component({
@@ -11,6 +11,7 @@ import { bootstrapCardImage, bootstrapPlus } from '@ng-icons/bootstrap-icons'
   imports: [CmsImageDirective, NgIcon],
   providers: [provideIcons({bootstrapCardImage, bootstrapPlus})],
   templateUrl: './image-picker-multi.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['../form-base.component.scss', './image-picker-multi.component.scss']
 })
 export class ImagePickerMultiComponent extends InputBaseComponent {

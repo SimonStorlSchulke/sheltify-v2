@@ -1,16 +1,16 @@
 import { Location } from '@angular/common';
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { CmsBlogEntry } from 'sheltify-lib/cms-types';
-import { createNewBlog } from 'src/app/cms-types/cms-type.factory';
-import { BlogEditorComponent } from 'src/app/editor/blog-editor/blog-editor.component';
-import { TextInputModalComponent } from 'src/app/forms/text-input-modal/text-input-modal.component';
-import { LeftSidebarLayoutComponent } from 'src/app/layout/left-sidebar-layout/left-sidebar-layout.component';
-import { BlogService } from 'src/app/services/blog.service';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
-import { ModalService } from 'src/app/services/modal.service';
-import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
+import { createNewBlog } from '@app/cms-types/cms-type.factory';
+import { BlogEditorComponent } from '@app/editor/blog-editor/blog-editor.component';
+import { TextInputModalComponent } from '@app/forms/text-input-modal/text-input-modal.component';
+import { LeftSidebarLayoutComponent } from '@app/layout/left-sidebar-layout/left-sidebar-layout.component';
+import { BlogService } from '@app/services/blog.service';
+import { CmsRequestService } from '@app/services/cms-request.service';
+import { ModalService } from '@app/services/modal.service';
+import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
 
 @Component({
   selector: 'app-page-list',
@@ -20,6 +20,7 @@ import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
     LeftSidebarLayoutComponent,
   ],
   templateUrl: './blog-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './blog-list.component.scss',
 })
 export class BlogListComponent {

@@ -1,20 +1,20 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, computed, OnInit, output, Pipe, PipeTransform, Signal, signal, inject } from '@angular/core';
+import { Component, computed, OnInit, output, Pipe, PipeTransform, Signal, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import { lastValueFrom, map, Observable } from 'rxjs';
 import { CmsAnimal, CmsImage, CmsTag } from 'sheltify-lib/cms-types';
-import { LoaderService } from 'src/app/layout/loader/loader.service';
-import { FileDropDirective } from 'src/app/media-library/file-drop.directive';
-import { ImageEditorComponent } from 'src/app/media-library/image-editor/image-editor.component';
-import { MediaEntryComponent } from 'src/app/media-library/media-entry/media-entry.component';
-import { UnusedMediafilesComponent } from 'src/app/media-library/unused-mediafiles/unused-mediafiles.component';
-import { AlertService } from 'src/app/services/alert.service';
-import { AnimalService } from 'src/app/services/animal.service';
-import { AuthService } from 'src/app/services/auth.service';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
-import { ImageConverterService } from 'src/app/services/image-converter.service';
-import { FinishableDialog, ModalService } from 'src/app/services/modal.service';
-import { TagsService } from 'src/app/services/tags.service';
-import { TagComponent } from 'src/app/ui/tag/tag.component';
+import { LoaderService } from '@app/layout/loader/loader.service';
+import { FileDropDirective } from '@app/media-library/file-drop.directive';
+import { ImageEditorComponent } from '@app/media-library/image-editor/image-editor.component';
+import { MediaEntryComponent } from '@app/media-library/media-entry/media-entry.component';
+import { UnusedMediafilesComponent } from '@app/media-library/unused-mediafiles/unused-mediafiles.component';
+import { AlertService } from '@app/services/alert.service';
+import { AnimalService } from '@app/services/animal.service';
+import { AuthService } from '@app/services/auth.service';
+import { CmsRequestService } from '@app/services/cms-request.service';
+import { ImageConverterService } from '@app/services/image-converter.service';
+import { FinishableDialog, ModalService } from '@app/services/modal.service';
+import { TagsService } from '@app/services/tags.service';
+import { TagComponent } from '@app/ui/tag/tag.component';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 
@@ -42,6 +42,7 @@ class MediaSelectionPipe implements PipeTransform {
     ImageEditorComponent,
   ],
   templateUrl: './media-library.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './media-library.component.scss'
 })
 export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implements OnInit {

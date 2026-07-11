@@ -1,21 +1,21 @@
 import { DatePipe } from '@angular/common';
-import { Component, effect, input, OnInit, output, signal, inject } from '@angular/core';
+import { Component, effect, input, OnInit, output, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { lastValueFrom } from 'rxjs';
 import { CmsImage, CmsImagesSize, CmsTag } from 'sheltify-lib/cms-types';
-import { TagsManagerComponent } from 'src/app/editor/tags-manager/tags-manager.component';
-import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
-import { LoaderService } from 'src/app/layout/loader/loader.service';
-import { AlertService } from 'src/app/services/alert.service';
-import { AnimalService } from 'src/app/services/animal.service';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
-import { ImageConverterService } from 'src/app/services/image-converter.service';
-import { ModalService } from 'src/app/services/modal.service';
-import { TagsService } from 'src/app/services/tags.service';
-import { CmsImageDirective } from 'src/app/ui/cms-image.directive';
-import { ExplainedButtonComponent } from 'src/app/ui/explained-button/explained-button.component';
-import { TagComponent } from 'src/app/ui/tag/tag.component';
+import { TagsManagerComponent } from '@app/editor/tags-manager/tags-manager.component';
+import { TextInputComponent } from '@app/forms/text-input/text-input.component';
+import { LoaderService } from '@app/layout/loader/loader.service';
+import { AlertService } from '@app/services/alert.service';
+import { AnimalService } from '@app/services/animal.service';
+import { CmsRequestService } from '@app/services/cms-request.service';
+import { ImageConverterService } from '@app/services/image-converter.service';
+import { ModalService } from '@app/services/modal.service';
+import { TagsService } from '@app/services/tags.service';
+import { CmsImageDirective } from '@app/ui/cms-image.directive';
+import { ExplainedButtonComponent } from '@app/ui/explained-button/explained-button.component';
+import { TagComponent } from '@app/ui/tag/tag.component';
 
 @Component({
   selector: 'app-image-editor',
@@ -30,6 +30,7 @@ import { TagComponent } from 'src/app/ui/tag/tag.component';
     ExplainedButtonComponent,
   ],
   templateUrl: './image-editor.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './image-editor.component.scss'
 })
 export class ImageEditorComponent implements OnInit {

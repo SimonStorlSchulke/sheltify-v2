@@ -1,11 +1,11 @@
-import { Component, input, OnDestroy, OnInit, output, inject } from '@angular/core';
+import { Component, input, OnDestroy, OnInit, output, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { debounceTime, firstValueFrom, Subject, Subscription } from 'rxjs';
 import { SectionAnimalUpdates } from 'sheltify-lib/article-types';
 import { animalsByArticleId } from 'sheltify-lib/dist/animal-util';
-import { NumberInputComponent } from 'src/app/forms/number-input/number-input.component';
-import { SelectInputComponent } from 'src/app/forms/select-input/select-input.component';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
+import { NumberInputComponent } from '@app/forms/number-input/number-input.component';
+import { SelectInputComponent } from '@app/forms/select-input/select-input.component';
+import { CmsRequestService } from '@app/services/cms-request.service';
 
 @Component({
   selector: 'app-section-editor-animal-updates',
@@ -15,6 +15,7 @@ import { CmsRequestService } from 'src/app/services/cms-request.service';
     NumberInputComponent
   ],
   templateUrl: './section-editor-animal-updates.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './section-editor-animal-updates.component.scss',
 })
 export class SectionEditorAnimalUpdatesComponent implements OnInit, OnDestroy {

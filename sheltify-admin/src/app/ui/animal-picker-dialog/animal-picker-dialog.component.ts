@@ -1,7 +1,7 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CmsAnimal } from 'sheltify-lib/cms-types';
-import { FinishableDialog } from 'src/app/services/modal.service';
+import { FinishableDialog } from '@app/services/modal.service';
 
 @Component({
   selector: 'app-animal-picker-dialog',
@@ -9,6 +9,7 @@ import { FinishableDialog } from 'src/app/services/modal.service';
     NgTemplateOutlet
   ],
   templateUrl: './animal-picker-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './animal-picker-dialog.component.scss',
 })
 export class AnimalPickerDialogComponent extends FinishableDialog<CmsAnimal> implements OnInit {

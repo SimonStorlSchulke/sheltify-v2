@@ -1,4 +1,4 @@
-import { Component, DestroyRef, effect, input, model, OnInit, Renderer2, signal, inject } from '@angular/core';
+import { Component, DestroyRef, effect, input, model, OnInit, Renderer2, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { bootstrapEye, bootstrapGripVertical, bootstrapPlus, bootstrapX } from '@ng-icons/bootstrap-icons';
@@ -6,23 +6,24 @@ import { provideIcons } from '@ng-icons/core';
 import { lastValueFrom, Observable } from 'rxjs';
 import { SqlNullTimeNow } from 'sheltify-lib/cms-types';
 import { Section } from 'sheltify-lib/dist/article-types';
-import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
-import { ArticleEditorService } from 'src/app/editor/article-editor/article-editor.service';
-import { createEmptySection } from 'src/app/editor/article-editor/article-section.factory';
-import { PickNewSectionComponent } from 'src/app/editor/article-editor/pick-new-section/pick-new-section.component';
-import { SectionEditorComponent } from 'src/app/editor/article-editor/section-editor/section-editor.component';
-import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
-import { sectionLabels } from 'src/app/services/article-renderer';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
-import { ModalService } from 'src/app/services/modal.service';
-import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
-import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
+import { createEmptyArticle } from '@app/cms-types/cms-type.factory';
+import { ArticleEditorService } from '@app/editor/article-editor/article-editor.service';
+import { createEmptySection } from '@app/editor/article-editor/article-section.factory';
+import { PickNewSectionComponent } from '@app/editor/article-editor/pick-new-section/pick-new-section.component';
+import { SectionEditorComponent } from '@app/editor/article-editor/section-editor/section-editor.component';
+import { TextInputComponent } from '@app/forms/text-input/text-input.component';
+import { sectionLabels } from '@app/services/article-renderer';
+import { CmsRequestService } from '@app/services/cms-request.service';
+import { ModalService } from '@app/services/modal.service';
+import { TenantConfigurationService } from '@app/services/tenant-configuration.service';
+import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
 
 @Component({
   selector: 'app-article-editor',
   imports: [FormsModule, SectionEditorComponent, TextInputComponent, BtIconComponent],
   providers: [provideIcons({bootstrapGripVertical, bootstrapX, bootstrapPlus, bootstrapEye})],
   templateUrl: './article-editor.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './article-editor.component.scss',
 })
 export class ArticleEditorComponent implements OnInit {

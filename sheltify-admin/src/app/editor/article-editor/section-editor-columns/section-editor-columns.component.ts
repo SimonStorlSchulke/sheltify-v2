@@ -1,14 +1,14 @@
-import { Component, input, inject } from '@angular/core';
+import { Component, input, inject, ChangeDetectionStrategy } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
 import { Section, SectionColumns } from 'sheltify-lib/article-types';
-import { createEmptySection } from 'src/app/editor/article-editor/article-section.factory';
-import { PickNewSectionComponent } from 'src/app/editor/article-editor/pick-new-section/pick-new-section.component';
-import { SectionEditorColumnSectionsComponent } from 'src/app/editor/article-editor/section-editor/section-editor-column-sections/section-editor-column-sections.component';
-import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-input.component';
-import { NumberInputComponent } from 'src/app/forms/number-input/number-input.component';
-import { AlertService } from 'src/app/services/alert.service';
-import { ModalService } from 'src/app/services/modal.service';
-import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
+import { createEmptySection } from '@app/editor/article-editor/article-section.factory';
+import { PickNewSectionComponent } from '@app/editor/article-editor/pick-new-section/pick-new-section.component';
+import { SectionEditorColumnSectionsComponent } from '@app/editor/article-editor/section-editor/section-editor-column-sections/section-editor-column-sections.component';
+import { CheckboxInputComponent } from '@app/forms/checkbox-input/checkbox-input.component';
+import { NumberInputComponent } from '@app/forms/number-input/number-input.component';
+import { AlertService } from '@app/services/alert.service';
+import { ModalService } from '@app/services/modal.service';
+import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
 
 const maxColumns = 4;
 
@@ -21,6 +21,7 @@ const maxColumns = 4;
     CheckboxInputComponent,
   ],
   templateUrl: './section-editor-columns.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './section-editor-columns.component.scss',
 })
 export class SectionEditorColumnsComponent {

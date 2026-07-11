@@ -1,17 +1,17 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { CmsPage } from 'sheltify-lib/cms-types';
-import { createNewPage } from 'src/app/cms-types/cms-type.factory';
-import { PageEditorComponent } from 'src/app/editor/page-editor/page-editor.component';
-import { TextInputModalComponent } from 'src/app/forms/text-input-modal/text-input-modal.component';
-import { LeftSidebarLayoutComponent } from 'src/app/layout/left-sidebar-layout/left-sidebar-layout.component';
-import { AlertService } from 'src/app/services/alert.service';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
-import { ModalService } from 'src/app/services/modal.service';
-import { PagesService } from 'src/app/services/pages.service';
-import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
+import { createNewPage } from '@app/cms-types/cms-type.factory';
+import { PageEditorComponent } from '@app/editor/page-editor/page-editor.component';
+import { TextInputModalComponent } from '@app/forms/text-input-modal/text-input-modal.component';
+import { LeftSidebarLayoutComponent } from '@app/layout/left-sidebar-layout/left-sidebar-layout.component';
+import { AlertService } from '@app/services/alert.service';
+import { CmsRequestService } from '@app/services/cms-request.service';
+import { ModalService } from '@app/services/modal.service';
+import { PagesService } from '@app/services/pages.service';
+import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
 
 @Component({
   selector: 'app-page-list',
@@ -21,6 +21,7 @@ import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
     LeftSidebarLayoutComponent,
   ],
   templateUrl: './page-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './page-list.component.scss',
 })
 export class PageListComponent {

@@ -1,10 +1,11 @@
-import { Component, input, model } from '@angular/core';
-import { InputBaseComponent } from 'src/app/forms/input-base.component';
+import { Component, input, model, ChangeDetectionStrategy } from '@angular/core';
+import { InputBaseComponent } from '@app/forms/input-base.component';
 
 @Component({
   selector: 'app-text-input',
   imports: [],
   templateUrl: './text-input.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['../form-base.component.scss', './text-input.component.scss']
 })
 export class TextInputComponent extends InputBaseComponent {

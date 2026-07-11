@@ -1,7 +1,7 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { CmsArticle, Section } from 'sheltify-lib/article-types';
-import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
-import { AlertService } from 'src/app/services/alert.service';
+import { createEmptyArticle } from '@app/cms-types/cms-type.factory';
+import { AlertService } from '@app/services/alert.service';
 
 @Injectable({providedIn: 'root'})
 export class ArticleEditorService {

@@ -1,6 +1,6 @@
 import { Section, SectionAnimalList, SectionColumns, SectionHero, SectionImages, SectionTitle, SectionType, SectionVideo } from 'sheltify-lib/article-types';
 import { CmsImage, CmsImagesSize } from 'sheltify-lib/cms-types';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
+import { CmsRequestService } from '@app/services/cms-request.service';
 
 export const sectionLabels = new Map<SectionType, string>([
   ['title', 'Titelsektion'],

@@ -12,8 +12,8 @@ import {
   CmsTenantConfiguration,
 } from 'sheltify-lib/cms-types';
 import { collectCmsImageGuidsDeep, filterPublishedAndHasArticle, sortByPriorityAndUpdatedAt } from 'sheltify-lib/cms-utils';
-import { LoaderService } from 'src/app/layout/loader/loader.service';
-import { AlertService } from 'src/app/services/alert.service';
+import { LoaderService } from '@app/layout/loader/loader.service';
+import { AlertService } from '@app/services/alert.service';
 import { AuthService } from './auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, timer, tap, OperatorFunction, lastValueFrom, Subject, firstValueFrom } from 'rxjs';

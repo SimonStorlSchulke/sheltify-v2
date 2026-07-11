@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FinishableDialog } from 'src/app/services/modal.service';
+import { FinishableDialog } from '@app/services/modal.service';
 
 @Component({
   selector: 'app-color-picker-dialog',

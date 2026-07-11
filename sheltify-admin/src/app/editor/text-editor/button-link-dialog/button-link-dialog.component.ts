@@ -1,8 +1,8 @@
-import { Component, ElementRef, HostListener, input, model, signal, viewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, input, model, signal, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
-import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
-import { FinishableDialog } from 'src/app/services/modal.service';
+import { TextInputComponent } from '@app/forms/text-input/text-input.component';
+import { FinishableDialog } from '@app/services/modal.service';
 
 @Component({
   selector: 'app-text-input-modal',
@@ -13,6 +13,7 @@ import { FinishableDialog } from 'src/app/services/modal.service';
     TextInputComponent
   ],
   templateUrl: './button-link-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './button-link-dialog.component.scss',
 })
 export class ButtonLinkDialogComponent extends FinishableDialog<{ url: string, buttonTye: 'primary' | 'secondary' | 'cto' }>{

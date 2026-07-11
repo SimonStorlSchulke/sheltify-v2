@@ -1,12 +1,12 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, HostListener, input, model, signal, TemplateRef, ViewChild, ViewContainerRef, inject } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, HostListener, input, model, signal, TemplateRef, ViewChild, ViewContainerRef, inject, ChangeDetectionStrategy } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
 import { Section } from 'sheltify-lib/article-types';
-import { ArticleEditorService } from 'src/app/editor/article-editor/article-editor.service';
-import { SectionEditorAllSectionsComponent } from 'src/app/editor/article-editor/section-editor/section-editor-all-sections/section-editor-all-sections.component';
-import { SectionRendererComponent } from 'src/app/section-renderer/section-renderer.component';
-import { AlertService } from 'src/app/services/alert.service';
-import { sectionLabels } from 'src/app/services/article-renderer';
+import { ArticleEditorService } from '@app/editor/article-editor/article-editor.service';
+import { SectionEditorAllSectionsComponent } from '@app/editor/article-editor/section-editor/section-editor-all-sections/section-editor-all-sections.component';
+import { SectionRendererComponent } from '@app/section-renderer/section-renderer.component';
+import { AlertService } from '@app/services/alert.service';
+import { sectionLabels } from '@app/services/article-renderer';
 
 @Component({
   selector: 'app-section-editor',
@@ -18,6 +18,7 @@ import { sectionLabels } from 'src/app/services/article-renderer';
   ],
   templateUrl: './section-editor.component.html',
   styleUrl: './section-editor.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SectionEditorComponent {

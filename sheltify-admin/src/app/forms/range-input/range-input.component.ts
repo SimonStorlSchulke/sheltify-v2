@@ -1,10 +1,11 @@
-import { Component, input, model } from '@angular/core';
-import { InputBaseComponent } from 'src/app/forms/input-base.component';
+import { Component, input, model, ChangeDetectionStrategy } from '@angular/core';
+import { InputBaseComponent } from '@app/forms/input-base.component';
 
 @Component({
   selector: 'app-range-input',
   imports: [],
   templateUrl: './range-input.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['../form-base.component.scss', './range-input.component.scss'],
 })
 export class RangeInputComponent extends InputBaseComponent {

@@ -1,9 +1,10 @@
-import { Component, input, output, inject } from '@angular/core';
-import { AlertService } from 'src/app/services/alert.service';
+import { Component, input, output, inject, ChangeDetectionStrategy } from '@angular/core';
+import { AlertService } from '@app/services/alert.service';
 
 @Component({
   selector: 'app-explained-button',
   imports: [],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './explained-button.component.html',
 })
 export class ExplainedButtonComponent {

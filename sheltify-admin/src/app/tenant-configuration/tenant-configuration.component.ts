@@ -1,14 +1,14 @@
-import { Component, inject, model, OnInit, signal } from '@angular/core';
+import { Component, inject, model, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { CmsTenantConfiguration } from 'sheltify-lib/cms-types';
-import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-input.component';
-import { ImagePickerSingleComponent } from 'src/app/forms/image-picker-single/image-picker-single.component';
-import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
-import { AlertService } from 'src/app/services/alert.service';
-import { AuthService } from 'src/app/services/auth.service';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
-import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
+import { CheckboxInputComponent } from '@app/forms/checkbox-input/checkbox-input.component';
+import { ImagePickerSingleComponent } from '@app/forms/image-picker-single/image-picker-single.component';
+import { TextInputComponent } from '@app/forms/text-input/text-input.component';
+import { AlertService } from '@app/services/alert.service';
+import { AuthService } from '@app/services/auth.service';
+import { CmsRequestService } from '@app/services/cms-request.service';
+import { TenantConfigurationService } from '@app/services/tenant-configuration.service';
 
 @Component({
   selector: 'app-tenant-configuration',
@@ -19,6 +19,7 @@ import { TenantConfigurationService } from 'src/app/services/tenant-configuratio
     CheckboxInputComponent
   ],
   templateUrl: './tenant-configuration.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './tenant-configuration.component.scss',
 })
 export class TenantConfigurationComponent implements OnInit {

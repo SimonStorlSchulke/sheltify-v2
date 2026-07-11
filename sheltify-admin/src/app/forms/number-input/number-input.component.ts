@@ -1,10 +1,11 @@
-import { Component, input, model, output } from '@angular/core';
-import { InputBaseComponent } from 'src/app/forms/input-base.component';
+import { Component, input, model, output, ChangeDetectionStrategy } from '@angular/core';
+import { InputBaseComponent } from '@app/forms/input-base.component';
 
 @Component({
   selector: 'app-number-input',
   imports: [],
   templateUrl: './number-input.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['../form-base.component.scss', './number-input.component.scss']
 })
 export class NumberInputComponent extends InputBaseComponent {

@@ -1,6 +1,6 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { SectionText } from 'sheltify-lib/article-types';
-import { TextEditorComponent } from 'src/app/editor/text-editor/text-editor.component';
+import { TextEditorComponent } from '@app/editor/text-editor/text-editor.component';
 
 @Component({
   selector: 'app-section-editor-text',
@@ -8,6 +8,7 @@ import { TextEditorComponent } from 'src/app/editor/text-editor/text-editor.comp
     TextEditorComponent
   ],
   templateUrl: './section-editor-text.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './section-editor-text.component.scss'
 })
 export class SectionEditorTextComponent {

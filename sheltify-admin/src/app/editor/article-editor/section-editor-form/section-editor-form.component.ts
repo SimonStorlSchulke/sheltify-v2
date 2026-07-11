@@ -1,16 +1,17 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { type SectionForm, } from 'sheltify-lib/article-types';
-import { AlertService } from 'src/app/services/alert.service';
-import { AlertChoice } from 'src/app/ui/alert/alert.component';
-import { TextInputComponent } from "src/app/forms/text-input/text-input.component";
-import { CheckboxInputComponent } from "src/app/forms/checkbox-input/checkbox-input.component";
-import { SelectInputComponent } from "src/app/forms/select-input/select-input.component";
+import { AlertService } from '@app/services/alert.service';
+import { AlertChoice } from '@app/ui/alert/alert.component';
+import { TextInputComponent } from "@app/forms/text-input/text-input.component";
+import { CheckboxInputComponent } from "@app/forms/checkbox-input/checkbox-input.component";
+import { SelectInputComponent } from "@app/forms/select-input/select-input.component";
 
 @Component({
   selector: 'app-section-editor-form',
   imports: [FormsModule, TextInputComponent, CheckboxInputComponent, SelectInputComponent],
   templateUrl: './section-editor-form.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './section-editor-form.component.scss',
 })
 export class SectionEditorFormComponent {

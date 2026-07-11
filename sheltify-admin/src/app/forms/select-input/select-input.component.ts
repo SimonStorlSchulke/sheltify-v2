@@ -1,7 +1,7 @@
-import { Component, input, model, output } from '@angular/core';
+import { Component, input, model, output, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
-import { InputBaseComponent } from 'src/app/forms/input-base.component';
+import { InputBaseComponent } from '@app/forms/input-base.component';
 
 @Component({
   selector: 'app-select-input',
@@ -11,6 +11,7 @@ import { InputBaseComponent } from 'src/app/forms/input-base.component';
     NgOptionComponent,
   ],
   templateUrl: './select-input.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['../form-base.component.scss', './select-input.component.scss']
 })
 export class SelectInputComponent extends InputBaseComponent {

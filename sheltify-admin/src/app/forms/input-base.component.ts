@@ -1,8 +1,9 @@
-import { Component, effect, inject, input, ModelSignal } from '@angular/core';
-import { AlertService } from 'src/app/services/alert.service';
-import { AskSaveService } from 'src/app/services/ask-save.service';
+import { Component, effect, inject, input, ModelSignal, ChangeDetectionStrategy } from '@angular/core';
+import { AlertService } from '@app/services/alert.service';
+import { AskSaveService } from '@app/services/ask-save.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: '',
 })
 export abstract class InputBaseComponent {

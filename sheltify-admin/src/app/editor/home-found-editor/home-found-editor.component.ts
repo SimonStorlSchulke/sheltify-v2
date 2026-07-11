@@ -1,12 +1,12 @@
 import { DatePipe } from '@angular/common';
-import { Component, input, Input, output, inject } from '@angular/core';
+import { Component, input, Input, output, inject, ChangeDetectionStrategy } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { CmsHomeFoundEntry } from 'sheltify-lib/cms-types';
-import { TextEditorComponent } from 'src/app/editor/text-editor/text-editor.component';
-import { ImagePickerMultiComponent } from 'src/app/forms/image-picker-multi/image-picker-multi.component';
-import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
-import { AlertService } from 'src/app/services/alert.service';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
+import { TextEditorComponent } from '@app/editor/text-editor/text-editor.component';
+import { ImagePickerMultiComponent } from '@app/forms/image-picker-multi/image-picker-multi.component';
+import { TextInputComponent } from '@app/forms/text-input/text-input.component';
+import { AlertService } from '@app/services/alert.service';
+import { CmsRequestService } from '@app/services/cms-request.service';
 
 @Component({
   selector: 'app-home-found-editor',
@@ -17,6 +17,7 @@ import { CmsRequestService } from 'src/app/services/cms-request.service';
     TextInputComponent
   ],
   templateUrl: './home-found-editor.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './home-found-editor.component.scss',
 })
 export class HomeFoundEditorComponent {

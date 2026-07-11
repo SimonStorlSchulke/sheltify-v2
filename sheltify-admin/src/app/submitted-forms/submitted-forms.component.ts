@@ -1,5 +1,5 @@
-import { Component, inject, signal } from '@angular/core';
-import { AuthService } from 'src/app/services/auth.service';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { AuthService } from '@app/services/auth.service';
 import { LeftSidebarLayoutComponent } from '../layout/left-sidebar-layout/left-sidebar-layout.component';
 import { CmsRequestService } from '../services/cms-request.service';
 import { DatePipe } from '@angular/common';
@@ -11,6 +11,7 @@ import { AlertService } from '../services/alert.service';
   selector: 'app-submitted-forms',
   imports: [LeftSidebarLayoutComponent, DatePipe],
   templateUrl: './submitted-forms.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './submitted-forms.component.scss',
 })
 export class SubmittedFormsComponent {

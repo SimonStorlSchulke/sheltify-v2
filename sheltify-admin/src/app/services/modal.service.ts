@@ -2,7 +2,7 @@ import { Dialog } from '@angular/cdk/dialog';
 import { ComponentType } from '@angular/cdk/portal';
 import { Directive, inject, Injectable, OnDestroy, Type } from '@angular/core';
 import { firstValueFrom, Observable, Subject } from 'rxjs';
-import { AlertChoice, AlertComponent } from 'src/app/ui/alert/alert.component';
+import { AlertChoice, AlertComponent } from '@app/ui/alert/alert.component';
 
 export interface Finishable<TValue> {
   finish: Observable<TValue | undefined>;

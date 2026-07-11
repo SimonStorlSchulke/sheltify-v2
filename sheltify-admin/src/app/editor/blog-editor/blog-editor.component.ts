@@ -1,20 +1,20 @@
-import { Component, computed, input, model, OnInit, output, inject } from '@angular/core';
+import { Component, computed, input, model, OnInit, output, inject, ChangeDetectionStrategy } from '@angular/core';
 import { firstValueFrom, Subject } from 'rxjs';
 import { CmsArticle } from 'sheltify-lib/article-types';
-import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
+import { createEmptyArticle } from '@app/cms-types/cms-type.factory';
 import { CmsBlogEntry } from 'sheltify-lib/cms-types';
-import { ArticleEditorComponent } from 'src/app/editor/article-editor/article-editor.component';
-import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-input.component';
-import { ImagePickerSingleComponent } from 'src/app/forms/image-picker-single/image-picker-single.component';
-import { NumberInputComponent } from 'src/app/forms/number-input/number-input.component';
-import { SelectInputComponent } from 'src/app/forms/select-input/select-input.component';
-import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
-import { AlertService } from 'src/app/services/alert.service';
-import { BlogService } from 'src/app/services/blog.service';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
-import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
-import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
-import { LastEditedComponent } from 'src/app/ui/last-edited/last-edited.component';
+import { ArticleEditorComponent } from '@app/editor/article-editor/article-editor.component';
+import { CheckboxInputComponent } from '@app/forms/checkbox-input/checkbox-input.component';
+import { ImagePickerSingleComponent } from '@app/forms/image-picker-single/image-picker-single.component';
+import { NumberInputComponent } from '@app/forms/number-input/number-input.component';
+import { SelectInputComponent } from '@app/forms/select-input/select-input.component';
+import { TextInputComponent } from '@app/forms/text-input/text-input.component';
+import { AlertService } from '@app/services/alert.service';
+import { BlogService } from '@app/services/blog.service';
+import { CmsRequestService } from '@app/services/cms-request.service';
+import { TenantConfigurationService } from '@app/services/tenant-configuration.service';
+import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
+import { LastEditedComponent } from '@app/ui/last-edited/last-edited.component';
 
 @Component({
   selector: 'app-blog-editor',
@@ -29,6 +29,7 @@ import { LastEditedComponent } from 'src/app/ui/last-edited/last-edited.componen
     NumberInputComponent
   ],
   templateUrl: './blog-editor.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './blog-editor.component.scss',
 })
 export class BlogEditorComponent implements OnInit {

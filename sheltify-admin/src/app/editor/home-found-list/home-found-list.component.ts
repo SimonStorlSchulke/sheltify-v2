@@ -1,15 +1,15 @@
 import { DatePipe, Location } from '@angular/common';
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { CmsHomeFoundEntry } from 'sheltify-lib/cms-types';
-import { createNewHomeFoundEntry } from 'src/app/cms-types/cms-type.factory';
-import { HomeFoundEditorComponent } from 'src/app/editor/home-found-editor/home-found-editor.component';
-import { TextInputModalComponent } from 'src/app/forms/text-input-modal/text-input-modal.component';
-import { LeftSidebarLayoutComponent } from 'src/app/layout/left-sidebar-layout/left-sidebar-layout.component';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
-import { HomeFoundService } from 'src/app/services/home-found.service';
-import { ModalService } from 'src/app/services/modal.service';
+import { createNewHomeFoundEntry } from '@app/cms-types/cms-type.factory';
+import { HomeFoundEditorComponent } from '@app/editor/home-found-editor/home-found-editor.component';
+import { TextInputModalComponent } from '@app/forms/text-input-modal/text-input-modal.component';
+import { LeftSidebarLayoutComponent } from '@app/layout/left-sidebar-layout/left-sidebar-layout.component';
+import { CmsRequestService } from '@app/services/cms-request.service';
+import { HomeFoundService } from '@app/services/home-found.service';
+import { ModalService } from '@app/services/modal.service';
 
 @Component({
   selector: 'app-home-found-list',
@@ -19,6 +19,7 @@ import { ModalService } from 'src/app/services/modal.service';
     DatePipe,
   ],
   templateUrl: './home-found-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './home-found-list.component.scss',
 })
 export class HomeFoundListComponent {

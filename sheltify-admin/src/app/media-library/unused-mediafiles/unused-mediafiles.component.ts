@@ -1,10 +1,10 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { CmsImage } from 'sheltify-lib/dist/cms-types';
-import { MediaEntryComponent } from 'src/app/media-library/media-entry/media-entry.component';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
-import { FinishableDialog } from 'src/app/services/modal.service';
+import { MediaEntryComponent } from '@app/media-library/media-entry/media-entry.component';
+import { CmsRequestService } from '@app/services/cms-request.service';
+import { FinishableDialog } from '@app/services/modal.service';
 
 @Component({
   selector: 'app-unused-mediafiles',
@@ -12,6 +12,7 @@ import { FinishableDialog } from 'src/app/services/modal.service';
     MediaEntryComponent
   ],
   templateUrl: './unused-mediafiles.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './unused-mediafiles.component.scss',
 })
 export class UnusedMediafilesComponent extends FinishableDialog<string[]> {

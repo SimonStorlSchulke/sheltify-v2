@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
 import {
   bootstrapBoxArrowUpRight,
   bootstrapGripVertical,
@@ -60,6 +60,7 @@ export type IconName =
   ],
   templateUrl: './bt-icon.component.html',
   styleUrl: './bt-icon.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [provideIcons({
       bootstrapBoxArrowUpRight,
       bootstrapGripVertical,

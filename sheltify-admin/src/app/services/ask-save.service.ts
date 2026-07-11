@@ -1,6 +1,6 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { Subject } from 'rxjs';
-import { AlertService } from 'src/app/services/alert.service';
+import { AlertService } from '@app/services/alert.service';
 
 @Injectable({providedIn: 'root'})
 export class AskSaveService {

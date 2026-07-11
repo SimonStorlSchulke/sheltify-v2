@@ -1,16 +1,16 @@
 import { Location } from '@angular/common';
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { createNewTeamMember } from 'src/app/cms-types/cms-type.factory';
+import { createNewTeamMember } from '@app/cms-types/cms-type.factory';
 import { CmsTeamMember } from 'sheltify-lib/cms-types';
-import { TeammemberEditorComponent } from 'src/app/editor/teammember-editor/teammember-editor.component';
-import { TextInputModalComponent } from 'src/app/forms/text-input-modal/text-input-modal.component';
-import { LeftSidebarLayoutComponent } from 'src/app/layout/left-sidebar-layout/left-sidebar-layout.component';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
-import { ModalService } from 'src/app/services/modal.service';
-import { TeamMembersService } from 'src/app/services/team-members.service';
-import { CmsImageDirective } from 'src/app/ui/cms-image.directive';
+import { TeammemberEditorComponent } from '@app/editor/teammember-editor/teammember-editor.component';
+import { TextInputModalComponent } from '@app/forms/text-input-modal/text-input-modal.component';
+import { LeftSidebarLayoutComponent } from '@app/layout/left-sidebar-layout/left-sidebar-layout.component';
+import { CmsRequestService } from '@app/services/cms-request.service';
+import { ModalService } from '@app/services/modal.service';
+import { TeamMembersService } from '@app/services/team-members.service';
+import { CmsImageDirective } from '@app/ui/cms-image.directive';
 
 @Component({
   selector: 'app-teammember-list',
@@ -20,6 +20,7 @@ import { CmsImageDirective } from 'src/app/ui/cms-image.directive';
     LeftSidebarLayoutComponent
   ],
   templateUrl: './teammember-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './teammember-list.component.scss',
 })
 export class TeammemberListComponent {

@@ -1,6 +1,6 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { SectionVideo } from 'sheltify-lib/article-types';
-import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
+import { TextInputComponent } from '@app/forms/text-input/text-input.component';
 
 @Component({
   selector: 'app-section-editor-video',
@@ -8,6 +8,7 @@ import { TextInputComponent } from 'src/app/forms/text-input/text-input.componen
     TextInputComponent
   ],
   templateUrl: './section-editor-video.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './section-editor-video.component.scss',
 })
 export class SectionEditorVideoComponent {

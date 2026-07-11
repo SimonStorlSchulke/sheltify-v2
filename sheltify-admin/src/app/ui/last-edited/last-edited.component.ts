@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { CmsType } from 'sheltify-lib/cms-types';
 
 @Component({
@@ -8,6 +8,7 @@ import { CmsType } from 'sheltify-lib/cms-types';
     DatePipe
   ],
   templateUrl: './last-edited.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './last-edited.component.scss',
 })
 export class LastEditedComponent {

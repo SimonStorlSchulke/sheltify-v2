@@ -1,7 +1,7 @@
-import { Component, computed, input, model } from '@angular/core';
+import { Component, computed, input, model, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SqlNullBool, SqlNullBoolNull } from 'sheltify-lib/cms-types';
-import { InputBaseComponent } from 'src/app/forms/input-base.component';
+import { InputBaseComponent } from '@app/forms/input-base.component';
 
 @Component({
   selector: 'app-checkbox-input',
@@ -9,6 +9,7 @@ import { InputBaseComponent } from 'src/app/forms/input-base.component';
     FormsModule
   ],
   templateUrl: './checkbox-input.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['../form-base.component.scss']
 })
 export class CheckboxInputComponent extends InputBaseComponent {

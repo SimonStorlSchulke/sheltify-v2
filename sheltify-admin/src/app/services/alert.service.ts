@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
-import { ModalService } from 'src/app/services/modal.service';
-import { AlertChoice, AlertComponent } from 'src/app/ui/alert/alert.component';
-import { ToastComponent, ToastLevel } from 'src/app/ui/toast/toast.component';
+import { ModalService } from '@app/services/modal.service';
+import { AlertChoice, AlertComponent } from '@app/ui/alert/alert.component';
+import { ToastComponent, ToastLevel } from '@app/ui/toast/toast.component';
 
 @Injectable({providedIn: 'root'})
 export class AlertService {

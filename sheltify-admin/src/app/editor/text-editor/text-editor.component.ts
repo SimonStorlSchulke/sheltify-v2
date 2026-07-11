@@ -1,4 +1,4 @@
-import { Component, model, OnInit, output, inject } from '@angular/core';
+import { Component, model, OnInit, output, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { EditorView } from 'prosemirror-view';
 import { toggleMark } from 'prosemirror-commands';
@@ -6,13 +6,13 @@ import { Plugin } from 'prosemirror-state';
 import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
 import { Schema, NodeSpec, MarkSpec, Mark, DOMOutputSpec } from 'prosemirror-model';
 import { firstValueFrom } from 'rxjs';
-import { ButtonLinkDialogComponent } from 'src/app/editor/text-editor/button-link-dialog/button-link-dialog.component';
-import { AskSaveService } from 'src/app/services/ask-save.service';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
-import { ModalService } from 'src/app/services/modal.service';
+import { ButtonLinkDialogComponent } from '@app/editor/text-editor/button-link-dialog/button-link-dialog.component';
+import { AskSaveService } from '@app/services/ask-save.service';
+import { CmsRequestService } from '@app/services/cms-request.service';
+import { ModalService } from '@app/services/modal.service';
 import { marks as defaultMarks } from 'ngx-editor';
 import { nodes as defaultNodes } from 'ngx-editor';
-import { AnimalPickerDialogComponent } from 'src/app/ui/animal-picker-dialog/animal-picker-dialog.component';
+import { AnimalPickerDialogComponent } from '@app/ui/animal-picker-dialog/animal-picker-dialog.component';
 
 const myLink: MarkSpec = {
   attrs: {
@@ -58,6 +58,7 @@ const schema = new Schema({
     FormsModule
   ],
   templateUrl: './text-editor.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./text-editor.component.scss']
 })
 export class TextEditorComponent implements OnInit {

@@ -1,11 +1,12 @@
-import { Component, inject, input, output } from '@angular/core';
+import { Component, inject, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { SqlNullTime } from 'sheltify-lib/dist/cms-types';
-import { AskSaveService } from 'src/app/services/ask-save.service';
+import { AskSaveService } from '@app/services/ask-save.service';
 
 @Component({
   selector: 'app-manage-entry-buttons',
   imports: [],
   templateUrl: './manage-entry-buttons.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './manage-entry-buttons.component.scss',
 })
 export class ManageEntryButtonsComponent {

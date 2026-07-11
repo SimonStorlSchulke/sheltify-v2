@@ -1,6 +1,6 @@
 import { Directive, effect, ElementRef, input, Renderer2, inject } from '@angular/core';
 import { CmsImage, CmsImagesSize } from 'sheltify-lib/cms-types';
-import { getImageFormatUrl } from 'src/app/services/article-renderer';
+import { getImageFormatUrl } from '@app/services/article-renderer';
 
 @Directive({
   selector: 'img[cmsImage]',
