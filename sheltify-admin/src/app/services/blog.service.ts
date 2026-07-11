@@ -11,7 +11,7 @@ export class BlogService {
     this.reloadBlogs();
   }
 
-  public blogs = signal<CmsBlogEntry[]>([]);
+  blogs = signal<CmsBlogEntry[]>([]);
 
   async reloadBlogs() {
     const pages = await firstValueFrom(this.cmsRequestService.getBlogEntries());

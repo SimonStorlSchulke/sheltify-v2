@@ -12,15 +12,15 @@ import { InputBaseComponent } from 'src/app/forms/input-base.component';
   styleUrls: ['../form-base.component.scss']
 })
 export class CheckboxInputComponent extends InputBaseComponent {
-  public twoWayModel = model<boolean>(false);
-  public nullBoolModel = model<SqlNullBool | undefined>(undefined);
-  public showYesNo = input<boolean>(true);
+  twoWayModel = model<boolean>(false);
+  nullBoolModel = model<SqlNullBool | undefined>(undefined);
+  showYesNo = input<boolean>(true);
 
-  public onInput(checked: boolean) {
+  onInput(checked: boolean) {
     this.twoWayModel.set(checked);
   }
 
-  public checkedState = computed(() => {
+  checkedState = computed(() => {
     const nullBool = this.nullBoolModel();
     if(!nullBool) return this.twoWayModel();
 
@@ -29,7 +29,7 @@ export class CheckboxInputComponent extends InputBaseComponent {
     return nullBool.Bool;
   });
 
-  public toggle(newBool: boolean) {
+  toggle(newBool: boolean) {
     this.askSaveService.markDirty();
     this.twoWayModel.set(newBool);
 

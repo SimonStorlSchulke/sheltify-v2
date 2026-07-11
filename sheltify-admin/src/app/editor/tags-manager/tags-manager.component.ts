@@ -39,7 +39,7 @@ export class TagsManagerComponent implements OnInit {
     this.tagsService.availableTags.update(tags => tags.filter(tag => tag.ID != id));
   }
 
-  public close() {
+  close() {
     this.dialogRef.close();
   };
 }

@@ -11,10 +11,10 @@ import { AnimalService } from 'src/app/services/animal.service';
   styleUrl: './featured-animals.component.scss',
 })
 export class FeaturedAnimalsComponent {
-  public selectedAnimals = model<CmsAnimal[]>([]);
+  selectedAnimals = model<CmsAnimal[]>([]);
 
   constructor(
-    public animalService: AnimalService,
+    animalService: AnimalService,
   ) {
   }
 }

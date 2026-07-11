@@ -23,9 +23,9 @@ export class HomeFoundEditorComponent {
   private alertService = inject(AlertService);
   private cmsRequestService = inject(CmsRequestService);
 
-  public entry = input.required<CmsHomeFoundEntry>();
+  entry = input.required<CmsHomeFoundEntry>();
 
-  public modified = output<void>();
+  modified = output<void>();
 
   async save() {
     await firstValueFrom(this.cmsRequestService.saveHomeFoundEntry(this.entry()));

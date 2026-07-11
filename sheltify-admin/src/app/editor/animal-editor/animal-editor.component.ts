@@ -124,7 +124,7 @@ export class AnimalEditorComponent {
     this.deleted.emit();
   }
 
-  public setStatus(status: string, active: boolean) {
+  setStatus(status: string, active: boolean) {
     const animal = this.animal()!;
     let currentStati = animal.Status?.split(',') ?? []
     currentStati = currentStati.filter(status => this.animalStati.includes(status));

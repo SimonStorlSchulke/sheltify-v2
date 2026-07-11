@@ -27,8 +27,8 @@ export class TenantConfigurationComponent implements OnInit {
   private readonly alertService = inject(AlertService);
 
 
-  public options = model<CmsTenantConfiguration | undefined>(undefined);
-  public isAdmin = inject(AuthService).isAdmin();
+  options = model<CmsTenantConfiguration | undefined>(undefined);
+  isAdmin = inject(AuthService).isAdmin();
 
   async ngOnInit() {
     try {

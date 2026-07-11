@@ -88,16 +88,16 @@ export type IconName =
   )]
 })
 export class BtIconComponent {
-  public name = input.required<IconName>()
-  public size = input<'s' | 'ms' | 'ml' | 'l'>();
+  name = input.required<IconName>()
+  size = input<'s' | 'ms' | 'ml' | 'l'>();
 
-  public customIconPath = computed(() => {
+  customIconPath = computed(() => {
     return new Map<IconName, string>([
       ['Paw', '/assets/icons/paw-icon.svg']
     ]).get(this.name())
   })
 
-  public iconSize = computed(() => {
+  iconSize = computed(() => {
     return new Map([
       ['s', 16],
       ['ms', 20],

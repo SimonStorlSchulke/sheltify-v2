@@ -10,5 +10,5 @@ import { TextInputComponent } from "src/app/forms/text-input/text-input.componen
   styleUrl: "./section-editor-special.component.scss",
 })
 export class SectionEditorSpecialComponent {
-  public section = input.required<SectionSpecial>();
+  section = input.required<SectionSpecial>();
 }

@@ -14,14 +14,14 @@ import { InputBaseComponent } from 'src/app/forms/input-base.component';
   styleUrls: ['../form-base.component.scss', './select-input.component.scss']
 })
 export class SelectInputComponent extends InputBaseComponent {
-  public placeholder = input<string>('');
-  public twoWayModel = model<string | undefined>('');
-  public onInputChange = output<string | undefined>();
-  public options = input.required<string[]>();
-  public optionTranslations = input<Record<string, string> | undefined>(undefined);
-  public clearable = input<boolean>(true);
+  placeholder = input<string>('');
+  twoWayModel = model<string | undefined>('');
+  onInputChange = output<string | undefined>();
+  options = input.required<string[]>();
+  optionTranslations = input<Record<string, string> | undefined>(undefined);
+  clearable = input<boolean>(true);
 
-  public onInput() {
+  onInput() {
     this.askSaveService.markDirty();
     this.onInputChange.emit(this.twoWayModel());
   }

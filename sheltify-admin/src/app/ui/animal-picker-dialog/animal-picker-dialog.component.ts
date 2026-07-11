@@ -12,10 +12,10 @@ import { FinishableDialog } from 'src/app/services/modal.service';
   styleUrl: './animal-picker-dialog.component.scss',
 })
 export class AnimalPickerDialogComponent extends FinishableDialog<CmsAnimal> implements OnInit {
-  public animals: CmsAnimal[] = [];
-  public byArticle = false;
+  animals: CmsAnimal[] = [];
+  byArticle = false;
 
-  public animalsByArticleID = signal(new Map<string, { animals: CmsAnimal[], title: string }>());
+  animalsByArticleID = signal(new Map<string, { animals: CmsAnimal[], title: string }>());
 
   ngOnInit() {
     if(this.byArticle) {

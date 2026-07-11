@@ -11,6 +11,6 @@ import { CmsRequestService } from 'src/app/services/cms-request.service';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SectionRendererComponent {
-  public section = input.required<Section>();
-  public uploadsUrl = CmsRequestService.publicApiUrl + 'uploads/';
+  section = input.required<Section>();
+  uploadsUrl = CmsRequestService.publicApiUrl + 'uploads/';
 }

@@ -24,10 +24,10 @@ import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 export class SidebarComponent {
   private cmsRequestService = inject(CmsRequestService);
 
-  public router = inject(Router);
-  public tenantConfigurationService = inject(TenantConfigurationService);
-  public isSuperAdmin = inject(AuthService).isSuperAdmin;
-  public building = signal(false);
+  router = inject(Router);
+  tenantConfigurationService = inject(TenantConfigurationService);
+  isSuperAdmin = inject(AuthService).isSuperAdmin;
+  building = signal(false);
 
   async triggerBuild() {
     this.building.set(true);

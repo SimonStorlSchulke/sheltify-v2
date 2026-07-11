@@ -8,7 +8,7 @@ import { FinishableDialog } from 'src/app/services/modal.service';
   styleUrl: './color-picker-dialog.component.scss'
 })
 export class ColorPickerDialogComponent extends FinishableDialog<string> {
-  public submit(color: string) {
+  submit(color: string) {
     this.finishWith(color);
   }
 }

@@ -150,7 +150,7 @@ export class TextEditorComponent implements OnInit {
     this.htmlInput.emit(value);
   }
 
-  public markDirty() {
+  markDirty() {
     console.log("value");
     this.askSaveService.markDirty();
   };

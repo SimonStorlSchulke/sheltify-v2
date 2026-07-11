@@ -11,7 +11,7 @@ export class PagesService {
     this.reloadPages();
   }
 
-  public pages = signal<CmsPage[]>([]);
+  pages = signal<CmsPage[]>([]);
 
   async reloadPages() {
     const pages = await firstValueFrom(this.cmsRequestService.getPages());
@@ -27,7 +27,7 @@ export class PagesService {
     }
   }
 
-  public createTitleFromPath(path: string) {
+  createTitleFromPath(path: string) {
     const pathSegments = path.split('/');
     return pathSegments[pathSegments.length - 1]
       .replace('-', ' ')

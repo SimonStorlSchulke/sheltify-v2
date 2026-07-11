@@ -8,14 +8,14 @@ import { InputBaseComponent } from 'src/app/forms/input-base.component';
   styleUrls: ['../form-base.component.scss', './number-input.component.scss']
 })
 export class NumberInputComponent extends InputBaseComponent {
-  public placeholder = input<string>();
-  public long = input<boolean>(false);
-  public twoWayModel = model<number | undefined>(undefined);
-  public min = input<number>(0);
-  public max = input<number>(100);
-  public stepSize = input<number>(1);
+  placeholder = input<string>();
+  long = input<boolean>(false);
+  twoWayModel = model<number | undefined>(undefined);
+  min = input<number>(0);
+  max = input<number>(100);
+  stepSize = input<number>(1);
 
-  public onInput(event: Event) {
+  onInput(event: Event) {
     this.askSaveService.markDirty();
     const numberString = (event.target as HTMLInputElement).value;
     const value = numberString ? parseInt(numberString) : undefined;

@@ -21,8 +21,8 @@ export class TeammemberEditorComponent {
   private cmsRequestService = inject(CmsRequestService);
   private teamMembersService = inject(TeamMembersService);
 
-  public teamMember = input.required<CmsTeamMember>();
-  public deleted = output<void>();
+  teamMember = input.required<CmsTeamMember>();
+  deleted = output<void>();
 
   async save() {
     const teamMember = await firstValueFrom(this.cmsRequestService.saveTeamMember(this.teamMember()));

@@ -27,17 +27,17 @@ export class SectionEditorColumnsComponent {
   private readonly alertService = inject(AlertService);
   private modalService = inject(ModalService);
 
-  public section = input.required<SectionColumns>();
+  section = input.required<SectionColumns>();
 
-  public deleteColumn(index: number) {
+  deleteColumn(index: number) {
     this.section().Content.Columns.splice(index, 1);
   }
 
-  public deleteSection(iColumn: number, iSection: number) {
+  deleteSection(iColumn: number, iSection: number) {
     this.section().Content.Columns[iColumn].Sections.splice(iColumn, 1);
   }
 
-  public addColumn() {
+  addColumn() {
     if(this.section().Content.Columns.length >= maxColumns){
       this.alertService.openAlert(`Maximal ${maxColumns} Spalten möglich`, '');
       return;

@@ -49,7 +49,7 @@ export class PageEditorComponent {
     this.askSaveService.triggerSave.pipe(takeUntilDestroyed()).subscribe(() => this.save());
   }
 
-  public pageUrl = computed(() => {
+  pageUrl = computed(() => {
     let url = this.tenantConfigurationService.config()?.SiteUrl;
     if (!url) return undefined;
     if (!url.endsWith('/')) url += '/';

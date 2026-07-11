@@ -37,7 +37,7 @@ export class SectionEditorAnimalUpdatesComponent implements OnInit, OnDestroy {
     this.triggerRerender.emit();
   }
 
-  public ngOnDestroy() {
+  ngOnDestroy() {
     this.updateSubscription?.unsubscribe();
   }
 }

@@ -45,7 +45,7 @@ export class HomeFoundListComponent {
     this.homeFoundService.reloadEntries();
   }
 
-  public onModified() {
+  onModified() {
     this.homeFoundService.reloadEntries();
   }
 

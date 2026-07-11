@@ -11,9 +11,9 @@ import { FinishableDialog } from 'src/app/services/modal.service';
   styleUrl: './save-animal.component.scss',
 })
 export class SaveAnimalComponent extends FinishableDialog<{updateNote: string, pushUpdate: boolean}> {
-  public updateNote = signal<string>('');
+  updateNote = signal<string>('');
 
-  public sendSaveInfo(pushUpdate: boolean) {
+  sendSaveInfo(pushUpdate: boolean) {
     this.finishWith({
       updateNote: this.updateNote(),
       pushUpdate,

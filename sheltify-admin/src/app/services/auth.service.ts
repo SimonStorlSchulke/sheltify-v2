@@ -30,10 +30,10 @@ export class AuthService {
 
   private _user$ = new BehaviorSubject<CmsUser | null>(null);
 
-  public user$ = this._user$.asObservable();
-  public userSignal = toSignal(this._user$);
+  user$ = this._user$.asObservable();
+  userSignal = toSignal(this._user$);
 
-  public login(username: string, password: string): Observable<CmsUser> {
+  login(username: string, password: string): Observable<CmsUser> {
     const formData: FormData = new FormData();
     formData.append('username', username);
     formData.append('password', password);
@@ -46,7 +46,7 @@ export class AuthService {
     );
   }
 
-  public reLogin() {
+  reLogin() {
     return this.httpClient.get<CmsUser>(CmsRequestService.adminApiUrl + "relogin", { withCredentials: true }).pipe(
       catchError(_ => of(null)),
       tap(response => {
@@ -64,18 +64,18 @@ export class AuthService {
       });
   }
 
-  public getLoggedInUser() {
+  getLoggedInUser() {
     return this._user$.value;
   }
 
-  public isSuperAdmin = computed(() => this.userSignal()?.Role == 'SUPERADMIN');
+  isSuperAdmin = computed(() => this.userSignal()?.Role == 'SUPERADMIN');
 
-  public isAdmin = computed(() => {
+  isAdmin = computed(() => {
     const role = this.userSignal()?.Role;
     return role == 'SUPERADMIN' || role == 'ADMIN';
   })
 
-  public getTenantID() {
+  getTenantID() {
     return this.getLoggedInUser()?.TenantID ?? "";
   }
 }

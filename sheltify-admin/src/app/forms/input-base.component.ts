@@ -6,15 +6,15 @@ import { AskSaveService } from 'src/app/services/ask-save.service';
   template: '',
 })
 export abstract class InputBaseComponent {
-  public idName = input.required<string>();
-  public explanation = input<string>();
-  public label = input.required<string>();
-  public abstract twoWayModel: ModelSignal<any>;
+  idName = input.required<string>();
+  explanation = input<string>();
+  label = input.required<string>();
+  abstract twoWayModel: ModelSignal<any>;
 
   private alertService = inject(AlertService);
   askSaveService = inject(AskSaveService);
 
-  public showExplanation() {
+  showExplanation() {
     this.alertService.openAlert(this.label(), this.explanation()!)
   }
 }

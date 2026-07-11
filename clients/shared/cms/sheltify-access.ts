@@ -12,13 +12,13 @@ export class SheltifyAccess {
     "Content-Type": "application/json",
   };
 
-  public uploadsUrl = 'http://localhost:3000/api/uploads/' as const;
+  uploadsUrl = 'http://localhost:3000/api/uploads/' as const;
 
-  public get apiBaseUrl() {
+  get apiBaseUrl() {
     return `http://localhost:3000/api/${this.tenant}/`;
   }
   
-  public get formSubmitUrl() {
+  get formSubmitUrl() {
     return `http://localhost:3000/forms/${this.tenant}/submit`;
   }
 
@@ -90,15 +90,15 @@ export class SheltifyAccess {
     return this.get<CmsArticle>(`article/${id}`)
   }
 
-  public get tenantConfig(): Promise<CmsTenantConfiguration> {
+  get tenantConfig(): Promise<CmsTenantConfiguration> {
     return this.get<CmsTenantConfiguration>('configuration');
   }
 
-  public getMediaFilesByIds(ids: string[]): Promise<CmsImage[]> {
+  getMediaFilesByIds(ids: string[]): Promise<CmsImage[]> {
     return this.get<CmsImage[]>('media?ids=' + ids.join(','));
   }
 
-  public get animals(): Promise<CmsAnimal[]> {
+  get animals(): Promise<CmsAnimal[]> {
     return this.getSortedByPriorityAndUpdatedAt<CmsAnimal>('animals')
   }
 
@@ -157,7 +157,7 @@ export class SheltifyAccess {
     return await this.get<CmsBlogEntry>(`blogs/by-title?title=${title}`);
   }
 
-  public animalById(id: number): Promise<CmsAnimal> {
+  animalById(id: number): Promise<CmsAnimal> {
     return this.get<CmsAnimal>(`animals/${id}`)
   }
 
@@ -183,7 +183,7 @@ export class SheltifyAccess {
     return data as T;
   }
 
-  public encodeTitle(title: string) {
+  encodeTitle(title: string) {
     return title
       .replace(/~/g, "~t")
       .replace(/\?/g, "~q")
@@ -192,7 +192,7 @@ export class SheltifyAccess {
       .replace(/\s+/g, "-");
   }
 
-  public decodeTitle(slug: string) {
+  decodeTitle(slug: string) {
     return slug
       .replace(/-/g, " ")
       .replace(/~p/g, "%")

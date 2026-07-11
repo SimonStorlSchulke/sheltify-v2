@@ -16,11 +16,11 @@ import { AlertService } from '../services/alert.service';
 export class SubmittedFormsComponent {
   private readonly authService = inject(AuthService);
 
-  public animals = signal<CmsFormSubmission[]>([]);
+  animals = signal<CmsFormSubmission[]>([]);
   private cmsRequestService = inject(CmsRequestService);
   private alertService = inject(AlertService);
-  public forms = signal<CmsFormSubmission[]>([]);
-  public selectedForm = signal<CmsFormSubmission | undefined>(undefined);
+  forms = signal<CmsFormSubmission[]>([]);
+  selectedForm = signal<CmsFormSubmission | undefined>(undefined);
 
   constructor() {
     this.reloadForms();

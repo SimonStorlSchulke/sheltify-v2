@@ -13,18 +13,18 @@ import { TenantConfigurationService } from 'src/app/services/tenant-configuratio
   styleUrl: './pick-new-section.component.scss'
 })
 export class PickNewSectionComponent extends FinishableDialog<SectionType | SectionSpecial> {
-  public SectionTypes = SectionTypes;
-  public sectionLabels = sectionLabels;
+  SectionTypes = SectionTypes;
+  sectionLabels = sectionLabels;
 
   private tenantConfigurationService = inject(TenantConfigurationService);
-  public tenantsSpecialSections = signal<SpecialArticleSections | undefined>(undefined);
+  tenantsSpecialSections = signal<SpecialArticleSections | undefined>(undefined);
 
   constructor() {
     super();
     this.tenantConfigurationService.providedSpecialSections().then(v => this.tenantsSpecialSections.set(v));
   }
 
-  public tenantName = computed(() => this.tenantConfigurationService.config()?.Name)
+  tenantName = computed(() => this.tenantConfigurationService.config()?.Name)
 
   async pickSpecialSection(sectionName: string) {
 

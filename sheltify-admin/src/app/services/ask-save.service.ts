@@ -7,17 +7,17 @@ export class AskSaveService {
   private alertService = inject(AlertService);
 
 
-  public readonly dirty = signal(false);
-  public readonly triggerSave = new Subject<void>();
+  readonly dirty = signal(false);
+  readonly triggerSave = new Subject<void>();
 
-  public markDirty() {
+  markDirty() {
     console.log("Eintrag editiert")
     if(!this.dirty()) {
       this.dirty.set(true);
     }
   }
 
-  public clean() {
+  clean() {
     this.dirty.set(false);
   }
 

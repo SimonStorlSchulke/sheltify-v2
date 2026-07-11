@@ -11,9 +11,9 @@ export class AnimalService {
     this.reloadAnimals();
   }
 
-  public animals = signal<CmsAnimal[]>([]);
+  animals = signal<CmsAnimal[]>([]);
 
-  public animalsByArticleID = computed(() => {
+  animalsByArticleID = computed(() => {
     return this.animals().reduce((acc, animal) => {
       animal.ArticleID ??= 'NoArticle'
       acc[animal.ArticleID] = acc[animal.ArticleID] ?? [];
@@ -42,7 +42,7 @@ export class AnimalService {
 
   }
 
-  public isPublished(animal: CmsAnimal): boolean {
+  isPublished(animal: CmsAnimal): boolean {
     return !!animal.PublishedAt?.Valid && !!animal.ArticleID && animal.ArticleID != 'NoArticle'
   }
 

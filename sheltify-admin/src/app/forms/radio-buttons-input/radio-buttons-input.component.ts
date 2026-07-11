@@ -9,13 +9,13 @@ import { InputBaseComponent } from 'src/app/forms/input-base.component';
 })
 export class RadioButtonsInputComponent extends InputBaseComponent{
 
-  public options = input.required<string[]>();
-  public optionImages = input<string[]>();
-  public optionTranslations = input<string[]>([]);
+  options = input.required<string[]>();
+  optionImages = input<string[]>();
+  optionTranslations = input<string[]>([]);
 
-  public twoWayModel = model<string | undefined>(undefined);
+  twoWayModel = model<string | undefined>(undefined);
 
-  public onInput(option: string) {
+  onInput(option: string) {
     this.askSaveService.markDirty();
     this.twoWayModel.set(option);
   }

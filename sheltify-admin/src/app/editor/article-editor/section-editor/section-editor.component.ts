@@ -25,37 +25,37 @@ export class SectionEditorComponent {
   private elementRef = inject(ElementRef);
   private alertService = inject(AlertService);
 
-  public section = input.required<Section>();
-  public rowIndex = input.required<number>();
-  public editable = input.required<boolean>();
-  public editedRow = model<number>();
+  section = input.required<Section>();
+  rowIndex = input.required<number>();
+  editable = input.required<boolean>();
+  editedRow = model<number>();
 
   @ViewChild('outlet', { read: ViewContainerRef }) outletRef!: ViewContainerRef;
   @ViewChild('preview', { read: TemplateRef }) previewRef!: TemplateRef<any>;
 
-  public triggerRerender() {
+  triggerRerender() {
     this.outletRef.clear();
     this.outletRef.createEmbeddedView(this.previewRef);
   }
 
   readonly sectionLabels = sectionLabels;
 
-  public copySection() {
+  copySection() {
     this.articleEditorService.copiedSection.set(this.section());
     this.alertService.openToast('Sektion kann nun über den "Einfügen" Knopf beim Hover zwischen den Sektionen wieder eingefügt werden.', 'Kopiert')
   }
 
-  public cutSection() {
+  cutSection() {
     this.articleEditorService.copiedSection.set(this.section());
     this.alertService.openToast('Sektion kann nun über den "Einfügen" Knopf beim Hover zwischen den Sektionen wieder eingefügt werden.', 'Ausgeschnitten');
     this.articleEditorService.deleteSection(this.rowIndex(), false);
   }
 
-  public enterMoveMode() {
+  enterMoveMode() {
     this.articleEditorService.enterMoveMode(this.rowIndex(), this.section())
   }
 
-  public deleteSection() {
+  deleteSection() {
     this.articleEditorService.deleteSection(this.rowIndex());
   }
 

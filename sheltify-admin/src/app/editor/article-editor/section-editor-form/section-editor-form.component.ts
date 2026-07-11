@@ -17,7 +17,7 @@ export class SectionEditorFormComponent {
 
   section = input.required<SectionForm>();
 
-  public alertService = inject(AlertService);
+  alertService = inject(AlertService);
   d = [''] as unknown as AlertChoice[]
 
   async add() {
@@ -29,16 +29,16 @@ export class SectionEditorFormComponent {
       });
   }
 
-  public setRadioOptions(index: number, $event: string) {
+  setRadioOptions(index: number, $event: string) {
     const input = this.section().Content.Inputs[index];
     input.RadioOptions = $event.split(',').map(o => o.trim());
   }
 
-  public setForwardMails($event: string) {
+  setForwardMails($event: string) {
     this.section().Content.ForwardToEmails = $event.split(',').map(o => o.trim());
   }
 
-  public moveInputUp(index: number) {
+  moveInputUp(index: number) {
     if (index <= 0) {
       return;
     }
@@ -46,7 +46,7 @@ export class SectionEditorFormComponent {
     [inputs[index - 1], inputs[index]] = [inputs[index], inputs[index - 1]];
   }
 
-  public moveInputDown(index: number) {
+  moveInputDown(index: number) {
     const inputs = this.section().Content.Inputs;
     if (index >= inputs.length - 1) {
       return;

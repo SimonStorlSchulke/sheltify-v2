@@ -54,17 +54,17 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
   private readonly modalService = inject(ModalService);
   private readonly alertService = inject(AlertService);
 
-  public selectedTags = signal<string[]>([]);
-  public selectedAnimals = signal<CmsAnimal[]>([]);
-  public activeImageId = signal<string>("");
-  public selectedImageIds = signal(new Set<string>());
-  public filesHovered = signal<boolean>(false);
+  selectedTags = signal<string[]>([]);
+  selectedAnimals = signal<CmsAnimal[]>([]);
+  activeImageId = signal<string>("");
+  selectedImageIds = signal(new Set<string>());
+  filesHovered = signal<boolean>(false);
 
-  public isPicker = false;
+  isPicker = false;
 
   private refreshImages = signal(0);
 
-  public images$: Signal<Observable<CmsImage[]>> = computed(() => {
+  images$: Signal<Observable<CmsImage[]>> = computed(() => {
     const tenant = this.authSv.getTenantID();
     const selectedTags = this.selectedTags()
     const selectedAnimals = this.selectedAnimals()
@@ -117,11 +117,11 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
     this.refreshImages.update((i) => i + 1);
   }
 
-  public editedImages = signal(new Map<string, CmsImage>([]));
+  editedImages = signal(new Map<string, CmsImage>([]));
 
-  public pickedImages = output<string[]>();
+  pickedImages = output<string[]>();
 
-  public unusedImages = signal<CmsImage[] | undefined>(undefined);
+  unusedImages = signal<CmsImage[] | undefined>(undefined);
 
   async ngOnInit() {
     this.tagsService.updateAvailableTags();
@@ -149,7 +149,7 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
     }
   }
 
-  public toggleSelect(id: string, e: MouseEvent, currentImageList: CmsImage[]) {
+  toggleSelect(id: string, e: MouseEvent, currentImageList: CmsImage[]) {
     this.selectedImageIds.update(ids => {
       if (e.shiftKey) {
         const allIds = currentImageList.map(i => i.ID);

@@ -34,14 +34,14 @@ export class ArticleEditorComponent implements OnInit {
   private tenantConfigurationService = inject(TenantConfigurationService);
 
 
-  public showUpdateNote = input<boolean>(false);
+  showUpdateNote = input<boolean>(false);
 
-  public articleId = input.required<string>();
-  public saveArticle = input<Observable<{updateNote: string, pushUpdate: boolean} | undefined>>();
+  articleId = input.required<string>();
+  saveArticle = input<Observable<{updateNote: string, pushUpdate: boolean} | undefined>>();
 
-  public selectedFillColor = signal<string | undefined>(undefined);
-  public editedRow = model<number | undefined>(undefined);
-  public colorPickerExpanded = signal<boolean>(false);
+  selectedFillColor = signal<string | undefined>(undefined);
+  editedRow = model<number | undefined>(undefined);
+  colorPickerExpanded = signal<boolean>(false);
 
 
   constructor() {
@@ -101,13 +101,13 @@ export class ArticleEditorComponent implements OnInit {
     await lastValueFrom(this.cmsRequestService.saveArticle(article));
   }
 
-  public exitMoveMode() {
+  exitMoveMode() {
     setTimeout(() => {
       this.articleEditorService.exitMoveMode();
     }, 1);
   }
 
-  public moveToNewRow(rowTo: number) {
+  moveToNewRow(rowTo: number) {
     if (!this.articleEditorService.article()) return;
     const movedItem = this.articleEditorService.movedItem();
     if (!movedItem) return;
@@ -124,7 +124,7 @@ export class ArticleEditorComponent implements OnInit {
     this.exitMoveMode();
   }
 
-  public colorFill(color: string | undefined) {
+  colorFill(color: string | undefined) {
     this.selectedFillColor.set(color);
   }
 

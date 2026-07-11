@@ -10,5 +10,5 @@ import { ImagePickerSingleComponent } from "src/app/forms/image-picker-single/im
   styleUrl: "./section-editor-file.component.scss",
 })
 export class SectionEditorFileComponent {
-  public section = input.required<SectionFile>();
+  section = input.required<SectionFile>();
 }

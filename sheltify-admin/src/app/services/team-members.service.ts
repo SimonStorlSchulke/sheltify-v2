@@ -11,7 +11,7 @@ export class TeamMembersService {
     this.reloadTeamMembers();
   }
 
-  public teamMembers = signal<CmsTeamMember[]>([]);
+  teamMembers = signal<CmsTeamMember[]>([]);
 
   async reloadTeamMembers() {
     const teamMembers = await firstValueFrom(this.cmsRequestService.getTeamMembers());

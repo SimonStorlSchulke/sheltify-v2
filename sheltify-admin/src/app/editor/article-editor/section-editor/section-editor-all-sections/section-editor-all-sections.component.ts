@@ -36,6 +36,6 @@ import { SectionEditorFileComponent } from '../../section-editor-file/section-ed
   templateUrl: './section-editor-all-sections.component.html',
 })
 export class SectionEditorAllSectionsComponent {
-  public section = input.required<Section>()
-  public triggerRerender = output();
+  section = input.required<Section>()
+  triggerRerender = output();
 }

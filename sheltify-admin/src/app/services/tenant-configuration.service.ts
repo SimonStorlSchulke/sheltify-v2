@@ -8,7 +8,7 @@ export class TenantConfigurationService {
   private cmsRequestService = inject(CmsRequestService);
 
 
-  public needsRebuild = signal(false);
+  needsRebuild = signal(false);
 
   constructor() {
     this.reloadConfig();
@@ -20,7 +20,7 @@ export class TenantConfigurationService {
     })
   }
 
-  public config = signal<CmsTenantConfiguration | undefined>(undefined);
+  config = signal<CmsTenantConfiguration | undefined>(undefined);
 
   /** returns tenants siteUrl with / at the end or undefined */
   async siteUrl(): Promise<string | undefined> {
@@ -65,7 +65,7 @@ export class TenantConfigurationService {
     return str.split(",") ?? []
   }
 
-  public getOrLoad() {
+  getOrLoad() {
     if(this.config()) {
       return of(this.config());
     }

@@ -53,7 +53,7 @@ export class BlogListComponent {
     this.location.go('/blog/' + id);
   }
 
-  public onDeleted() {
+  onDeleted() {
     this.blogService.reloadBlogs();
     this.selectedBlog.set(null);
   }

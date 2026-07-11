@@ -41,14 +41,14 @@ export class ImageEditorComponent implements OnInit {
   private imageConverterService = inject(ImageConverterService);
   private alertService = inject(AlertService);
 
-  public image = input.required<CmsImage>();
-  public selectedTags = signal<string[]>([]);
-  public selectedAnimals = signal<string[]>([]);
-  public createdTag = output<CmsTag>()
+  image = input.required<CmsImage>();
+  selectedTags = signal<string[]>([]);
+  selectedAnimals = signal<string[]>([]);
+  createdTag = output<CmsTag>()
 
-  public editedImage = output<CmsImage>();
+  editedImage = output<CmsImage>();
 
-  public editFocusMode = false;
+  editFocusMode = false;
 
   constructor() {
     effect(() => {
@@ -77,11 +77,11 @@ export class ImageEditorComponent implements OnInit {
     }
   }
 
-  public editFocusPoint() {
+  editFocusPoint() {
     this.editFocusMode = true;
   }
 
-  public setFocusPoint(event: MouseEvent) {
+  setFocusPoint(event: MouseEvent) {
     if (!this.editFocusMode) return;
     const rect = (event.target as HTMLElement).getBoundingClientRect();
     const x = (event.clientX - rect.left) / rect.width;
@@ -91,7 +91,7 @@ export class ImageEditorComponent implements OnInit {
     this.image().FocusY = y;
   }
 
-  public getSizeString(size: CmsImagesSize) {
+  getSizeString(size: CmsImagesSize) {
     return new Map<CmsImagesSize, string>([
       ['thumbnail', 'winzig'],
       ['small', 'klein'],

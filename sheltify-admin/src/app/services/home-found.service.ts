@@ -11,7 +11,7 @@ export class HomeFoundService {
     this.reloadEntries();
   }
 
-  public entries = signal<CmsHomeFoundEntry[]>([]);
+  entries = signal<CmsHomeFoundEntry[]>([]);
 
   async reloadEntries() {
     const entries = await firstValueFrom(this.cmsRequestService.getHomeFoundEntries());

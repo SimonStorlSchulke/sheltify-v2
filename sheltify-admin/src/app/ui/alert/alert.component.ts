@@ -16,8 +16,8 @@ export class AlertComponent extends FinishableDialog<{choice: AlertChoice, optio
   buttons: AlertChoice[] = [];
   options?: string[];
   optionTranslations?: string[];
-  
-  public onButtonClicked(button: AlertChoice) {
+
+  onButtonClicked(button: AlertChoice) {
     this.finishWith({choice: button});
   }
 

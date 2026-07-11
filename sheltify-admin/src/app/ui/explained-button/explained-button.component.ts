@@ -9,13 +9,13 @@ import { AlertService } from 'src/app/services/alert.service';
 export class ExplainedButtonComponent {
   private readonly alertService = inject(AlertService);
 
-  public action = output();
-  public text = input<string>('');
-  public explainer = input<string>('');
-  public secondary = input<boolean>(false);
-  public small = input<boolean>(false);
+  action = output();
+  text = input<string>('');
+  explainer = input<string>('');
+  secondary = input<boolean>(false);
+  small = input<boolean>(false);
 
-  public showExplainer() {
+  showExplainer() {
     this.alertService.openAlert(this.text(), this.explainer()!)
   }
 }

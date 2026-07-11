@@ -10,14 +10,14 @@ import { InputBaseComponent } from 'src/app/forms/input-base.component';
 })
 export class DatePickerComponent extends InputBaseComponent {
 
-  public mode = input<'SqlNullTime' | 'String' | 'Date'>('Date')
+  mode = input<'SqlNullTime' | 'String' | 'Date'>('Date')
 
-  public twoWayModel = model<Date>();
-  public twoWayModelISOString = model<string | null>();
-  public twoWayModelSqlNullTime = model<SqlNullTime>();
-  public nullTimeValid = input<boolean>(true);
+  twoWayModel = model<Date>();
+  twoWayModelISOString = model<string | null>();
+  twoWayModelSqlNullTime = model<SqlNullTime>();
+  nullTimeValid = input<boolean>(true);
 
-  public dateOnly = computed(() => {
+  dateOnly = computed(() => {
 
     if(this.mode() == 'SqlNullTime') {
       const time = this.twoWayModelSqlNullTime();
@@ -30,7 +30,7 @@ export class DatePickerComponent extends InputBaseComponent {
     return this.twoWayModelISOString()?.split('T')[0];
   });
 
-  public onInput(event: Event) {
+  onInput(event: Event) {
     this.askSaveService.markDirty();
     const date = new Date((event.target as any).value);
     this.twoWayModel.set(date);
@@ -39,7 +39,7 @@ export class DatePickerComponent extends InputBaseComponent {
     this.twoWayModelSqlNullTime.set({Valid: true, Time: dateString})
   }
 
-  public getDateString(date: Date): string {
+  getDateString(date: Date): string {
     return date.toISOString().split('T')[0];
   }
 }

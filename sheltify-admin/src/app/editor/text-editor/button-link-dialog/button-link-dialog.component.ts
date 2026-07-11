@@ -16,8 +16,8 @@ import { FinishableDialog } from 'src/app/services/modal.service';
   styleUrl: './button-link-dialog.component.scss',
 })
 export class ButtonLinkDialogComponent extends FinishableDialog<{ url: string, buttonTye: 'primary' | 'secondary' | 'cto' }>{
-  public url = model<string>( '');
-  public buttonType: 'primary' | 'secondary' | 'cto' = 'primary';
+  url = model<string>( '');
+  buttonType: 'primary' | 'secondary' | 'cto' = 'primary';
 
   submit() {
     this.finishWith({

@@ -48,7 +48,7 @@ export class BlogEditorComponent implements OnInit {
     this.blogCategories = await this.tenantConfigurationService.blogCategories();
   }
 
-  public link = computed(() => {
+  link = computed(() => {
     let url = this.tenantConfigurationService.config()?.SiteUrl;
     if (!url || this.blog().PublishedAt?.Valid == false) return undefined;
 

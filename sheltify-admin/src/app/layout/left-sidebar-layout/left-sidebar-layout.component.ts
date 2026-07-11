@@ -7,5 +7,5 @@ import { Component, signal } from '@angular/core';
   styleUrl: './left-sidebar-layout.component.scss',
 })
 export class LeftSidebarLayoutComponent {
-  public mobileOpen = signal(false);
+  mobileOpen = signal(false);
 }

@@ -26,12 +26,12 @@ import { sectionLabels } from 'src/app/services/article-renderer';
   templateUrl: './section-editor-column-sections.component.html',
 })
 export class SectionEditorColumnSectionsComponent {
-  public section = input.required<Section>();
-  public deletedSection = output();
+  section = input.required<Section>();
+  deletedSection = output();
 
-  public triggerRerender() {
+  triggerRerender() {
 
   }
 
-  public readonly sectionLabels = sectionLabels;
+  readonly sectionLabels = sectionLabels;
 }

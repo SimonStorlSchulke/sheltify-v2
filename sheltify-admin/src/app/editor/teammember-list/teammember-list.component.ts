@@ -53,7 +53,7 @@ export class TeammemberListComponent {
     this.location.go('/team/' + id);
   }
 
-  public onDeleted() {
+  onDeleted() {
     this.selectedTeamMember.set(null);
   }
 }

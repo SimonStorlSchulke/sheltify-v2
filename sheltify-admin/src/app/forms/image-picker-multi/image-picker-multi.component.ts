@@ -14,7 +14,7 @@ import { bootstrapCardImage, bootstrapPlus } from '@ng-icons/bootstrap-icons'
   styleUrls: ['../form-base.component.scss', './image-picker-multi.component.scss']
 })
 export class ImagePickerMultiComponent extends InputBaseComponent {
-  public twoWayModel = model<CmsImage[]>([]);
+  twoWayModel = model<CmsImage[]>([]);
 
 
   private modalPresenter = inject(ModalPresenter);
@@ -26,12 +26,12 @@ export class ImagePickerMultiComponent extends InputBaseComponent {
     this.twoWayModel.set([...this.twoWayModel()!, ...images]);
   }
 
-  public removeImage(index: number) {
+  removeImage(index: number) {
     this.askSaveService.markDirty();
     this.twoWayModel().splice(index, 1);
   }
 
-  public moveImage(index: number, offset: number) {
+  moveImage(index: number, offset: number) {
     this.askSaveService.markDirty();
     const newArr = [...this.twoWayModel()];
     if (offset < 0 && index <= 0) {

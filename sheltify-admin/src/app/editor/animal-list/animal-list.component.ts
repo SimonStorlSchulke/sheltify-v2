@@ -35,15 +35,15 @@ import { CmsRequestService } from '../../services/cms-request.service';
 export class AnimalListComponent {
   private cmsRequestService = inject(CmsRequestService);
 
-  public editedAnimals = signal(new Map<string, CmsAnimal>([]));
+  editedAnimals = signal(new Map<string, CmsAnimal>([]));
 
-  public selectedAnimal = signal<CmsAnimal | null>(null);
+  selectedAnimal = signal<CmsAnimal | null>(null);
 
-  public animalsWithSameArticle = computed(() => {
+  animalsWithSameArticle = computed(() => {
     return this.animalService.animalsByArticleID()[this.selectedAnimal()?.ArticleID ?? ''] ?? []
   })
 
-  public pageUrl = computed(() => {
+  pageUrl = computed(() => {
     let url = this.tenantConfigurationService.config()?.SiteUrl;
     if (!url) return undefined;
 
@@ -57,10 +57,10 @@ export class AnimalListComponent {
     return url + 'tierartikel/' + animals.map(animal => animal.Name).join('-');
   })
 
-  public search = signal('');
+  search = signal('');
 
-  public animalKinds = signal<string[]>(['alle']);
-  public selectedAnimalKind = model<string>('alle');
+  animalKinds = signal<string[]>(['alle']);
+  selectedAnimalKind = model<string>('alle');
 
   animalService = inject(AnimalService);
   private modalService = inject(ModalService);
@@ -76,7 +76,7 @@ export class AnimalListComponent {
       .subscribe(({animal}) => this.selectedAnimal.set(animal));
   }
 
-  public animalList = computed(() => {
+  animalList = computed(() => {
     return this.animalService.animals().filter(animal => {
       const matchesSearch = animal.Name?.toLowerCase().includes(this.search().toLowerCase());
       const matchesAnimalKind = this.selectedAnimalKind() == 'alle' || this.selectedAnimalKind() == animal.AnimalKind;
@@ -106,7 +106,7 @@ export class AnimalListComponent {
     await this.toAnimal(savedAnimal.ID);
   }
 
-  public onSavedAnimal(animal: CmsAnimal | null) {
+  onSavedAnimal(animal: CmsAnimal | null) {
     if (animal) {
       //TODO wenn deployed: gucken ob das wirklich sinnvoll ist oder ob ein einfacher reload besser wäre.
       // structurecClone hier sinnvoll? Wenns fehlt wird liste bei jeder änderung geupdated, auch wenn nicht gespeichert wurde...

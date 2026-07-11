@@ -33,7 +33,7 @@ export class AlertService {
     ))?.option;
   }
 
-  public openToast(message: string, title: string = '', level: ToastLevel = 'info') {
+  openToast(message: string, title: string = '', level: ToastLevel = 'info') {
     this.modalService.open(ToastComponent, {
         title,
         message,

@@ -15,8 +15,8 @@ import { BtIconComponent } from "src/app/ui/bt-icon/bt-icon.component";
   styleUrls: ['../form-base.component.scss', './image-picker-single.component.scss']
 })
 export class ImagePickerSingleComponent extends InputBaseComponent {
-  public twoWayModel = model<CmsImage>();
-  public cropped = input(false);
+  twoWayModel = model<CmsImage>();
+  cropped = input(false);
 
   private modalPresenter = inject(ModalPresenter);
 

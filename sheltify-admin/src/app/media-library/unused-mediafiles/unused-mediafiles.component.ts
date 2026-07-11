@@ -18,15 +18,15 @@ export class UnusedMediafilesComponent extends FinishableDialog<string[]> {
   private cmsRequestService = inject(CmsRequestService);
   dialogRef = inject(DialogRef);
 
-  public unusedMediafiles: CmsImage[] = [];
+  unusedMediafiles: CmsImage[] = [];
 
-  public selectedEntries = signal<Set<string>>(new Set());
+  selectedEntries = signal<Set<string>>(new Set());
 
   ngOnInit() {
     this.selectedEntries.set(new Set(this.unusedMediafiles.map(m => m.ID)))
   }
 
-  public toggleSelectEntry(ID: string) {
+  toggleSelectEntry(ID: string) {
     this.selectedEntries.update(entries => {
 
       if(entries.has(ID)) {

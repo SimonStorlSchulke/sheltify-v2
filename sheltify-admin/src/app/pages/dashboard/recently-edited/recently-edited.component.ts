@@ -22,9 +22,9 @@ import { CmsImageDirective } from 'src/app/ui/cms-image.directive';
 })
 export class RecentlyEditedComponent {
 
-  public tenantConfigurationService = inject(TenantConfigurationService);
-  public authService = inject(AuthService);
+  tenantConfigurationService = inject(TenantConfigurationService);
+  authService = inject(AuthService);
   private cmsRequestService = inject(CmsRequestService);
 
-  public lastModifiedAnimals = firstValueFrom(this.cmsRequestService.getLastModifiedAnimals(10));
+  lastModifiedAnimals = firstValueFrom(this.cmsRequestService.getLastModifiedAnimals(10));
 }
