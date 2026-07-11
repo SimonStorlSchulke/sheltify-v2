@@ -3,9 +3,7 @@ import { firstValueFrom } from 'rxjs';
 import { CmsBlogEntry, SqlNullTimeNow, togglePublishedAt } from 'sheltify-lib/cms-types';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({providedIn: 'root'})
 export class BlogService {
   constructor(private readonly cmsRequestService: CmsRequestService) {
     this.reloadBlogs();
@@ -13,7 +11,7 @@ export class BlogService {
 
   public blogs = signal<CmsBlogEntry[]>([]);
 
-  public async reloadBlogs() {
+  async reloadBlogs() {
     const pages = await firstValueFrom(this.cmsRequestService.getBlogEntries());
     this.blogs.set(pages ?? []);
   }

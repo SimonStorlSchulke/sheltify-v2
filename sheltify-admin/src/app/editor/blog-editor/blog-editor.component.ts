@@ -68,7 +68,7 @@ export class BlogEditorComponent implements OnInit {
     return `${url}blog/${encodedTitle}`;
   });
 
-  public async save(skipArticle: boolean = false) {
+  async save(skipArticle: boolean = false) {
     const page = await firstValueFrom(this.cmsRequestService.saveBlogEntry(this.blog()));
     if(page) {
       if(!skipArticle) {
@@ -85,7 +85,7 @@ export class BlogEditorComponent implements OnInit {
     this.save(true);
   }
 
-  public async togglePublished() {
+  async togglePublished() {
     const savedPage = await this.blogService.togglePublished(this.blog()!);
     this.blog.update(blog => {
       blog.PublishedAt = savedPage?.PublishedAt
@@ -93,7 +93,7 @@ export class BlogEditorComponent implements OnInit {
     });
   }
 
-  public async delete() {
+  async delete() {
     if (!await this.alertService.confirmDelete()) return;
     await firstValueFrom(this.cmsRequestService.deleteBlogEntries([this.blog().ID]));
     this.deleted.emit();

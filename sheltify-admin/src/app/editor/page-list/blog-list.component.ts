@@ -42,7 +42,7 @@ export class BlogListComponent {
 
   selectedBlog = signal<CmsBlogEntry | null>(null);
 
-  public async newBlog() {
+  async newBlog() {
     const blog = createNewBlog();
     blog.Title = await this.modalService.openFinishable(TextInputModalComponent, {label: 'Blogtitel eingeben'}) ?? '';
     const savedBlog = await firstValueFrom(this.cmsRequestService.saveBlogEntry(blog));
@@ -50,7 +50,7 @@ export class BlogListComponent {
     this.blogService.reloadBlogs();
   }
 
-  public async toBlog(id: string) {
+  async toBlog(id: string) {
     const blog = await firstValueFrom(this.cmsRequestService.getBlogEntry(id));
     this.selectedBlog.set(blog);
     this.location.go('/blog/' + id);

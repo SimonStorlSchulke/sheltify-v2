@@ -6,7 +6,7 @@
       <button data-testid="btn-new-blog" class="primary" (click)="newBlog(); layout.mobileOpen.set(true)">Neuer Post</button>
     </div>
     <br>
-    <div class="sui flex-y">
+    <div class="list">
       @let blogs = blogService.blogs();
       @for (blog of blogs; track blog) {
         <div [class.selected]="selectedBlog()?.ID == blogs[$index].ID" class="list-entry sui p-1" (click)="toBlog(blog.ID); layout.mobileOpen.set(true)">

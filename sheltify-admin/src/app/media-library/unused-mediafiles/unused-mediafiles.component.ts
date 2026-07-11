@@ -43,7 +43,7 @@ export class UnusedMediafilesComponent extends FinishableDialog<string[]> {
     });
   }
 
-  public async submitDelete() {
+  async submitDelete() {
     const ids = Array.from(this.selectedEntries());
     await firstValueFrom(this.cmsRequestService.deleteImages(ids));
     this.finishWith(ids);

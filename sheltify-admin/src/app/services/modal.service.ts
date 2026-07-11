@@ -48,7 +48,7 @@ export class ModalService {
     return dialogRef;
   }
 
-  public async openFinishable<TValue, TComponent extends Finishable<TValue>>(
+  async openFinishable<TValue, TComponent extends Finishable<TValue>>(
     component: Type<TComponent>,
     inputs?: Partial<TComponent>,
     cssClass = 'modal-lg'

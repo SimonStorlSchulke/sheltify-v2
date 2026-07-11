@@ -14,7 +14,7 @@ export class TagsService {
     ) {
   }
 
-  public async updateAvailableTags() {
+  async updateAvailableTags() {
     this.availableTags.set(await lastValueFrom(this.cmsRequestService.getTags()));
   }
 }

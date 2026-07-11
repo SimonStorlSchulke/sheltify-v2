@@ -27,14 +27,14 @@ export class TeammemberEditorComponent {
   ) {
   }
 
-  public async save() {
+  async save() {
     const teamMember = await firstValueFrom(this.cmsRequestService.saveTeamMember(this.teamMember()));
     if (teamMember) {
       this.teamMembersService.reloadTeamMembers();
     }
   }
 
-  public async delete() {
+  async delete() {
     await firstValueFrom(this.cmsRequestService.deleteTeamMember([this.teamMember().ID]));
     this.teamMembersService.reloadTeamMembers();
     this.deleted.emit();

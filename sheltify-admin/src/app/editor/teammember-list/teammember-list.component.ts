@@ -41,7 +41,7 @@ export class TeammemberListComponent {
 
   selectedTeamMember = signal<CmsTeamMember | null>(null);
 
-  public async newTeamMember() {
+  async newTeamMember() {
     const page = createNewTeamMember();
     page.Name = await this.modalService.openFinishable(TextInputModalComponent, {label: 'Name eingeben'}) ?? '';
     const savedTeamMember = await firstValueFrom(this.cmsRequestService.saveTeamMember(page));
@@ -49,7 +49,7 @@ export class TeammemberListComponent {
     this.teamMembersService.reloadTeamMembers();
   }
 
-  public async toTeamMember(id: string) {
+  async toTeamMember(id: string) {
     const teamMember = await firstValueFrom(this.cmsRequestService.getTeamMember(id));
     this.selectedTeamMember.set(teamMember);
     this.location.go('/team/' + id);

@@ -24,11 +24,11 @@ export class TagsManagerComponent implements OnInit {
   ) {
   }
 
-  public async ngOnInit() {
+  async ngOnInit() {
     await this.tagsService.updateAvailableTags();
   }
 
-  public async createTag(Name: string, Color: string) {
+  async createTag(Name: string, Color: string) {
     const tag = {
       Name,
       Color,
@@ -37,7 +37,7 @@ export class TagsManagerComponent implements OnInit {
     this.tagsService.availableTags.update(tags => [createdTag, ...tags]);
   }
 
-  public async deleteTag(id: string) {
+  async deleteTag(id: string) {
     await lastValueFrom(this.cmsRequestSv.deleteTag(id));
     this.tagsService.availableTags.update(tags => tags.filter(tag => tag.ID != id));
   }

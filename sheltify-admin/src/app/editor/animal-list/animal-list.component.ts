@@ -84,11 +84,11 @@ export class AnimalListComponent {
     });
   })
 
-  public async toAnimal(id: string) {
+  async toAnimal(id: string) {
     await this.router.navigate(['tiere', id]);
   }
 
-  public async newAnimal() {
+  async newAnimal() {
 
     const name = await this.modalService.openFinishable(TextInputModalComponent, {
       label: "Name eingeben"

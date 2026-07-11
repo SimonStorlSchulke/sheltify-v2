@@ -101,7 +101,7 @@ export class ImageEditorComponent implements OnInit {
     ]).get(size);
   }
 
-  public async editTags() {
+  async editTags() {
     await this.updateMedia(); //Workaround for selectedTags resetting to the medias tags when the availableTags are updated
     this.modalService.open(TagsManagerComponent)
   }
@@ -110,7 +110,7 @@ export class ImageEditorComponent implements OnInit {
     this.image().RotationSteps += steps;
   }
 
-  public async replaceImage() {
+  async replaceImage() {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept = 'image/*';
@@ -119,7 +119,7 @@ export class ImageEditorComponent implements OnInit {
     fileInput.onchange = () => this.onFilesDropped(fileInput.files!);
   }
 
-  public async onFilesDropped(files: FileList) {
+  async onFilesDropped(files: FileList) {
     this.loaderService.setLoading('Bilder hochladen...');
     const imageTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/svg"]);
 

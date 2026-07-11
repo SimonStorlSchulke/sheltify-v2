@@ -196,7 +196,7 @@ export class CmsRequestService {
     return this.get<CmsImage[]>(`${this.publicTenantsUrl}/media-by-tags?tags=` + tags.join(','));
   }
 
-  public async getUnlinkedMediaFiles(): Promise<CmsImage[]> {
+  async getUnlinkedMediaFiles(): Promise<CmsImage[]> {
     const unlinkedFiles = await firstValueFrom(this.get<CmsImage[]>(`${CmsRequestService.adminApiUrl}media/unlinked`));
     const allTenantsArticles = await firstValueFrom(this.getArticles())
     const imgageIdsInArticles = collectCmsImageGuidsDeep(allTenantsArticles);
@@ -219,7 +219,7 @@ export class CmsRequestService {
     return this.postOrPatch<CmsArticle>(`article`, article);
   }
 
-  public async updateMedia(image: CmsImage): Promise<CmsImage> {
+  async updateMedia(image: CmsImage): Promise<CmsImage> {
     return lastValueFrom(this.patch<CmsImage>(`media`, image));
   }
 

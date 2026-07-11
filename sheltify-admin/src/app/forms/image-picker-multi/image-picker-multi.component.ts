@@ -19,7 +19,7 @@ export class ImagePickerMultiComponent extends InputBaseComponent {
 
   private modalPresenter = inject(ModalPresenter);
 
-  public async addImage() {
+  async addImage() {
     this.askSaveService.markDirty();
     const images = await this.modalPresenter.openMediaLibrary();
     if(!images) return;

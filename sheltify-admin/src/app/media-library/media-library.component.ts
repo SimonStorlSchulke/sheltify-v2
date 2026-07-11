@@ -84,11 +84,11 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
     );
   });
 
-  public async getUnusedMediaFiles(): Promise<CmsImage[]> {
+  async getUnusedMediaFiles(): Promise<CmsImage[]> {
     return await this.cmsRequestSv.getUnlinkedMediaFiles();
   }
 
-  public async getOldUnusedMediaFiles(): Promise<CmsImage[]> {
+  async getOldUnusedMediaFiles(): Promise<CmsImage[]> {
     let unlinkedMediaFiles = await this.cmsRequestSv.getUnlinkedMediaFiles();
     const oldUnlinkedMediaFiles = unlinkedMediaFiles.filter(mediaFile => {
       const diffMs = new Date().getTime() - new Date(mediaFile.CreatedAt as any).getTime();
@@ -101,7 +101,7 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
 
   }
 
-  public async openUnusedMediaDeleter() {
+  async openUnusedMediaDeleter() {
     await this.modalService.openFinishable(UnusedMediafilesComponent, {
       unusedMediafiles: this.unusedImages(),
     });
@@ -144,7 +144,7 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
     }
   }
 
-  public async updateUnusedMediaFiles() {
+  async updateUnusedMediaFiles() {
     this.unusedImages.set(await this.getUnusedMediaFiles());
     if(this.unusedImages()!.length > 0) {
       await this.openUnusedMediaDeleter();
@@ -180,7 +180,7 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
     }
   }
 
-  public async uploadImages() {
+  async uploadImages() {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept = 'image/*';
@@ -189,7 +189,7 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
     fileInput.onchange = () => this.onFilesDropped(fileInput.files!);
   }
 
-  public async onFilesDropped(files: FileList) {
+  async onFilesDropped(files: FileList) {
     this.loaderService.setLoading('Bilder hochladen...');
     for (let i = 0; i < files.length; i++) {
       const imageTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/svg"]);
@@ -212,7 +212,7 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
     this.filesHovered.set($event);
   }
 
-  public async deleteSelectedImages() {
+  async deleteSelectedImages() {
 
     if(this.unusedImages() === undefined) {
       this.unusedImages.set(await this.getUnusedMediaFiles());

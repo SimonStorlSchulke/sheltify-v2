@@ -30,7 +30,7 @@ export class SidebarComponent {
   constructor(private cmsRequestService: CmsRequestService) {
   }
 
-  public async triggerBuild() {
+  async triggerBuild() {
     this.building.set(true);
     try {
       const response = await firstValueFrom(this.cmsRequestService.triggerBuild());

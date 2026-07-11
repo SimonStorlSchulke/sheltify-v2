@@ -62,7 +62,7 @@ export class ArticleEditorComponent implements OnInit {
     this.saveArticle()?.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((saveOptions) => this.save(saveOptions));
   }
 
-  public async addSectionAtRow(row: number) {
+  async addSectionAtRow(row: number) {
     if (!this.articleEditorService.article()) return;
     if (this.articleEditorService.movedItem()) return;
     const article = this.articleEditorService.article()!;
@@ -92,7 +92,7 @@ export class ArticleEditorComponent implements OnInit {
     this.renderer.appendChild(document.head, link);
   }
 
-  public async save(saveOptions: { updateNote: string, pushUpdate: boolean } | undefined) {
+  async save(saveOptions: { updateNote: string, pushUpdate: boolean } | undefined) {
     const article = this.articleEditorService.article()!;
     if(saveOptions?.pushUpdate) {
       article.ContentUpdateNote = saveOptions.updateNote;

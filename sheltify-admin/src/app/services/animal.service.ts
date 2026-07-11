@@ -3,9 +3,7 @@ import { firstValueFrom } from 'rxjs';
 import { CmsAnimal, SqlNullTimeNow } from 'sheltify-lib/cms-types';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({providedIn: 'root'})
 export class AnimalService {
   constructor(private cmsRequestService: CmsRequestService) {
     this.reloadAnimals();
@@ -22,7 +20,7 @@ export class AnimalService {
     }, {} as Record<string, CmsAnimal[]>);
   })
 
-  public async reloadAnimals() {
+  async reloadAnimals() {
     const animals = await firstValueFrom(this.cmsRequestService.getAnimals());
     this.animals.set(animals.results ?? []);
   }

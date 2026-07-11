@@ -57,7 +57,7 @@ export class PageEditorComponent {
     return url + this.page().Path;
   });
 
-  public async save(skipArticle: boolean = false) {
+  async save(skipArticle: boolean = false) {
     this.pagesService.savePage(this.page());
     if (!skipArticle) {
       this.saveArticle$.next(undefined);
@@ -76,7 +76,7 @@ export class PageEditorComponent {
     this.page().PublishedAt = savedPage?.PublishedAt;
   }
 
-  public async delete() {
+  async delete() {
     if (!await this.alertService.confirmDelete()) return;
     await firstValueFrom(this.cmsRequestService.deletePages([this.page()!.ID]));
     this.deleted.emit();

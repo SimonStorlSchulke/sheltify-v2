@@ -1,5 +1,5 @@
 <div class="sui flex-x gap-2 jc-end">
-  <button [disabled]="!dirty()" type="button" class="primary" (click)="triggerSave()">Speichern</button>
+  <button type="button" class="primary" style="width: 140px;" (click)="triggerSave()">Speichern {{dirty() ? '*' : '&nbsp;'}}</button>
   @let publishable = !!entry()?.PublishedAt;
   @let isPublished = entry()?.PublishedAt?.Valid;
   @if(publishable) {

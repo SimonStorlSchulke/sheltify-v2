@@ -3,9 +3,7 @@ import { firstValueFrom } from 'rxjs';
 import { CmsPage, SqlNullTimeNow, togglePublishedAt } from 'sheltify-lib/cms-types';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({providedIn: 'root'})
 export class PagesService {
   constructor(private readonly cmsRequestService: CmsRequestService) {
     this.reloadPages();
@@ -13,12 +11,12 @@ export class PagesService {
 
   public pages = signal<CmsPage[]>([]);
 
-  public async reloadPages() {
+  async reloadPages() {
     const pages = await firstValueFrom(this.cmsRequestService.getPages());
     this.pages.set(pages ?? []);
   }
 
-  public async savePage(page: CmsPage) {
+  async savePage(page: CmsPage) {
     const savedPage = await firstValueFrom(this.cmsRequestService.savePage(page));
     if (savedPage) {
       this.reloadPages();

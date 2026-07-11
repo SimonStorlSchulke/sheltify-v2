@@ -3,9 +3,7 @@ import { CmsArticle, Section } from 'sheltify-lib/article-types';
 import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
 import { AlertService } from 'src/app/services/alert.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({providedIn: 'root'})
 export class ArticleEditorService {
   public article = signal<CmsArticle | undefined>(createEmptyArticle());
   public movedItem = signal<{ row: number, sectionRef: Section } | null>(null);
@@ -25,7 +23,7 @@ export class ArticleEditorService {
     this.movedItem.set(null)
   }
 
-  public async deleteSection(row: number, withConfirm = true): Promise<void> {
+  async deleteSection(row: number, withConfirm = true): Promise<void> {
     const article = this.article()!;
     if (!article) return;
 

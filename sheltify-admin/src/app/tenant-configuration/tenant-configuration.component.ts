@@ -70,7 +70,7 @@ export class TenantConfigurationComponent implements OnInit {
     }
   }
 
-  public async save() {
+  async save() {
     await firstValueFrom(this.cmsRequestService.saveTenantConfiguration(this.options()!));
     this.tenantConfigurationService.reloadConfig();
   }

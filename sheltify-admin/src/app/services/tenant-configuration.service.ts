@@ -3,9 +3,7 @@ import { firstValueFrom, of, tap } from 'rxjs';
 import { CmsTenantConfiguration, SpecialArticleSections } from 'sheltify-lib/cms-types';
 import { CmsRequestService } from 'src/app/services/cms-request.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({providedIn: 'root'})
 export class TenantConfigurationService {
 
   public needsRebuild = signal(false);
@@ -23,7 +21,7 @@ export class TenantConfigurationService {
   public config = signal<CmsTenantConfiguration | undefined>(undefined);
 
   /** returns tenants siteUrl with / at the end or undefined */
-  public async siteUrl(): Promise<string | undefined> {
+  async siteUrl(): Promise<string | undefined> {
     const siteUrl = (await firstValueFrom(this.getOrLoad()))?.SiteUrl;
 
     if(siteUrl) {
@@ -32,24 +30,24 @@ export class TenantConfigurationService {
     return undefined;
   }
 
-  public async animalKinds(): Promise<string[]> {
+  async animalKinds(): Promise<string[]> {
     return this.stringValueToArray('AnimalKinds');
   }
 
-  public async blogCategories(): Promise<string[]> {
+  async blogCategories(): Promise<string[]> {
     return this.stringValueToArray('BlogCategories');
   }
 
-  public async animalStati(): Promise<string[]> {
+  async animalStati(): Promise<string[]> {
     return this.stringValueToArray('AnimalStati');
   }
 
-  public async providedArticleThemeUrl(): Promise<string> {
+  async providedArticleThemeUrl(): Promise<string> {
     return await this.siteUrl() + 'provided-article-theme.css';
   }
 
   private _specialSections?: SpecialArticleSections;
-  public async providedSpecialSections(): Promise<SpecialArticleSections | undefined> {
+  async providedSpecialSections(): Promise<SpecialArticleSections | undefined> {
     if(this._specialSections) return this._specialSections;
     const url = await this.siteUrl() + 'provided-special-sections.js';
     const module = await import(url);
@@ -73,7 +71,7 @@ export class TenantConfigurationService {
       .pipe(tap(config => this.config.set(config)));
   }
 
-  public async reloadConfig() {
+  async reloadConfig() {
     const config = await firstValueFrom(this.cmsRequestService.getTenantConfiguration());
     this.config.set(config);
     this.needsRebuild.set(config.NeedsRebuild);

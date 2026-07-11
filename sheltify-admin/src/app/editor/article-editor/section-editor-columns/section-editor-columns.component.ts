@@ -48,7 +48,7 @@ export class SectionEditorColumnsComponent {
     })
   }
 
-  public async addSectionAtRow(columnId: number, rowId: number) {
+  async addSectionAtRow(columnId: number, rowId: number) {
 
     const sectionPickReturn = await this.modalService.openFinishable(PickNewSectionComponent);
     if (!sectionPickReturn) return;

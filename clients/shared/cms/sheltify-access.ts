@@ -22,11 +22,11 @@ export class SheltifyAccess {
     return `http://localhost:3000/forms/${this.tenant}/submit`;
   }
 
-  public async getPages(): Promise<CmsPage[]> {
+  async getPages(): Promise<CmsPage[]> {
     return this.getSortedByPriorityAndUpdatedAt<CmsPage>('pages');
   }
 
-  public async getStaticPathsPages() {
+  async getStaticPathsPages() {
     return (await this.getPages())
       .filter(page => page.PublishedAt?.Valid && page.ArticleID)
       .map(page => ({
@@ -34,7 +34,7 @@ export class SheltifyAccess {
       }));
   }
 
-  public async getStaticPathsAnimals() {
+  async getStaticPathsAnimals() {
     const animals = await this.getPublishedAnimals();
     animals.sort((a, b) => a.ID.localeCompare(b.ID));
 
@@ -57,7 +57,7 @@ export class SheltifyAccess {
     return paths;
   }
 
-  public async getStaticPathsBlogs() {
+  async getStaticPathsBlogs() {
     const blogEntries = await this.getBlogEntries();
     blogEntries.sort((a, b) => a.ID.localeCompare(b.ID));
 
@@ -71,11 +71,11 @@ export class SheltifyAccess {
     })
   }
 
-  public async getPageByPath(path: string): Promise<CmsPage> {
+  async getPageByPath(path: string): Promise<CmsPage> {
     return this.get<CmsPage>(`page-by-path?path=${path}`)
   }
 
-  public async getSeoByPath(path: string): Promise<SeoData> {
+  async getSeoByPath(path: string): Promise<SeoData> {
     const page = await this.getPageByPath(path);
     const pathParts = path.split('/');
     const title = pathParts[pathParts.length - 1];
@@ -86,7 +86,7 @@ export class SheltifyAccess {
     }
   }
 
-  public async getArticle(id: string): Promise<CmsArticle> {
+  async getArticle(id: string): Promise<CmsArticle> {
     return this.get<CmsArticle>(`article/${id}`)
   }
 
@@ -102,7 +102,7 @@ export class SheltifyAccess {
     return this.getSortedByPriorityAndUpdatedAt<CmsAnimal>('animals')
   }
 
-  public async getPublishedAnimals(): Promise<CmsAnimal[]> {
+  async getPublishedAnimals(): Promise<CmsAnimal[]> {
     const allAnimals = await this.getSortedByPriorityAndUpdatedAt<CmsAnimal>('animals');
 
     const animals = allAnimals.filter(animal => {
@@ -112,7 +112,7 @@ export class SheltifyAccess {
     return animals;
   }
 
-  public async getFilteredAnimals(filter: AnimalsFilter): Promise<CmsAnimal[]> {
+  async getFilteredAnimals(filter: AnimalsFilter): Promise<CmsAnimal[]> {
     let query = ``;
 
     if (filter.AnimalKind) query += `kind=${filter.AnimalKind}&`;
@@ -128,7 +128,7 @@ export class SheltifyAccess {
     return sortByPriorityAndUpdatedAt(filterPublishedAndHasArticle(animals));
   }
 
-  public async getAnimalsByNames(animalNames: string): Promise<CmsAnimal[]> {
+  async getAnimalsByNames(animalNames: string): Promise<CmsAnimal[]> {
     return this.getFilteredAnimals({
       AnimalKind: undefined,
       MaxNumber: undefined,
@@ -140,20 +140,20 @@ export class SheltifyAccess {
     })
   }
 
-  public async getAnimalUpdates(days: number): Promise<CmsAnimal[]> {
+  async getAnimalUpdates(days: number): Promise<CmsAnimal[]> {
     const animals = await this.get<CmsAnimal[]>(`animals/updates/${days}`)
     return sortByPriorityAndUpdatedAt(filterPublishedAndHasArticle(animals));
   }
 
-  public async getBlogEntries(categories: string[] = []): Promise<CmsBlogEntry[]> {
+  async getBlogEntries(categories: string[] = []): Promise<CmsBlogEntry[]> {
     return await this.get<CmsBlogEntry[]>('blogs');
   }
 
-  public async getPaginatedBlogEntries(pageSize: number, pageIndex: number, category: string): Promise<CmsBlogEntry[]> {
+  async getPaginatedBlogEntries(pageSize: number, pageIndex: number, category: string): Promise<CmsBlogEntry[]> {
     return await this.get<CmsBlogEntry[]>(`blogs/by-pagination?pageSize=${pageSize}&pageIndex=${pageIndex}&category=${category}`);
   }
 
-  public async getBlogEntrybyTitle(title: string): Promise<CmsBlogEntry> {
+  async getBlogEntrybyTitle(title: string): Promise<CmsBlogEntry> {
     return await this.get<CmsBlogEntry>(`blogs/by-title?title=${title}`);
   }
 
@@ -161,14 +161,14 @@ export class SheltifyAccess {
     return this.get<CmsAnimal>(`animals/${id}`)
   }
 
-  public async getSortedByPriorityAndUpdatedAt<T extends { Priority: number; UpdatedAt?: string | Date | null }>(path: string) {
+  async getSortedByPriorityAndUpdatedAt<T extends { Priority: number; UpdatedAt?: string | Date | null }>(path: string) {
     const result = await this.get<T[]>(path);
     return sortByPriorityAndUpdatedAt(result);
   }
 
   private cache = new Map<string, unknown>();
   private isDev = import.meta.env.MY_ENV === 'dev';
-  public async get<T>(path: string) {
+  async get<T>(path: string) {
     if (this.cache.has(path)) return this.cache.get(path) as T;
     const res = await fetch(this.apiBaseUrl + path, {
       headers: this.headers,

@@ -24,14 +24,14 @@ export class SubmittedFormsComponent {
     this.reloadForms();
   }
 
-  public async reloadForms() {
+  async reloadForms() {
     const forms = await firstValueFrom(
       this.cmsRequestService.getSubmittedForms()
     );
     this.forms.set(forms);
   }
 
-  public async toForm(id: string) {
+  async toForm(id: string) {
     const form = await firstValueFrom(
       this.cmsRequestService.getSubmittedForm(id)
     );
@@ -55,7 +55,7 @@ export class SubmittedFormsComponent {
     this.selectedForm()!.LastModifiedBy = userId;
   }
 
-  public async deleteForm() {
+  async deleteForm() {
     if (!(await this.alertService.confirmDelete())) return;
     await firstValueFrom(
       this.cmsRequestService.deleteSubmittedForms([this.selectedForm()!.ID])

@@ -40,7 +40,7 @@ export class HomeFoundListComponent {
     }
   }
 
-  public async newEntry() {
+  async newEntry() {
     const entry = createNewHomeFoundEntry();
     entry.AnimalName = await this.modalService.openFinishable(TextInputModalComponent, {label: 'Tiername(n) eingeben'}) ?? '';
     const savedEntry = await firstValueFrom(this.cmsRequestService.saveHomeFoundEntry(entry));
@@ -52,7 +52,7 @@ export class HomeFoundListComponent {
     this.homeFoundService.reloadEntries();
   }
 
-  public async toEntry(ID: string) {
+  async toEntry(ID: string) {
     const entry = await firstValueFrom(this.cmsRequestService.getHomeFoundEntry(ID));
     this.selectedEntry.set(entry);
     this.location.go('/rueckmeldungen/' + encodeURIComponent(entry.ID));

@@ -2,9 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { Subject } from 'rxjs';
 import { AlertService } from 'src/app/services/alert.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({providedIn: 'root'})
 export class AskSaveService {
 
   public readonly dirty = signal(false);
@@ -24,7 +22,7 @@ export class AskSaveService {
     this.dirty.set(false);
   }
 
-  public async askSave(): Promise<boolean> {
+  async askSave(): Promise<boolean> {
     if(!this.dirty()) return true;
     const answer = await this.alertService.openAlert('Änderungen speichern?', '', ['ja', 'nein', 'abbrechen']);
 

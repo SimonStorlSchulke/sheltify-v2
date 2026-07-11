@@ -20,7 +20,7 @@ export class SectionEditorFormComponent {
   public alertService = inject(AlertService);
   d = [''] as unknown as AlertChoice[]
 
-  public async add() {
+  async add() {
     this.section().Content
       .Inputs.push({
         Type: 'text',
@@ -54,7 +54,7 @@ export class SectionEditorFormComponent {
     [inputs[index + 1], inputs[index]] = [inputs[index], inputs[index + 1]];
   }
 
-  public async deleteInput(index: number) {
+  async deleteInput(index: number) {
     this.section().Content.Inputs.splice(index, 1);
   }
 }

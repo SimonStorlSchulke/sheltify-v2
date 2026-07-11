@@ -10,7 +10,7 @@ export class AnimalEditor extends CmsPage {
         this.articleEditor = new ArticleEditor(page);
     }
 
-    public async start() {
+    async start() {
         await this.login();
         await this.goto('tiere');
     }

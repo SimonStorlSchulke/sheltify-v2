@@ -26,7 +26,7 @@ export class PickNewSectionComponent extends FinishableDialog<SectionType | Sect
 
   public tenantName = computed(() => this.tenantConfigurationService.config()?.Name)
 
-  public async pickSpecialSection(sectionName: string) {
+  async pickSpecialSection(sectionName: string) {
 
     const section = newSpecialSection(sectionName, this.tenantsSpecialSections()!)
     this.finishWith(section)

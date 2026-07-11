@@ -39,7 +39,7 @@ export class PageListComponent {
 
   selectedPage = signal<CmsPage | null>(null);
 
-  public async newPage() {
+  async newPage() {
     const page = createNewPage();
     page.Path = await this.modalService.openFinishable(TextInputModalComponent, {label: 'Pfad für die Seite eingeben - dieser darf nur Buchstaben, Zahlen, - und / enthalten.'}) ?? '';
 
@@ -59,7 +59,7 @@ export class PageListComponent {
     this.pagesService.reloadPages();
   }
 
-  public async toPage(path: string) {
+  async toPage(path: string) {
     await this.router.navigate(['seiten', path]);
   }
 

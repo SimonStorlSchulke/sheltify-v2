@@ -30,12 +30,12 @@ export class HomeFoundEditorComponent {
   ) {
   }
 
-  public async save() {
+  async save() {
     await firstValueFrom(this.cmsRequestService.saveHomeFoundEntry(this.entry()));
     this.modified.emit();
   }
 
-  public async delete() {
+  async delete() {
     const choice = await this.alertService.openAlert('Seite wirklich entfernen?', 'Aktion kann nicht rückgängig gemacht werden', ['ja', 'nein'])
     if (choice !== 'ja') return;
     await firstValueFrom(this.cmsRequestService.deleteHomeFoundEntries([this.entry()!.ID]));
