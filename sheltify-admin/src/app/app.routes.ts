@@ -1,35 +1,17 @@
-import { inject } from '@angular/core';
-import { ActivatedRouteSnapshot, ResolveFn, Routes } from '@angular/router';
-import { CmsAnimal, CmsBlogEntry, CmsPage } from 'sheltify-lib/dist/cms-types';
+import { Routes } from '@angular/router';
 import { AdministrationComponent } from '@app/administration/administration.component';
-import { PageListComponent } from '@app/editor/blog-list/page-list.component';
-import { HomeFoundListComponent } from '@app/editor/home-found-list/home-found-list.component';
-import { BlogListComponent } from '@app/editor/page-list/blog-list.component';
+import { PageListComponent, pageResolver } from '@app/editor/blog-list/page-list.component';
+import { HomeFoundListComponent, homeFoundResolver } from '@app/editor/home-found-list/home-found-list.component';
+import { BlogListComponent, blogResolver } from '@app/editor/page-list/blog-list.component';
 import { TeammemberListComponent } from '@app/editor/teammember-list/teammember-list.component';
 import { MediaLibraryComponent } from '@app/media-library/media-library.component';
 import { askSaveGuard } from '@app/services/ask-save.guard';
-import { CmsRequestService } from '@app/services/cms-request.service';
 import { TenantConfigurationComponent } from '@app/tenant-configuration/tenant-configuration.component';
 import { LoginComponent } from './pages/login/login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { AnimalListComponent } from './editor/animal-list/animal-list.component';
+import { AnimalListComponent, animalResolver } from './editor/animal-list/animal-list.component';
 import { AuthGuard, SuperAdminAuthGuard } from './services/auth-guard.service';
 import { SubmittedFormsComponent } from './submitted-forms/submitted-forms.component';
-
-const animalResolver: ResolveFn<CmsAnimal> = (route: ActivatedRouteSnapshot) => {
-  const id = route.paramMap.get('id')!;
-  return inject(CmsRequestService).getAnimal(id);
-}
-
-const blogResolver: ResolveFn<CmsBlogEntry> = (route: ActivatedRouteSnapshot) => {
-  const id = route.paramMap.get('id')!;
-  return inject(CmsRequestService).getBlogEntry(id);
-}
-
-const pageResolver: ResolveFn<CmsPage> = (route: ActivatedRouteSnapshot) => {
-  const path = route.paramMap.get('path')!;
-  return inject(CmsRequestService).getPageByPath(path);
-}
 
 export const routes: Routes = [
   {path: "", component: DashboardComponent, canActivate: [AuthGuard]},
@@ -39,7 +21,7 @@ export const routes: Routes = [
   {path: "blog", component: BlogListComponent, canActivate: [AuthGuard]},
   {path: "blog/:id", component: BlogListComponent, canActivate: [AuthGuard], canDeactivate: [askSaveGuard], resolve: {blog: blogResolver} },
   {path: "rueckmeldungen", component: HomeFoundListComponent, canActivate: [AuthGuard]},
-  {path: "rueckmeldungen/:id", component: HomeFoundListComponent, canActivate: [AuthGuard]},
+  {path: "rueckmeldungen/:id", component: HomeFoundListComponent, canActivate: [AuthGuard], canDeactivate: [askSaveGuard], resolve: {entry: homeFoundResolver}},
   {path: "team", component: TeammemberListComponent, canActivate: [AuthGuard]},
   {path: "team/:id", component: TeammemberListComponent, canActivate: [AuthGuard]},
   {path: "media", component: MediaLibraryComponent, canActivate: [AuthGuard]},

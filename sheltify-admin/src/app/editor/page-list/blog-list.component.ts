@@ -1,6 +1,9 @@
 import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, ResolveFn, Router, Routes } from '@angular/router';
+import { DashboardComponent } from '@app/pages/dashboard/dashboard.component';
+import { LoginComponent } from '@app/pages/login/login.component';
+import { AuthGuard } from '@app/services/auth-guard.service';
 import { firstValueFrom } from 'rxjs';
 import { CmsBlogEntry } from 'sheltify-lib/cms-types';
 import { createNewBlog } from '@app/cms-types/cms-type.factory';
@@ -11,6 +14,12 @@ import { BlogService } from '@app/services/blog.service';
 import { CmsRequestService } from '@app/services/cms-request.service';
 import { ModalService } from '@app/services/modal.service';
 import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
+
+
+export const blogResolver: ResolveFn<CmsBlogEntry> = (route: ActivatedRouteSnapshot) => {
+  const id = route.paramMap.get('id')!;
+  return inject(CmsRequestService).getBlogEntry(id);
+}
 
 @Component({
   selector: 'app-page-list',

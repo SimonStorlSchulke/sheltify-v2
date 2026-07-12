@@ -1,6 +1,7 @@
-import { DatePipe, Location } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, ActivatedRouteSnapshot, ResolveFn, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { CmsHomeFoundEntry } from 'sheltify-lib/cms-types';
 import { createNewHomeFoundEntry } from '@app/cms-types/cms-type.factory';
@@ -10,6 +11,12 @@ import { LeftSidebarLayoutComponent } from '@app/layout/left-sidebar-layout/left
 import { CmsRequestService } from '@app/services/cms-request.service';
 import { HomeFoundService } from '@app/services/home-found.service';
 import { ModalService } from '@app/services/modal.service';
+
+
+export const homeFoundResolver: ResolveFn<CmsHomeFoundEntry> = (route: ActivatedRouteSnapshot) => {
+  const id = route.paramMap.get('id')!;
+  return inject(CmsRequestService).getHomeFoundEntry(id);
+}
 
 @Component({
   selector: 'app-home-found-list',
@@ -25,17 +32,14 @@ import { ModalService } from '@app/services/modal.service';
 export class HomeFoundListComponent {
   homeFoundService = inject(HomeFoundService);
   private cmsRequestService = inject(CmsRequestService);
-  private location = inject(Location);
+  private router = inject(Router);
   private modalService = inject(ModalService);
   private activatedRoute = inject(ActivatedRoute);
 
   selectedEntry = signal<CmsHomeFoundEntry | null>(null);
 
-  ngOnInit() {
-    const id = this.activatedRoute.snapshot.paramMap.get('id');
-    if(id != null) {
-      this.toEntry(id);
-    }
+  constructor() {
+    this.activatedRoute.data.pipe(takeUntilDestroyed()).subscribe(({entry}) => this.selectedEntry.set(entry));
   }
 
   async newEntry() {
@@ -50,9 +54,7 @@ export class HomeFoundListComponent {
     this.homeFoundService.reloadEntries();
   }
 
-  async toEntry(ID: string) {
-    const entry = await firstValueFrom(this.cmsRequestService.getHomeFoundEntry(ID));
-    this.selectedEntry.set(entry);
-    this.location.go('/rueckmeldungen/' + encodeURIComponent(entry.ID));
+  async toEntry(id: string) {
+    await this.router.navigate(['rueckmeldungen', id]);
   }
 }

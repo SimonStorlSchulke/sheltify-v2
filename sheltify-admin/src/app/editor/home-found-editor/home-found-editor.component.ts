@@ -1,5 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, input, Input, output, inject, ChangeDetectionStrategy } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AskSaveService } from '@app/services/ask-save.service';
 import { firstValueFrom } from 'rxjs';
 import { CmsHomeFoundEntry } from 'sheltify-lib/cms-types';
 import { TextEditorComponent } from '@app/editor/text-editor/text-editor.component';
@@ -23,10 +25,15 @@ import { CmsRequestService } from '@app/services/cms-request.service';
 export class HomeFoundEditorComponent {
   private alertService = inject(AlertService);
   private cmsRequestService = inject(CmsRequestService);
+  private askSaveService = inject(AskSaveService);
 
   entry = input.required<CmsHomeFoundEntry>();
 
   modified = output<void>();
+
+  constructor() {
+    this.askSaveService.triggerSave$.pipe(takeUntilDestroyed()).subscribe(() => this.save())
+  }
 
   async save() {
     await firstValueFrom(this.cmsRequestService.saveHomeFoundEntry(this.entry()));

@@ -1,7 +1,10 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, model, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, ResolveFn, Router, Routes } from '@angular/router';
+import { DashboardComponent } from '@app/pages/dashboard/dashboard.component';
+import { LoginComponent } from '@app/pages/login/login.component';
+import { AuthGuard } from '@app/services/auth-guard.service';
 import { firstValueFrom } from 'rxjs';
 import { CmsAnimal } from 'sheltify-lib/cms-types';
 import { createNewAnimal } from '@app/cms-types/cms-type.factory';
@@ -16,6 +19,12 @@ import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
 import { CmsImageDirective } from '@app/ui/cms-image.directive';
 import { AnimalEditorComponent } from '../../editor/animal-editor/animal-editor.component';
 import { CmsRequestService } from '../../services/cms-request.service';
+
+export const animalResolver: ResolveFn<CmsAnimal> = (route: ActivatedRouteSnapshot) => {
+  const id = route.paramMap.get('id')!;
+  return inject(CmsRequestService).getAnimal(id);
+}
+
 
 @Component({
   selector: 'app-animal-list',
