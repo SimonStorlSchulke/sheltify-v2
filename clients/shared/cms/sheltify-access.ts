@@ -13,6 +13,7 @@ export class SheltifyAccess {
   };
 
   uploadsUrl = 'http://localhost:3000/api/uploads/' as const;
+  staticUrl = 'http://localhost:3000/api/static/' as const;
 
   get apiBaseUrl() {
     return `http://localhost:3000/api/${this.tenant}/`;

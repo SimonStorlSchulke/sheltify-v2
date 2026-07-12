@@ -23,8 +23,8 @@ func main() {
 	}))
 	initRoutes(r)
 	workDir, _ := os.Getwd()
-	filesDir := http.Dir(filepath.Join(workDir, "uploads"))
-	handlers.FileServer(r, "/api/uploads", filesDir)
+	handlers.FileServer(r, "/api/static", http.Dir(filepath.Join(workDir, "static")))
+	handlers.FileServer(r, "/api/uploads", http.Dir(filepath.Join(workDir, "uploads")))
 
 	services.InitMailDialer()
 	http.ListenAndServe(":3000", r)
