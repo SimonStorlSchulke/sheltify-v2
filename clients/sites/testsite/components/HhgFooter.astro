@@ -1,0 +1,62 @@
+---
+import { cms } from "@shared/cms/sheltify-access"
+
+const config = await cms.tenantConfig;
+
+const showSocialNetworks = [
+  config.LinkFacebook,
+  config.LinkTiktok,
+  config.LinkInstagram,
+  config.LinkYoutube
+].some(Boolean);
+---
+
+<div data-pagefind-ignore class="hhg-footer themable article">
+  <div class="sui wrapper flex-y gap-4 ai-center py-4">
+    <div class="sui flex-x jc-center wrap gap-4">
+      <img class="logo" alt="mft-logo" src="/herzenshunde_weiß.svg">
+      <div>
+        <h2>Kontakt</h2>
+        {config.Name}
+        <br>
+        <br>
+        <b>Vorsitz</b>
+        <br>
+        TODO
+        <br><br>
+        <b>Vereinssitz</b>
+        <br>
+        {config.Address.split('\n').map(line => (
+          <>{line}<br/></>
+        ))}
+        <br>
+        <b>Kontakt</b>
+        <br>
+        {config.Email}
+
+        { showSocialNetworks &&
+          <h2>Soziale Netzwerke</h2>
+        }
+
+      </div>
+      <img class="logo" alt="mft-logo" src="/siegel-paragraph.png">
+      <div>
+        <h2>Spendenkonto</h2>
+        {config.Name}
+        <br>
+        <span class="sui text-pre-wrap">{config.IBAN}</span>
+        {config.LinkPaypal &&
+          <button class="sui flex-x gap-4 ai-center paypal">
+            <span _ngcontent-ng-c37085840="">Jetzt Spenden</span>
+            <img _ngcontent-ng-c37085840="" alt="paypal logo" aria-hidden="true" src="/paypal.png">
+          </button>
+        }
+
+      </div>
+
+      <div>
+      </div>
+    </div>
+  </div>
+</div>
+
