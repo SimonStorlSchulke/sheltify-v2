@@ -27,7 +27,7 @@
   })
 
   function toggleFilter(key: FilterKey, value: string) {
-    filters[key] = filters[key] ? '' : value;
+    filters[key] = filters[key] === value ? '' : value;
   }
 
   function resetFilters() {
@@ -65,7 +65,7 @@
       let matchesFreigaenger = !filters.freigaenger;
 
       if(filters.freigaenger && animal.FreeRoamer.Valid) {
-        matchesFreigaenger = (filters.freigaenger == 'ja') && animal.FreeRoamer.Bool;
+        matchesFreigaenger = (filters.freigaenger == 'ja') == animal.FreeRoamer.Bool;
       }
 
       if(filters.gender && animal.Gender) {

@@ -66,19 +66,19 @@
 
 <div class={`image-grid count-${images.length} ${layout()} ${size()}`}>
   {#each images() as image, index}
-    <img on:click={() => openLightBox(index)} src={getImageSrc(image, size())} alt={image.Description || image.Title}>
+    <img onclick={() => openLightBox(index)} src={getImageSrc(image, size())} alt={image.Description || image.Title}>
   {/each}
 </div>
 
 {#if shownId !== undefined}
-  <div on:click={closeLightBox} class="lightbox">
+  <div onclick={closeLightBox} class="lightbox">
     <div class="lightbox-content">
-      <button class="previous" on:click={(e) => previous(e)}><span>‹</span></button>
+      <button class="previous" onclick={(e) => previous(e)}><span>‹</span></button>
       <div class="sui flex-y ai-center jc-space-evenly gap-3 w-100">
         <img src={getImageSrc(images()[shownId], 'xlarge')} alt={images()[shownId].Description || images()[shownId].Title}>
         <span class="description sui text-center py-1">{@html description()}</span>
       </div>
-      <button class="next" on:click={(e) => next(e)}><span>›</span></button>
+      <button class="next" onclick={(e) => next(e)}><span>›</span></button>
     </div>
   </div>
 {/if}

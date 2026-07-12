@@ -67,6 +67,10 @@ export class CmsRequestService {
     return this.get<CmsBlogEntry[]>(`${this.publicTenantsUrl}/blogs`);
   }
 
+  getPaginatedBlogEntries(pageSize: number, pageIndex: number, category: string): Observable<CmsBlogEntry[]> {
+    return this.get<CmsBlogEntry[]>(`${this.publicTenantsUrl}/blogs/by-pagination?pageSize=${pageSize}&pageIndex=${pageIndex}&category=${category}`);
+  }
+
   getBlogEntry(id: string): Observable<CmsBlogEntry> {
     return this.get<CmsBlogEntry>(`${this.publicTenantsUrl}/blogs/` + id);
   }

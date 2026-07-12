@@ -29,12 +29,12 @@ func AuthMiddleware(next http.Handler) http.Handler {
 				return
 			} else {
 				http.Error(w, "Invalid Bearer Token", http.StatusForbidden)
-				return;
+				return
 			}
 		}
 
 		user, err := services.Authorize(r)
-		
+
 		if err != nil {
 			http.Error(w, "Authorization Failed", http.StatusForbidden)
 			return
@@ -56,8 +56,9 @@ func SetNeedsRebuild(next http.Handler) http.Handler {
 		case http.MethodPost, http.MethodPatch, http.MethodDelete:
 			user := services.UserFromRequest(r)
 
-			if(user == nil) {
-				logger.Error(r, "No user found in context for SetNeedsRebuild middleware")
+			if user == nil || user.TenantID == "" {
+				logger.Error(r, "could not execute SetNeedsRebuild. No user found in context for SetNeedsRebuild middleware")
+				next.ServeHTTP(w, r)
 				return
 			}
 

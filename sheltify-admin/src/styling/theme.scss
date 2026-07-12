@@ -7,6 +7,17 @@ body {
   scrollbar-color: $primary-h2 $neutral100;
 }
 
+@media (max-width: 1600px) {
+  body {
+    font-size: 0.82rem;
+    line-height: 1.2;
+
+    label {
+      font-size: 0.82rem;
+    }
+  }
+}
+
 .left-sidebar-layout {
   height: 100dvh;
   max-height: 100dvh;

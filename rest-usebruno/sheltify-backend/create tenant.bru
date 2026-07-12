@@ -1,0 +1,26 @@
+meta {
+  name: create tenant
+  type: http
+  seq: 23
+}
+
+post {
+  url: http://localhost:3000/admin/api/create-tenant
+  body: multipartForm
+  auth: inherit
+}
+
+body:json {
+  {
+    "Name": "hhgs dog 3",
+    "Gender": "Male",
+    "Castrated": false,
+    "Birthday": "2018-03-29T15:04:05Z"
+  }
+}
+
+body:multipart-form {
+  ID: hhg
+  Name: Herzenhunde Griechenland e.V.
+  SiteUrl: http://localhost:4205
+}

@@ -33,10 +33,8 @@
 <div class="sui wrapper themable article pt-4">
   <div class="sui flex-x ai-center">
     <div class="sui grow-1 flex-y">
-      <h1 class="sui mb-3 flex-x ai-center gap-4"><a
-        title="Zurück zur Übersicht" class="back-link" href="/Tiere/Hunde">&lt; </a>{animal.Name}<img
-        class="gender-icon" alt="male" src="assets/img/male.svg"></h1>
-    </div><a target="_blank" class="print" href="/print/tierartikel/Pumba"><img alt="print" src="assets/icons/printer.svg" class="sui inline-icon"></a>
+      <h1 class="sui mb-3 flex-x ai-center gap-4">{animal.Name}<img class="gender-icon" alt="male" src="assets/img/male.svg"></h1>
+    </div><a target="_blank" class="print" href="./print"><img alt="print" src="assets/icons/printer.svg" class="sui inline-icon"></a>
   </div>
   <div class="cvs">
     <div class="tabs sui flex-x wrap"></div>

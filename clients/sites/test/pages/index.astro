@@ -6,7 +6,7 @@
 import { cms } from '@shared/cms/sheltify-access.ts';
 import Page from '@shared/components/Page.astro';
 import AnimateArticle from '@shared/interactive/AnimateArticle.astro';
-import HhgLayout from '../layouts/HhgLayout.astro';
+import TestLayout from '../layouts/TestLayout.astro';
 
 export async function getStaticPaths() {
   return cms.getStaticPathsPages();
@@ -17,8 +17,8 @@ const seo = await cms.getSeoByPath(path ?? '');
 
 ---
 
-<HhgLayout seo={seo}>
+<TestLayout seo={seo}>
   <Page path={path ?? ''} />
-</HhgLayout>
+</TestLayout>
 
 <AnimateArticle/>

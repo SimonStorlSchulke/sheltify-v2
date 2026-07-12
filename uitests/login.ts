@@ -19,10 +19,10 @@ export class CmsPage {
 
   async login() {
     await this.goto('login');
-    await this.page.locator('#username').fill('uitest-user');
-    await this.page.locator('#password').fill('uitests-passwort');
+    await this.page.locator('#username').fill('testuser');
+    await this.page.locator('#password').fill('Test12345678');
     await this.page.locator('#login').click();
-    await expect(this.page.getByTestId('sidebar-username')).toHaveText('uitest-user');
+    await expect(this.page.getByTestId('sidebar-username')).toHaveText('testuser');
   }
 
   async waitForToast(message: string) {

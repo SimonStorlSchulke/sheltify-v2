@@ -13,7 +13,4 @@ type User struct {
 var BypassAuthUser = User{
 	Name: "BypassAuthUser",
 	Role: "admin",
-	CmsType: CmsType{
-		TenantID: "snhg", //todo
-	},
 }

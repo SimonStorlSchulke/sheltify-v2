@@ -80,7 +80,7 @@
 
   <div class="form-group">
     <label for="email">E-Mail <span class="required">*</span></label><br>
-    <input type="email" id="email" name="email" required on:change={validateForm} />
+    <input type="email" id="email" name="email" required onchange={validateForm} />
   </div>
 
     {#each section.Content.Inputs as input}
@@ -89,18 +89,18 @@
       <br>
       
       {#if input.Type === 'textarea'}
-      <textarea id={input.Label} name={input.Label} required={input.Required} on:change={validateForm}></textarea>
+      <textarea id={input.Label} name={input.Label} required={input.Required} onchange={validateForm}></textarea>
       {:else if input.Type === 'checkbox'}
-      <input type="checkbox" id={input.Label} name={input.Label} required={input.Required} on:change={validateForm} />
+      <input type="checkbox" id={input.Label} name={input.Label} required={input.Required} onchange={validateForm} />
       {:else if input.Type === 'radio'}
       {#each input.RadioOptions as option}
         <div class="radio-option sui ml-2 flex-x">
-          <input type="radio" id={`${input.Label}-${option}`} name={input.Label} value={option} required={input.Required} on:change={validateForm} />
+          <input type="radio" id={`${input.Label}-${option}`} name={input.Label} value={option} required={input.Required} onchange={validateForm} />
           <label for={`${input.Label}-${option}`}>{option}</label>
         </div>
       {/each}
       {:else}
-      <input type={input.Type} id={input.Label} name={input.Label} required={input.Required} on:change={validateForm} />
+      <input type={input.Type} id={input.Label} name={input.Label} required={input.Required} onchange={validateForm} />
       {/if}
       
     </div>
@@ -114,7 +114,7 @@
 
     {#if !submitted}
       
-      <button class="primary" type="button" on:click={handleSubmit} disabled={!isFormValid}>{section.Content.SubmitButtonText || "Abschicken"}</button>
+      <button class="primary" type="button" onclick={handleSubmit} disabled={!isFormValid}>{section.Content.SubmitButtonText || "Abschicken"}</button>
       {#if !isFormValid}
         <span class="required-info">Alle mit <span class="required">*</span> markierten Felder müssen ausgefüllt werden</span>
       {/if}

@@ -19,11 +19,26 @@ func init() {
 		log.Fatal("Error loading .env file")
 	}
 
-	dbHost := os.Getenv("DB_HOST")
-	dbPort := os.Getenv("DB_PORT")
-	dbName := os.Getenv("DB_NAME")
-	dbUser := os.Getenv("DB_USER")
-	dbPassword := os.Getenv("DB_PASSWORD")
+	var dbHost string
+	var dbPort string
+	var dbName string
+	var dbUser string
+	var dbPassword string
+
+	if os.Getenv("USE_TEST_DB") == "true" {
+		fmt.Println("Using Test-DB")
+		dbHost = "localhost"
+		dbPort = "5435"
+		dbName = "sheltify-test-db"
+		dbUser = "postgres"
+		dbPassword = "test"
+	} else {
+		dbHost = os.Getenv("DB_HOST")
+		dbPort = os.Getenv("DB_PORT")
+		dbName = os.Getenv("DB_NAME")
+		dbUser = os.Getenv("DB_USER")
+		dbPassword = os.Getenv("DB_PASSWORD")
+	}
 
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Europe/Berlin", dbHost, dbUser, dbPassword, dbName, dbPort)
 	fmt.Println(dsn)

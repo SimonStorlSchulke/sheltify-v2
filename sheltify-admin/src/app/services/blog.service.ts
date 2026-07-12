@@ -14,7 +14,7 @@ export class BlogService {
   blogs = signal<CmsBlogEntry[]>([]);
 
   async reloadBlogs() {
-    const pages = await firstValueFrom(this.cmsRequestService.getBlogEntries());
+    const pages = await firstValueFrom(this.cmsRequestService.getPaginatedBlogEntries(1000, 1, ''));
     this.blogs.set(pages ?? []);
   }
 
