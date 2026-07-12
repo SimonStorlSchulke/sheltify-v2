@@ -47,7 +47,7 @@ export class PageEditorComponent {
   deleted = output();
 
   constructor() {
-    this.askSaveService.triggerSave.pipe(takeUntilDestroyed()).subscribe(() => this.save());
+    this.askSaveService.triggerSave$.pipe(takeUntilDestroyed()).subscribe(() => this.save());
   }
 
   pageUrl = computed(() => {

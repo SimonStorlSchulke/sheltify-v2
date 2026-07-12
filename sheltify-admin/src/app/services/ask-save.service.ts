@@ -8,7 +8,7 @@ export class AskSaveService {
 
 
   readonly dirty = signal(false);
-  readonly triggerSave = new Subject<void>();
+  readonly triggerSave$ = new Subject<void>();
 
   markDirty() {
     console.log("Eintrag editiert")
@@ -31,7 +31,7 @@ export class AskSaveService {
       return false
     }
     if(answer == 'ja') {
-      this.triggerSave.next();
+      this.triggerSave$.next();
     }
     return true;
   }

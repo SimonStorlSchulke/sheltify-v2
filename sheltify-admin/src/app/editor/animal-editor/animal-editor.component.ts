@@ -65,7 +65,7 @@ export class AnimalEditorComponent {
 
 
   constructor() {
-    this.askSaveService.triggerSave.pipe(takeUntilDestroyed()).subscribe(() => this.saveFromUI());
+    this.askSaveService.triggerSave$.pipe(takeUntilDestroyed()).subscribe(() => this.saveFromUI());
   }
 
   async ngOnInit() {

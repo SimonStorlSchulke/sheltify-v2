@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, ResolveFn, Routes } from '@angular/router';
-import { CmsAnimal, CmsPage } from 'sheltify-lib/dist/cms-types';
+import { CmsAnimal, CmsBlogEntry, CmsPage } from 'sheltify-lib/dist/cms-types';
 import { AdministrationComponent } from '@app/administration/administration.component';
 import { PageListComponent } from '@app/editor/blog-list/page-list.component';
 import { HomeFoundListComponent } from '@app/editor/home-found-list/home-found-list.component';
@@ -21,6 +21,11 @@ const animalResolver: ResolveFn<CmsAnimal> = (route: ActivatedRouteSnapshot) => 
   return inject(CmsRequestService).getAnimal(id);
 }
 
+const blogResolver: ResolveFn<CmsBlogEntry> = (route: ActivatedRouteSnapshot) => {
+  const id = route.paramMap.get('id')!;
+  return inject(CmsRequestService).getBlogEntry(id);
+}
+
 const pageResolver: ResolveFn<CmsPage> = (route: ActivatedRouteSnapshot) => {
   const path = route.paramMap.get('path')!;
   return inject(CmsRequestService).getPageByPath(path);
@@ -32,7 +37,7 @@ export const routes: Routes = [
   {path: "seiten", component: PageListComponent, canActivate: [AuthGuard]},
   {path: "seiten/:path", component: PageListComponent, canActivate: [AuthGuard], canDeactivate: [askSaveGuard], resolve: {page: pageResolver}},
   {path: "blog", component: BlogListComponent, canActivate: [AuthGuard]},
-  {path: "blog/:id", component: BlogListComponent, canActivate: [AuthGuard]},
+  {path: "blog/:id", component: BlogListComponent, canActivate: [AuthGuard], canDeactivate: [askSaveGuard], resolve: {blog: blogResolver} },
   {path: "rueckmeldungen", component: HomeFoundListComponent, canActivate: [AuthGuard]},
   {path: "rueckmeldungen/:id", component: HomeFoundListComponent, canActivate: [AuthGuard]},
   {path: "team", component: TeammemberListComponent, canActivate: [AuthGuard]},

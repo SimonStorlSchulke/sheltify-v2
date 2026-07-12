@@ -1,6 +1,6 @@
-import { Location } from '@angular/common';
 import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { CmsBlogEntry } from 'sheltify-lib/cms-types';
 import { createNewBlog } from '@app/cms-types/cms-type.factory';
@@ -27,15 +27,11 @@ export class BlogListComponent {
   blogService = inject(BlogService);
   private cmsRequestService = inject(CmsRequestService);
   private modalService = inject(ModalService);
+  private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
-  private location = inject(Location);
 
-
-  ngOnInit() {
-    const path = this.activatedRoute.snapshot.paramMap.get('id');
-    if(path != null) {
-      this.toBlog(path);
-    }
+  constructor() {
+    this.activatedRoute.data.pipe(takeUntilDestroyed()).subscribe(({blog}) => this.selectedBlog.set(blog));
   }
 
   selectedBlog = signal<CmsBlogEntry | null>(null);
@@ -49,9 +45,7 @@ export class BlogListComponent {
   }
 
   async toBlog(id: string) {
-    const blog = await firstValueFrom(this.cmsRequestService.getBlogEntry(id));
-    this.selectedBlog.set(blog);
-    this.location.go('/blog/' + id);
+    await this.router.navigate(['blog', id]);
   }
 
   onDeleted() {

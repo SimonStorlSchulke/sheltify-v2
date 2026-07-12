@@ -1,4 +1,6 @@
 import { Component, computed, input, model, OnInit, output, inject, ChangeDetectionStrategy } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AskSaveService } from '@app/services/ask-save.service';
 import { firstValueFrom, Subject } from 'rxjs';
 import { CmsArticle } from 'sheltify-lib/article-types';
 import { createEmptyArticle } from '@app/cms-types/cms-type.factory';
@@ -37,12 +39,17 @@ export class BlogEditorComponent implements OnInit {
   private blogService = inject(BlogService);
   private alertService = inject(AlertService);
   private tenantConfigurationService = inject(TenantConfigurationService);
+  private askSaveService = inject(AskSaveService);
 
   blog = model.required<CmsBlogEntry>();
   saveArticle$ = new Subject<undefined>();
   deleted = output();
 
   blogCategories: string[] = [];
+
+  constructor() {
+    this.askSaveService.triggerSave$.pipe(takeUntilDestroyed()).subscribe(() => this.save())
+  }
 
 
   async ngOnInit() {
