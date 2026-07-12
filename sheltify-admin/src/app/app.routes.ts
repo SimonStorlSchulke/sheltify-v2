@@ -25,7 +25,7 @@ export const routes: Routes = [
   {path: "team", component: TeammemberListComponent, canActivate: [AuthGuard]},
   {path: "team/:id", component: TeammemberListComponent, canActivate: [AuthGuard], canDeactivate: [askSaveGuard], resolve: {entry: teamMemberResolver}},
   {path: "media", component: MediaLibraryComponent, canActivate: [AuthGuard]},
-  {path: "optionen", component: TenantConfigurationComponent, canActivate: [AuthGuard]},
+  {path: "optionen", component: TenantConfigurationComponent, canActivate: [AuthGuard], canDeactivate: [askSaveGuard]},
   {path: "tiere", component: AnimalListComponent, canActivate: [AuthGuard]},
   {path: "tiere/:id", component: AnimalListComponent, canActivate: [AuthGuard], canDeactivate: [askSaveGuard], resolve: {animal: animalResolver}},
   {path: "formulare", component: SubmittedFormsComponent, canActivate: [AuthGuard]},

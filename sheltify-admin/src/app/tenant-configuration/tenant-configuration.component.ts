@@ -1,5 +1,7 @@
 import { Component, inject, model, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
+import { AskSaveService } from '@app/services/ask-save.service';
 import { firstValueFrom } from 'rxjs';
 import { CmsTenantConfiguration } from 'sheltify-lib/cms-types';
 import { CheckboxInputComponent } from '@app/forms/checkbox-input/checkbox-input.component';
@@ -25,11 +27,14 @@ import { TenantConfigurationService } from '@app/services/tenant-configuration.s
 export class TenantConfigurationComponent implements OnInit {
   private cmsRequestService = inject(CmsRequestService);
   private tenantConfigurationService = inject(TenantConfigurationService);
-  private readonly alertService = inject(AlertService);
-
+  private askSaveService = inject(AskSaveService);
 
   options = model<CmsTenantConfiguration | undefined>(undefined);
   isAdmin = inject(AuthService).isAdmin();
+
+  constructor() {
+    this.askSaveService.triggerSave$.pipe(takeUntilDestroyed()).subscribe(() => this.save());
+  }
 
   async ngOnInit() {
     try {
