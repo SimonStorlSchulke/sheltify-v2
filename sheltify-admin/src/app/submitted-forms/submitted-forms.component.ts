@@ -1,5 +1,5 @@
-import { Component, inject, signal } from '@angular/core';
-import { AuthService } from 'src/app/services/auth.service';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { AuthService } from '@app/services/auth.service';
 import { LeftSidebarLayoutComponent } from '../layout/left-sidebar-layout/left-sidebar-layout.component';
 import { CmsRequestService } from '../services/cms-request.service';
 import { DatePipe } from '@angular/common';
@@ -11,27 +11,30 @@ import { AlertService } from '../services/alert.service';
   selector: 'app-submitted-forms',
   imports: [LeftSidebarLayoutComponent, DatePipe],
   templateUrl: './submitted-forms.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './submitted-forms.component.scss',
 })
 export class SubmittedFormsComponent {
-  public animals = signal<CmsFormSubmission[]>([]);
+  private readonly authService = inject(AuthService);
+
+  animals = signal<CmsFormSubmission[]>([]);
   private cmsRequestService = inject(CmsRequestService);
   private alertService = inject(AlertService);
-  public forms = signal<CmsFormSubmission[]>([]);
-  public selectedForm = signal<CmsFormSubmission | undefined>(undefined);
+  forms = signal<CmsFormSubmission[]>([]);
+  selectedForm = signal<CmsFormSubmission | undefined>(undefined);
 
-  constructor(private readonly authService: AuthService) {
+  constructor() {
     this.reloadForms();
   }
 
-  public async reloadForms() {
+  async reloadForms() {
     const forms = await firstValueFrom(
       this.cmsRequestService.getSubmittedForms()
     );
     this.forms.set(forms);
   }
 
-  public async toForm(id: string) {
+  async toForm(id: string) {
     const form = await firstValueFrom(
       this.cmsRequestService.getSubmittedForm(id)
     );
@@ -55,7 +58,7 @@ export class SubmittedFormsComponent {
     this.selectedForm()!.LastModifiedBy = userId;
   }
 
-  public async deleteForm() {
+  async deleteForm() {
     if (!(await this.alertService.confirmDelete())) return;
     await firstValueFrom(
       this.cmsRequestService.deleteSubmittedForms([this.selectedForm()!.ID])

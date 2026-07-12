@@ -1,0 +1,12 @@
+@use "variables";
+@use "article";
+@use "header";
+@use "footer";
+@use "fonts";
+
+body {
+  background-color: var(--neutral200);
+  color: var(--c-text);
+  font-size: var(--fontsize-default);
+  line-height: 1.65;
+}

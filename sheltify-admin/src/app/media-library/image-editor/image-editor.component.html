@@ -6,6 +6,7 @@
       <img
         (click)="setFocusPoint($event)"
         [cmsImage]="image()"
+        [withCacheInvalidation]="true"
         [useFocusPoint]="false"
       >
       <div
@@ -16,14 +17,13 @@
     </div>
 </div>
 
-  <div class="sui flex-x">
-    <button
+    <app-explained-button
       (click)="editFocusPoint()"
-      title="Der Fokuspunkt bestimmt, zu welchem Punkt hingezoomt wird, wenn aufgrund des Seitenverhältnisses ein Teil des Bildes abgeschnitten wird."
-      class="primary small secondary sui w-100">
-      Fokuspunkt setzen
-    </button>
-  </div>
+      text="Fokuspunkt setzen"
+      explainer="Der Fokuspunkt bestimmt, zu welchem Punkt hingezoomt wird,
+      wenn aufgrund des Seitenverhältnisses ein Teil des Bildes abgeschnitten wird."
+      class="primary small secondary sui w-100"
+    />
 }
 
 <div class="sui flex-y gap-1 grow-1">
@@ -32,11 +32,32 @@
     <span>Dateiname: {{ image().OriginalFileName }}</span>
     <span>Größe: {{ getSizeString(image().LargestAvailableSize) }}</span>
   </div>
-  <app-text-input idName="title" label="Titel"
-                  [twoWayModel]="image().Title" (twoWayModelChange)="image().Title = $event"/>
+  <div class="button-group">
+    <app-explained-button
+      (action)="replaceImage()"
+      text="Bild ersetzen"
+      explainer="Ersetzt das Bild an allen Stellen, an denen es verwendet wird. Es kann jedoch sein, dass
+      einigen Nutzern temporär noch das alte Bild angezeigt wird, da es sich noch im Speicher von deren Webbrowser befindet."
+      [small]="true"
+      [secondary]="true"
+    />
+  </div>
 
-  <app-text-input idName="title" label="Beschreibung" [long]="true" explanation="Wird z.B. in Gallerien unter dem Bild angezeigt"
-                  [twoWayModel]="image().Description" (twoWayModelChange)="image().Description = $event"/>
+  <app-text-input
+    idName="title"
+    label="Titel"
+    [twoWayModel]="image().Title"
+    (twoWayModelChange)="image().Title = $event"
+  />
+
+  <app-text-input
+    idName="title"
+    label="Beschreibung"
+    [long]="true"
+    explanation="Wird z.B. in Gallerien unter dem Bild angezeigt"
+    [twoWayModel]="image().Description"
+    (twoWayModelChange)="image().Description = $event"
+  />
 
   <span class="tags-label">Tags</span>
   <span class="sui flex-x gap-1">

@@ -1,6 +1,6 @@
-import { Component, signal } from '@angular/core';
-import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
-import { FinishableDialog } from 'src/app/services/modal.service';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
+import { TextInputComponent } from '@app/forms/text-input/text-input.component';
+import { FinishableDialog } from '@app/services/modal.service';
 
 @Component({
   selector: 'app-save-animal',
@@ -8,12 +8,13 @@ import { FinishableDialog } from 'src/app/services/modal.service';
     TextInputComponent
   ],
   templateUrl: './save-animal.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './save-animal.component.scss',
 })
 export class SaveAnimalComponent extends FinishableDialog<{updateNote: string, pushUpdate: boolean}> {
-  public updateNote = signal<string>('');
+  updateNote = signal<string>('');
 
-  public sendSaveInfo(pushUpdate: boolean) {
+  sendSaveInfo(pushUpdate: boolean) {
     this.finishWith({
       updateNote: this.updateNote(),
       pushUpdate,

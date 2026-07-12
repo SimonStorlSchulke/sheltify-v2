@@ -1,15 +1,21 @@
-import { DatePipe, Location } from '@angular/common';
-import { Component, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { DatePipe } from '@angular/common';
+import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, ActivatedRouteSnapshot, ResolveFn, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { CmsHomeFoundEntry } from 'sheltify-lib/cms-types';
-import { createNewHomeFoundEntry } from 'src/app/cms-types/cms-type.factory';
-import { HomeFoundEditorComponent } from 'src/app/editor/home-found-editor/home-found-editor.component';
-import { TextInputModalComponent } from 'src/app/forms/text-input-modal/text-input-modal.component';
-import { LeftSidebarLayoutComponent } from 'src/app/layout/left-sidebar-layout/left-sidebar-layout.component';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
-import { HomeFoundService } from 'src/app/services/home-found.service';
-import { ModalService } from 'src/app/services/modal.service';
+import { createNewHomeFoundEntry } from '@app/cms-types/cms-type.factory';
+import { HomeFoundEditorComponent } from '@app/editor/home-found-editor/home-found-editor.component';
+import { TextInputModalComponent } from '@app/forms/text-input-modal/text-input-modal.component';
+import { LeftSidebarLayoutComponent } from '@app/layout/left-sidebar-layout/left-sidebar-layout.component';
+import { CmsRequestService } from '@app/services/cms-request.service';
+import { HomeFoundService } from '@app/services/home-found.service';
+import { ModalService } from '@app/services/modal.service';
+
+export const homeFoundResolver: ResolveFn<CmsHomeFoundEntry> = (route: ActivatedRouteSnapshot) => {
+  const id = route.paramMap.get('id')!;
+  return inject(CmsRequestService).getHomeFoundEntry(id);
+}
 
 @Component({
   selector: 'app-home-found-list',
@@ -19,28 +25,23 @@ import { ModalService } from 'src/app/services/modal.service';
     DatePipe,
   ],
   templateUrl: './home-found-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './home-found-list.component.scss',
 })
 export class HomeFoundListComponent {
+  homeFoundService = inject(HomeFoundService);
+  private cmsRequestService = inject(CmsRequestService);
+  private router = inject(Router);
+  private modalService = inject(ModalService);
+  private activatedRoute = inject(ActivatedRoute);
+
   selectedEntry = signal<CmsHomeFoundEntry | null>(null);
 
-  constructor(
-    public homeFoundService: HomeFoundService,
-    private cmsRequestService: CmsRequestService,
-    private location: Location,
-    private modalService: ModalService,
-    private activatedRoute: ActivatedRoute,
-  ) {
+  constructor() {
+    this.activatedRoute.data.pipe(takeUntilDestroyed()).subscribe(({entry}) => this.selectedEntry.set(entry));
   }
 
-  ngOnInit() {
-    const id = this.activatedRoute.snapshot.paramMap.get('id');
-    if(id != null) {
-      this.toEntry(id);
-    }
-  }
-
-  public async newEntry() {
+  async newEntry() {
     const entry = createNewHomeFoundEntry();
     entry.AnimalName = await this.modalService.openFinishable(TextInputModalComponent, {label: 'Tiername(n) eingeben'}) ?? '';
     const savedEntry = await firstValueFrom(this.cmsRequestService.saveHomeFoundEntry(entry));
@@ -48,13 +49,11 @@ export class HomeFoundListComponent {
     this.homeFoundService.reloadEntries();
   }
 
-  public onModified() {
+  onModified() {
     this.homeFoundService.reloadEntries();
   }
 
-  public async toEntry(ID: string) {
-    const entry = await firstValueFrom(this.cmsRequestService.getHomeFoundEntry(ID));
-    this.selectedEntry.set(entry);
-    this.location.go('/rueckmeldungen/' + encodeURIComponent(entry.ID));
+  async toEntry(id: string) {
+    await this.router.navigate(['rueckmeldungen', id]);
   }
 }

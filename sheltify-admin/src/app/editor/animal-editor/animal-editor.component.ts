@@ -1,23 +1,26 @@
-import { Component, input, inject, output, ChangeDetectionStrategy } from '@angular/core';
+import { Component, input, inject, output, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom, lastValueFrom, Subject } from 'rxjs';
 import { CmsArticle } from 'sheltify-lib/article-types';
-import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
-import { CmsAnimal, CmsTenantConfiguration, SqlNullTimeNow } from 'sheltify-lib/cms-types';
-import { SaveAnimalComponent } from 'src/app/editor/animal-editor/save-animal/save-animal.component';
-import { ArticleEditorComponent } from 'src/app/editor/article-editor/article-editor.component';
-import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-input.component';
-import { DatePickerComponent } from 'src/app/forms/date-picker/date-picker.component';
-import { ImagePickerSingleComponent } from 'src/app/forms/image-picker-single/image-picker-single.component';
-import { NumberInputComponent } from 'src/app/forms/number-input/number-input.component';
-import { RadioButtonsInputComponent } from 'src/app/forms/radio-buttons-input/radio-buttons-input.component';
-import { SelectInputComponent } from 'src/app/forms/select-input/select-input.component';
-import { AlertService } from 'src/app/services/alert.service';
-import { AnimalService } from 'src/app/services/animal.service';
-import { ModalService } from 'src/app/services/modal.service';
-import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
-import { AnimalPickerDialogComponent } from 'src/app/ui/animal-picker-dialog/animal-picker-dialog.component';
-import { LastEditedComponent } from 'src/app/ui/last-edited/last-edited.component';
+import { createEmptyArticle } from '@app/cms-types/cms-type.factory';
+import { CmsAnimal } from 'sheltify-lib/cms-types';
+import { SaveAnimalComponent } from '@app/editor/animal-editor/save-animal/save-animal.component';
+import { ArticleEditorComponent } from '@app/editor/article-editor/article-editor.component';
+import { CheckboxInputComponent } from '@app/forms/checkbox-input/checkbox-input.component';
+import { DatePickerComponent } from '@app/forms/date-picker/date-picker.component';
+import { ImagePickerSingleComponent } from '@app/forms/image-picker-single/image-picker-single.component';
+import { NumberInputComponent } from '@app/forms/number-input/number-input.component';
+import { RadioButtonsInputComponent } from '@app/forms/radio-buttons-input/radio-buttons-input.component';
+import { SelectInputComponent } from '@app/forms/select-input/select-input.component';
+import { AlertService } from '@app/services/alert.service';
+import { AnimalService } from '@app/services/animal.service';
+import { AskSaveService } from '@app/services/ask-save.service';
+import { ModalService } from '@app/services/modal.service';
+import { TenantConfigurationService } from '@app/services/tenant-configuration.service';
+import { AnimalPickerDialogComponent } from '@app/ui/animal-picker-dialog/animal-picker-dialog.component';
+import { LastEditedComponent } from '@app/ui/last-edited/last-edited.component';
+import { ManageEntryButtonsComponent } from '@app/ui/manage-entry-buttons/manage-entry-buttons.component';
 import { TextInputComponent } from '../../forms/text-input/text-input.component';
 import { CmsRequestService } from '../../services/cms-request.service';
 
@@ -34,31 +37,35 @@ import { CmsRequestService } from '../../services/cms-request.service';
     NumberInputComponent,
     SelectInputComponent,
     LastEditedComponent,
+    ManageEntryButtonsComponent,
   ],
   templateUrl: './animal-editor.component.html',
   styleUrl: './animal-editor.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AnimalEditorComponent {
-
+  tenantConfigurationService = inject(TenantConfigurationService);
+  cdRef = inject(ChangeDetectorRef);
   private cmsRequestService = inject(CmsRequestService);
+  private modalService = inject(ModalService);
+  private animalService = inject(AnimalService);
+  private alertService = inject(AlertService);
+  private askSaveService = inject(AskSaveService);
 
-  public animal = input<CmsAnimal | null>(null);
-  public animals = input.required<CmsAnimal[] | null>();
-  public saved = output<CmsAnimal | null>();
-  public deleted = output();
 
-  public saveArticle$ = new Subject<{updateNote: string, pushUpdate: boolean}>();
 
-  public animalStati: string[] = [];
-  public animalKinds: string[] = [];
+  animal = input<CmsAnimal | null>(null);
+  animals = input.required<CmsAnimal[] | null>();
+  saved = output<CmsAnimal | null>();
+  deleted = output();
 
-  constructor(
-    public tenantConfigurationService: TenantConfigurationService,
-    private modalService: ModalService,
-    private animalService: AnimalService,
-    private alertService: AlertService,
-  ) {
+  saveArticle$ = new Subject<{ updateNote: string, pushUpdate: boolean }>();
+  animalStati: string[] = [];
+  animalKinds: string[] = [];
+
+
+  constructor() {
+    this.askSaveService.triggerSave$.pipe(takeUntilDestroyed()).subscribe(() => this.saveFromUI());
   }
 
   async ngOnInit() {
@@ -91,14 +98,14 @@ export class AnimalEditorComponent {
     }
   }
 
-  protected async createArticle() {
+  async createArticle() {
     const article: CmsArticle = createEmptyArticle();
     const savedArticle = await firstValueFrom(this.cmsRequestService.saveArticle(article));
     this.animal()!.ArticleID = savedArticle.ID;
     this.save();
   }
 
-  protected async assignExistingArticle() {
+  async assignExistingArticle() {
     const selectableAnimals = this.animals()?.filter(animal => (
       animal.ID !== this.animal()?.ID) && this.animalService.isPublished(animal)
     );
@@ -112,13 +119,14 @@ export class AnimalEditorComponent {
     }
   }
 
-  protected async delete() {
+  async delete() {
     if (!await this.alertService.confirmDelete()) return;
     await lastValueFrom(this.cmsRequestService.deleteAnimals([this.animal()!.ID]));
     this.deleted.emit();
   }
 
-  public setStatus(status: string, active: boolean): void {
+  setStatus(status: string, active: boolean) {
+    this.askSaveService.markDirty();
     const animal = this.animal()!;
     let currentStati = animal.Status?.split(',') ?? []
     currentStati = currentStati.filter(status => this.animalStati.includes(status));

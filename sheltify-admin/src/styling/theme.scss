@@ -1,5 +1,5 @@
 @use "colors" as *;
-
+@use "sass:color";
 
 body {
   color: $text;
@@ -19,7 +19,8 @@ body {
 }
 
 .left-sidebar-layout {
-  height: 100%;
+  height: 100dvh;
+  max-height: 100dvh;
   display: flex;
 
   .left-sidebar {
@@ -29,6 +30,20 @@ body {
     gap: 16px;
     min-width: 280px;
     box-sizing: border-box;
+
+    .sidebar {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
   }
 
   .content {
@@ -85,10 +100,10 @@ body {
   }
 
   &.selected {
-    outline: 1px solid transparentize($primary-d1, 0.9);
+    outline: 1px solid color.adjust($primary-d1, $alpha: -0.9);
     outline-offset: -1px;
     border-radius: 6px;
-    background-color: transparentize($primary, 0.82);
+    background-color: color.adjust($primary, $alpha: -0.82);
   }
 }
 
@@ -119,7 +134,7 @@ body {
   background: $neutral0;
   padding: 16px;
   border-radius: 6px;
-  outline: 1px solid transparentize($primary-d1, 0.94);
+  outline: 1px solid color.adjust($primary-d1, $alpha: -0.94);
   box-shadow: 4px 4px 8px $neutral150;
 }
 

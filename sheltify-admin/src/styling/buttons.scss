@@ -1,5 +1,6 @@
 @use "colors" as *;
 @use "variables" as *;
+@use "sass:color";
 
 .button:not(.unstyled),
 button:not(.unstyled) {
@@ -108,7 +109,7 @@ button:not(.unstyled) {
   &.white {
     background-color: #fff;
     color: $primary-d2;
-    outline: 1px solid transparentize($primary-d1, 0.74);
+    outline: 1px solid color.adjust($primary-d1, $alpha: -0.74);
     outline-offset: -1px;
 
     &:hover {

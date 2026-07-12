@@ -27,6 +27,13 @@ func DefaultGetByID[T any](id string, tenant string, out *T, preloads ...string)
 }
 
 func DefaultGetByIDs[T any](ids []string, tenant string, out *[]T, preloads ...string) error {
+
+	if len(ids) == 0 {
+		var empty []T
+		*out = empty
+		return nil
+	}
+
 	q := db
 
 	for _, p := range preloads {

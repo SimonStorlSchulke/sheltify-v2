@@ -1,19 +1,19 @@
-import { Injectable, signal } from '@angular/core';
+import { Service, signal, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { CmsBlogEntry, SqlNullTimeNow, togglePublishedAt } from 'sheltify-lib/cms-types';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
+import { CmsRequestService } from '@app/services/cms-request.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class BlogService {
-  constructor(private readonly cmsRequestService: CmsRequestService) {
+  private readonly cmsRequestService = inject(CmsRequestService);
+
+  constructor() {
     this.reloadBlogs();
   }
 
-  public blogs = signal<CmsBlogEntry[]>([]);
+  blogs = signal<CmsBlogEntry[]>([]);
 
-  public async reloadBlogs() {
+  async reloadBlogs() {
     const pages = await firstValueFrom(this.cmsRequestService.getPaginatedBlogEntries(1000, 1, ''));
     this.blogs.set(pages ?? []);
   }

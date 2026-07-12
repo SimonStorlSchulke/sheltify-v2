@@ -1,4 +1,4 @@
-import { Component, model, OnInit, output } from '@angular/core';
+import { Component, model, OnInit, output, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { EditorView } from 'prosemirror-view';
 import { toggleMark } from 'prosemirror-commands';
@@ -6,12 +6,13 @@ import { Plugin } from 'prosemirror-state';
 import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
 import { Schema, NodeSpec, MarkSpec, Mark, DOMOutputSpec } from 'prosemirror-model';
 import { firstValueFrom } from 'rxjs';
-import { ButtonLinkDialogComponent } from 'src/app/editor/text-editor/button-link-dialog/button-link-dialog.component';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
-import { ModalService } from 'src/app/services/modal.service';
+import { ButtonLinkDialogComponent } from '@app/editor/text-editor/button-link-dialog/button-link-dialog.component';
+import { AskSaveService } from '@app/services/ask-save.service';
+import { CmsRequestService } from '@app/services/cms-request.service';
+import { ModalService } from '@app/services/modal.service';
 import { marks as defaultMarks } from 'ngx-editor';
 import { nodes as defaultNodes } from 'ngx-editor';
-import { AnimalPickerDialogComponent } from 'src/app/ui/animal-picker-dialog/animal-picker-dialog.component';
+import { AnimalPickerDialogComponent } from '@app/ui/animal-picker-dialog/animal-picker-dialog.component';
 
 const myLink: MarkSpec = {
   attrs: {
@@ -57,9 +58,14 @@ const schema = new Schema({
     FormsModule
   ],
   templateUrl: './text-editor.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./text-editor.component.scss']
 })
 export class TextEditorComponent implements OnInit {
+  private modalService = inject(ModalService);
+  private cmsRequestService = inject(CmsRequestService);
+  private readonly askSaveService = inject(AskSaveService);
+
   editor: Editor;
 
   htmlModel = model<string>('');
@@ -76,10 +82,7 @@ export class TextEditorComponent implements OnInit {
     ['align_left', 'align_center', 'align_right', 'align_justify'],
   ];
 
-  constructor(
-    private modalService: ModalService,
-    private cmsRequestService: CmsRequestService,
-  ) {
+  constructor() {
     const plainTextOnlyPaste = new Plugin({
       props: {
         transformPastedHTML(html: string): string {
@@ -147,4 +150,10 @@ export class TextEditorComponent implements OnInit {
     this.htmlModel.set(value);
     this.htmlInput.emit(value);
   }
+
+  markDirty() {
+    console.log("value");
+    this.askSaveService.markDirty();
+  };
+
 }

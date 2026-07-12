@@ -1,11 +1,13 @@
-import { Component, input, output } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
+import { Component, input, output, inject, ChangeDetectionStrategy } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AskSaveService } from '@app/services/ask-save.service';
+import { firstValueFrom, take } from 'rxjs';
 import { CmsTeamMember } from 'sheltify-lib/cms-types';
-import { ImagePickerSingleComponent } from 'src/app/forms/image-picker-single/image-picker-single.component';
-import { NumberInputComponent } from 'src/app/forms/number-input/number-input.component';
-import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
-import { TeamMembersService } from 'src/app/services/team-members.service';
+import { ImagePickerSingleComponent } from '@app/forms/image-picker-single/image-picker-single.component';
+import { NumberInputComponent } from '@app/forms/number-input/number-input.component';
+import { TextInputComponent } from '@app/forms/text-input/text-input.component';
+import { CmsRequestService } from '@app/services/cms-request.service';
+import { TeamMembersService } from '@app/services/team-members.service';
 
 @Component({
   selector: 'app-teammember-editor',
@@ -15,26 +17,29 @@ import { TeamMembersService } from 'src/app/services/team-members.service';
     NumberInputComponent
   ],
   templateUrl: './teammember-editor.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './teammember-editor.component.scss',
 })
 export class TeammemberEditorComponent {
-  public teamMember = input.required<CmsTeamMember>();
-  public deleted = output<void>();
+  private cmsRequestService = inject(CmsRequestService);
+  private teamMembersService = inject(TeamMembersService);
+  private askSaveService = inject(AskSaveService);
 
-  constructor(
-    private cmsRequestService: CmsRequestService,
-    private teamMembersService: TeamMembersService,
-  ) {
+  teamMember = input.required<CmsTeamMember>();
+  deleted = output<void>();
+
+  constructor() {
+    this.askSaveService.triggerSave$.pipe(takeUntilDestroyed()).subscribe(() => this.save());
   }
 
-  public async save() {
+  async save() {
     const teamMember = await firstValueFrom(this.cmsRequestService.saveTeamMember(this.teamMember()));
     if (teamMember) {
       this.teamMembersService.reloadTeamMembers();
     }
   }
 
-  public async delete() {
+  async delete() {
     await firstValueFrom(this.cmsRequestService.deleteTeamMember([this.teamMember().ID]));
     this.teamMembersService.reloadTeamMembers();
     this.deleted.emit();

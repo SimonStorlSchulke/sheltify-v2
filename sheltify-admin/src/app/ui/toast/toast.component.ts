@@ -1,5 +1,5 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 export type ToastLevel = 'info' | 'success' | 'warning' | 'error';
 
@@ -9,17 +9,17 @@ const readingTimeMsPerChar = 40;
   selector: 'app-toast',
   imports: [],
   templateUrl: './toast.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './toast.component.scss',
 })
 export class ToastComponent {
+  dialogRef = inject<DialogRef<ToastComponent>>(DialogRef);
+
   level: ToastLevel = 'info';
   title: string = '';
   message: string = '';
 
-  constructor(public dialogRef: DialogRef<ToastComponent>) {
-  }
-
-  public ngOnInit() {
+  ngOnInit() {
     const readingTime = Math.max((this.title.length + this.message.length) * readingTimeMsPerChar, 1000);
     setTimeout(() => {
       this.dialogRef.close();

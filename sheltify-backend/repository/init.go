@@ -47,7 +47,7 @@ func init() {
 	})
 
 	if err != nil {
-		fmt.Println(err)
+		log.Fatalln("Cannot connect to database:", err)
 	}
 
 	migrations.Migrate(db)

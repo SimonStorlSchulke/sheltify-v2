@@ -1,8 +1,7 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { ComponentType } from '@angular/cdk/portal';
-import { Directive, inject, Injectable, OnDestroy, Type } from '@angular/core';
+import { Directive, inject, OnDestroy, Service, Type } from '@angular/core';
 import { firstValueFrom, Observable, Subject } from 'rxjs';
-import { AlertChoice, AlertComponent } from 'src/app/ui/alert/alert.component';
 
 export interface Finishable<TValue> {
   finish: Observable<TValue | undefined>;
@@ -10,15 +9,15 @@ export interface Finishable<TValue> {
 
 @Directive()
 export abstract class FinishableDialog<TValue> implements Finishable<TValue>, OnDestroy {
-  protected readonly finishSubject = new Subject<TValue | undefined>();
+  readonly finishSubject = new Subject<TValue | undefined>();
   readonly finish = this.finishSubject.asObservable();
 
-  protected finishWith(value: TValue) {
+  finishWith(value: TValue) {
     this.finishSubject.next(value);
     this.finishSubject.complete();
   }
 
-  protected cancel() {
+  cancel() {
     this.finishSubject.next(undefined);
     this.finishSubject.complete();
   }
@@ -28,14 +27,12 @@ export abstract class FinishableDialog<TValue> implements Finishable<TValue>, On
   }
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Service()
 export class ModalService {
 
   private dialog = inject(Dialog);
 
-  public open<T>(component: ComponentType<T>, inputs?: Partial<T>, cssClass = 'modal-lg', hasBackdrop = true) {
+  open<T>(component: ComponentType<T>, inputs?: Partial<T>, cssClass = 'modal-lg', hasBackdrop = true) {
     const dialogRef = this.dialog.open(component, {
       panelClass: cssClass,
       hasBackdrop,
@@ -48,7 +45,7 @@ export class ModalService {
     return dialogRef;
   }
 
-  public async openFinishable<TValue, TComponent extends Finishable<TValue>>(
+  async openFinishable<TValue, TComponent extends Finishable<TValue>>(
     component: Type<TComponent>,
     inputs?: Partial<TComponent>,
     cssClass = 'modal-lg'

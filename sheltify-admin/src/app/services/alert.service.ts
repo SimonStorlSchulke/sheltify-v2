@@ -1,17 +1,14 @@
-import { Injectable } from '@angular/core';
-import { ModalService } from 'src/app/services/modal.service';
-import { AlertChoice, AlertComponent } from 'src/app/ui/alert/alert.component';
-import { ToastComponent, ToastLevel } from 'src/app/ui/toast/toast.component';
+import { Service, inject } from '@angular/core';
+import { ModalService } from '@app/services/modal.service';
+import { AlertChoice, AlertComponent } from '@app/ui/alert/alert.component';
+import { ToastComponent, ToastLevel } from '@app/ui/toast/toast.component';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Service()
 export class AlertService {
+  private modalService = inject(ModalService);
 
-  constructor(private modalService: ModalService) {
-  }
 
-  public async openAlert(title: string, message: string, buttons: AlertChoice[] = ['ok']): Promise<AlertChoice | undefined> {
+  async openAlert(title: string, message: string, buttons: AlertChoice[] = ['ok']): Promise<AlertChoice | undefined> {
     return (await this.modalService.openFinishable(AlertComponent, {
         title,
         message,
@@ -20,12 +17,12 @@ export class AlertService {
     ))?.choice;
   }
 
-  public async confirmDelete(): Promise<boolean> {
+  async confirmDelete(): Promise<boolean> {
     const result = await this.openAlert('Löschen bestätigen', 'Möchten Sie den Eintrag wirklich löschen? Dieser Vorgang kann nicht rückgängig gemacht werden.', ['ja', 'nein']);
     return result === 'ja';
   }
 
-  public async openOptionsPrompt(title: string, message: string, options: string[], optionTranslations?: string[]): Promise<string | undefined> {
+  async openOptionsPrompt(title: string, message: string, options: string[], optionTranslations?: string[]): Promise<string | undefined> {
     return (await this.modalService.openFinishable(AlertComponent, {
         title,
         message,
@@ -36,7 +33,7 @@ export class AlertService {
     ))?.option;
   }
 
-  public openToast(message: string, title: string = '', level: ToastLevel = 'info'): void {
+  openToast(message: string, title: string = '', level: ToastLevel = 'info') {
     this.modalService.open(ToastComponent, {
         title,
         message,

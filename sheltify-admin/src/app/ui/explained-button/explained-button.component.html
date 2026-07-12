@@ -1,0 +1,4 @@
+<div class="sui button-group flex-x">
+  <button [class]="'sui grow-1 ' + (secondary() ? 'secondary' : 'primary')" [class.small]="small()" (click)="action.emit()">{{text()}}</button>
+  <button class="secondary questionmark" [class.small]="small()"  type="button" (click)="showExplainer()"><span>&nbsp;?&nbsp;</span></button>
+</div>

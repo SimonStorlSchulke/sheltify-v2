@@ -1,31 +1,28 @@
-import { Injectable, signal } from '@angular/core';
+import { Service, signal, inject } from '@angular/core';
 import { CmsArticle, Section } from 'sheltify-lib/article-types';
-import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
-import { AlertService } from 'src/app/services/alert.service';
+import { createEmptyArticle } from '@app/cms-types/cms-type.factory';
+import { AlertService } from '@app/services/alert.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class ArticleEditorService {
-  public article = signal<CmsArticle | undefined>(createEmptyArticle());
-  public movedItem = signal<{ row: number, sectionRef: Section } | null>(null);
-  public copiedSection = signal<Section | null>(null);
+  private alertService = inject(AlertService);
 
-  constructor(private readonly alertService: AlertService) {
-  }
+  article = signal<CmsArticle | undefined>(createEmptyArticle());
+  movedItem = signal<{ row: number, sectionRef: Section } | null>(null);
+  copiedSection = signal<Section | null>(null);
 
-  public enterMoveMode(row: number, sectionRef: Section) {
+  enterMoveMode(row: number, sectionRef: Section) {
     this.movedItem.set({
       row,
       sectionRef,
     })
   }
 
-  public exitMoveMode() {
+  exitMoveMode() {
     this.movedItem.set(null)
   }
 
-  public async deleteSection(row: number, withConfirm = true): Promise<void> {
+  async deleteSection(row: number, withConfirm = true) {
     const article = this.article()!;
     if (!article) return;
 

@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
 import {
   bootstrapBoxArrowUpRight,
   bootstrapGripVertical,
@@ -60,6 +60,7 @@ export type IconName =
   ],
   templateUrl: './bt-icon.component.html',
   styleUrl: './bt-icon.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [provideIcons({
       bootstrapBoxArrowUpRight,
       bootstrapGripVertical,
@@ -88,16 +89,16 @@ export type IconName =
   )]
 })
 export class BtIconComponent {
-  public name = input.required<IconName>()
-  public size = input<'s' | 'ms' | 'ml' | 'l'>();
+  name = input.required<IconName>()
+  size = input<'s' | 'ms' | 'ml' | 'l'>();
 
-  public customIconPath = computed(() => {
+  customIconPath = computed(() => {
     return new Map<IconName, string>([
       ['Paw', '/assets/icons/paw-icon.svg']
     ]).get(this.name())
   })
 
-  public iconSize = computed(() => {
+  iconSize = computed(() => {
     return new Map([
       ['s', 16],
       ['ms', 20],

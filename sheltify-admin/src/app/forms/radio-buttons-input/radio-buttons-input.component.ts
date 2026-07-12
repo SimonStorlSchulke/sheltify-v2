@@ -1,21 +1,23 @@
-import { Component, input, model } from '@angular/core';
-import { InputBaseComponent } from 'src/app/forms/input-base.component';
+import { Component, input, model, ChangeDetectionStrategy } from '@angular/core';
+import { InputBaseComponent } from '@app/forms/input-base.component';
 
 @Component({
   selector: 'app-radio-buttons-input',
   imports: [],
   templateUrl: './radio-buttons-input.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['../form-base.component.scss']
 })
 export class RadioButtonsInputComponent extends InputBaseComponent{
 
-  public options = input.required<string[]>();
-  public optionImages = input<string[]>();
-  public optionTranslations = input<string[]>([]);
+  options = input.required<string[]>();
+  optionImages = input<string[]>();
+  optionTranslations = input<string[]>([]);
 
-  public twoWayModel = model<string | undefined>(undefined);
+  twoWayModel = model<string | undefined>(undefined);
 
-  public onInput(option: string) {
+  onInput(option: string) {
+    this.askSaveService.markDirty();
     this.twoWayModel.set(option);
   }
 }

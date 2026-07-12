@@ -1,7 +1,7 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CmsAnimal } from 'sheltify-lib/cms-types';
-import { FinishableDialog } from 'src/app/services/modal.service';
+import { FinishableDialog } from '@app/services/modal.service';
 
 @Component({
   selector: 'app-animal-picker-dialog',
@@ -9,21 +9,22 @@ import { FinishableDialog } from 'src/app/services/modal.service';
     NgTemplateOutlet
   ],
   templateUrl: './animal-picker-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './animal-picker-dialog.component.scss',
 })
 export class AnimalPickerDialogComponent extends FinishableDialog<CmsAnimal> implements OnInit {
-  public animals: CmsAnimal[] = [];
-  public byArticle = false;
+  animals: CmsAnimal[] = [];
+  byArticle = false;
 
-  public animalsByArticleID = signal(new Map<string, { animals: CmsAnimal[], title: string }>());
+  animalsByArticleID = signal(new Map<string, { animals: CmsAnimal[], title: string }>());
 
-  public ngOnInit() {
+  ngOnInit() {
     if(this.byArticle) {
       this.sortByAnimalsByArticleID();
     }
   }
 
-  private sortByAnimalsByArticleID(): void {
+  private sortByAnimalsByArticleID() {
     this.animalsByArticleID.update(animalsByArticleID => {
         for (const animal of this.animals) {
           if (!animal.ArticleID) continue;
@@ -46,5 +47,5 @@ export class AnimalPickerDialogComponent extends FinishableDialog<CmsAnimal> imp
   }
 
 
-  protected readonly Object = Object;
+  readonly Object = Object;
 }

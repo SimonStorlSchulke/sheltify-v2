@@ -57,6 +57,9 @@
     @case ('form') {
       <section-form [section]="sectionVal" />
     }
+    @case ('file') {
+      <section-file [section]="sectionVal" />
+    }
     @case('special') {
       @switch (sectionVal.Content.Type) {
         @case('Sponsor') {

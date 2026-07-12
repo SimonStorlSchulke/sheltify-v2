@@ -1,18 +1,21 @@
-import { AsyncPipe, DatePipe } from '@angular/common';
-import { Component, effect, input, OnInit, output, signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { Component, effect, input, OnInit, output, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
-import { firstValueFrom } from 'rxjs';
-import { CmsAnimal, CmsImage, CmsImagesSize, CmsTag } from 'sheltify-lib/cms-types';
-import { TagsManagerComponent } from 'src/app/editor/tags-manager/tags-manager.component';
-import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
-import { MediaLibraryComponent } from 'src/app/media-library/media-library.component';
-import { AnimalService } from 'src/app/services/animal.service';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
-import { ModalService } from 'src/app/services/modal.service';
-import { TagsService } from 'src/app/services/tags.service';
-import { CmsImageDirective } from 'src/app/ui/cms-image.directive';
-import { TagComponent } from 'src/app/ui/tag/tag.component';
+import { lastValueFrom } from 'rxjs';
+import { CmsImage, CmsImagesSize, CmsTag } from 'sheltify-lib/cms-types';
+import { TagsManagerComponent } from '@app/editor/tags-manager/tags-manager.component';
+import { TextInputComponent } from '@app/forms/text-input/text-input.component';
+import { LoaderService } from '@app/layout/loader/loader.service';
+import { AlertService } from '@app/services/alert.service';
+import { AnimalService } from '@app/services/animal.service';
+import { CmsRequestService } from '@app/services/cms-request.service';
+import { ImageConverterService } from '@app/services/image-converter.service';
+import { ModalService } from '@app/services/modal.service';
+import { TagsService } from '@app/services/tags.service';
+import { CmsImageDirective } from '@app/ui/cms-image.directive';
+import { ExplainedButtonComponent } from '@app/ui/explained-button/explained-button.component';
+import { TagComponent } from '@app/ui/tag/tag.component';
 
 @Component({
   selector: 'app-image-editor',
@@ -24,26 +27,31 @@ import { TagComponent } from 'src/app/ui/tag/tag.component';
     NgOptionComponent,
     NgSelectComponent,
     FormsModule,
+    ExplainedButtonComponent,
   ],
   templateUrl: './image-editor.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './image-editor.component.scss'
 })
 export class ImageEditorComponent implements OnInit {
-  public image = input.required<CmsImage>();
-  public selectedTags = signal<string[]>([]);
-  public selectedAnimals = signal<string[]>([]);
-  public createdTag = output<CmsTag>()
+  private cmsRequestSv = inject(CmsRequestService);
+  private modalService = inject(ModalService);
+  tagsService = inject(TagsService);
+  animalService = inject(AnimalService);
+  private loaderService = inject(LoaderService);
+  private imageConverterService = inject(ImageConverterService);
+  private alertService = inject(AlertService);
 
-  public editedImage = output<CmsImage>();
+  image = input.required<CmsImage>();
+  selectedTags = signal<string[]>([]);
+  selectedAnimals = signal<string[]>([]);
+  createdTag = output<CmsTag>()
 
-  public editFocusMode = false;
+  editedImage = output<CmsImage>();
 
-  constructor(
-    private cmsRequestSv: CmsRequestService,
-    private modalService: ModalService,
-    public tagsService: TagsService,
-    public animalService: AnimalService,
-  ) {
+  editFocusMode = false;
+
+  constructor() {
     effect(() => {
       const img = this.image();
       if (this.image()) {
@@ -53,7 +61,7 @@ export class ImageEditorComponent implements OnInit {
     });
   }
 
-  public ngOnInit() {
+  ngOnInit() {
     this.selectedTags.set(this.image().MediaTags.map(tag => tag.ID));
   }
 
@@ -70,11 +78,11 @@ export class ImageEditorComponent implements OnInit {
     }
   }
 
-  public editFocusPoint() {
+  editFocusPoint() {
     this.editFocusMode = true;
   }
 
-  public setFocusPoint(event: MouseEvent) {
+  setFocusPoint(event: MouseEvent) {
     if (!this.editFocusMode) return;
     const rect = (event.target as HTMLElement).getBoundingClientRect();
     const x = (event.clientX - rect.left) / rect.width;
@@ -84,7 +92,7 @@ export class ImageEditorComponent implements OnInit {
     this.image().FocusY = y;
   }
 
-  public getSizeString(size: CmsImagesSize) {
+  getSizeString(size: CmsImagesSize) {
     return new Map<CmsImagesSize, string>([
       ['thumbnail', 'winzig'],
       ['small', 'klein'],
@@ -94,7 +102,7 @@ export class ImageEditorComponent implements OnInit {
     ]).get(size);
   }
 
-  public async editTags() {
+  async editTags() {
     await this.updateMedia(); //Workaround for selectedTags resetting to the medias tags when the availableTags are updated
     this.modalService.open(TagsManagerComponent)
   }
@@ -103,4 +111,26 @@ export class ImageEditorComponent implements OnInit {
     this.image().RotationSteps += steps;
   }
 
+  async replaceImage() {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.multiple = true;
+    fileInput.click();
+    fileInput.onchange = () => this.onFilesDropped(fileInput.files!);
+  }
+
+  async onFilesDropped(files: FileList) {
+    this.loaderService.setLoading('Bilder hochladen...');
+    const imageTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/svg"]);
+
+    if(imageTypes.has(files[0].type)) {
+      const scaledImages = await this.imageConverterService.generateAllSizes(files[0]);
+      const img = await lastValueFrom(this.cmsRequestSv.replaceScaledImage(scaledImages, this.image().ID));
+      this.editedImage.emit(img);
+    } else {
+      this.alertService.openAlert("Falsches Dateiformat", "Nur JPG, PNG, WEBP und SVG Bilder werden unterstützt");
+    }
+    this.loaderService.unsetLoading('Bilder hochladen...');
+  }
 }

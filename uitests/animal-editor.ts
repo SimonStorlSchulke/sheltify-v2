@@ -4,13 +4,13 @@ import { ArticleEditor } from "./article-editor";
 import { MediaLibrary } from "./media-library";
 
 export class AnimalEditor extends CmsPage {
-    public articleEditor: ArticleEditor
+    articleEditor: ArticleEditor
     constructor(page: Page) {
         super(page);
         this.articleEditor = new ArticleEditor(page);
     }
 
-    public async start() {
+    async start() {
         await this.login();
         await this.goto('tiere');
     }

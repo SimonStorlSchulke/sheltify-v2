@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { CmsImage, CmsImagesSize } from 'sheltify-lib/cms-types';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
+import { CmsRequestService } from '@app/services/cms-request.service';
 
 @Pipe({
   name: 'cmsImageTTTT',

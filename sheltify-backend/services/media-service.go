@@ -33,12 +33,17 @@ func StoreMultiPartFile(multiPartFile multipart.File, savePath string) error {
 	return err
 }
 
-func DeleteMedia(id string) error {
-	err := repository.DeleteMediaFileMeta(id)
-	if err == nil {
-		DeleteUploadsWithPrefix(id)
+func DeleteMedia(ids []string, tenant string) []string {
+	notDeletedIds := []string{}
+	for _, id := range ids {
+		err := repository.DeleteMediaFileMeta(id, tenant)
+		if err == nil {
+			DeleteUploadsWithPrefix(id)
+		} else {
+			notDeletedIds = append(notDeletedIds, id)
+		}
 	}
-	return err
+	return notDeletedIds
 }
 
 func DeleteUploadsWithPrefix(prefix string) error {

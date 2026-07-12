@@ -1,24 +1,24 @@
-import { Injectable, signal } from '@angular/core';
+import { Service, signal, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { CmsPage, SqlNullTimeNow, togglePublishedAt } from 'sheltify-lib/cms-types';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
+import { CmsRequestService } from '@app/services/cms-request.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class PagesService {
-  constructor(private readonly cmsRequestService: CmsRequestService) {
+  private readonly cmsRequestService = inject(CmsRequestService);
+
+  constructor() {
     this.reloadPages();
   }
 
-  public pages = signal<CmsPage[]>([]);
+  pages = signal<CmsPage[]>([]);
 
-  public async reloadPages() {
+  async reloadPages() {
     const pages = await firstValueFrom(this.cmsRequestService.getPages());
     this.pages.set(pages ?? []);
   }
 
-  public async savePage(page: CmsPage) {
+  async savePage(page: CmsPage) {
     const savedPage = await firstValueFrom(this.cmsRequestService.savePage(page));
     if (savedPage) {
       this.reloadPages();
@@ -27,7 +27,7 @@ export class PagesService {
     }
   }
 
-  public createTitleFromPath(path: string) {
+  createTitleFromPath(path: string) {
     const pathSegments = path.split('/');
     return pathSegments[pathSegments.length - 1]
       .replace('-', ' ')

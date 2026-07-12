@@ -1,12 +1,12 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, computed, CUSTOM_ELEMENTS_SCHEMA, ElementRef, HostListener, input, model, signal, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, computed, CUSTOM_ELEMENTS_SCHEMA, ElementRef, HostListener, input, model, signal, TemplateRef, ViewChild, ViewContainerRef, inject, ChangeDetectionStrategy } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
 import { Section } from 'sheltify-lib/article-types';
-import { ArticleEditorService } from 'src/app/editor/article-editor/article-editor.service';
-import { SectionEditorAllSectionsComponent } from 'src/app/editor/article-editor/section-editor/section-editor-all-sections/section-editor-all-sections.component';
-import { SectionRendererComponent } from 'src/app/section-renderer/section-renderer.component';
-import { AlertService } from 'src/app/services/alert.service';
-import { sectionLabels } from 'src/app/services/article-renderer';
+import { ArticleEditorService } from '@app/editor/article-editor/article-editor.service';
+import { SectionEditorAllSectionsComponent } from '@app/editor/article-editor/section-editor/section-editor-all-sections/section-editor-all-sections.component';
+import { SectionRendererComponent } from '@app/section-renderer/section-renderer.component';
+import { AlertService } from '@app/services/alert.service';
+import { sectionLabels } from '@app/services/article-renderer';
 
 @Component({
   selector: 'app-section-editor',
@@ -18,13 +18,18 @@ import { sectionLabels } from 'src/app/services/article-renderer';
   ],
   templateUrl: './section-editor.component.html',
   styleUrl: './section-editor.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SectionEditorComponent {
-  public section = input.required<Section>();
-  public rowIndex = input.required<number>();
-  public editable = input.required<boolean>();
-  public editedRow = model<number>();
+  private articleEditorService = inject(ArticleEditorService);
+  private elementRef = inject(ElementRef);
+  private alertService = inject(AlertService);
+
+  section = input.required<Section>();
+  rowIndex = input.required<number>();
+  editable = input.required<boolean>();
+  editedRow = model<number>();
 
   public sectionLabel = computed(() => {
     const section = this.section();
@@ -36,35 +41,29 @@ export class SectionEditorComponent {
   @ViewChild('outlet', { read: ViewContainerRef }) outletRef!: ViewContainerRef;
   @ViewChild('preview', { read: TemplateRef }) previewRef!: TemplateRef<any>;
 
-  constructor(
-    private articleEditorService: ArticleEditorService,
-    private elementRef: ElementRef,
-    private alertService: AlertService) {
-  }
-
-  public triggerRerender() {
+  triggerRerender() {
     this.outletRef.clear();
     this.outletRef.createEmbeddedView(this.previewRef);
   }
 
-  protected readonly sectionLabels = sectionLabels;
+  readonly sectionLabels = sectionLabels;
 
-  public copySection() {
+  copySection() {
     this.articleEditorService.copiedSection.set(this.section());
     this.alertService.openToast('Sektion kann nun über den "Einfügen" Knopf beim Hover zwischen den Sektionen wieder eingefügt werden.', 'Kopiert')
   }
 
-  public cutSection() {
+  cutSection() {
     this.articleEditorService.copiedSection.set(this.section());
     this.alertService.openToast('Sektion kann nun über den "Einfügen" Knopf beim Hover zwischen den Sektionen wieder eingefügt werden.', 'Ausgeschnitten');
     this.articleEditorService.deleteSection(this.rowIndex(), false);
   }
 
-  public enterMoveMode() {
+  enterMoveMode() {
     this.articleEditorService.enterMoveMode(this.rowIndex(), this.section())
   }
 
-  public deleteSection() {
+  deleteSection() {
     this.articleEditorService.deleteSection(this.rowIndex());
   }
 

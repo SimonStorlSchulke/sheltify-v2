@@ -9,6 +9,7 @@ import (
 	"sheltify-new-backend/repository"
 	"sheltify-new-backend/services"
 	"sheltify-new-backend/shtypes"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -153,7 +154,7 @@ func UploadFiles(w http.ResponseWriter, r *http.Request) {
 		err = services.StoreMultiPartFile(uploadedFile, savePath)
 		if err != nil {
 			internalServerErrorResponse(w, r, err.Error())
-			repository.DeleteMediaFileMeta(uuid)
+			repository.DeleteMediaFileMeta(uuid, user.TenantID)
 			return
 		}
 	}
@@ -187,7 +188,7 @@ func UploadScaledWebps(w http.ResponseWriter, r *http.Request) {
 	}
 
 	entity.ID = uuid
-	entity.TenantID = r.FormValue("TenantID")
+	entity.TenantID = user.TenantID
 
 	for _, sizeLabel := range sizeNames {
 		uploadedFile, _, err := r.FormFile(sizeLabel)
@@ -240,7 +241,7 @@ func UploadScaledWebps(w http.ResponseWriter, r *http.Request) {
 		err = services.StoreMultiPartFile(uploadedFile, savePath)
 		if err != nil {
 			internalServerErrorResponse(w, r, err.Error())
-			repository.DeleteMediaFileMeta(uuid)
+			repository.DeleteMediaFileMeta(uuid, user.TenantID)
 			return
 		}
 	}
@@ -248,22 +249,89 @@ func UploadScaledWebps(w http.ResponseWriter, r *http.Request) {
 	createdResponse(w, entity)
 }
 
-func DeleteMedia(w http.ResponseWriter, r *http.Request) {
-	id := chi.URLParam(r, "id")
+func ReplaceWebps(w http.ResponseWriter, r *http.Request) {
+	id, err := idFromParameter(w, r)
 
-	if id == "" {
-		badRequestResponse(w, r, "media id must be provided")
+	// upload 50 MB max
+	r.ParseMultipartForm(50 << 20)
+
+	user := services.UserFromRequest(r)
+
+	uploadedFiles := []multipart.File{}
+
+	sizeNames := []string{"thumbnail", "small", "medium", "large", "xlarge"}
+
+	entity, err := repository.GetMediaFileMetaById(id)
+
+	if entity.TenantID != user.TenantID {
+		forbiddenResponse(w, r, "Bild gehört anderer Organisation")
 		return
 	}
-	err := services.DeleteMedia(id)
 
+	services.DeleteUploadsWithPrefix(id)
+
+	for _, sizeLabel := range sizeNames {
+		uploadedFile, _, err := r.FormFile(sizeLabel)
+		if err == nil {
+			uploadedFiles = append(uploadedFiles, uploadedFile)
+			fmt.Println("Uploaded file for size:", sizeLabel)
+			entity.LargestAvailableSize = sizeLabel
+			defer uploadedFile.Close()
+		}
+	}
+
+	for i, uploadedFile := range uploadedFiles {
+
+		filename := id + "_" + sizeNames[i] + ".webp"
+		savePath := filepath.Join("uploads", filename)
+		fmt.Println(savePath)
+
+		err = services.StoreMultiPartFile(uploadedFile, savePath)
+		if err != nil {
+			internalServerErrorResponse(w, r, err.Error())
+			repository.DeleteMediaFileMeta(id, user.TenantID)
+			return
+		}
+	}
+
+	err = repository.SaveMedia(entity)
 	if err != nil {
-		logger.RequestError(r, id, err)
-		internalServerErrorResponse(w, r, "Could not delete media: "+err.Error())
+		internalServerErrorResponse(w, r, "Medium konnte nicht gespoeichert werden: "+err.Error())
+		return
+	}
+	okResponse(w, entity)
+}
+
+func DeleteMedia(w http.ResponseWriter, r *http.Request) {
+	ids, err := idsFromQuery(w, r)
+	if err != nil {
 		return
 	}
 
-	logger.Deleted(r, id)
+	user := services.UserFromRequest(r)
+
+	if len(ids) == 0 {
+		badRequestResponse(w, r, "Nichts zu löschen")
+		return
+	}
+
+	notDeletedIds := services.DeleteMedia(ids, user.TenantID)
+	deletedIds := []string{}
+
+	for _, id := range ids {
+		if !slices.Contains(notDeletedIds, id) {
+			deletedIds = append(deletedIds, id)
+		}
+	}
+
+	if len(notDeletedIds) == len(ids) {
+		badRequestResponse(w, r, "Dateien konnten nicht gelöscht werden - werden sie noch verwendet?")
+	} else if len(notDeletedIds) > 0 {
+		badRequestResponse(w, r, "Einige Dateien konnten nicht gelöscht werden - werden sie noch verwendet?")
+	} else {
+		emptyOkResponse(w)
+	}
+	logger.Deleted(r, deletedIds)
 }
 
 func GetAllTags(w http.ResponseWriter, r *http.Request) {
@@ -335,4 +403,17 @@ func SaveMedia(w http.ResponseWriter, r *http.Request) {
 		logger.Saved(r, media.ID)
 		okResponse(w, media)
 	}
+}
+
+// returns media files that are not hard-linked to any database entry. This does NOT yet mean they can safely be deleted,
+// as they might be used in articles (stored as JSON in the Database)
+func FindUnlinkedMediaFiles(w http.ResponseWriter, r *http.Request) {
+	user := services.UserFromRequest(r)
+
+	mediaFiles, err := repository.FindUnlinkedMediaFiles(user.TenantID)
+	if err != nil {
+		internalServerErrorResponse(w, r, "Could not retrieve media files")
+		return
+	}
+	okResponse(w, mediaFiles)
 }

@@ -1,8 +1,8 @@
-import { Component, HostBinding, input } from '@angular/core';
+import { Component, computed, HostBinding, input, ChangeDetectionStrategy } from '@angular/core';
 import { CmsImage } from 'sheltify-lib/cms-types';
-import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
-import { CmsImageDirective } from 'src/app/ui/cms-image.directive';
-import { CmsImagePipe } from 'src/app/ui/cms-image.pipe';
+import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
+import { CmsImageDirective } from '@app/ui/cms-image.directive';
+import { CmsImagePipe } from '@app/ui/cms-image.pipe';
 
 @Component({
   selector: 'app-media-entry',
@@ -11,6 +11,7 @@ import { CmsImagePipe } from 'src/app/ui/cms-image.pipe';
     BtIconComponent
   ],
   templateUrl: './media-entry.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './media-entry.component.scss'
 })
 export class MediaEntryComponent {

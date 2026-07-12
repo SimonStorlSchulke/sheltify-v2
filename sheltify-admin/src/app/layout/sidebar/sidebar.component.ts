@@ -1,10 +1,10 @@
 import { DatePipe } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, signal } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { AuthService } from 'src/app/services/auth.service';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
-import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
-import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
+import { AuthService } from '@app/services/auth.service';
+import { CmsRequestService } from '@app/services/cms-request.service';
+import { TenantConfigurationService } from '@app/services/tenant-configuration.service';
+import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
 import { UserMenuComponent } from './user-menu/user-menu.component';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 
@@ -19,18 +19,18 @@ import { RouterLink, RouterLinkActive, Router } from '@angular/router';
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SidebarComponent {
-  public router = inject(Router);
-  public tenantConfigurationService = inject(TenantConfigurationService);
-  public isSuperAdmin = inject(AuthService).isSuperAdmin;
-  public building = signal(false);
+  private cmsRequestService = inject(CmsRequestService);
 
-  constructor(private cmsRequestService: CmsRequestService) {
-  }
+  router = inject(Router);
+  tenantConfigurationService = inject(TenantConfigurationService);
+  isSuperAdmin = inject(AuthService).isSuperAdmin;
+  building = signal(false);
 
-  public async triggerBuild() {
+  async triggerBuild() {
     this.building.set(true);
     try {
       const response = await firstValueFrom(this.cmsRequestService.triggerBuild());

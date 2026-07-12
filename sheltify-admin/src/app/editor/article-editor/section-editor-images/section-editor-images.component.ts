@@ -1,8 +1,8 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { SectionImages } from 'sheltify-lib/article-types';
 import { CmsImage } from 'sheltify-lib/cms-types';
-import { ImagePickerMultiComponent } from 'src/app/forms/image-picker-multi/image-picker-multi.component';
-import { RadioButtonsInputComponent } from 'src/app/forms/radio-buttons-input/radio-buttons-input.component';
+import { ImagePickerMultiComponent } from '@app/forms/image-picker-multi/image-picker-multi.component';
+import { RadioButtonsInputComponent } from '@app/forms/radio-buttons-input/radio-buttons-input.component';
 
 @Component({
   selector: 'app-section-editor-images',
@@ -11,12 +11,13 @@ import { RadioButtonsInputComponent } from 'src/app/forms/radio-buttons-input/ra
     RadioButtonsInputComponent
   ],
   templateUrl: './section-editor-images.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './section-editor-images.component.scss',
 })
 export class SectionEditorImagesComponent {
-  public section = input.required<SectionImages>();
+  section = input.required<SectionImages>();
 
-  protected setImages(images: CmsImage[]) {
+  setImages(images: CmsImage[]) {
     this.section().Content.MediaFiles = images;
     console.log("AAA", images.map(i => i.Title));
   }

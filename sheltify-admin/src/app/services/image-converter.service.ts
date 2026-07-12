@@ -1,8 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Service } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Service()
 export class ImageConverterService {
 
   private sizes: [string, number][] = [
@@ -13,7 +11,7 @@ export class ImageConverterService {
     ["xlarge", 1920],
   ];
 
-  public async generateAllSizes(image: File) {
+  async generateAllSizes(image: File) {
     const img = new Image();
     img.src = URL.createObjectURL(image);
 
@@ -36,7 +34,7 @@ export class ImageConverterService {
     return images;
   }
 
-  public async toScaledWebP(
+  async toScaledWebP(
     img: HTMLImageElement,
     width: number): Promise<Blob> {
     try {

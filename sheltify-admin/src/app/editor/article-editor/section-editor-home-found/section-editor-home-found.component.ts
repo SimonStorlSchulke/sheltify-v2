@@ -1,7 +1,7 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SectionHomeFound } from 'sheltify-lib/article-types';
-import { DatePickerComponent } from 'src/app/forms/date-picker/date-picker.component';
+import { DatePickerComponent } from '@app/forms/date-picker/date-picker.component';
 
 @Component({
   selector: 'app-section-editor-home-found',
@@ -10,6 +10,7 @@ import { DatePickerComponent } from 'src/app/forms/date-picker/date-picker.compo
     DatePickerComponent,
   ],
   templateUrl: './section-editor-home-found.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './section-editor-home-found.component.scss',
 })
 export class SectionEditorHomeFoundComponent {

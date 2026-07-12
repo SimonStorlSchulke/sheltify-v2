@@ -1,14 +1,16 @@
-import { Component, inject, model, OnInit, signal } from '@angular/core';
+import { Component, inject, model, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
+import { AskSaveService } from '@app/services/ask-save.service';
 import { firstValueFrom } from 'rxjs';
 import { CmsTenantConfiguration } from 'sheltify-lib/cms-types';
-import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-input.component';
-import { ImagePickerSingleComponent } from 'src/app/forms/image-picker-single/image-picker-single.component';
-import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
-import { AlertService } from 'src/app/services/alert.service';
-import { AuthService } from 'src/app/services/auth.service';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
-import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
+import { CheckboxInputComponent } from '@app/forms/checkbox-input/checkbox-input.component';
+import { ImagePickerSingleComponent } from '@app/forms/image-picker-single/image-picker-single.component';
+import { TextInputComponent } from '@app/forms/text-input/text-input.component';
+import { AlertService } from '@app/services/alert.service';
+import { AuthService } from '@app/services/auth.service';
+import { CmsRequestService } from '@app/services/cms-request.service';
+import { TenantConfigurationService } from '@app/services/tenant-configuration.service';
 
 @Component({
   selector: 'app-tenant-configuration',
@@ -19,19 +21,19 @@ import { TenantConfigurationService } from 'src/app/services/tenant-configuratio
     CheckboxInputComponent
   ],
   templateUrl: './tenant-configuration.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './tenant-configuration.component.scss',
 })
 export class TenantConfigurationComponent implements OnInit {
+  private cmsRequestService = inject(CmsRequestService);
+  private tenantConfigurationService = inject(TenantConfigurationService);
+  private askSaveService = inject(AskSaveService);
 
-  public options = model<CmsTenantConfiguration | undefined>(undefined);
-  public isAdmin = inject(AuthService).isAdmin();
+  options = model<CmsTenantConfiguration | undefined>(undefined);
+  isAdmin = inject(AuthService).isAdmin();
 
-
-  constructor(
-    private cmsRequestService: CmsRequestService,
-    private tenantConfigurationService: TenantConfigurationService,
-    private readonly alertService: AlertService,
-  ) {
+  constructor() {
+    this.askSaveService.triggerSave$.pipe(takeUntilDestroyed()).subscribe(() => this.save());
   }
 
   async ngOnInit() {
@@ -70,7 +72,7 @@ export class TenantConfigurationComponent implements OnInit {
     }
   }
 
-  public async save() {
+  async save() {
     await firstValueFrom(this.cmsRequestService.saveTenantConfiguration(this.options()!));
     this.tenantConfigurationService.reloadConfig();
   }

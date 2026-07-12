@@ -1,20 +1,15 @@
-import { Injectable, signal } from '@angular/core';
+import { Service, signal, inject } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
 import { CmsTag } from 'sheltify-lib/cms-types';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
+import { CmsRequestService } from '@app/services/cms-request.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Service()
 export class TagsService {
-  public availableTags = signal<CmsTag[]>([]);
+  private cmsRequestService = inject(CmsRequestService);
 
-  constructor(
-    private cmsRequestService: CmsRequestService,
-    ) {
-  }
+  availableTags = signal<CmsTag[]>([]);
 
-  public async updateAvailableTags() {
+  async updateAvailableTags() {
     this.availableTags.set(await lastValueFrom(this.cmsRequestService.getTags()));
   }
 }

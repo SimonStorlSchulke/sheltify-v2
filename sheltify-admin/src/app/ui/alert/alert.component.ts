@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { FinishableDialog } from 'src/app/services/modal.service';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { FinishableDialog } from '@app/services/modal.service';
 
 export type AlertChoice = 'ok' | 'ja' | 'nein' | 'abbrechen';
 
@@ -7,6 +7,7 @@ export type AlertChoice = 'ok' | 'ja' | 'nein' | 'abbrechen';
   selector: 'app-alert',
   imports: [],
   templateUrl: './alert.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './alert.component.scss'
 })
 export class AlertComponent extends FinishableDialog<{choice: AlertChoice, option?: string}> {
@@ -16,8 +17,8 @@ export class AlertComponent extends FinishableDialog<{choice: AlertChoice, optio
   buttons: AlertChoice[] = [];
   options?: string[];
   optionTranslations?: string[];
-  
-  public onButtonClicked(button: AlertChoice) {
+
+  onButtonClicked(button: AlertChoice) {
     this.finishWith({choice: button});
   }
 

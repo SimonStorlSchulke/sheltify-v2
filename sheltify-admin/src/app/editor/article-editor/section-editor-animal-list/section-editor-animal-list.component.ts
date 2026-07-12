@@ -1,11 +1,11 @@
-import { Component, input, OnDestroy, OnInit, output } from '@angular/core';
+import { Component, input, OnDestroy, OnInit, output, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { debounceTime, firstValueFrom, Subject, Subscription } from 'rxjs';
 import { SectionAnimalList } from 'sheltify-lib/article-types';
-import { NumberInputComponent } from 'src/app/forms/number-input/number-input.component';
-import { RangeInputComponent } from 'src/app/forms/range-input/range-input.component';
-import { SelectInputComponent } from 'src/app/forms/select-input/select-input.component';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
+import { NumberInputComponent } from '@app/forms/number-input/number-input.component';
+import { RangeInputComponent } from '@app/forms/range-input/range-input.component';
+import { SelectInputComponent } from '@app/forms/select-input/select-input.component';
+import { CmsRequestService } from '@app/services/cms-request.service';
 
 @Component({
   selector: 'app-section-editor-animal-list',
@@ -16,9 +16,12 @@ import { CmsRequestService } from 'src/app/services/cms-request.service';
     NumberInputComponent
   ],
   templateUrl: './section-editor-animal-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './section-editor-animal-list.component.scss',
 })
 export class SectionEditorAnimalListComponent implements OnInit, OnDestroy {
+  private cmsRequestService = inject(CmsRequestService);
+
   section = input.required<SectionAnimalList>();
   triggerRerender = output<void>();
 
@@ -26,12 +29,7 @@ export class SectionEditorAnimalListComponent implements OnInit, OnDestroy {
 
   updateSubscription?: Subscription;
 
-  constructor(
-    private cmsRequestService: CmsRequestService,
-  ) {
-  }
-
-  public ngOnInit() {
+  ngOnInit() {
     this.updateSubscription = this.onInput.pipe(debounceTime(1000)).subscribe(() => this.updateAnimals());
     this.updateAnimals();
   }
@@ -41,7 +39,7 @@ export class SectionEditorAnimalListComponent implements OnInit, OnDestroy {
     this.triggerRerender.emit();
   }
 
-  public ngOnDestroy() {
+  ngOnDestroy() {
     this.updateSubscription?.unsubscribe();
   }
 }

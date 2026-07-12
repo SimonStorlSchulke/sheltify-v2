@@ -1,26 +1,27 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { type SectionForm, } from 'sheltify-lib/article-types';
-import { AlertService } from 'src/app/services/alert.service';
-import { AlertChoice } from 'src/app/ui/alert/alert.component';
-import { TextInputComponent } from "src/app/forms/text-input/text-input.component";
-import { CheckboxInputComponent } from "src/app/forms/checkbox-input/checkbox-input.component";
-import { SelectInputComponent } from "src/app/forms/select-input/select-input.component";
+import { AlertService } from '@app/services/alert.service';
+import { AlertChoice } from '@app/ui/alert/alert.component';
+import { TextInputComponent } from "@app/forms/text-input/text-input.component";
+import { CheckboxInputComponent } from "@app/forms/checkbox-input/checkbox-input.component";
+import { SelectInputComponent } from "@app/forms/select-input/select-input.component";
 
 @Component({
   selector: 'app-section-editor-form',
   imports: [FormsModule, TextInputComponent, CheckboxInputComponent, SelectInputComponent],
   templateUrl: './section-editor-form.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './section-editor-form.component.scss',
 })
 export class SectionEditorFormComponent {
 
   section = input.required<SectionForm>();
 
-  public alertService = inject(AlertService);
+  alertService = inject(AlertService);
   d = [''] as unknown as AlertChoice[]
 
-  public async add() {
+  async add() {
     this.section().Content
       .Inputs.push({
         Type: 'text',
@@ -29,16 +30,16 @@ export class SectionEditorFormComponent {
       });
   }
 
-  public setRadioOptions(index: number, $event: string) {
+  setRadioOptions(index: number, $event: string) {
     const input = this.section().Content.Inputs[index];
     input.RadioOptions = $event.split(',').map(o => o.trim());
   }
 
-  public setForwardMails($event: string) {
+  setForwardMails($event: string) {
     this.section().Content.ForwardToEmails = $event.split(',').map(o => o.trim());
   }
 
-  public moveInputUp(index: number) {
+  moveInputUp(index: number) {
     if (index <= 0) {
       return;
     }
@@ -46,7 +47,7 @@ export class SectionEditorFormComponent {
     [inputs[index - 1], inputs[index]] = [inputs[index], inputs[index - 1]];
   }
 
-  public moveInputDown(index: number) {
+  moveInputDown(index: number) {
     const inputs = this.section().Content.Inputs;
     if (index >= inputs.length - 1) {
       return;
@@ -54,7 +55,7 @@ export class SectionEditorFormComponent {
     [inputs[index + 1], inputs[index]] = [inputs[index], inputs[index + 1]];
   }
 
-  public async deleteInput(index: number) {
+  async deleteInput(index: number) {
     this.section().Content.Inputs.splice(index, 1);
   }
 }

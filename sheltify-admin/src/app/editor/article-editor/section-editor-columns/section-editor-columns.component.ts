@@ -1,14 +1,14 @@
-import { Component, input } from '@angular/core';
+import { Component, input, inject, ChangeDetectionStrategy } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
 import { Section, SectionColumns } from 'sheltify-lib/article-types';
-import { createEmptySection } from 'src/app/editor/article-editor/article-section.factory';
-import { PickNewSectionComponent } from 'src/app/editor/article-editor/pick-new-section/pick-new-section.component';
-import { SectionEditorColumnSectionsComponent } from 'src/app/editor/article-editor/section-editor/section-editor-column-sections/section-editor-column-sections.component';
-import { CheckboxInputComponent } from 'src/app/forms/checkbox-input/checkbox-input.component';
-import { NumberInputComponent } from 'src/app/forms/number-input/number-input.component';
-import { AlertService } from 'src/app/services/alert.service';
-import { ModalService } from 'src/app/services/modal.service';
-import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
+import { createEmptySection } from '@app/editor/article-editor/article-section.factory';
+import { PickNewSectionComponent } from '@app/editor/article-editor/pick-new-section/pick-new-section.component';
+import { SectionEditorColumnSectionsComponent } from '@app/editor/article-editor/section-editor/section-editor-column-sections/section-editor-column-sections.component';
+import { CheckboxInputComponent } from '@app/forms/checkbox-input/checkbox-input.component';
+import { NumberInputComponent } from '@app/forms/number-input/number-input.component';
+import { AlertService } from '@app/services/alert.service';
+import { ModalService } from '@app/services/modal.service';
+import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
 
 const maxColumns = 4;
 
@@ -21,23 +21,24 @@ const maxColumns = 4;
     CheckboxInputComponent,
   ],
   templateUrl: './section-editor-columns.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './section-editor-columns.component.scss',
 })
 export class SectionEditorColumnsComponent {
-  public section = input.required<SectionColumns>();
+  private readonly alertService = inject(AlertService);
+  private modalService = inject(ModalService);
 
-  constructor(private readonly alertService: AlertService, private modalService: ModalService) {
-  }
+  section = input.required<SectionColumns>();
 
-  public deleteColumn(index: number) {
+  deleteColumn(index: number) {
     this.section().Content.Columns.splice(index, 1);
   }
 
-  public deleteSection(iColumn: number, iSection: number) {
+  deleteSection(iColumn: number, iSection: number) {
     this.section().Content.Columns[iColumn].Sections.splice(iColumn, 1);
   }
 
-  public addColumn() {
+  addColumn() {
     if(this.section().Content.Columns.length >= maxColumns){
       this.alertService.openAlert(`Maximal ${maxColumns} Spalten möglich`, '');
       return;
@@ -48,7 +49,7 @@ export class SectionEditorColumnsComponent {
     })
   }
 
-  public async addSectionAtRow(columnId: number, rowId: number) {
+  async addSectionAtRow(columnId: number, rowId: number) {
 
     const sectionPickReturn = await this.modalService.openFinishable(PickNewSectionComponent);
     if (!sectionPickReturn) return;
@@ -65,7 +66,7 @@ export class SectionEditorColumnsComponent {
     //setTimeout(() => this.editSectionAtPosition(rowId, 0), 0);
   }
 
-  protected moveColumnRight(iColumn: number) {
+  moveColumnRight(iColumn: number) {
     const columns = this.section().Content.Columns;
 
     if (iColumn < 0 || iColumn >= columns.length - 1) {
@@ -75,7 +76,7 @@ export class SectionEditorColumnsComponent {
     [columns[iColumn], columns[iColumn + 1]] = [columns[iColumn + 1], columns[iColumn]];
   }
 
-  protected moveColumnLeft(iColumn: number) {
+  moveColumnLeft(iColumn: number) {
     const columns = this.section().Content.Columns;
 
     if (iColumn <= 0 || iColumn >= columns.length) {

@@ -1,17 +1,25 @@
-import { Component, signal } from '@angular/core';
-import { Location  } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, ActivatedRouteSnapshot, ResolveFn, Router, Routes } from '@angular/router';
+import { DashboardComponent } from '@app/pages/dashboard/dashboard.component';
+import { LoginComponent } from '@app/pages/login/login.component';
+import { AuthGuard } from '@app/services/auth-guard.service';
 import { firstValueFrom } from 'rxjs';
-import { createNewPage } from 'src/app/cms-types/cms-type.factory';
 import { CmsPage } from 'sheltify-lib/cms-types';
-import { PageEditorComponent } from 'src/app/editor/page-editor/page-editor.component';
-import { TextInputModalComponent } from 'src/app/forms/text-input-modal/text-input-modal.component';
-import { LeftSidebarLayoutComponent } from 'src/app/layout/left-sidebar-layout/left-sidebar-layout.component';
-import { AlertService } from 'src/app/services/alert.service';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
-import { ModalService } from 'src/app/services/modal.service';
-import { PagesService } from 'src/app/services/pages.service';
-import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
+import { createNewPage } from '@app/cms-types/cms-type.factory';
+import { PageEditorComponent } from '@app/editor/page-editor/page-editor.component';
+import { TextInputModalComponent } from '@app/forms/text-input-modal/text-input-modal.component';
+import { LeftSidebarLayoutComponent } from '@app/layout/left-sidebar-layout/left-sidebar-layout.component';
+import { AlertService } from '@app/services/alert.service';
+import { CmsRequestService } from '@app/services/cms-request.service';
+import { ModalService } from '@app/services/modal.service';
+import { PagesService } from '@app/services/pages.service';
+import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
+
+export const pageResolver: ResolveFn<CmsPage> = (route: ActivatedRouteSnapshot) => {
+  const path = route.paramMap.get('path')!;
+  return inject(CmsRequestService).getPageByPath(path);
+}
 
 @Component({
   selector: 'app-page-list',
@@ -21,29 +29,25 @@ import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
     LeftSidebarLayoutComponent,
   ],
   templateUrl: './page-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './page-list.component.scss',
 })
 export class PageListComponent {
+  pagesService = inject(PagesService);
+  private cmsRequestService = inject(CmsRequestService);
+  private modalService = inject(ModalService);
+  private activatedRoute = inject(ActivatedRoute);
+  private router = inject(Router);
+  private alertService = inject(AlertService);
 
-  constructor(
-    public pagesService: PagesService,
-    private cmsRequestService: CmsRequestService,
-    private modalService: ModalService,
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private location: Location,
-    private readonly alertService: AlertService,
-  ) {
-  }
-
-  ngOnInit() {
-    const path = this.activatedRoute.snapshot.paramMap.get('path');
-    this.toPage(path ?? '');
+  constructor() {
+    this.activatedRoute.data.pipe(takeUntilDestroyed())
+      .subscribe(({page}) => this.selectedPage.set(page));
   }
 
   selectedPage = signal<CmsPage | null>(null);
 
-  public async newPage() {
+  async newPage() {
     const page = createNewPage();
     page.Path = await this.modalService.openFinishable(TextInputModalComponent, {label: 'Pfad für die Seite eingeben - dieser darf nur Buchstaben, Zahlen, - und / enthalten.'}) ?? '';
 
@@ -59,18 +63,18 @@ export class PageListComponent {
     }
 
     const savedPage = await firstValueFrom(this.cmsRequestService.savePage(page));
-    this.toPage(savedPage.ID);
+    await this.toPage(savedPage.Path);
     this.pagesService.reloadPages();
   }
 
-  public async toPage(path: string) {
-    const page = await firstValueFrom(this.cmsRequestService.getPageByPath(path));
-    this.selectedPage.set(page);
-    this.location.go('/seiten/' + encodeURIComponent(path));
+  async toPage(path: string) {
+    await this.router.navigate(['seiten', path]);
   }
 
-  protected onDeleted() {
+  onDeleted() {
     this.pagesService.reloadPages();
     this.selectedPage.set(null);
   }
+
+  readonly encodeURIComponent = encodeURIComponent;
 }

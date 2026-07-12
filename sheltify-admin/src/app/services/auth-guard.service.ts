@@ -1,11 +1,9 @@
-import { Injectable, inject } from '@angular/core';
+import { Service, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, GuardResult, RouterStateSnapshot, Router } from '@angular/router';
 import { AuthService } from './auth.service';
 import { map, lastValueFrom } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Service()
 export class AuthGuard implements CanActivate {
 
   authService = inject(AuthService);
@@ -21,7 +19,7 @@ export class AuthGuard implements CanActivate {
   }
 }
 
-@Injectable({providedIn: 'root'})
+@Service()
 export class SuperAdminAuthGuard implements CanActivate {
 
   authService = inject(AuthService);

@@ -1,4 +1,7 @@
 <div class="sui flex-x gap-2">
   <app-image-picker-single idName="picker" label="Datei auswählen" [(twoWayModel)]="section().Content.File"/>
-  <app-text-input class="sui grow-1" idName="text" label="Text" [(twoWayModel)]="section().Content.Text"/>
+  <div class="sui flex-y gap-2">
+    <app-text-input class="sui grow-1" idName="text" label="Zusätzlicher Text" [(twoWayModel)]="section().Content.Text"/>
+    <i>Titel und Beschreibung der Datei können im Dateiauswahldialog auf der rechten Seite eingestell werden. "Zusätzlicher Text" wird darunter angezeigt.</i>
+  </div>
 </div>

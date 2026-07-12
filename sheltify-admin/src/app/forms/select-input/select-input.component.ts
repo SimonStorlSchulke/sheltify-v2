@@ -1,7 +1,7 @@
-import { Component, input, model, output } from '@angular/core';
+import { Component, input, model, output, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
-import { InputBaseComponent } from 'src/app/forms/input-base.component';
+import { InputBaseComponent } from '@app/forms/input-base.component';
 
 @Component({
   selector: 'app-select-input',
@@ -11,17 +11,19 @@ import { InputBaseComponent } from 'src/app/forms/input-base.component';
     NgOptionComponent,
   ],
   templateUrl: './select-input.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['../form-base.component.scss', './select-input.component.scss']
 })
 export class SelectInputComponent extends InputBaseComponent {
-  public placeholder = input<string>();
-  public twoWayModel = model<string | undefined>('');
-  public onInputChange = output<string | undefined>();
-  public options = input.required<string[]>();
-  public optionTranslations = input<Record<string, string> | undefined>(undefined);
-  public clearable = input<boolean>(true);
+  placeholder = input<string>('');
+  twoWayModel = model<string | undefined>('');
+  onInputChange = output<string | undefined>();
+  options = input.required<string[]>();
+  optionTranslations = input<Record<string, string> | undefined>(undefined);
+  clearable = input<boolean>(true);
 
-  public onInput() {
+  onInput() {
+    this.askSaveService.markDirty();
     this.onInputChange.emit(this.twoWayModel());
   }
 }

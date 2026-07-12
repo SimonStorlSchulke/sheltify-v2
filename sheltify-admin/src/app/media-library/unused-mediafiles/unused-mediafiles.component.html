@@ -1,0 +1,15 @@
+@if(unusedMediafiles.length > 0) {
+<div class="sui flex-y gap-2">
+  <h3>Die folgenden Bilder sind ungenutzt</h3>
+  <span>Dürfen diese enternt werden um Speicherplatz zu sparen?</span>
+
+  @for (mediaFile of unusedMediafiles; track $index) {
+    <app-media-entry [media]="mediaFile" [selected]="selectedEntries().has(mediaFile.ID)" (click)="toggleSelectEntry(mediaFile.ID)"/>
+  }
+
+  <div class="sui flex-x gap-2 jc-end">
+    <button (click)="dialogRef.close()" class="secondary">Nein!</button>
+    <button (click)="submitDelete()" class="primary">Ja, alle markierten Bilder entfernen</button>
+  </div>
+</div>
+}

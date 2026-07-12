@@ -18,7 +18,7 @@ export function getAnimalLink(animal: CmsAnimal, allAnimalsByArticle: Record<str
   return `/tierartikel/${names}`;
 }
 
-export async function downloadFile(file: CmsImage): Promise<void> {
+export async function downloadFile(file: CmsImage) {
   // TODO replace with default download once deployed
   const response = await fetch(config.uploadsUrl + file.ID);
   const blob = await response.blob();
@@ -26,12 +26,19 @@ export async function downloadFile(file: CmsImage): Promise<void> {
 
   const a = document.createElement("a");
   a.href = url;
-  const extension = file.OriginalFileName.split('.').pop();
-  a.download = file.Title + '.' + extension;
+  a.download = getDownloadTitle(file);
   document.body.appendChild(a);
   a.click();
   a.remove();
   window.URL.revokeObjectURL(url);
+}
+
+export function getDownloadTitle(file: CmsImage) {
+  const extension = file.OriginalFileName.split('.').pop();
+  const endsWithExtension = extension && file.Title.endsWith('.' + extension);
+  let fileName = endsWithExtension ? file.Title : `${file.Title}.${extension}`;
+  fileName = fileName.replace(/[^a-z0-9.äöüÄÖÜß]/gi, '_').toLowerCase();
+  return fileName;
 }
 
 export function yearsOld(animal: CmsAnimal): number | null {

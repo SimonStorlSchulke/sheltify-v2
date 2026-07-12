@@ -1,7 +1,7 @@
-import { Component, computed, input, model } from '@angular/core';
+import { Component, computed, input, model, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SqlNullBool, SqlNullBoolNull } from 'sheltify-lib/cms-types';
-import { InputBaseComponent } from 'src/app/forms/input-base.component';
+import { InputBaseComponent } from '@app/forms/input-base.component';
 
 @Component({
   selector: 'app-checkbox-input',
@@ -9,18 +9,19 @@ import { InputBaseComponent } from 'src/app/forms/input-base.component';
     FormsModule
   ],
   templateUrl: './checkbox-input.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['../form-base.component.scss']
 })
 export class CheckboxInputComponent extends InputBaseComponent {
-  public twoWayModel = model<boolean>(false);
-  public nullBoolModel = model<SqlNullBool | undefined>(undefined);
-  public showYesNo = input<boolean>(true);
+  twoWayModel = model<boolean>(false);
+  nullBoolModel = model<SqlNullBool | undefined>(undefined);
+  showYesNo = input<boolean>(true);
 
-  public onInput(checked: boolean) {
-    this.twoWayModel.set(checked);
+  markDirty() {
+    this.askSaveService.markDirty();
   }
 
-  public checkedState = computed(() => {
+  checkedState = computed(() => {
     const nullBool = this.nullBoolModel();
     if(!nullBool) return this.twoWayModel();
 
@@ -29,7 +30,8 @@ export class CheckboxInputComponent extends InputBaseComponent {
     return nullBool.Bool;
   });
 
-  public toggle(newBool: boolean) {
+  toggle(newBool: boolean) {
+    this.askSaveService.markDirty();
     this.twoWayModel.set(newBool);
 
     const nullBool = this.nullBoolModel();

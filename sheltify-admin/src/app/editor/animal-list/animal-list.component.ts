@@ -1,20 +1,30 @@
-import { ChangeDetectionStrategy, Component, computed, inject, model, OnInit, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { DatePipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, inject, model, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, ActivatedRouteSnapshot, ResolveFn, Router, Routes } from '@angular/router';
+import { DashboardComponent } from '@app/pages/dashboard/dashboard.component';
+import { LoginComponent } from '@app/pages/login/login.component';
+import { AuthGuard } from '@app/services/auth-guard.service';
 import { firstValueFrom } from 'rxjs';
-import { createNewAnimal } from 'src/app/cms-types/cms-type.factory';
 import { CmsAnimal } from 'sheltify-lib/cms-types';
-import { RadioButtonsInputComponent } from 'src/app/forms/radio-buttons-input/radio-buttons-input.component';
-import { TextInputModalComponent } from 'src/app/forms/text-input-modal/text-input-modal.component';
-import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
-import { LeftSidebarLayoutComponent } from 'src/app/layout/left-sidebar-layout/left-sidebar-layout.component';
-import { AnimalService } from 'src/app/services/animal.service';
-import { ModalService } from 'src/app/services/modal.service';
-import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
-import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
-import { CmsImageDirective } from 'src/app/ui/cms-image.directive';
+import { createNewAnimal } from '@app/cms-types/cms-type.factory';
+import { RadioButtonsInputComponent } from '@app/forms/radio-buttons-input/radio-buttons-input.component';
+import { TextInputModalComponent } from '@app/forms/text-input-modal/text-input-modal.component';
+import { TextInputComponent } from '@app/forms/text-input/text-input.component';
+import { LeftSidebarLayoutComponent } from '@app/layout/left-sidebar-layout/left-sidebar-layout.component';
+import { AnimalService } from '@app/services/animal.service';
+import { ModalService } from '@app/services/modal.service';
+import { TenantConfigurationService } from '@app/services/tenant-configuration.service';
+import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
+import { CmsImageDirective } from '@app/ui/cms-image.directive';
 import { AnimalEditorComponent } from '../../editor/animal-editor/animal-editor.component';
 import { CmsRequestService } from '../../services/cms-request.service';
-import { DatePipe, Location } from '@angular/common';
+
+export const animalResolver: ResolveFn<CmsAnimal> = (route: ActivatedRouteSnapshot) => {
+  const id = route.paramMap.get('id')!;
+  return inject(CmsRequestService).getAnimal(id);
+}
+
 
 @Component({
   selector: 'app-animal-list',
@@ -31,21 +41,22 @@ import { DatePipe, Location } from '@angular/common';
   styleUrl: './animal-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AnimalListComponent implements OnInit {
+export class AnimalListComponent {
+  animalService = inject(AnimalService);
   private cmsRequestService = inject(CmsRequestService);
-
+  private modalService = inject(ModalService);
+  private tenantConfigurationService = inject(TenantConfigurationService);
+  private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
-  private location = inject(Location);
 
-  public editedAnimals = signal(new Map<string, CmsAnimal>([]));
+  editedAnimals = signal(new Map<string, CmsAnimal>([]));
+  selectedAnimal = signal<CmsAnimal | null>(null);
 
-  public selectedAnimal = signal<CmsAnimal | null>(null);
-
-  public animalsWithSameArticle = computed(() => {
+  animalsWithSameArticle = computed(() => {
     return this.animalService.animalsByArticleID()[this.selectedAnimal()?.ArticleID ?? ''] ?? []
   })
 
-  public pageUrl = computed(() => {
+  pageUrl = computed(() => {
     let url = this.tenantConfigurationService.config()?.SiteUrl;
     if (!url) return undefined;
 
@@ -54,25 +65,22 @@ export class AnimalListComponent implements OnInit {
     const animals = this.animalsWithSameArticle();
     animals.sort((a, b) => a.ID.localeCompare(b.ID));
 
-    if(!animals[0]?.AnimalKind) return undefined;
+    if (!animals[0]?.AnimalKind) return undefined;
 
     return url + 'tierartikel/' + animals.map(animal => animal.Name).join('-');
   })
 
-  public search = signal('');
+  search = signal('');
 
-  public animalKinds = signal<string[]>(['alle']);
-  public selectedAnimalKind = model<string>('alle');
+  animalKinds = signal<string[]>(['alle']);
+  selectedAnimalKind = model<string>('alle');
 
-  constructor(
-    public animalService: AnimalService,
-    private modalService: ModalService,
-    private tenantConfigurationService: TenantConfigurationService,
-    ) {
+  constructor() {
     this.tenantConfigurationService.animalKinds().then(animalKinds => this.animalKinds.set(['alle', ...animalKinds]));
+    this.activatedRoute.data.pipe(takeUntilDestroyed()).subscribe(({animal}) => this.selectedAnimal.set(animal));
   }
 
-  public animalList = computed(() => {
+  animalList = computed(() => {
     return this.animalService.animals().filter(animal => {
       const matchesSearch = animal.Name?.toLowerCase().includes(this.search().toLowerCase());
       const matchesAnimalKind = this.selectedAnimalKind() == 'alle' || this.selectedAnimalKind() == animal.AnimalKind;
@@ -80,22 +88,11 @@ export class AnimalListComponent implements OnInit {
     });
   })
 
-  ngOnInit() {
-    const id = this.activatedRoute.snapshot.paramMap.get('id');
-
-    if(id != null) {
-      this.toAnimal(id);
-    }
-  }
-
   async toAnimal(id: string) {
-    const animal = await firstValueFrom(this.cmsRequestService.getAnimal(id));
-    this.selectedAnimal.set(animal);
-
-    this.location.go('/tiere/' + id);
+    await this.router.navigate(['tiere', id]);
   }
 
-  public async newAnimal() {
+  async newAnimal() {
 
     const name = await this.modalService.openFinishable(TextInputModalComponent, {
       label: "Name eingeben"
@@ -108,22 +105,21 @@ export class AnimalListComponent implements OnInit {
     const animal = createNewAnimal(name, useDefaultAnimalKind ? animalKinds[0] : undefined);
 
     const savedAnimal = await firstValueFrom(this.cmsRequestService.saveAnimal(animal));
-    this.animalService.reloadAnimals();
+    await this.animalService.reloadAnimals();
     this.selectedAnimal.set(savedAnimal);
-    this.location.go('/tiere/' + savedAnimal.ID);
+    await this.toAnimal(savedAnimal.ID);
   }
 
-  public onSavedAnimal(animal: CmsAnimal | null) {
+  onSavedAnimal(animal: CmsAnimal | null) {
     if (animal) {
       //TODO wenn deployed: gucken ob das wirklich sinnvoll ist oder ob ein einfacher reload besser wäre.
       // structurecClone hier sinnvoll? Wenns fehlt wird liste bei jeder änderung geupdated, auch wenn nicht gespeichert wurde...
       this.editedAnimals.update(map => map.set(animal.ID!, structuredClone(animal)));
-      this.selectedAnimal.set(animal);
       this.animalService.reloadAnimals();
     }
   }
 
-  protected onDeletedAnimal() {
+  onDeletedAnimal() {
     this.selectedAnimal.set(null);
     this.animalService.reloadAnimals();
   }

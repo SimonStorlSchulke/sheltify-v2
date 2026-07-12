@@ -1,14 +1,29 @@
-.required {
-    color: Red;
-}
 .section-form {
+  .required {
+      color: Red;
+  }
   input, textarea {
     border: 1px solid #aaa;
     border-radius: 16px;
-    width: min(400px, 100%);
 
     &:focus {
       outline: none;
+    }
+  }
+
+  input[type = 'text'],
+  input[type = 'email'] {
+    width: min(400px, 100%);
+  }
+
+  .radio-option {
+    label {
+      cursor: pointer;
+      padding-left: 12px;
+    }
+
+    input {
+      cursor: pointer;
     }
   }
 }

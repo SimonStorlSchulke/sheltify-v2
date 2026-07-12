@@ -1,51 +1,51 @@
-import { Component, DestroyRef, effect, input, model, OnInit, Renderer2, signal } from '@angular/core';
+import { Component, DestroyRef, effect, input, model, OnInit, Renderer2, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { bootstrapGripVertical, bootstrapX, bootstrapPlus } from '@ng-icons/bootstrap-icons';
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { bootstrapEye, bootstrapGripVertical, bootstrapPlus, bootstrapX } from '@ng-icons/bootstrap-icons';
+import { provideIcons } from '@ng-icons/core';
 import { lastValueFrom, Observable } from 'rxjs';
 import { SqlNullTimeNow } from 'sheltify-lib/cms-types';
 import { Section } from 'sheltify-lib/dist/article-types';
-import { createEmptyArticle } from 'src/app/cms-types/cms-type.factory';
-import { ArticleEditorService } from 'src/app/editor/article-editor/article-editor.service';
-import { createEmptySection } from 'src/app/editor/article-editor/article-section.factory';
-import { PickNewSectionComponent } from 'src/app/editor/article-editor/pick-new-section/pick-new-section.component';
-import { SectionEditorComponent } from 'src/app/editor/article-editor/section-editor/section-editor.component';
-import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
-import { sectionLabels } from 'src/app/services/article-renderer';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
-import { ModalService } from 'src/app/services/modal.service';
-import { bootstrapEye } from '@ng-icons/bootstrap-icons';
-import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
-import { BtIconComponent } from 'src/app/ui/bt-icon/bt-icon.component';
+import { createEmptyArticle } from '@app/cms-types/cms-type.factory';
+import { ArticleEditorService } from '@app/editor/article-editor/article-editor.service';
+import { createEmptySection } from '@app/editor/article-editor/article-section.factory';
+import { PickNewSectionComponent } from '@app/editor/article-editor/pick-new-section/pick-new-section.component';
+import { SectionEditorComponent } from '@app/editor/article-editor/section-editor/section-editor.component';
+import { TextInputComponent } from '@app/forms/text-input/text-input.component';
+import { sectionLabels } from '@app/services/article-renderer';
+import { CmsRequestService } from '@app/services/cms-request.service';
+import { ModalService } from '@app/services/modal.service';
+import { TenantConfigurationService } from '@app/services/tenant-configuration.service';
+import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
 
 @Component({
   selector: 'app-article-editor',
-  imports: [NgIcon, FormsModule, SectionEditorComponent, TextInputComponent, BtIconComponent],
+  imports: [FormsModule, SectionEditorComponent, TextInputComponent, BtIconComponent],
   providers: [provideIcons({bootstrapGripVertical, bootstrapX, bootstrapPlus, bootstrapEye})],
   templateUrl: './article-editor.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './article-editor.component.scss',
 })
 export class ArticleEditorComponent implements OnInit {
-
-  public showUpdateNote = input<boolean>(false);
-
-  public articleId = input.required<string>();
-  public saveArticle = input<Observable<{updateNote: string, pushUpdate: boolean} | undefined>>();
-
-  public selectedFillColor = signal<string | undefined>(undefined);
-  public editedRow = model<number | undefined>(undefined);
-  public colorPickerExpanded = signal<boolean>(false);
+  articleEditorService = inject(ArticleEditorService);
+  private modalService = inject(ModalService);
+  private cmsRequestService = inject(CmsRequestService);
+  private renderer = inject(Renderer2);
+  private destroyRef = inject(DestroyRef);
+  private tenantConfigurationService = inject(TenantConfigurationService);
 
 
-  constructor(
-    public articleEditorService: ArticleEditorService,
-    private modalService: ModalService,
-    private cmsRequestService: CmsRequestService,
-    private renderer: Renderer2,
-    private destroyRef: DestroyRef,
-    private tenantConfigurationService: TenantConfigurationService,
-  ) {
+  showUpdateNote = input<boolean>(false);
+
+  articleId = input.required<string>();
+  saveArticle = input<Observable<{updateNote: string, pushUpdate: boolean} | undefined>>();
+
+  selectedFillColor = signal<string | undefined>(undefined);
+  editedRow = model<number | undefined>(undefined);
+  colorPickerExpanded = signal<boolean>(false);
+
+
+  constructor() {
 
     this.tenantConfigurationService.providedArticleThemeUrl().then(url => url ? this.addGlobalStyle(url) : false);
 
@@ -63,7 +63,7 @@ export class ArticleEditorComponent implements OnInit {
     this.saveArticle()?.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((saveOptions) => this.save(saveOptions));
   }
 
-  public async addSectionAtRow(row: number) {
+  async addSectionAtRow(row: number) {
     if (!this.articleEditorService.article()) return;
     if (this.articleEditorService.movedItem()) return;
     const article = this.articleEditorService.article()!;
@@ -93,7 +93,7 @@ export class ArticleEditorComponent implements OnInit {
     this.renderer.appendChild(document.head, link);
   }
 
-  public async save(saveOptions: { updateNote: string, pushUpdate: boolean } | undefined) {
+  async save(saveOptions: { updateNote: string, pushUpdate: boolean } | undefined) {
     const article = this.articleEditorService.article()!;
     if(saveOptions?.pushUpdate) {
       article.ContentUpdateNote = saveOptions.updateNote;
@@ -102,13 +102,13 @@ export class ArticleEditorComponent implements OnInit {
     await lastValueFrom(this.cmsRequestService.saveArticle(article));
   }
 
-  public exitMoveMode() {
+  exitMoveMode() {
     setTimeout(() => {
       this.articleEditorService.exitMoveMode();
     }, 1);
   }
 
-  public moveToNewRow(rowTo: number) {
+  moveToNewRow(rowTo: number) {
     if (!this.articleEditorService.article()) return;
     const movedItem = this.articleEditorService.movedItem();
     if (!movedItem) return;
@@ -125,11 +125,11 @@ export class ArticleEditorComponent implements OnInit {
     this.exitMoveMode();
   }
 
-  public colorFill(color: string | undefined) {
+  colorFill(color: string | undefined) {
     this.selectedFillColor.set(color);
   }
 
-  protected clickSection(section: Section, row: number) {
+  clickSection(section: Section, row: number) {
     const selectedColor = this.selectedFillColor();
     if (selectedColor !== undefined) {
       section.BackgroundColor = selectedColor;
@@ -140,7 +140,7 @@ export class ArticleEditorComponent implements OnInit {
     }
   }
 
-  protected pasteSectionAtRow(event: MouseEvent, row: number) {
+  pasteSectionAtRow(event: MouseEvent, row: number) {
     event.preventDefault();
     event.stopPropagation();
 
@@ -152,9 +152,9 @@ export class ArticleEditorComponent implements OnInit {
     article.Structure.Rows.splice(row, 0, sectionRef);
   }
 
-  protected readonly sectionLabels = sectionLabels;
+  readonly sectionLabels = sectionLabels;
 
-  protected cancelPaste(event: MouseEvent) {
+  cancelPaste(event: MouseEvent) {
     event.preventDefault();
     event.stopPropagation();
     this.articleEditorService.copiedSection.set(null)

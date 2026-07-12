@@ -1,9 +1,9 @@
-import { Component, inject, model } from '@angular/core';
+import { Component, inject, model, ChangeDetectionStrategy } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { CmsImage } from 'sheltify-lib/cms-types';
-import { InputBaseComponent } from 'src/app/forms/input-base.component';
-import { ModalPresenter } from 'src/app/services/modal.presenter';
-import { CmsImageDirective } from 'src/app/ui/cms-image.directive';
+import { InputBaseComponent } from '@app/forms/input-base.component';
+import { ModalPresenter } from '@app/services/modal.presenter';
+import { CmsImageDirective } from '@app/ui/cms-image.directive';
 import { bootstrapCardImage, bootstrapPlus } from '@ng-icons/bootstrap-icons'
 
 @Component({
@@ -11,25 +11,29 @@ import { bootstrapCardImage, bootstrapPlus } from '@ng-icons/bootstrap-icons'
   imports: [CmsImageDirective, NgIcon],
   providers: [provideIcons({bootstrapCardImage, bootstrapPlus})],
   templateUrl: './image-picker-multi.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['../form-base.component.scss', './image-picker-multi.component.scss']
 })
 export class ImagePickerMultiComponent extends InputBaseComponent {
-  public twoWayModel = model<CmsImage[]>([]);
+  twoWayModel = model<CmsImage[]>([]);
 
 
   private modalPresenter = inject(ModalPresenter);
 
-  public async addImage() {
+  async addImage() {
+    this.askSaveService.markDirty();
     const images = await this.modalPresenter.openMediaLibrary();
     if(!images) return;
     this.twoWayModel.set([...this.twoWayModel()!, ...images]);
   }
 
-  public removeImage(index: number) {
+  removeImage(index: number) {
+    this.askSaveService.markDirty();
     this.twoWayModel().splice(index, 1);
   }
 
-  public moveImage(index: number, offset: number) {
+  moveImage(index: number, offset: number) {
+    this.askSaveService.markDirty();
     const newArr = [...this.twoWayModel()];
     if (offset < 0 && index <= 0) {
       const item = newArr.shift();

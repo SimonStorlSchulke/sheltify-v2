@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, effect, ElementRef, input, output, viewChild } from '@angular/core';
+import { AfterViewInit, Component, effect, ElementRef, input, output, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SectionHtml } from 'sheltify-lib/article-types';
 import { Highlight } from 'ngx-highlightjs';
@@ -7,6 +7,7 @@ import { Highlight } from 'ngx-highlightjs';
   selector: 'app-section-editor-html',
   imports: [Highlight, FormsModule],
   templateUrl: './section-editor-html.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './section-editor-html.component.scss',
 })
 export class SectionEditorHtmlComponent implements AfterViewInit {
@@ -17,7 +18,7 @@ export class SectionEditorHtmlComponent implements AfterViewInit {
   textarea = viewChild<ElementRef>('textarea');
   wrapper = viewChild<ElementRef>('wrapper');
 
-  protected onInput(event: Event) {
+  onInput(event: Event) {
     this.section().Content.Html = (event.target as HTMLTextAreaElement).value;
     this.adjustTextareaHeight();
   }

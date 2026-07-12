@@ -1,10 +1,10 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
-import { TextInputComponent } from 'src/app/forms/text-input/text-input.component';
-import { CmsRequestService } from 'src/app/services/cms-request.service';
-import { TagsService } from 'src/app/services/tags.service';
-import { TagComponent } from 'src/app/ui/tag/tag.component';
+import { TextInputComponent } from '@app/forms/text-input/text-input.component';
+import { CmsRequestService } from '@app/services/cms-request.service';
+import { TagsService } from '@app/services/tags.service';
+import { TagComponent } from '@app/ui/tag/tag.component';
 
 @Component({
   selector: 'app-tags-manager',
@@ -13,22 +13,20 @@ import { TagComponent } from 'src/app/ui/tag/tag.component';
     TextInputComponent
   ],
   templateUrl: './tags-manager.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './tags-manager.component.scss'
 })
 export class TagsManagerComponent implements OnInit {
+  private cmsRequestSv = inject(CmsRequestService);
+  private dialogRef = inject(DialogRef);
+  tagsService = inject(TagsService);
 
-  constructor(
-    private cmsRequestSv: CmsRequestService,
-    private dialogRef: DialogRef,
-    public tagsService: TagsService,
-  ) {
-  }
 
-  public async ngOnInit() {
+  async ngOnInit() {
     await this.tagsService.updateAvailableTags();
   }
 
-  public async createTag(Name: string, Color: string) {
+  async createTag(Name: string, Color: string) {
     const tag = {
       Name,
       Color,
@@ -37,12 +35,12 @@ export class TagsManagerComponent implements OnInit {
     this.tagsService.availableTags.update(tags => [createdTag, ...tags]);
   }
 
-  public async deleteTag(id: string) {
+  async deleteTag(id: string) {
     await lastValueFrom(this.cmsRequestSv.deleteTag(id));
     this.tagsService.availableTags.update(tags => tags.filter(tag => tag.ID != id));
   }
 
-  public close() {
+  close() {
     this.dialogRef.close();
   };
 }

@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 import { provideHighlightOptions } from 'ngx-highlightjs';
 
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { NgxEditorModule } from 'ngx-editor';
 
@@ -11,7 +11,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({eventCoalescing: true}),
     provideRouter(routes),
-    provideHttpClient(),
+    provideHttpClient(withXhr()),
     provideHighlightOptions({
       coreLibraryLoader: () => import('highlight.js/lib/core'),
       lineNumbersLoader: () => import('ngx-highlightjs/line-numbers'), // Optional, add line numbers if needed

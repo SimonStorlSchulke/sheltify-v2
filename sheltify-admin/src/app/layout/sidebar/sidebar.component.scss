@@ -1,4 +1,5 @@
 @use "colors" as *;
+@use "sass:color";
 
 .sidebar {
   min-width: 180px;
@@ -12,14 +13,14 @@
     font-size: 1.1rem;
     font-weight: 500;
     background: #4c3123;
-    border-bottom: 1px solid transparentize($primary-d1, 0.5);
+    border-bottom: 1px solid color.adjust($primary-d1, $alpha: -0.5);
   }
 }
 
 .buttons {
   color: $text-heading;
   background: #553a2c;
-  border-top: 1px solid transparentize($primary-d1, 0.4);
+  border-top: 1px solid color.adjust($primary-d1, $alpha: -0.5);
   padding: 0 16px;
 }
 

@@ -1,5 +1,6 @@
 ---
 import { cms } from "@shared/cms/sheltify-access";
+import HeaderEntryMobile from '@shared/components/HeaderEntryMobile.astro';
 import SearchBar from "@shared/components/SearchBar.astro";
 import CmsImg from "@shared/components/ui/CmsImg.astro";
 import { createPageStructure } from "sheltify-lib/page-structure.ts";
@@ -14,7 +15,7 @@ const startPage = menu.find((item) => item.link == "/");
 const logo = (await cms.tenantConfig).LogoHeader;
 ---
 
-<nav class="themable header">
+<nav class="themable header desktop">
   <div class="logo">
     <a href={startPage && "/"}>
       {logo && <CmsImg img={logo} size="xlarge" refetch={false} />}
@@ -23,11 +24,28 @@ const logo = (await cms.tenantConfig).LogoHeader;
   <div class="menu">
     {menu.map((item) => <HeaderEntry entry={item} startPageName="Home" />)}
   </div>
-  <SearchBar />
+  <SearchBar isMobile={false}/>
 </nav>
 
+<nav class="themable header mobile">
+  <div class="sui flex-x mobile-topbar ai-center">
+    <button class="burger"><img src="/burger.png"></button>
+    <div class="logo">
+      <a href={startPage && "/"}>
+        {logo && <CmsImg img={logo} size="xlarge" refetch={false} />}
+      </a>
+    </div>
+  </div>
+
+  <div class="menu">
+    <SearchBar isMobile={true} />
+    {menu.map((item) => <HeaderEntryMobile entry={item} startPageName="Home" />)}
+  </div>
+</nav>
+<div class="themable search-results sui flex-y gap-2"/>
+
 <style lang="scss">
-  nav {
+  nav.desktop {
     display: flex;
     align-items: center;
     height: var(--header-height);
@@ -65,17 +83,108 @@ const logo = (await cms.tenantConfig).LogoHeader;
       height: 100%;
     }
   }
+
+  nav.mobile {
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    height: var(--header-height);
+    top: 0;
+    transition: opacity 0.3s;
+    position: fixed;
+    z-index: 22;
+    width: 100dvw;
+    box-shadow: 0 0 22px rgba(0, 0, 0, 0.22);
+    background-color: #fff;
+    font-size: 1.25rem;
+    font-weight: 600;
+
+    .mobile-topbar {
+      padding: 0 16px;
+      gap: 24px;
+      height: var(--header-height);
+    }
+
+    .burger {
+      border: none;
+      background: none;
+      height: 50%;
+      img {
+        height: 100%;
+      }
+    }
+
+    .logo {
+      padding-left: 42px;
+      height: 100%;
+    }
+
+    .logo :global(img) {
+      height: 90%;
+    }
+
+    .menu {
+      opacity: 0;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-evenly;
+      background: #fff;
+    }
+
+    &.open {
+      .menu {
+        opacity: 1;
+      }
+    }
+  }
+
+  @media (max-width: 1000px) {
+    nav.mobile {
+      display: flex;
+    }
+    nav.desktop {
+      display: none;
+    }
+  }
+
+
 </style>
 
 <script>
-  const links = document.querySelectorAll<HTMLAnchorElement>(".header a");
+  const links = document.querySelectorAll<HTMLAnchorElement>(".header a")!;
+  const burger = document.querySelector<HTMLElement>(".burger")!;
+  const mobileNav = document.querySelector<HTMLElement>("nav.mobile")!;
 
   // Highlight the active link
   for (const link of links) {
-    if(link.href === window.location.href) {
+    if (link.href === window.location.href) {
       link.classList.add("active");
     }
   }
+
+  burger!.addEventListener("click", (e) => {
+    mobileNav.classList.toggle("open");
+  });
+
+  document.addEventListener("click", (e) => {
+    if (mobileNav.contains(e.target as HTMLElement)) {
+      return;
+    }
+    mobileNav.classList.remove("open");
+  })
+
+  mobileNav.querySelectorAll<HTMLElement>(".dropdown-container").forEach((item) => {
+
+    const btn = item.querySelector(".dropdown-button");
+    if(!btn) return;
+    btn.addEventListener("click", (e) => {
+      console.log("aaa", e.target);
+      item.classList.toggle("open");
+    })
+  })
+
 
   // hide / show header when scrolling down / up
   let previousScroll = window.scrollY || document.documentElement.scrollTop;

@@ -31,8 +31,10 @@
           </div>
         </div>
         <div class="sui flex-x gap-2">
-          <button class="red" data-testid="btn-delete-images" (click)="deleteSelectedImages()">Löschen</button>
           <button class="primary" data-testid="btn-upload-images" (click)="uploadImages()">Hochladen</button>
+          <div class="sui grow-1"></div>
+          <button class="red" data-testid="btn-delete-images" (click)="deleteSelectedImages()">Löschen</button>
+          <button class="primary secondary" data-testid="btn-upload-images" (click)="updateUnusedMediaFiles()">unverwendete Bilder suchen</button>
         </div>
 
         <div class="sui flex-x gap-2 wrap list dropzone" [class.files-hovered]="filesHovered()"
@@ -64,6 +66,13 @@
             </button>
           </div>
         }
+
+        @let unusedImagesVal = unusedImages();
+        @if(unusedImagesVal && unusedImagesVal.length > 0) {
+          <a class="unused-images-alert" (click)="openUnusedMediaDeleter()">Es wurden <b>{{unusedImagesVal.length}}</b> ungenutze Bild(er) gefunden.
+            Bitte klicke hier um zu bestimmen, welche davon gelöscht werden können um Speicherplatz zu sparen.</a>
+        }
+
       </div>
 
     </div>
@@ -77,4 +86,6 @@
       }
     </div>
   }
+
+
 </div>

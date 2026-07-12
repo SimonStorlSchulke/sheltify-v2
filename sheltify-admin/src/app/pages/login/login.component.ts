@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
-import { AlertService } from 'src/app/services/alert.service';
-import { TenantConfigurationService } from 'src/app/services/tenant-configuration.service';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { AlertService } from '@app/services/alert.service';
+import { TenantConfigurationService } from '@app/services/tenant-configuration.service';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
 })
 export class LoginComponent {

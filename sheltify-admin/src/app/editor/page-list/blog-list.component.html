@@ -11,7 +11,7 @@
       <app-radio-buttons-input class="sui mb-1" idName="selectedCategory" [(twoWayModel)]="selectedCategory" label="" [options]="blogCategories()" />
     }
 
-    <div class="sui flex-y">
+    <div class="list">
       @for (blog of blogs(); track blog) {
         <div [class.selected]="selectedBlog()?.ID == blogs()[$index].ID" class="list-entry sui p-1 flex-x" (click)="toBlog(blog.ID); layout.mobileOpen.set(true)">
           {{ blog.Title }}

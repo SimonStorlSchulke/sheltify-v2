@@ -1,17 +1,21 @@
-import { Component, input } from '@angular/core';
-import { AlertService } from 'src/app/services/alert.service';
+import { Component, effect, inject, input, ModelSignal, ChangeDetectionStrategy } from '@angular/core';
+import { AlertService } from '@app/services/alert.service';
+import { AskSaveService } from '@app/services/ask-save.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: '',
 })
-export class InputBaseComponent {
-  public idName = input.required<string>();
-  public explanation = input<string>();
-  public label = input.required<string>();
+export abstract class InputBaseComponent {
+  idName = input.required<string>();
+  explanation = input<string>();
+  label = input.required<string>();
+  abstract twoWayModel: ModelSignal<any>;
 
-  constructor(private alertService: AlertService) {}
+  private alertService = inject(AlertService);
+  askSaveService = inject(AskSaveService);
 
-  public showExplanation() {
+  showExplanation() {
     this.alertService.openAlert(this.label(), this.explanation()!)
   }
 }

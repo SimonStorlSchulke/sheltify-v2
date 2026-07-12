@@ -94,7 +94,7 @@
       <input type="checkbox" id={input.Label} name={input.Label} required={input.Required} onchange={validateForm} />
       {:else if input.Type === 'radio'}
       {#each input.RadioOptions as option}
-        <div class="radio-option sui ml-2">
+        <div class="radio-option sui ml-2 flex-x">
           <input type="radio" id={`${input.Label}-${option}`} name={input.Label} value={option} required={input.Required} onchange={validateForm} />
           <label for={`${input.Label}-${option}`}>{option}</label>
         </div>

@@ -8,12 +8,13 @@
         <app-bt-icon name="PencilFill" />
       }
     </div>
-    <div class="sui flex-x gap-2">
-      <button type="button" class="primary" (click)="save()">Speichern</button>
-      @let isPublished = page.PublishedAt?.Valid;
-      <button [class.warning]="!isPublished" [class.success]="isPublished" (click)="togglePublished()">{{ page.PublishedAt?.Valid ? 'Depublizieren' : 'Publizieren' }}</button>
-      <button type="button" class="red" (click)="delete()">Löschen</button>
-    </div>
+
+    <app-manage-entry-buttons
+      [entry]="page"
+      (save)="save()"
+      (togglePublished)="togglePublished()"
+      (delete)="delete()"
+    />
   }
 </div>
 

@@ -1,13 +1,29 @@
+---
+interface Props {
+  isMobile: boolean,
+}
+
+const { isMobile } = Astro.props;
+
+---
+
+{isMobile ?
+  <div class="sui flex-x">
+
+<span style="filter: saturate(0) contrast(2)">🔍</span>
+<input class="seaarch-bar" type="text" placeholder="Suchen...">
+</div>
+  :
 <button class="search-toggle">
   <span style="filter: saturate(0) contrast(2)">🔍</span>
   <input class="search-bar" type="text" placeholder="Suchen...">
 
-  <div class="themable search-results sui flex-y gap-2"/>
 </button>
+  }
 
 <script is:inline>
 
-  const isDevMode = window.location.href.includes('://localhost:42');
+  const isDevMode = window.location.href.includes('://localhost:');
 
   if (isDevMode) {
       const mockEntry= (title) => ({
@@ -37,7 +53,7 @@
 
   function initSearch() {
     const searchBar = document.querySelector('.search-bar');
-    const searchResults = document.querySelector('.search-results');
+    const searchResults = () => document.querySelector('.search-results');
     searchBar?.addEventListener('input', async (e) => {
       // only load the pagefind script once
       if (e.target.dataset.loaded !== 'true' && !isDevMode) {
@@ -48,7 +64,7 @@
 
       const searchValue = e.target.value;
 
-      searchResults.innerHTML = '';
+      searchResults().innerHTML = '';
 
       if (searchValue.length < 3) return;
 
@@ -60,7 +76,7 @@
       // add the new results
       for (const result of search.results) {
         const data = await result.data()
-        searchResults.innerHTML += `
+        searchResults().innerHTML += `
           <a href="${data.url}">
             <h3>${data.meta.title}</h3>
             <p>${data.excerpt}</p>

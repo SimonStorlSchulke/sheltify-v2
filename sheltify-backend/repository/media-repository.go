@@ -85,8 +85,8 @@ func GetAllTenantsMedia(tenant string) ([]shtypes.MediaFile, error) {
 	return mediaFiles, nil
 }
 
-func DeleteMediaFileMeta(id string) error {
-	if err := db.Unscoped().Where("id = ?", id).Delete(&shtypes.MediaFile{}).Error; err != nil {
+func DeleteMediaFileMeta(id string, tenant string) error {
+	if err := db.Unscoped().Where("id = ? AND tenant_id = ?", id, tenant).Delete(&shtypes.MediaFile{}).Error; err != nil {
 		return err
 	}
 	return nil
@@ -141,4 +141,28 @@ func SaveMedia(media *shtypes.MediaFile) error {
 		return err
 	}
 	return nil
+}
+
+// returns media files that are not hard-linked to any database entry. This does NOT yet mean they can safely be deleted,
+// as they might be used in articles (stored as JSON in the Database)
+func FindUnlinkedMediaFiles(tenant string) ([]shtypes.MediaFile, error) {
+	var mediaFiles []shtypes.MediaFile
+
+	// i hate this, but is there an alternativer?
+	err := db.
+		Joins("LEFT JOIN animals a ON a.portrait_id = media_files.id").
+		Joins("LEFT JOIN team_members t ON t.portrait_id = media_files.id").
+		Joins("LEFT JOIN tenant_configurations tc ON tc.logo_header_id = media_files.id").
+		Joins("LEFT JOIN blog_entries be ON be.thumbnail_id = media_files.id").
+		Where("media_files.tenant_id = ?", tenant).
+		Where("a.portrait_id IS NULL").
+		Where("t.portrait_id IS NULL").
+		Where("tc.logo_header_id IS NULL").
+		Where("be.thumbnail_id IS NULL").
+		Find(&mediaFiles).Error
+
+	if err != nil {
+		return nil, err
+	}
+	return mediaFiles, nil
 }
