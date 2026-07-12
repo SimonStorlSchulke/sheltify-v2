@@ -1,6 +1,7 @@
 import { Component, computed, input, model, OnInit, output, inject, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AskSaveService } from '@app/services/ask-save.service';
+import { ManageEntryButtonsComponent } from '@app/ui/manage-entry-buttons/manage-entry-buttons.component';
 import { firstValueFrom, Subject } from 'rxjs';
 import { CmsArticle } from 'sheltify-lib/article-types';
 import { createEmptyArticle } from '@app/cms-types/cms-type.factory';
@@ -28,7 +29,8 @@ import { LastEditedComponent } from '@app/ui/last-edited/last-edited.component';
     SelectInputComponent,
     LastEditedComponent,
     BtIconComponent,
-    NumberInputComponent
+    NumberInputComponent,
+    ManageEntryButtonsComponent
   ],
   templateUrl: './blog-editor.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
