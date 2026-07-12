@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Service, inject } from '@angular/core';
 import { AnimalsFilter, CmsArticle } from 'sheltify-lib/article-types';
 import {
   CmsAnimal,
@@ -23,7 +23,7 @@ export type CollectionResult<T> = {
   results: T[] | null,
 }
 
-@Injectable({providedIn: 'root'})
+@Service()
 export class CmsRequestService {
 
   private authService = inject(AuthService);

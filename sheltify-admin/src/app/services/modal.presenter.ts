@@ -1,9 +1,9 @@
-import { Injectable, inject } from '@angular/core';
+import { Service, inject } from '@angular/core';
 import { CmsImage } from 'sheltify-lib/cms-types';
 import { MediaLibraryComponent } from '@app/media-library/media-library.component';
 import { ModalService } from '@app/services/modal.service';
 
-@Injectable({providedIn: 'root'})
+@Service()
 export class ModalPresenter {
   private modalService = inject(ModalService);
 

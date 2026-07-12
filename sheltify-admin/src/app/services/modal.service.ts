@@ -1,8 +1,7 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { ComponentType } from '@angular/cdk/portal';
-import { Directive, inject, Injectable, OnDestroy, Type } from '@angular/core';
+import { Directive, inject, OnDestroy, Service, Type } from '@angular/core';
 import { firstValueFrom, Observable, Subject } from 'rxjs';
-import { AlertChoice, AlertComponent } from '@app/ui/alert/alert.component';
 
 export interface Finishable<TValue> {
   finish: Observable<TValue | undefined>;
@@ -28,7 +27,7 @@ export abstract class FinishableDialog<TValue> implements Finishable<TValue>, On
   }
 }
 
-@Injectable({providedIn: 'root'})
+@Service()
 export class ModalService {
 
   private dialog = inject(Dialog);

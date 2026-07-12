@@ -1,9 +1,9 @@
-import { Injectable, inject } from '@angular/core';
+import { Service, inject } from '@angular/core';
 import { ModalService } from '@app/services/modal.service';
 import { AlertChoice, AlertComponent } from '@app/ui/alert/alert.component';
 import { ToastComponent, ToastLevel } from '@app/ui/toast/toast.component';
 
-@Injectable({providedIn: 'root'})
+@Service()
 export class AlertService {
   private modalService = inject(ModalService);
 

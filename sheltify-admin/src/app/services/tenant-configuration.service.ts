@@ -1,9 +1,9 @@
-import { Injectable, signal, inject } from '@angular/core';
+import { Service, signal, inject } from '@angular/core';
 import { firstValueFrom, of, tap } from 'rxjs';
 import { CmsTenantConfiguration, SpecialArticleSections } from 'sheltify-lib/cms-types';
 import { CmsRequestService } from '@app/services/cms-request.service';
 
-@Injectable({providedIn: 'root'})
+@Service()
 export class TenantConfigurationService {
   private cmsRequestService = inject(CmsRequestService);
 

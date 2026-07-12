@@ -1,9 +1,9 @@
-import { computed, Injectable, signal, inject } from '@angular/core';
+import { computed, Service, signal, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { CmsAnimal, SqlNullTimeNow } from 'sheltify-lib/cms-types';
 import { CmsRequestService } from '@app/services/cms-request.service';
 
-@Injectable({providedIn: 'root'})
+@Service()
 export class AnimalService {
   private cmsRequestService = inject(CmsRequestService);
 

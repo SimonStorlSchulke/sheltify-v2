@@ -1,4 +1,4 @@
-import { Injectable, inject, computed } from '@angular/core';
+import { Service, inject, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Observable, tap, BehaviorSubject, catchError, of } from 'rxjs';
@@ -20,7 +20,7 @@ export type CmsUser = {
 }
 
 
-@Injectable({providedIn: 'root'})
+@Service()
 export class AuthService {
   private httpClient = inject(HttpClient);
   private _bearer = "";
