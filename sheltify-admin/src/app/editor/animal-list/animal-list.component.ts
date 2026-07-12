@@ -33,10 +33,14 @@ import { CmsRequestService } from '../../services/cms-request.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AnimalListComponent {
+  animalService = inject(AnimalService);
   private cmsRequestService = inject(CmsRequestService);
+  private modalService = inject(ModalService);
+  private tenantConfigurationService = inject(TenantConfigurationService);
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
 
   editedAnimals = signal(new Map<string, CmsAnimal>([]));
-
   selectedAnimal = signal<CmsAnimal | null>(null);
 
   animalsWithSameArticle = computed(() => {
@@ -62,18 +66,9 @@ export class AnimalListComponent {
   animalKinds = signal<string[]>(['alle']);
   selectedAnimalKind = model<string>('alle');
 
-  animalService = inject(AnimalService);
-  private modalService = inject(ModalService);
-  private tenantConfigurationService = inject(TenantConfigurationService);
-  private router = inject(Router);
-  private activatedRoute = inject(ActivatedRoute);
-
-  constructor(
-  ) {
+  constructor() {
     this.tenantConfigurationService.animalKinds().then(animalKinds => this.animalKinds.set(['alle', ...animalKinds]));
-
-    this.activatedRoute.data.pipe(takeUntilDestroyed())
-      .subscribe(({animal}) => this.selectedAnimal.set(animal));
+    this.activatedRoute.data.pipe(takeUntilDestroyed()).subscribe(({animal}) => this.selectedAnimal.set(animal));
   }
 
   animalList = computed(() => {

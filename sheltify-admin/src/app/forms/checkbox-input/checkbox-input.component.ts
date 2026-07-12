@@ -17,8 +17,8 @@ export class CheckboxInputComponent extends InputBaseComponent {
   nullBoolModel = model<SqlNullBool | undefined>(undefined);
   showYesNo = input<boolean>(true);
 
-  onInput(checked: boolean) {
-    this.twoWayModel.set(checked);
+  markDirty() {
+    this.askSaveService.markDirty();
   }
 
   checkedState = computed(() => {

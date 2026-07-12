@@ -27,8 +27,7 @@ export class AnimalService {
     this.animals.set(animals.results ?? []);
   }
 
-  async togglePublished(animal: CmsAnimal) {
-    const animalToSave = structuredClone(animal);
+  async togglePublished(animalToSave: CmsAnimal) {
     if(animalToSave.PublishedAt?.Valid) {
       animalToSave.PublishedAt = {
         Valid: false,
@@ -39,7 +38,6 @@ export class AnimalService {
       animalToSave.PublishedAt = SqlNullTimeNow();
       return await this.save(animalToSave);
     }
-
   }
 
   isPublished(animal: CmsAnimal): boolean {

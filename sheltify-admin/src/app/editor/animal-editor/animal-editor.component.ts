@@ -1,4 +1,4 @@
-import { Component, input, inject, output, ChangeDetectionStrategy } from '@angular/core';
+import { Component, input, inject, output, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom, lastValueFrom, Subject } from 'rxjs';
@@ -45,6 +45,8 @@ import { CmsRequestService } from '../../services/cms-request.service';
 })
 export class AnimalEditorComponent {
   tenantConfigurationService = inject(TenantConfigurationService);
+  cdRef = inject(ChangeDetectorRef);
+  private cmsRequestService = inject(CmsRequestService);
   private modalService = inject(ModalService);
   private animalService = inject(AnimalService);
   private alertService = inject(AlertService);
@@ -61,7 +63,6 @@ export class AnimalEditorComponent {
   animalStati: string[] = [];
   animalKinds: string[] = [];
 
-  private cmsRequestService = inject(CmsRequestService);
 
   constructor() {
     this.askSaveService.triggerSave.pipe(takeUntilDestroyed()).subscribe(() => this.saveFromUI());
@@ -125,6 +126,7 @@ export class AnimalEditorComponent {
   }
 
   setStatus(status: string, active: boolean) {
+    this.askSaveService.markDirty();
     const animal = this.animal()!;
     let currentStati = animal.Status?.split(',') ?? []
     currentStati = currentStati.filter(status => this.animalStati.includes(status));

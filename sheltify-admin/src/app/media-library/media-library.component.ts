@@ -224,6 +224,7 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
     if(toDelete.length !== this.selectedImageIds().size) {
       if(this.selectedImageIds().size == 1) {
         await this.alertService.openAlert("Bild wird noch verwendet", "Dieses Bild wird noch verwendet und kann nicht gelöscht werden")
+        return;
       } else if(this.selectedImageIds().size > 1) {
         await this.alertService.openAlert("Bilder werden noch verwendet", "Einige dieser Bilder werden noch verwendet und können nicht gelöscht werden")
       }
