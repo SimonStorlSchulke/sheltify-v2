@@ -43,6 +43,11 @@ const logo = (await cms.tenantConfig).LogoHeader;
     font-size: 1.25rem;
     font-weight: 600;
 
+    &.header-hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
     .logo {
       padding-left: 42px;
       height: 100%;
@@ -65,9 +70,44 @@ const logo = (await cms.tenantConfig).LogoHeader;
 <script>
   const links = document.querySelectorAll<HTMLAnchorElement>(".header a");
 
+  // Highlight the active link
   for (const link of links) {
     if(link.href === window.location.href) {
       link.classList.add("active");
     }
   }
+
+  // hide / show header when scrolling down / up
+  let previousScroll = window.scrollY || document.documentElement.scrollTop;
+  let currentScroll;
+  let direction = 0;
+  let prevDirection = 0;
+  const header = document.querySelector('.header')!;
+
+  function checkScroll() {
+    currentScroll = window.scrollY || document.documentElement.scrollTop;
+    if (currentScroll > previousScroll) {
+      direction = 2;
+    } else if (currentScroll < previousScroll) {
+      direction = 1;
+    }
+
+    if (direction !== prevDirection) {
+      toggleHeader(direction, currentScroll);
+    }
+
+    previousScroll = currentScroll;
+  }
+
+  function toggleHeader(direction: number, curScroll: number) {
+    if (direction === 2 && curScroll > 52 && screen.width > 766) {
+      header.classList.add('header-hidden');
+      prevDirection = direction;
+    } else if (direction === 1) {
+      header.classList.remove('header-hidden');
+      prevDirection = direction;
+    }
+  };
+
+  window.addEventListener('scroll', checkScroll);
 </script>

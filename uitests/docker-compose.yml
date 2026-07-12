@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:17
+    container_name: sheltify-test-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: sheltify-test-db
+    ports:
+      - "5435:5432"
+    volumes:
+      - sheltifytest:/var/lib/postgresql/data
+
+volumes:
+  sheltifytest:

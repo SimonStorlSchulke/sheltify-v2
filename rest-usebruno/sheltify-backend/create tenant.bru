@@ -1,11 +1,11 @@
 meta {
-  name: create user
+  name: create tenant
   type: http
-  seq: 20
+  seq: 23
 }
 
 post {
-  url: http://localhost:3000/admin/api/create-user
+  url: http://localhost:3000/admin/api/create-tenant
   body: multipartForm
   auth: inherit
 }
@@ -20,9 +20,7 @@ body:json {
 }
 
 body:multipart-form {
-  username: test
-  password: Test12345678
-  tenant: test
-  email: test@test.test
-  role: SUPERADMIN
+  ID: hhg
+  Name: Herzenhunde Griechenland e.V.
+  SiteUrl: http://localhost:4205
 }

@@ -1,7 +1,7 @@
 ---
 import { cms } from '@shared/cms/sheltify-access.ts';
 import AnimalArticle from '@shared/components/AnimalArticle.astro';
-import HhgLayout from '../../layouts/HhgLayout.astro';
+import TestLayout from '../../layouts/TestLayout.astro';
 
 export async function getStaticPaths() {
   return cms.getStaticPathsAnimals();
@@ -11,6 +11,6 @@ const {animalNames} = Astro.params;
 const title = animalNames.split('-').join(', ');
 ---
 
-<HhgLayout seo={{ title }}>
+<TestLayout seo={{ title }}>
   <AnimalArticle animalNames={animalNames}/>
-</HhgLayout>
+</TestLayout>

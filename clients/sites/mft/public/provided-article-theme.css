@@ -43,11 +43,35 @@
   font-size: 1.2rem;
 }
 
+@font-face {
+  font-display: swap;
+  font-family: "oswald";
+  src: url("/oswald.ttf") format("opentype"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+:root {
+  --fontsize-small: 1rem;
+  --fontsize-default: 1.2rem;
+  --fontsize-h1: 3.8rem;
+  --fontsize-h2: 2.8rem;
+  --fontsize-h3: 1.85rem;
+  --fontsize-h4: 1.55rem;
+}
+
+@media (max-width: 1350px) {
+  :root {
+    --fontsize-small: 0.9rem;
+    --fontsize-default: 1rem;
+    --fontsize-h1: 2.8rem;
+    --fontsize-h2: 2rem;
+    --fontsize-h3: 1.6rem;
+    --fontsize-h4: 1.35rem;
+  }
+}
 :root {
   --section-gap-x: min(50px, 5dvw);
   --section-gap-y: 50px;
   --hero-height: 800px;
-  --hero-top-height: 900px;
+  --hero-top-height: 70dvh;
 }
 
 .themable.article {
@@ -66,10 +90,11 @@
   outline: none;
   border: none;
   border-radius: 32px;
-  font-family: "system-ui";
-  font-weight: 200;
+  font-family: "Oswald", system-ui;
+  font-weight: 400;
   padding: 8px 16px;
   transition: background-color 0.35s, color 0.35s;
+  cursor: pointer;
 }
 .themable.article button.lg {
   font-size: 32px;
@@ -83,12 +108,12 @@
   color: #000;
 }
 .themable.article button.secondary {
-  background: #aaa096;
-  color: #fff;
+  background: #fff;
+  outline: 3px solid var(--c-primary);
+  color: #424242;
 }
 .themable.article button.secondary:hover {
-  background: #ffdb7e;
-  color: #000;
+  background: var(--c-primary-h);
 }
 .themable.article a.link {
   text-decoration: underline;
@@ -129,6 +154,26 @@
 }
 .themable.article .section-animal-updates .update-entry:hover {
   color: var(--c-primary) !important;
+}
+.themable.article .button-group button {
+  border-radius: 0;
+  margin-right: -3px;
+  background: #fff;
+  outline: 3px solid var(--c-primary);
+  color: #424242;
+}
+.themable.article .button-group button:hover {
+  background: var(--c-primary-h);
+}
+.themable.article .button-group button.active {
+  background: var(--c-primary);
+  color: #fff;
+}
+.themable.article .button-group :last-child {
+  border-radius: 0 10px 10px 0;
+}
+.themable.article .button-group :first-child {
+  border-radius: 10px 0 0 10px;
 }
 
 /*# sourceMappingURL=provided-article-theme.css.map */

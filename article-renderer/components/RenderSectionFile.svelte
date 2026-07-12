@@ -15,7 +15,7 @@
 <div>
   {#if section.Content.File}
     {@const file = section.Content.File}
-    <a on:click={() => downloadFile(file)}>herunterladen</a>
+    <a onclick={() => downloadFile(file)}>herunterladen</a>
     {:else}
     <div>Datei nicht gefunden</div>
   {/if}

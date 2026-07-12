@@ -2,6 +2,12 @@
   --header-height: 110px;
 }
 
+@media (max-width: 1900px) {
+  :root {
+    --header-height: 70px;
+  }
+}
+
 .themable.header {
   font-family: 'Oswald';
   box-shadow: none;

@@ -4,8 +4,8 @@ import Header from '@shared/components/Header.astro';
 import Layout from '@shared/layouts/Layout.astro';
 
 import '../theme/_index.scss'
-import HhgFooter from '../components/HhgFooter.astro';
 import type { SeoData } from '@shared/types/seo-data';
+import TestFooter from '../components/TestFooter.astro';
 
 interface Props {
   seo: SeoData;
@@ -18,7 +18,7 @@ const {seo} = Astro.props;
   <main>
     <slot/>
   </main>
-  <HhgFooter/>
+  <TestFooter/>
   <Footer/>
 </Layout>
 

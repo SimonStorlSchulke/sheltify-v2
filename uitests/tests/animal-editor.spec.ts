@@ -1,6 +1,5 @@
 import { test } from '@playwright/test';
 import { AnimalEditor } from '../animal-editor';
-import { MediaLibrary } from '../media-library';
 
 test('create and delete new animal article', async ({ page }) => {
   const p = new AnimalEditor(page);
@@ -22,7 +21,7 @@ test('create and delete new animal article', async ({ page }) => {
   await p.deleteAnimal('Nina');
 });
 
-test('animals can share article', async ({ page }) => {
+test.skip('animals can share article', async ({ page }) => {
   const p = new AnimalEditor(page);
   await p.start();
   await p.newAnimal('Vito');

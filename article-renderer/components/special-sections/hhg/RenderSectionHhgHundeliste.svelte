@@ -29,12 +29,7 @@
   })
 
   function toggleFilter(key: FilterKey, value: string) {
-    if(filters[key] == value) {
-      filters[key] = '';
-      return;
-    }
-    console.log('c-val:', filters[key], 'nextVal:', value);
-    filters[key] = filters[key] != value ? value : '';
+    filters[key] = filters[key] === value ? '' : value;
   }
 
   let anyFilterActive = $derived(Object.values(filters).some(v => !!v));

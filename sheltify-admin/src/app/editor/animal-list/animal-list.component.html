@@ -14,14 +14,12 @@
     <app-text-input idName="filter" placeholder="Suche" label="" [(twoWayModel)]="search"/>
 
     <div class="animals sui flex-x ai-start wrap gap-4">
-      <table [class.partial-table]="editorOpened">
+      <table>
         <thead>
         <tr>
           <th class="td-image">Bild</th>
           <th class="td-name">Name</th>
           <th class="td-born">Geboren</th>
-          <th class="td-created">erstellt</th>
-          <th class="td-modified">bearbeitet</th>
         </tr>
         </thead>
         <tbody>
@@ -41,8 +39,6 @@
                 }
               </td>
               <td class="td-born">{{ animal.Birthday.Valid ? (animal.Birthday.Time | date: 'dd.MM.yyyy') : '-' }}</td>
-              <td class="td-created">{{ animal.CreatedAt | date: 'dd.MM.yyyy' }}</td>
-              <td class="td-modified">{{ animal.UpdatedAt | date: 'dd.MM.yyyy' }}</td>
             </tr>
           }
         </tbody>

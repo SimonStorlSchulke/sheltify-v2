@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, HostListener, input, model, signal, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, computed, CUSTOM_ELEMENTS_SCHEMA, ElementRef, HostListener, input, model, signal, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
 import { Section } from 'sheltify-lib/article-types';
 import { ArticleEditorService } from 'src/app/editor/article-editor/article-editor.service';
@@ -25,6 +25,13 @@ export class SectionEditorComponent {
   public rowIndex = input.required<number>();
   public editable = input.required<boolean>();
   public editedRow = model<number>();
+
+  public sectionLabel = computed(() => {
+    const section = this.section();
+    if(!section) return '';
+    if(section.SectionType == 'special') return section.Content.Type;
+    return sectionLabels.get(section.SectionType) ?? section.SectionType
+  })
 
   @ViewChild('outlet', { read: ViewContainerRef }) outletRef!: ViewContainerRef;
   @ViewChild('preview', { read: TemplateRef }) previewRef!: TemplateRef<any>;
