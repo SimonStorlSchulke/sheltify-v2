@@ -8,7 +8,7 @@
 
 <script lang="ts">
   import { config } from '../config';
-  import { downloadFile } from '../util';
+  import { downloadFile, getDownloadTitle } from '../util';
   import type { SectionFile } from "sheltify-lib/article-types";
 
   const iconsUrl = config.staticUrl + 'icons';
@@ -42,14 +42,16 @@
 
 </script>
 
-<div>
-  {#if section.Content.File}
-    {@const file = section.Content.File}
-    <a on:click={() => downloadFile(file)}>
-      <img src={getFileIcon(file.OriginalFileName)}>
-      <span>herunterladen</span>
-    </a>
-    {:else}
-    <div>Datei nicht gefunden</div>
-  {/if}
-</div>
+{#if section.Content.File}
+  {@const file = section.Content.File}
+  <a class="file sui flex-x" on:click={() => downloadFile(file)}>
+    <img src={getFileIcon(file.OriginalFileName)}>
+    <div class="sui flex-y">
+      <b>{file.Title}</b>
+      <span>{file.Description}</span>
+      <i>{getDownloadTitle(file)}</i>
+    </div>
+  </a>
+{:else}
+  <div>Datei nicht gefunden</div>
+{/if}

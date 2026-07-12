@@ -28,5 +28,4 @@ func main() {
 
 	services.InitMailDialer()
 	http.ListenAndServe(":3000", r)
-
 }
