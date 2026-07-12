@@ -12,7 +12,6 @@ import { CmsRequestService } from '@app/services/cms-request.service';
 import { HomeFoundService } from '@app/services/home-found.service';
 import { ModalService } from '@app/services/modal.service';
 
-
 export const homeFoundResolver: ResolveFn<CmsHomeFoundEntry> = (route: ActivatedRouteSnapshot) => {
   const id = route.paramMap.get('id')!;
   return inject(CmsRequestService).getHomeFoundEntry(id);

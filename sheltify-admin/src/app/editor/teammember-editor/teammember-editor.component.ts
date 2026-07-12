@@ -1,5 +1,7 @@
 import { Component, input, output, inject, ChangeDetectionStrategy } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AskSaveService } from '@app/services/ask-save.service';
+import { firstValueFrom, take } from 'rxjs';
 import { CmsTeamMember } from 'sheltify-lib/cms-types';
 import { ImagePickerSingleComponent } from '@app/forms/image-picker-single/image-picker-single.component';
 import { NumberInputComponent } from '@app/forms/number-input/number-input.component';
@@ -21,9 +23,14 @@ import { TeamMembersService } from '@app/services/team-members.service';
 export class TeammemberEditorComponent {
   private cmsRequestService = inject(CmsRequestService);
   private teamMembersService = inject(TeamMembersService);
+  private askSaveService = inject(AskSaveService);
 
   teamMember = input.required<CmsTeamMember>();
   deleted = output<void>();
+
+  constructor() {
+    this.askSaveService.triggerSave$.pipe(takeUntilDestroyed()).subscribe(() => this.save());
+  }
 
   async save() {
     const teamMember = await firstValueFrom(this.cmsRequestService.saveTeamMember(this.teamMember()));

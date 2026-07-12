@@ -40,7 +40,6 @@ export class PageListComponent {
   private router = inject(Router);
   private alertService = inject(AlertService);
 
-
   constructor() {
     this.activatedRoute.data.pipe(takeUntilDestroyed())
       .subscribe(({page}) => this.selectedPage.set(page));

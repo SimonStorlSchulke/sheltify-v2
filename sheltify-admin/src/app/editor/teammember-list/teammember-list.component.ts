@@ -1,6 +1,7 @@
 import { Location } from '@angular/common';
 import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, ActivatedRouteSnapshot, ResolveFn, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { createNewTeamMember } from '@app/cms-types/cms-type.factory';
 import { CmsTeamMember } from 'sheltify-lib/cms-types';
@@ -11,6 +12,11 @@ import { CmsRequestService } from '@app/services/cms-request.service';
 import { ModalService } from '@app/services/modal.service';
 import { TeamMembersService } from '@app/services/team-members.service';
 import { CmsImageDirective } from '@app/ui/cms-image.directive';
+
+export const teamMemberResolver: ResolveFn<CmsTeamMember> = (route: ActivatedRouteSnapshot) => {
+  const id = route.paramMap.get('id')!;
+  return inject(CmsRequestService).getTeamMember(id);
+}
 
 @Component({
   selector: 'app-teammember-list',
@@ -28,14 +34,10 @@ export class TeammemberListComponent {
   private cmsRequestService = inject(CmsRequestService);
   private modalService = inject(ModalService);
   private activatedRoute = inject(ActivatedRoute);
-  private location = inject(Location);
+  private router = inject(Router);
 
-
-  ngOnInit() {
-    const id = this.activatedRoute.snapshot.paramMap.get('id');
-    if(id != null) {
-      this.toTeamMember(id);
-    }
+  constructor() {
+    this.activatedRoute.data.pipe(takeUntilDestroyed()).subscribe(({entry}) => this.selectedTeamMember.set(entry));
   }
 
   selectedTeamMember = signal<CmsTeamMember | null>(null);
@@ -49,9 +51,7 @@ export class TeammemberListComponent {
   }
 
   async toTeamMember(id: string) {
-    const teamMember = await firstValueFrom(this.cmsRequestService.getTeamMember(id));
-    this.selectedTeamMember.set(teamMember);
-    this.location.go('/team/' + id);
+    await this.router.navigate(['team', id]);
   }
 
   onDeleted() {

@@ -12,6 +12,12 @@
   }
 }
 
+.modal-lg-no-padding,
+.modal-alert,
+.modal-lg {
+  border-radius: 12px;
+}
+
 .modal-alert {
   align-self: start;
   margin-top: 5dvh;
