@@ -1,6 +1,6 @@
 <script lang="ts">
   import Image from "./Image.svelte";
-  import type { CmsAnimal } from "sheltify-lib/cms-types";
+  import type { CmsAnimal } from "sheltify-lib/dist/cms-types";
 
   let { animal, bubbles = [] }: { animal: CmsAnimal, bubbles?: {text: string, color: string}[] } = $props();
 

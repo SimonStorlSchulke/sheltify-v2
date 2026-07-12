@@ -7,7 +7,7 @@
 
 <script lang="ts">
   import { searchAnimal } from '../special-section-utils';
-  import AnimalCard from '../../AnimalCard.svelte';
+  import AnimalCard from '../../shared/AnimalCard.svelte';
   import type { SectionSpecial } from 'sheltify-lib/dist/article-types';
   import type { CmsAnimal } from 'sheltify-lib/dist/cms-types';
   import { getAnimalLink, yearsOld } from '../../../util';

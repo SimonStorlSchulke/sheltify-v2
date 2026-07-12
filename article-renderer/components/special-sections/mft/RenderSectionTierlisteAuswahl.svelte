@@ -6,7 +6,7 @@
 />
 
 <script lang="ts">
-  import Image from '../../Image.svelte';
+  import Image from '../../shared/Image.svelte';
   import type { SectionSpecial } from 'sheltify-lib/dist/article-types';
   import type { CmsImage } from 'sheltify-lib/dist/cms-types';
   import { getPropValue } from '../special-section-utils';

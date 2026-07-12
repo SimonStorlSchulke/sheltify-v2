@@ -6,7 +6,7 @@
 />
 
 <script lang="ts">
-  import Image from './Image.svelte';
+  import Image from './shared/Image.svelte';
   import { onMount } from 'svelte';
   import type { SectionBlogs } from "sheltify-lib/article-types";
 

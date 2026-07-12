@@ -6,7 +6,7 @@
 />
 
 <script lang="ts">
-  import Image from './Image.svelte';
+  import Image from './shared/Image.svelte';
   import type { SectionHero } from "sheltify-lib/dist/article-types";
 
   let {section}: { section: SectionHero } = $props();

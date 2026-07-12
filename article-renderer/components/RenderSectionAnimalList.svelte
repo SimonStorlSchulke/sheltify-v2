@@ -7,7 +7,7 @@
 
 <script lang="ts">
   import type { CmsAnimal } from 'sheltify-lib/cms-types';
-  import AnimalCard from './AnimalCard.svelte';
+  import AnimalCard from './shared/AnimalCard.svelte';
   import type { SectionAnimalList } from "sheltify-lib/article-types";
   import { getAnimalLink } from '../util';
   let { section, allAnimalsByArticle }: { section: SectionAnimalList, allAnimalsByArticle?: Record<string, CmsAnimal[]>} = $props();
