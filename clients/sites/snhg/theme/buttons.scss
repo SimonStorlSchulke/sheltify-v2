@@ -11,8 +11,11 @@ button {
     font-size: 32px;
   }
 
+  &.sm {
+    padding: 4px 8px;
+  }
+
   &.primary {
-    background: var(--c-primary);
     color: #fff;
 
     &:hover {

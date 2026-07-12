@@ -32,7 +32,7 @@
 :root {
   --section-gap-x: min(50px, 5dvw);
   --section-gap-y: 50px;
-  --hero-height: 600px;
+  --hero-height: 650px;
   --hero-top-height: 400px;
 }
 
@@ -60,9 +60,14 @@
   font-weight: 200;
   padding: 8px 16px;
   transition: background-color 0.35s, color 0.35s;
+  cursor: pointer;
 }
 .themable.article button.lg {
   font-size: 32px;
+}
+.themable.article button.sm {
+  padding: 4px 12px;
+  height: 34px;
 }
 .themable.article button.primary {
   background: var(--c-primary);
@@ -98,9 +103,6 @@
   font-weight: normal;
   color: #454545;
 }
-.themable.article .section-hero .hero-container {
-  margin-bottom: 50px;
-}
 .themable.article .section-hero .hero-container.top-hero::after {
   content: "";
   display: block;
@@ -125,6 +127,14 @@
 }
 .themable.article .section-animal-updates .update-entry:hover {
   color: var(--c-primary) !important;
+}
+.themable.article .section-file a {
+  outline: none;
+  box-shadow: 0 0 12px var(--c-accent);
+  background: #fff;
+}
+.themable.article .section-file a img {
+  opacity: 0.5;
 }
 
 /*# sourceMappingURL=provided-article-theme.css.map */

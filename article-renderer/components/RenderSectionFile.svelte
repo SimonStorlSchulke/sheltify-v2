@@ -44,13 +44,19 @@
 
 {#if section.Content.File}
   {@const file = section.Content.File}
-  <a class="file sui flex-x" on:click={() => downloadFile(file)}>
-    <img src={getFileIcon(file.OriginalFileName)}>
-    <div class="sui flex-y">
-      <b>{file.Title}</b>
-      <span>{file.Description}</span>
-      <i>{getDownloadTitle(file)}</i>
+  <a title="herunterladen" class="file sui flex-y ai-start gap-2" on:click={() => downloadFile(file)}>
+    <div class="sui flex-x gap-2">
+      <img src={getFileIcon(file.OriginalFileName)}>
+      <div class="sui flex-y gap-2 ai-start">
+        <div class="sui flex-y ai-start">
+          <b>{file.Title}</b>
+          <span>{file.Description}aa</span>
+          <span>{section.Content.Text}aa</span>
+          <i>{getDownloadTitle(file)}</i>
+        </div>
+      </div>
     </div>
+    <button class="primary sm">Herunterladen</button>
   </a>
 {:else}
   <div>Datei nicht gefunden</div>
