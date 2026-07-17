@@ -1,9 +1,6 @@
 import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ActivatedRouteSnapshot, ResolveFn, Router, Routes } from '@angular/router';
-import { DashboardComponent } from '@app/pages/dashboard/dashboard.component';
-import { LoginComponent } from '@app/pages/login/login.component';
-import { AuthGuard } from '@app/services/auth-guard.service';
 import { firstValueFrom } from 'rxjs';
 import { CmsPage } from 'sheltify-lib/cms-types';
 import { createNewPage } from '@app/cms-types/cms-type.factory';
@@ -18,7 +15,7 @@ import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
 
 export const pageResolver: ResolveFn<CmsPage> = (route: ActivatedRouteSnapshot) => {
   const path = route.paramMap.get('path')!;
-  return inject(CmsRequestService).getPageByPath(path);
+  return inject(CmsRequestService).getPageByPath(path ?? '');
 }
 
 @Component({

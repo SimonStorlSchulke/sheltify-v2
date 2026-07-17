@@ -9,7 +9,7 @@
 
     @if (showUpdateNote()) {
       <app-text-input
-        class="contentUpdateNote" idName="contentUpdateNote" label="letzte Updatenotiz" [long]="true"
+        class="contentUpdateNote" idName="contentUpdateNote" label="letzte Updateinfo" [long]="true"
         [(twoWayModel)]="article.ContentUpdateNote"
         style="width: 100%;"
         explanation="z.B: 'Neue Bilder von Snoopy'. Kurzer Text, der in 'Tierupdates'-Sektionen angezeigt wird - dort (z.B. auf der Startseite) werden Tiere für eine gewisse Zeit nachdem man sie bearbeitet hat angezeigt."
@@ -65,15 +65,18 @@
 </div>
 
 <div class="sui flex-y gap-1 color-filler p-2 rounded-1">
-  <button class="color-filler-toggle" (click)="colorPickerExpanded.set(!colorPickerExpanded())">
-      <app-bt-icon [name]="colorPickerExpanded() ? 'ChevronDown' : 'PaintBucket'"/>
-  </button>
-
   @let selectedColor = selectedFillColor();
+
+  @if (selectedColor == undefined) {
+    <button class="color-filler-toggle" (click)="colorPickerExpanded.set(!colorPickerExpanded())">
+      <app-bt-icon [name]="colorPickerExpanded() ? 'ChevronDown' : 'PaintBucket'"/>
+    </button>
+  }
+
   @if (colorPickerExpanded() || selectedColor !== undefined) {
     <div class="sui flex-y gap-1 wrap">
 
-      @if (selectedColor == undefined) {
+    @if (selectedColor == undefined) {
 
         @for (colorName of ['accent-1', 'accent-2', 'accent-3']; track $index) {
           <button [class]="'themable themable-bg-'+colorName" (click)="colorFill(colorName)">
@@ -90,7 +93,6 @@
     </div>
   }
 </div>
-
 
 <ng-template let-rowIndex>
   @if (articleEditorService.copiedSection(); as copied) {

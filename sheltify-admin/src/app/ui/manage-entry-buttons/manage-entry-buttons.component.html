@@ -1,7 +1,7 @@
 <div class="sui flex-x gap-2 jc-end">
-  <button type="button" class="primary" style="width: 140px;" (click)="triggerSave()">Speichern {{dirty() ? '*' : '&nbsp;'}}</button>
+  <button type="button" class="primary" style="width: 140px;" data-testid="save-entry" (click)="triggerSave()">Speichern {{dirty() ? '*' : '&nbsp;'}}</button>
   @let publishable = !!entry()?.PublishedAt;
-  @let isPublished = $safeNavigationMigration(entry()?.PublishedAt?.Valid);
+  @let isPublished = entry()?.PublishedAt?.Valid;
   @if(publishable) {
     <button [class.warning]="!isPublished" [class.success]="isPublished" (click)="togglePublished.emit()">{{ entry()?.PublishedAt?.Valid ? 'Depublizieren' : 'Publizieren' }}</button>
   }

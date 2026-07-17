@@ -16,6 +16,7 @@
     SentTo: string;
   }
 
+  let loading = $state(false);
   let submitted = $state(false);
   let isFormValid = $state(false);
 
@@ -27,6 +28,7 @@
   async function handleSubmit() {
     const formElement = document.querySelector("form") as HTMLFormElement;
     const formData = new FormData(formElement);
+    loading = true;
 
     // Build HTML summary of all form inputs
     let htmlSummary = `<h2>${section.Content.Name}</h2>`;
@@ -114,7 +116,7 @@
 
     {#if !submitted}
       
-      <button class="primary" type="button" onclick={handleSubmit} disabled={!isFormValid}>{section.Content.SubmitButtonText || "Abschicken"}</button>
+      <button class="primary" class:loading={loading} type="button" onclick={handleSubmit} disabled={!isFormValid || loading}>{section.Content.SubmitButtonText || "Abschicken"}</button>
       {#if !isFormValid}
         <span class="required-info">Alle mit <span class="required">*</span> markierten Felder müssen ausgefüllt werden</span>
       {/if}

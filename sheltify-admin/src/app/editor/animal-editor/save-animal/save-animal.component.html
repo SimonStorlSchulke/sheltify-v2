@@ -2,8 +2,8 @@
   <app-text-input [long]="true" idName="updateNote" [(twoWayModel)]="updateNote" label="Updatetext eingeben (z.B. 'Neue Bilder von Snoopy')"/>
   <div class="sui flex-x jc-end gap-1">
     <button class="secondary" (click)="cancel()">Abbrechen</button>
-    <button class="secondary" (click)="sendSaveInfo(false)">Ohne Update Speichern</button>
-    <button class="primary" (click)="sendSaveInfo(true)">Speichern</button>
+    <button data-test="btn-save-without-update" class="secondary" (click)="sendSaveInfo(false)">Ohne Update Speichern</button>
+    <button data-test="btn-save-with-update" class="primary" (click)="sendSaveInfo(true)">Speichern</button>
   </div>
 </div>
 

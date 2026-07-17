@@ -1,8 +1,5 @@
 <div class="sui flex-y gap-2">
-  <b>{{ section().Content.Type }}</b>
-  @if(section().Content.Properties.length > 0) {
-    <label>Eigenschaften</label>
-  } @else {
+  @if(section().Content.Properties.length == 0) {
     <span class="sui text-secondary">Hier gibt es nichts einzustellen - Änderungswünsche bitte an Simon</span>
   }
   <div class="sui flex-x wrap jc-start gap-2">
@@ -15,7 +12,7 @@
             <app-text-input class="sui grow-1" idName="text" [long]="true" [label]="propertyName" [(twoWayModel)]="section().Content.PropertyValues[$index]"/>
           }
           @case ('image') {
-            <app-image-picker-single class="sui grow-1" idName="text" [label]="propertyName" [(twoWayModel)]="section().Content.PropertyValues[$index]"/>
+            <app-image-picker-single class="sui" idName="text" [label]="propertyName" [(twoWayModel)]="section().Content.PropertyValues[$index]"/>
           }
         }
       } @else {

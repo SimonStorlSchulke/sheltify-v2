@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { CmsImage, CmsImagesSize } from 'sheltify-lib/dist/cms-types';
-  import { getImageSrc } from 'util';
+  import { getImageSrc } from '../../util';
 
   interface Props {
     img: CmsImage | undefined,
@@ -20,5 +20,5 @@
 {#if img}
   <img style={style} class={cssClass} src={getImageSrc(img, size)} alt={img.Description || img.Title} />
   {:else}
-  <div>bild nicht gefunden</div>
+  <div>Bild nicht gefunden</div>
 {/if}

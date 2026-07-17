@@ -51,7 +51,7 @@ export class AnimalEditor extends CmsPage {
     }
     
     async save() {
-        await this.page.getByTestId('btn-save-animal').click();
+        await this.page.getByTestId('save-entry').click();
         await this.waitForToast('Speichern erfolgreich');
     }
 

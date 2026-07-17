@@ -1,0 +1,16 @@
+@let formsValue = forms();
+
+<h2 class="sui mb-1">Formulare</h2>
+<div class="sui flex-y">
+  @if (formsValue) {
+    @for (form of formsValue; track $index) {
+      <a [routerLink]="['formulare', form.ID]" class="sui flex-x gap-2 list-entry">
+        <span>{{ form.Type }}</span>
+        <span>{{ form.SenderMail }}</span>
+        <span>{{ form.CreatedAt | date : "dd.MM.yyyy - HH:mm" }}</span>
+      </a>
+    } @empty {
+      <i>Keine Formulare in den letzten 14 Tagen</i>
+    }
+  }
+</div>

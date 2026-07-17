@@ -114,7 +114,7 @@ func Set24hCookie(w http.ResponseWriter, name string, value string, httpOnly boo
 		Name:     name,
 		Value:    value,
 		Path:     "/",
-		Expires:  time.Now().Add(24 * time.Hour),
+		Expires:  time.Now().Add(72 * time.Hour),
 		HttpOnly: httpOnly,
 	})
 }

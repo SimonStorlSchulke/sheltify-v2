@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { RecentFormsComponent } from '@app/pages/dashboard/recent-forms/recent-forms.component';
 import { bootstrapCardImage } from '@ng-icons/bootstrap-icons';
 import { provideIcons } from '@ng-icons/core';
 import { RecentlyEditedComponent } from '@app/pages/dashboard/recently-edited/recently-edited.component';
@@ -6,7 +7,8 @@ import { RecentlyEditedComponent } from '@app/pages/dashboard/recently-edited/re
 @Component({
   selector: 'app-dashboard',
   imports: [
-    RecentlyEditedComponent
+    RecentlyEditedComponent,
+    RecentFormsComponent
   ],
   providers: [provideIcons({bootstrapCardImage})],
   templateUrl: './dashboard.component.html',

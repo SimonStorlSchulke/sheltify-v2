@@ -1,3 +1,4 @@
+.themable.article button,
 button {
   outline: none;
   border: none;
@@ -6,16 +7,25 @@ button {
   font-weight: 200;
   padding: 8px 16px;
   transition: background-color 0.35s, color 0.35s;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.7;
+    background: var(--c-primary-desaturated) !important;
+    pointer-events: none;
+  }
 
   &.lg {
     font-size: 32px;
   }
 
   &.sm {
-    padding: 4px 8px;
+    padding: 4px 12px;
+    height: 34px;
   }
 
   &.primary {
+    background: var(--c-primary);
     color: #fff;
 
     &:hover {

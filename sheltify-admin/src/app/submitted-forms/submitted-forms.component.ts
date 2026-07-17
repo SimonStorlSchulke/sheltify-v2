@@ -1,11 +1,18 @@
-import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy, effect } from '@angular/core';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, ActivatedRouteSnapshot, ResolveFn, Router } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
 import { LeftSidebarLayoutComponent } from '../layout/left-sidebar-layout/left-sidebar-layout.component';
 import { CmsRequestService } from '../services/cms-request.service';
 import { DatePipe } from '@angular/common';
-import { firstValueFrom } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, firstValueFrom, map, switchMap, timer } from 'rxjs';
 import { CmsFormSubmission } from 'sheltify-lib/cms-types';
 import { AlertService } from '../services/alert.service';
+
+export const formResolver: ResolveFn<CmsFormSubmission> = (route: ActivatedRouteSnapshot) => {
+  const id = route.paramMap.get('id')!;
+  return inject(CmsRequestService).getSubmittedForm(id);
+}
 
 @Component({
   selector: 'app-submitted-forms',
@@ -15,15 +22,33 @@ import { AlertService } from '../services/alert.service';
   styleUrl: './submitted-forms.component.scss',
 })
 export class SubmittedFormsComponent {
-  private readonly authService = inject(AuthService);
+  private authService = inject(AuthService);
+  private cmsRequestService = inject(CmsRequestService);
+  private activatedRoute = inject(ActivatedRoute);
+  private router = inject(Router);
+  private alertService = inject(AlertService);
 
   animals = signal<CmsFormSubmission[]>([]);
-  private cmsRequestService = inject(CmsRequestService);
-  private alertService = inject(AlertService);
   forms = signal<CmsFormSubmission[]>([]);
   selectedForm = signal<CmsFormSubmission | undefined>(undefined);
 
   constructor() {
+    this.activatedRoute.data.pipe(takeUntilDestroyed())
+      .subscribe(({form}) => this.selectedForm.set(form));
+
+    toObservable(this.selectedForm).pipe(
+      filter((form): form is CmsFormSubmission => !!form),
+      distinctUntilChanged((a, b) => a.ID === b.ID),
+      switchMap(form =>
+        timer(5000).pipe(
+          map(() => form)
+        )
+      ),
+      takeUntilDestroyed()
+    ).subscribe(form => {
+      this.setFormRead(form.ID);
+    });
+
     this.reloadForms();
   }
 
@@ -35,18 +60,15 @@ export class SubmittedFormsComponent {
   }
 
   async toForm(id: string) {
-    const form = await firstValueFrom(
-      this.cmsRequestService.getSubmittedForm(id)
-    );
-    this.selectedForm.set(form);
-
-    if(!form.LastModifiedBy) {
-      await this.setLastModifiedBy(form, id);
-    }
+    await this.router.navigate(['formulare', id]);
   }
 
-  private async setLastModifiedBy(form: CmsFormSubmission, id: string) {
-    await firstValueFrom(this.cmsRequestService.readSubmittedForm(form.ID));
+  private async setFormRead(id: string) {
+    if(this.selectedForm()?.LastModifiedBy) {
+      //already set to read
+      return;
+    }
+    await firstValueFrom(this.cmsRequestService.readSubmittedForm(id));
     const userId = this.authService.getLoggedInUser()?.ID;
 
     const formInList = this.forms().find(cForm => cForm.ID === id);

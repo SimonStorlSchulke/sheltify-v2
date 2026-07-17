@@ -14,7 +14,7 @@ import { TenantConfigurationService } from '@app/services/tenant-configuration.s
   styleUrl: './pick-new-section.component.scss'
 })
 export class PickNewSectionComponent extends FinishableDialog<SectionType | SectionSpecial> {
-  SectionTypes = SectionTypes;
+  SectionTypes = SectionTypes.filter(sectionType => sectionType !== 'special');
   sectionLabels = sectionLabels;
 
   private tenantConfigurationService = inject(TenantConfigurationService);

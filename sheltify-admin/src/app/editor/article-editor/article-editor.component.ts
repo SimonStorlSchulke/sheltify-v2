@@ -1,4 +1,4 @@
-import { Component, DestroyRef, effect, input, model, OnInit, Renderer2, signal, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, DestroyRef, effect, input, model, OnInit, Renderer2, signal, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { bootstrapEye, bootstrapGripVertical, bootstrapPlus, bootstrapX } from '@ng-icons/bootstrap-icons';
@@ -33,6 +33,7 @@ export class ArticleEditorComponent implements OnInit {
   private renderer = inject(Renderer2);
   private destroyRef = inject(DestroyRef);
   private tenantConfigurationService = inject(TenantConfigurationService);
+  private cdRef = inject(ChangeDetectorRef);
 
 
   showUpdateNote = input<boolean>(false);
@@ -82,6 +83,7 @@ export class ArticleEditorComponent implements OnInit {
 
     this.exitMoveMode();
     this.editedRow.set(row);
+    this.cdRef.markForCheck();
   }
 
   private addGlobalStyle(css: string) {

@@ -5,8 +5,9 @@
     @let iCol = $index;
     <div class="column" [style.flex]="`${column.Grow} 1 0px`">
 
-      <div class="column-header sui p-1 flex-x">
-        <app-number-input idName="grow" label="Platz" [(twoWayModel)]="column.Grow"/>
+      <div class="column-header sui p-1 flex-x gap-2 ai-center">
+        <b>Platz</b>
+        <app-number-input idName="grow" label="" [(twoWayModel)]="column.Grow"/>
         <div class="button-group">
           <button class="small"><app-bt-icon (click)="moveColumnLeft(iCol)" name="ChevronLeft"/></button>
           <button class="small"><app-bt-icon (click)="moveColumnRight(iCol)" name="ChevronRight"/></button>

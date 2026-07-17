@@ -47,6 +47,10 @@ export class AuthService {
   }
 
   reLogin() {
+    if(this.isLoggedIn()) {
+      return of(this._user$.value);
+    }
+
     return this.httpClient.get<CmsUser>(CmsRequestService.adminApiUrl + "relogin", { withCredentials: true }).pipe(
       catchError(_ => of(null)),
       tap(response => {
@@ -56,6 +60,13 @@ export class AuthService {
         }
       })
     );
+  }
+
+  private isLoggedIn(): boolean {
+    const cookie = decodeURIComponent(document.cookie);
+    return !!this._user$.value
+      && cookie.includes('csrf_token')
+      && cookie.includes('user_name');
   }
 
   logout() {

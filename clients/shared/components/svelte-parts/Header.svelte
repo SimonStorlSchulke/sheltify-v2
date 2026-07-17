@@ -1,6 +1,7 @@
 <script lang="ts">
   import { getImageSrc } from '@shared/cms/cms-image.ts';
   import HeaderEntry from '@shared/components/svelte-parts/HeaderEntry.svelte';
+  import Image from 'article-renderer/components/shared/Image.svelte';
   import type { CmsImage, CmsPage } from 'sheltify-lib/dist/cms-types.ts';
   import { createPageStructure } from '../../../../sheltify-lib/dist/page-structure.ts';
 
@@ -17,7 +18,7 @@
   <div class="logo">
     <a href={startPage && "/"}>
       {#if logo}
-        <img src={getImageSrc(logo, 'medium')} alt="logo"/>
+        <Image img={logo} size="medium" />
       {/if}
     </a>
   </div>

@@ -15,8 +15,8 @@ export class ArticleEditor extends CmsPage {
         await this.page.getByTestId('btn-add-section-' + type).click();
     }
 
-    getSectionEditor(row: number, column: number) {
-        return this.page.getByTestId(`section-editor-${row}-${column}`);
+    getSectionEditor(row: number) {
+        return this.page.locator('app-section-editor').nth(row);
     }
 
     getSectionPreview(row: number, column: number) {

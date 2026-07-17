@@ -11,12 +11,12 @@ import { LoginComponent } from './pages/login/login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { AnimalListComponent, animalResolver } from './editor/animal-list/animal-list.component';
 import { AuthGuard, SuperAdminAuthGuard } from './services/auth-guard.service';
-import { SubmittedFormsComponent } from './submitted-forms/submitted-forms.component';
+import { formResolver, SubmittedFormsComponent } from './submitted-forms/submitted-forms.component';
 
 export const routes: Routes = [
   {path: "", component: DashboardComponent, canActivate: [AuthGuard]},
   {path: "login", component: LoginComponent},
-  {path: "seiten", component: PageListComponent, canActivate: [AuthGuard]},
+  {path: "seiten", component: PageListComponent, canActivate: [AuthGuard], canDeactivate: [askSaveGuard], resolve: {page: pageResolver}},
   {path: "seiten/:path", component: PageListComponent, canActivate: [AuthGuard], canDeactivate: [askSaveGuard], resolve: {page: pageResolver}},
   {path: "blog", component: BlogListComponent, canActivate: [AuthGuard]},
   {path: "blog/:id", component: BlogListComponent, canActivate: [AuthGuard], canDeactivate: [askSaveGuard], resolve: {blog: blogResolver}},
@@ -29,6 +29,6 @@ export const routes: Routes = [
   {path: "tiere", component: AnimalListComponent, canActivate: [AuthGuard]},
   {path: "tiere/:id", component: AnimalListComponent, canActivate: [AuthGuard], canDeactivate: [askSaveGuard], resolve: {animal: animalResolver}},
   {path: "formulare", component: SubmittedFormsComponent, canActivate: [AuthGuard]},
-  {path: "formulare/:id", component: SubmittedFormsComponent, canActivate: [AuthGuard]},
+  {path: "formulare/:id", component: SubmittedFormsComponent, canActivate: [AuthGuard], resolve: {form: formResolver}},
   {path: "administration", component: AdministrationComponent, canActivate: [SuperAdminAuthGuard]},
 ];

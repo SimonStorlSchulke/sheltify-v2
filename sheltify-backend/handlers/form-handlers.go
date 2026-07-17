@@ -31,7 +31,7 @@ func FormSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	recipients := strings.Split(formSubmission.SentTo, ",")
-	err = services.SendMail(r,  recipients, formSubmission.SenderMail, formSubmission.Type, formSubmission.Text)
+	err = services.SendMail(r, recipients, formSubmission.SenderMail, formSubmission.Type, formSubmission.Text)
 	if err != nil {
 		internalServerErrorResponse(w, r, "Failed to forward mail")
 		return
@@ -80,6 +80,21 @@ func GetSubmittedForms(w http.ResponseWriter, r *http.Request) {
 	tenant := user.TenantID
 
 	forms, err := repository.GetFormSubmissionsByTenant(tenant)
+	if err != nil {
+		internalServerErrorResponse(w, r, err.Error())
+		return
+	}
+	sort.Slice(forms, func(i, j int) bool {
+		return forms[i].CreatedAt.After(forms[j].CreatedAt)
+	})
+	okResponse(w, forms)
+}
+
+func GetRecentForms(w http.ResponseWriter, r *http.Request) {
+	user := services.UserFromRequest(r)
+	tenant := user.TenantID
+
+	forms, err := repository.GetRecentFormSubmissionsByTenant(tenant)
 	if err != nil {
 		internalServerErrorResponse(w, r, err.Error())
 		return

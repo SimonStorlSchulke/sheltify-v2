@@ -21,3 +21,19 @@ func GetFormSubmissionsByTenant(tenant string) ([]*shtypes.FormSubmission, error
 	}
 	return forms, nil
 }
+
+func GetRecentFormSubmissionsByTenant(tenant string) ([]*shtypes.FormSubmission, error) {
+	var forms []*shtypes.FormSubmission
+
+	q := db.Model(&shtypes.FormSubmission{}).
+		Select("id, created_at, updated_at, deleted_at, tenant_id, last_modified_by, type, sender_mail")
+
+	if err := q.
+		Where("tenant_id = ?", tenant).
+		Where("last_modified_by = '' OR last_modified_by IS NULL").
+		Find(&forms).Error; err != nil {
+		return nil, err
+	}
+
+	return forms, nil
+}

@@ -1,10 +1,15 @@
 @use "colors" as *;
 @use "sass:color";
 
+:root {
+  --sui-spacing-factor: 28px;
+}
+
 body {
   color: $text;
   background: $neutral100;
   scrollbar-color: $primary-h2 $neutral100;
+  font-size: 0.85rem;
 }
 
 @media (max-width: 1600px) {

@@ -1,0 +1,13 @@
+[
+  {
+    "label": "Go Run",
+    "command": "go run .",
+  },
+  {
+    "label": "Start Sheltify DB",
+    "command": "wsl",
+    "args": ["docker", "start", "sheltify-db"],
+    "use_new_terminal": true,
+    "allow_concurrent_runs": false,
+  },
+]
