@@ -4,6 +4,7 @@ import { CmsAnimal, CmsBlogEntry, CmsHomeFoundEntry, CmsPage, CmsTeamMember, Sql
 export function createNewAnimal(name: string, animalKind?: string): CmsAnimal {
   return {
     ID: '',
+    InternalNote: '',
     Birthday: SqlNullTimeNull(),
     Castrated: SqlNullBoolNull(),
     Gender: '',
@@ -30,6 +31,7 @@ export function createNewAnimal(name: string, animalKind?: string): CmsAnimal {
 export function createEmptyArticle(): CmsArticle {
   return {
     ID: '',
+    InternalNote: '',
     Structure: {Rows: []},
     TenantID: '', ContentUpdateAt: SqlNullTimeNull(),
     ContentUpdateNote: '',
@@ -39,6 +41,7 @@ export function createEmptyArticle(): CmsArticle {
 export function createNewPage(): CmsPage {
   return {
     ID: '',
+    InternalNote: '',
     Description: "",
     Path: '',
     ShowInMenu: true,
@@ -50,6 +53,7 @@ export function createNewPage(): CmsPage {
 export function createNewHomeFoundEntry(): CmsHomeFoundEntry {
   return {
     ID: '',
+    InternalNote: '',
     AnimalName: '',
     Content: {
       Html: '',
@@ -61,6 +65,7 @@ export function createNewHomeFoundEntry(): CmsHomeFoundEntry {
 export function createNewBlog(): CmsBlogEntry {
   return {
     ID: '',
+    InternalNote: '',
     Description: "",
     Title: '',
     ShowPopup: false,
@@ -72,6 +77,7 @@ export function createNewBlog(): CmsBlogEntry {
 export function createNewTeamMember(): CmsTeamMember {
   return {
     ID: '',
+    InternalNote: '',
     Description: "",
     Name: '',
     EMail: '',

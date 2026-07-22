@@ -21,13 +21,13 @@ export class TagsManagerComponent implements OnInit {
   private dialogRef = inject(DialogRef);
   tagsService = inject(TagsService);
 
-
   async ngOnInit() {
     await this.tagsService.updateAvailableTags();
   }
 
   async createTag(Name: string, Color: string) {
     const tag = {
+      InternalNote: '',
       Name,
       Color,
     }

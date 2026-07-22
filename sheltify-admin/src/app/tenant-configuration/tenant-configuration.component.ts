@@ -7,7 +7,6 @@ import { CmsTenantConfiguration } from 'sheltify-lib/cms-types';
 import { CheckboxInputComponent } from '@app/forms/checkbox-input/checkbox-input.component';
 import { ImagePickerSingleComponent } from '@app/forms/image-picker-single/image-picker-single.component';
 import { TextInputComponent } from '@app/forms/text-input/text-input.component';
-import { AlertService } from '@app/services/alert.service';
 import { AuthService } from '@app/services/auth.service';
 import { CmsRequestService } from '@app/services/cms-request.service';
 import { TenantConfigurationService } from '@app/services/tenant-configuration.service';
@@ -39,12 +38,12 @@ export class TenantConfigurationComponent implements OnInit {
   async ngOnInit() {
     try {
       const options = await firstValueFrom(this.cmsRequestService.getTenantConfiguration());
-      console.log("options", options);
       this.options.set(options);
     } catch (error) {
       console.log('did not find tenant configuration, creating default');
       this.options.set({
         ID: '',
+        InternalNote: '',
         Name: '',
         SiteUrl: '',
         Address: '',

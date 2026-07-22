@@ -168,7 +168,6 @@ export function createEmptySection(SectionType: SectionType): Section {
 export function newSpecialSection(Name: string, SpecialArticleSections: Record<string, {Name: string, Type: "string" | "number" | "boolean" | "image" }[]>): SectionSpecial {
   const section = createEmptySection('special') as SectionSpecial;
   section.Content.Type = Name;
-  console.log("SpecialArticleSections[Name]", SpecialArticleSections[Name])
   section.Content.Properties = SpecialArticleSections[Name].map(property => (
     [property.Name, property.Type]
   ));

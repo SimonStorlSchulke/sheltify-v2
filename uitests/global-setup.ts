@@ -33,7 +33,7 @@ async function resetDbAndBackend() {
 function killBackend(port: number) {
   try {
     // Get PID using the port
-    const output = execSync(
+    const output: string = execSync(
       `netstat -ano | findstr :${port}`,
       { encoding: 'utf-8' }
     );

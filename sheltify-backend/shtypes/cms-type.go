@@ -13,6 +13,7 @@ type CmsType struct {
 	UpdatedAt      time.Time
 	DeletedAt      gorm.DeletedAt `gorm:"index"`
 	TenantID       string
+	InternalNote   string
 	Tenant         *Tenant
 	LastModifiedBy string
 }
