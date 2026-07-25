@@ -1,7 +1,7 @@
 import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ActivatedRouteSnapshot, ResolveFn, Router, Routes } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
+import { catchError, firstValueFrom, of } from 'rxjs';
 import { CmsPage } from 'sheltify-lib/cms-types';
 import { createNewPage } from '@app/cms-types/cms-type.factory';
 import { PageEditorComponent } from '@app/editor/page-editor/page-editor.component';
@@ -13,10 +13,22 @@ import { ModalService } from '@app/services/modal.service';
 import { PagesService } from '@app/services/pages.service';
 import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
 
-export const pageResolver: ResolveFn<CmsPage> = (route: ActivatedRouteSnapshot) => {
-  const path = route.paramMap.get('path')!;
-  return inject(CmsRequestService).getPageByPath(path ?? '');
-}
+export const pageResolver: ResolveFn<CmsPage | undefined> = (
+  route: ActivatedRouteSnapshot
+) => {
+  const path = route.paramMap.get('path') ?? '';
+
+  return inject(CmsRequestService).getPageByPath(path).pipe(
+    catchError(err => {
+      if (path == '' && err.status === 404) {
+        // If not startPage (with path '') exist yet, return undefined
+        return of(undefined);
+      }
+      throw err;
+    })
+  );
+};
+
 
 @Component({
   selector: 'app-page-list',
