@@ -3,7 +3,7 @@ services:
   postgres:
     image: postgres:17
     container_name: sheltify-test-db
-    restart: always
+    restart: no
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: test
