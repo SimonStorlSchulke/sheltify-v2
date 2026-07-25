@@ -1,6 +1,6 @@
 import { computed, Service, signal, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { CmsAnimal, SqlNullTimeNow } from 'sheltify-lib/cms-types';
+import { CmsAnimal, SqlNullTimeNow, SqlNullTimeNull } from 'sheltify-lib/cms-types';
 import { CmsRequestService } from '@app/services/cms-request.service';
 
 @Service()
@@ -29,14 +29,16 @@ export class AnimalService {
 
   async togglePublished(animalToSave: CmsAnimal) {
     if(animalToSave.PublishedAt?.Valid) {
-      animalToSave.PublishedAt = {
-        Valid: false,
-        Time: null,
-      };
+      animalToSave.PublishedAt = SqlNullTimeNull();
       return await this.save(animalToSave);
     } else {
       animalToSave.PublishedAt = SqlNullTimeNow();
-      return await this.save(animalToSave);
+      try {
+        return await this.save(animalToSave);
+      } catch {
+        animalToSave.PublishedAt = SqlNullTimeNull();
+        return animalToSave;
+      }
     }
   }
 
