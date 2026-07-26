@@ -7,7 +7,6 @@ import { ToastComponent, ToastLevel } from '@app/ui/toast/toast.component';
 export class AlertService {
   private modalService = inject(ModalService);
 
-
   async openAlert(title: string, message: string, buttons: AlertChoice[] = ['ok']): Promise<AlertChoice | undefined> {
     return (await this.modalService.openFinishable(AlertComponent, {
         title,

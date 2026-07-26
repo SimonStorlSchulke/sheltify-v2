@@ -1,11 +1,11 @@
-<div class="sui flex-x gap-2 wrap">
+<div class="sui flex-y gap-2">
   <app-radio-buttons-input
     idName="layout"
     label="Layout"
     [(twoWayModel)]="section().Content.Layout"
-    [options]="['vertical', 'horizontal', 'gallery']"
-    [optionTranslations]="['Vertikal', 'Horizontal', 'Gallerie']"
-    [optionImages]="['/assets/img/images_layout_vertical.png', '/assets/img/images_layout_horizontal.png', '/assets/img/images_layout_gallery.png']"
+    [options]="['vertical', 'horizontal', 'gallery', 'single']"
+    [optionTranslations]="['Vertikal', 'Horizontal', 'Gallerie', 'Einzeln']"
+    [optionImages]="['/assets/img/images_layout_vertical.png', '/assets/img/images_layout_horizontal.png', '/assets/img/images_layout_gallery.png', '/assets/img/images_layout_single.png']"
   />
   <app-radio-buttons-input
     idName="size"
@@ -14,6 +14,8 @@
     [options]="['small', 'medium', 'large']"
     [optionTranslations]="['klein', 'mittel', 'groß']"
   />
+  <app-image-picker-multi idName="bilder" label="Bilder auswählen" (twoWayModelChange)="setImages($event)" [(twoWayModel)]="section().Content!.MediaFiles"/>
+  @if(section().Content.Layout == 'single' && section().Content.MediaFiles.length > 1) {
+    <p style="color: red">Nur das erste Bild wird angezeigt wenn als Layout 'einzeln' eingestellt ist</p>
+  }
 </div>
-<br>
-<app-image-picker-multi idName="bilder" label="Bilder auswählen" (twoWayModelChange)="setImages($event)" [(twoWayModel)]="section().Content!.MediaFiles"/>

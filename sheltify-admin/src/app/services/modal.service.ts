@@ -1,14 +1,16 @@
-import { Dialog } from '@angular/cdk/dialog';
+import { Dialog, DialogRef } from '@angular/cdk/dialog';
 import { ComponentType } from '@angular/cdk/portal';
 import { Directive, inject, OnDestroy, Service, Type } from '@angular/core';
 import { firstValueFrom, Observable, Subject } from 'rxjs';
 
 export interface Finishable<TValue> {
   finish: Observable<TValue | undefined>;
+  isModal: boolean;
 }
 
 @Directive()
 export abstract class FinishableDialog<TValue> implements Finishable<TValue>, OnDestroy {
+  isModal = false;
   readonly finishSubject = new Subject<TValue | undefined>();
   readonly finish = this.finishSubject.asObservable();
 
@@ -58,8 +60,9 @@ export class ModalService {
       Object.assign(dialogRef.componentInstance as any, inputs);
     }
 
-    const instance = dialogRef.componentInstance;
-    const result = await firstValueFrom(instance!.finish);
+    const instance = dialogRef.componentInstance!;
+    instance.isModal = true;
+    const result = await firstValueFrom(instance.finish);
     dialogRef.close();
     return result as any;
   }

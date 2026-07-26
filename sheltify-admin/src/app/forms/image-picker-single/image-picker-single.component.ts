@@ -1,11 +1,11 @@
-import { Component, inject, Input, input, model, signal, ChangeDetectionStrategy } from '@angular/core';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { CmsImage } from 'sheltify-lib/cms-types';
+import { ChangeDetectionStrategy, Component, inject, input, model } from '@angular/core';
 import { InputBaseComponent } from '@app/forms/input-base.component';
 import { ModalPresenter } from '@app/services/modal.presenter';
+import { BtIconComponent } from "@app/ui/bt-icon/bt-icon.component";
 import { CmsImageDirective } from '@app/ui/cms-image.directive';
 import { bootstrapCardImage } from '@ng-icons/bootstrap-icons'
-import { BtIconComponent } from "@app/ui/bt-icon/bt-icon.component";
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { CmsImage } from 'sheltify-lib/cms-types';
 
 @Component({
   selector: 'app-image-picker-single',
@@ -23,8 +23,13 @@ export class ImagePickerSingleComponent extends InputBaseComponent {
 
   async pickImage() {
     this.askSaveService.markDirty();
-    const portraits = await this.modalPresenter.openMediaLibrary();
+    const portraits = await this.modalPresenter.openMediaLibrary(this.twoWayModel());
     if(!portraits) return;
     this.twoWayModel.set(portraits[0]);
+  }
+
+  async editImage() {
+    console.log("AAA")
+    this.modalPresenter.openImageEditor(this.twoWayModel()!)
   }
 }

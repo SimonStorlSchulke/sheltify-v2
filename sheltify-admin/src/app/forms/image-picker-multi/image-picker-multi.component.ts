@@ -17,7 +17,6 @@ import { bootstrapCardImage, bootstrapPlus } from '@ng-icons/bootstrap-icons'
 export class ImagePickerMultiComponent extends InputBaseComponent {
   twoWayModel = model<CmsImage[]>([]);
 
-
   private modalPresenter = inject(ModalPresenter);
 
   async addImage() {
@@ -46,5 +45,9 @@ export class ImagePickerMultiComponent extends InputBaseComponent {
     }
     console.log(newArr.map(i => i.Title));
     this.twoWayModel.set(newArr);
+  }
+
+  editImage(image: CmsImage) {
+    this.modalPresenter.openImageEditor(image);
   }
 }

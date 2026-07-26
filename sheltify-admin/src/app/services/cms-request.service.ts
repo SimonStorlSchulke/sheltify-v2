@@ -25,15 +25,16 @@ export type CollectionResult<T> = {
 
 @Service()
 export class CmsRequestService {
+  static readonly adminApiUrl = 'http://localhost:3000/admin/api/';
+  static readonly publicApiUrl = 'http://localhost:3000/api/';
 
   private authService = inject(AuthService);
   private httpClient = inject(HttpClient);
-  private alertSv = inject(AlertService);
-  private loaderSv = inject(LoaderService);
+  private alertService = inject(AlertService);
+  private loaderService = inject(LoaderService);
+
   postPatchOrDeleteCalled$ = new Subject<string>();
 
-  static readonly adminApiUrl = 'http://localhost:3000/admin/api/';
-  static readonly publicApiUrl = 'http://localhost:3000/api/';
 
   private options(contentType = 'application/json', raw = false) {
     return {
@@ -61,10 +62,6 @@ export class CmsRequestService {
 
   deleteTeamMember(ids: string[]): Observable<void> {
     return this.delete(`teammembers?ids=${ids.join(',')}`)
-  }
-
-  getBlogEntries(): Observable<CmsBlogEntry[]> {
-    return this.get<CmsBlogEntry[]>(`${this.publicTenantsUrl}/blogs`);
   }
 
   getPaginatedBlogEntries(pageSize: number, pageIndex: number, category: string): Observable<CmsBlogEntry[]> {
@@ -382,19 +379,19 @@ export class CmsRequestService {
 
       let timerSub = timer(loadTimerMs)
         .subscribe({
-          next: () => this.loaderSv.setLoading(loaderText),
+          next: () => this.loaderService.setLoading(loaderText),
         });
 
       return source.pipe(
         tap({
           next: () => {
               if (message != "") {
-                this.alertSv.openToast(message, new URL(url).pathname, 'success')
+                this.alertService.openToast(message, new URL(url).pathname, 'success')
               }
           },
           error: (e) => {
             console.log(e.error);
-            this.alertSv.openToast(
+            this.alertService.openToast(
               e.error.replace ? e.error.replace("\n", "<br>") : '',
               "Fehler",
               'error',
@@ -402,7 +399,7 @@ export class CmsRequestService {
             );
           },
           finalize: () => {
-            this.loaderSv.unsetLoading(loaderText)
+            this.loaderService.unsetLoading(loaderText)
             timerSub.unsubscribe();
           },
         })

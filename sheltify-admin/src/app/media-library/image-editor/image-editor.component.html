@@ -1,4 +1,4 @@
-@if(image().NonImage) {
+@if (image().NonImage) {
   {{ image().Title }}
 } @else {
   <div class="img-container" [class.focus-mode]="editFocusMode">
@@ -16,15 +16,15 @@
         [style.left]="image().FocusX * 100 + '%'"
       ></div>
     </div>
-</div>
+  </div>
 
-    <app-explained-button
-      (click)="editFocusPoint()"
-      text="Fokuspunkt setzen"
-      explainer="Der Fokuspunkt bestimmt, zu welchem Punkt hingezoomt wird,
+  <app-explained-button
+    (click)="editFocusPoint()"
+    text="Fokuspunkt setzen"
+    explainer="Der Fokuspunkt bestimmt, zu welchem Punkt hingezoomt wird,
       wenn aufgrund des Seitenverhältnisses ein Teil des Bildes abgeschnitten wird."
-      class="primary small secondary sui w-100"
-    />
+    class="primary small secondary sui w-100"
+  />
 }
 
 <div class="sui flex-y gap-1 grow-1">
@@ -88,7 +88,7 @@
         <ng-select [notFoundText]="'keine'" [(ngModel)]="selectedAnimals" [multiple]="true" placeholder="...Tiere zuweisen">
           @for (animal of animalService.animals(); track animal) {
             <ng-option [value]="animal.Name">
-              {{animal.Name}}
+              {{ animal.Name }}
             </ng-option>
           }
         </ng-select>
@@ -96,4 +96,4 @@
   </span>
 </div>
 
-<button class="primary sui w-100" (click)="updateMedia()">Speichern</button>
+<button class="primary sui w-100" (click)="save()">Speichern</button>

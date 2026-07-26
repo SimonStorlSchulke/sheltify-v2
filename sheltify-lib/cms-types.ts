@@ -68,7 +68,6 @@ export type Publishable = CmsType & {
   PublishedAt?: SqlNullTime;
 };
 
-// New CMS types
 export type CmsAnimal = Publishable & {
   Name: string;
   AnimalKind?: string;

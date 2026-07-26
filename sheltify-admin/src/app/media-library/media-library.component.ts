@@ -63,6 +63,7 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
   filesHovered = signal<boolean>(false);
 
   isPicker = false;
+  preselectedImage?: CmsImage;
 
   private refreshImages = signal(0);
 
@@ -95,21 +96,32 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
     );
   });
 
+  async ngOnInit() {
+    this.setPreselectedImage();
+    await this.checkUnusedMediaFilesOnceAWeek();
+    this.tagsService.updateAvailableTags();
+  }
+
+  private setPreselectedImage() {
+    if (this.preselectedImage) {
+      this.selectedImageIds().add(this.preselectedImage!.ID)
+      this.activeImageId.set(this.preselectedImage!.ID)
+    }
+  }
+
   async getUnusedMediaFiles(): Promise<CmsImage[]> {
     return await this.cmsRequestSv.getUnlinkedMediaFiles();
   }
 
   async getOldUnusedMediaFiles(): Promise<CmsImage[]> {
     let unlinkedMediaFiles = await this.cmsRequestSv.getUnlinkedMediaFiles();
-    const oldUnlinkedMediaFiles = unlinkedMediaFiles.filter(mediaFile => {
+    return unlinkedMediaFiles.filter(mediaFile => {
       const diffMs = Date.now() - new Date(mediaFile.CreatedAt as any).getTime();
       const minutes = diffMs / 60000;
       const hours = minutes / 60;
       const days = hours / 24;
       return days > 7
-    })
-    return oldUnlinkedMediaFiles;
-
+    });
   }
 
   async openUnusedMediaDeleter() {
@@ -125,10 +137,6 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
 
   unusedImages = signal<CmsImage[] | undefined>(undefined);
 
-  async ngOnInit() {
-    this.tagsService.updateAvailableTags();
-    await this.checkUnusedMediaFilesOnceAWeek();
-  }
 
   private async checkUnusedMediaFilesOnceAWeek() {
     const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000;
@@ -215,14 +223,14 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
   }
 
   async deleteSelectedImages() {
-
     if(this.unusedImages() === undefined) {
       this.unusedImages.set(await this.getUnusedMediaFiles());
     }
 
-    const toDelete = Array.from(this.selectedImageIds()).filter(id => this.unusedImages()!.map(img => img.ID).includes(id))
+    const unusedSelectedImages = Array.from(this.selectedImageIds())
+      .filter(id => this.unusedImages()!.some(img => img.ID == id));
 
-    if(toDelete.length !== this.selectedImageIds().size) {
+    if(unusedSelectedImages.length !== this.selectedImageIds().size) {
       if(this.selectedImageIds().size == 1) {
         await this.alertService.openAlert("Bild wird noch verwendet", "Dieses Bild wird noch verwendet und kann nicht gelöscht werden")
         return;
@@ -232,7 +240,7 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
     }
 
     try {
-      await lastValueFrom(this.cmsRequestSv.deleteImages(toDelete));
+      await lastValueFrom(this.cmsRequestSv.deleteImages(unusedSelectedImages));
     } finally {
       this.refreshImages.update((i) => i + 1);
     }

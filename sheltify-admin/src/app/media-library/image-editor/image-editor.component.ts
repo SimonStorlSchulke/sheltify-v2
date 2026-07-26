@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, effect, inject, model, OnInit, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, model, ModelSignal, OnInit, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TagsManagerComponent } from '@app/editor/tags-manager/tags-manager.component';
 import { TextInputComponent } from '@app/forms/text-input/text-input.component';
@@ -8,7 +8,7 @@ import { AlertService } from '@app/services/alert.service';
 import { AnimalService } from '@app/services/animal.service';
 import { CmsRequestService } from '@app/services/cms-request.service';
 import { ImageConverterService } from '@app/services/image-converter.service';
-import { ModalService } from '@app/services/modal.service';
+import { FinishableDialog, ModalService } from '@app/services/modal.service';
 import { TagsService } from '@app/services/tags.service';
 import { CmsImageDirective } from '@app/ui/cms-image.directive';
 import { ExplainedButtonComponent } from '@app/ui/explained-button/explained-button.component';
@@ -33,7 +33,7 @@ import { CmsImage, CmsImagesSize } from 'sheltify-lib/cms-types';
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './image-editor.component.scss'
 })
-export class ImageEditorComponent implements OnInit {
+export class ImageEditorComponent extends FinishableDialog<CmsImage> implements OnInit {
   tagsService = inject(TagsService);
   animalService = inject(AnimalService);
   private cmsRequestSv = inject(CmsRequestService);
@@ -42,7 +42,8 @@ export class ImageEditorComponent implements OnInit {
   private imageConverterService = inject(ImageConverterService);
   private alertService = inject(AlertService);
 
-  image = model.required<CmsImage>();
+  openedAsModalImage?: CmsImage;
+  image = model<CmsImage>() as ModelSignal<CmsImage>; //Workaround for modalService manually setting image
   selectedTags = signal<string[]>([]);
   selectedAnimals = signal<string[]>([]);
 
@@ -51,6 +52,7 @@ export class ImageEditorComponent implements OnInit {
   editFocusMode = false;
 
   constructor() {
+    super();
     effect(() => {
       const img = this.image();
       if (this.image()) {
@@ -60,8 +62,24 @@ export class ImageEditorComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.setModalImage();
     this.selectedTags.set(this.image().MediaTags.map(tag => tag.ID));
+  }
+
+  private async setModalImage() {
+    if (this.openedAsModalImage) {
+      this.image.set(this.openedAsModalImage);
+      await this.tagsService.updateAvailableTags();
+      await this.updateMedia();
+    }
+  }
+
+  async save() {
+    await this.updateMedia();
+    if (this.isModal) {
+      this.finishWith(this.image());
+    }
   }
 
   async updateMedia() {
@@ -88,14 +106,14 @@ export class ImageEditorComponent implements OnInit {
     this.image().FocusY = y;
   }
 
-  getSizeString(size: CmsImagesSize) {
+  getSizeString(size: CmsImagesSize): string {
     return new Map<CmsImagesSize, string>([
       ['thumbnail', 'winzig'],
       ['small', 'klein'],
       ['medium', 'mittel'],
       ['large', 'groß'],
       ['xlarge', 'extragroß'],
-    ]).get(size);
+    ]).get(size)!;
   }
 
   async editTags() {

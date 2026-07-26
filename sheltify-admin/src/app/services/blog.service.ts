@@ -1,6 +1,6 @@
 import { Service, signal, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { CmsBlogEntry, SqlNullTimeNow, togglePublishedAt } from 'sheltify-lib/cms-types';
+import { CmsBlogEntry, togglePublishedAt } from 'sheltify-lib/cms-types';
 import { CmsRequestService } from '@app/services/cms-request.service';
 
 @Service()
