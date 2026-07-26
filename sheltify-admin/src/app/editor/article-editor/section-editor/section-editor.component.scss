@@ -9,10 +9,15 @@
 
 .section:not(.edit-mode) {
   cursor: pointer;
-  outline: 1px solid $neutral150;
 
   &:hover {
     outline: 1px solid $primary;
+  }
+}
+
+@media(hover: none) {
+  .section:not(.edit-mode) {
+    outline: 1px solid $neutral150;
   }
 }
 
