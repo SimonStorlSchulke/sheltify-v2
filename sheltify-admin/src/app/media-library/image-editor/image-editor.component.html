@@ -33,16 +33,20 @@
     <span>Dateiname: {{ image().OriginalFileName }}</span>
     <span>Größe: {{ getSizeString(image().LargestAvailableSize) }}</span>
   </div>
-  <div class="button-group">
-    <app-explained-button
-      (action)="replaceImage()"
-      text="Bild ersetzen"
-      explainer="Ersetzt das Bild an allen Stellen, an denen es verwendet wird. Es kann jedoch sein, dass
-      einigen Nutzern temporär noch das alte Bild angezeigt wird, da es sich noch im Speicher von deren Webbrowser befindet."
-      [small]="true"
-      [secondary]="true"
-    />
-  </div>
+
+  <!-- Don't show replaceImage in modal mode as it would be confusing -->
+  @if(!isModal) {
+    <div class="button-group">
+      <app-explained-button
+        (action)="replaceImage()"
+        text="Bild ersetzen"
+        explainer="Ersetzt das Bild an allen Stellen, an denen es verwendet wird. Es kann jedoch sein, dass
+        einigen Nutzern temporär noch das alte Bild angezeigt wird, da es sich noch im Speicher von deren Webbrowser befindet."
+        [small]="true"
+        [secondary]="true"
+      />
+    </div>
+  }
 
   <app-text-input
     idName="title"

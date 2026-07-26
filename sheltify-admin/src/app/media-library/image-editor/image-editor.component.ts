@@ -122,6 +122,11 @@ export class ImageEditorComponent extends FinishableDialog<CmsImage> implements 
   }
 
   async replaceImage() {
+    const answer = await this.alertService.openAlert('Bild wirklich ersetzen?', 'Das Bild wird dann an ALLEN Stellen, an denen es auftaucht durch ein anderes ersetzt.', ['abbrechen', 'ok'])
+    if(answer != 'ok') {
+      return;
+    }
+
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept = 'image/*';

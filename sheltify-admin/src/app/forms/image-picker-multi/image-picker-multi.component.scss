@@ -1,4 +1,5 @@
 @use "colors" as *;
+@use "variables" as *;
 
 .img-wrapper {
   cursor: pointer;
@@ -11,14 +12,14 @@
       bottom: 0;
       display: none;
       opacity: 80%;
-    }
-
-    &:hover .buttons {
-      display: flex;
       button {
         font-size: 1.2rem;
         border-radius: 0;
       }
+    }
+
+    &:hover .buttons {
+      display: flex;
     }
   }
 
@@ -35,6 +36,12 @@
     max-height: 100%;
     max-width: 100%;
     object-fit: contain;
+  }
+}
+
+@media (hover: none) {
+  .img-wrapper .img-container .buttons {
+    display: flex;
   }
 }
 
