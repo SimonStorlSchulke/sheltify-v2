@@ -1,8 +1,6 @@
-import { Component, computed, signal, inject, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ActivatedRouteSnapshot, ResolveFn, Router } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
-import { CmsBlogEntry } from 'sheltify-lib/cms-types';
 import { createNewBlog } from '@app/cms-types/cms-type.factory';
 import { BlogEditorComponent } from '@app/editor/blog-editor/blog-editor.component';
 import { RadioButtonsInputComponent } from '@app/forms/radio-buttons-input/radio-buttons-input.component';
@@ -13,6 +11,8 @@ import { CmsRequestService } from '@app/services/cms-request.service';
 import { ModalService } from '@app/services/modal.service';
 import { TenantConfigurationService } from '@app/services/tenant-configuration.service';
 import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
+import { firstValueFrom } from 'rxjs';
+import { CmsBlogEntry } from 'sheltify-lib/cms-types';
 
 
 export const blogResolver: ResolveFn<CmsBlogEntry> = (route: ActivatedRouteSnapshot) => {

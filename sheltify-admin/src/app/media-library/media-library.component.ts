@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, computed, OnInit, output, Pipe, PipeTransform, Signal, signal, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, OnInit, output, Pipe, PipeTransform, Signal, signal, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { lastValueFrom, map, Observable } from 'rxjs';
 import { CmsAnimal, CmsImage, CmsTag } from 'sheltify-lib/cms-types';
 import { LoaderService } from '@app/layout/loader/loader.service';
@@ -52,8 +52,9 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
   private imageConverterService = inject(ImageConverterService);
   tagsService = inject(TagsService);
   animalService = inject(AnimalService);
-  private readonly modalService = inject(ModalService);
-  private readonly alertService = inject(AlertService);
+  private modalService = inject(ModalService);
+  private alertService = inject(AlertService);
+  private cdRef = inject(ChangeDetectorRef);
 
   selectedTags = signal<string[]>([]);
   selectedAnimals = signal<CmsAnimal[]>([]);
@@ -242,14 +243,18 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
   }
 
   onTagAdded(tag: CmsTag, image: CmsImage) {
-    this.tagsService.availableTags.update(tags => [...tags, tag])
-    image.MediaTags.push(tag)
+    image.MediaTags.push(tag);
+
+    // No idea why this is necessary
+    setTimeout(() => {
+      this.cdRef.markForCheck();
+    }, 100);
   }
 
   pickImages(selectedIds: Set<string>, images: CmsImage[]) {
     // TODO: Auch aktuell NICHT angezeigte Bilder auswählbar machen?
     const selectedImages = Array.from(images).filter(img => selectedIds.has(img.ID));
-    this.finishSubject.next(selectedImages)
+    this.finishSubject.next(selectedImages);
   }
 }
 

@@ -1,8 +1,6 @@
-import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, ActivatedRouteSnapshot, ResolveFn, Router, Routes } from '@angular/router';
-import { catchError, firstValueFrom, of } from 'rxjs';
-import { CmsPage } from 'sheltify-lib/cms-types';
+import { ActivatedRoute, ActivatedRouteSnapshot, ResolveFn, Router } from '@angular/router';
 import { createNewPage } from '@app/cms-types/cms-type.factory';
 import { PageEditorComponent } from '@app/editor/page-editor/page-editor.component';
 import { TextInputModalComponent } from '@app/forms/text-input-modal/text-input-modal.component';
@@ -12,6 +10,8 @@ import { CmsRequestService } from '@app/services/cms-request.service';
 import { ModalService } from '@app/services/modal.service';
 import { PagesService } from '@app/services/pages.service';
 import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
+import { catchError, firstValueFrom, of } from 'rxjs';
+import { CmsPage } from 'sheltify-lib/cms-types';
 
 export const pageResolver: ResolveFn<CmsPage | undefined> = (
   route: ActivatedRouteSnapshot
@@ -66,7 +66,7 @@ export class PageListComponent {
     }
 
     // this should really be done in the backend but ¯\_(ツ)_/¯
-    if(this.pagesService.pages().findIndex(foundPage => foundPage.Path === page.Path) != -1) {
+    if(this.pagesService.pages().some(foundPage => foundPage.Path === page.Path)) {
       this.alertService.openAlert('Seite mit diesem Pfad existiert bereits', '')
       return;
     }

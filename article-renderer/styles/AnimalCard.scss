@@ -1,3 +1,4 @@
+
 .animal-card {
   width: 210px;
   height: 210px;
@@ -28,7 +29,6 @@
     flex-direction: column;
     gap: 8px;
     align-items: start;
-
     color: #fff;
 
     span {
@@ -37,22 +37,6 @@
       padding: 2px 8px;
       font-size: var(--fontsize-small);
       font-weight: 100;
-
-      &.emergency {
-        //background-color: $cto;
-      }
     }
-  }
-
-  .bubbles {
-    position: absolute;
-    bottom: 68px;
-    left: 12px;
-    display: flex;
-    padding: 0;
-    flex-direction: column;
-    gap: 8px;
-    align-items: start;
-    color: #fff;
   }
 }

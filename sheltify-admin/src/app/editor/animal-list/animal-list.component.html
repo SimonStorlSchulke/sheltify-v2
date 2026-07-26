@@ -30,7 +30,7 @@
                 (click)="toAnimal(animal.ID ?? ''); layout.mobileOpen.set(true)">
               <td class="td-image">
                 @if (animal.Portrait) {
-                  <div class="img-wrapper"><img [cmsImage]="animal.Portrait" cmsImageSize="thumbnail"></div>
+                  <div class="img-wrapper"><img [cmsImage]="animal.Portrait" [alt]="'Portrait - ' + animal.Name" cmsImageSize="thumbnail"></div>
                 }
               </td>
               <td class="td-name">{{ animal.Name }}

@@ -1,8 +1,8 @@
-import { Component, ElementRef, HostListener, input, model, signal, viewChild, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { TextInputComponent } from '@app/forms/text-input/text-input.component';
 import { FinishableDialog } from '@app/services/modal.service';
+import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-text-input-modal',

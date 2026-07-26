@@ -6,6 +6,7 @@
       <img
         (click)="setFocusPoint($event)"
         [cmsImage]="image()"
+        alt="Vorschau"
         [withCacheInvalidation]="true"
         [useFocusPoint]="false"
       >
@@ -59,17 +60,26 @@
     (twoWayModelChange)="image().Description = $event"
   />
 
-  <span class="tags-label">Tags</span>
+  <div class="sui flex-x gap-2">
+    <span class="tags-label">Tags</span>
+    <a id="open-tag-manager" class="link" (click)="editTags()">Tags verwalten</a>
+  </div>
+
   <span class="sui flex-x gap-1">
       <div class="tag-selector sui flex-x">
-        <ng-select [notFoundText]="'keine'" [(ngModel)]="selectedTags" [multiple]="true" placeholder="...Tags zuweisen">
+        <ng-select
+          #tagSelector
+          [notFoundText]="'keine'"
+          [(ngModel)]="selectedTags"
+          [multiple]="true"
+          placeholder="...Tags zuweisen"
+        >
           @for (tag of tagsService.availableTags(); track tag.ID) {
             <ng-option [value]="tag.ID">
               <app-tag [tag]="tag"/>
             </ng-option>
           }
         </ng-select>
-        <button id="open-tag-manager" class="secondary" (click)="editTags()">+</button>
       </div>
   </span>
 

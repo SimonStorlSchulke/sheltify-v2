@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, effect, input, OnInit, output, signal, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, effect, OnInit, output, signal, inject, ChangeDetectionStrategy, computed, untracked, model, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { lastValueFrom } from 'rxjs';
@@ -41,8 +41,9 @@ export class ImageEditorComponent implements OnInit {
   private loaderService = inject(LoaderService);
   private imageConverterService = inject(ImageConverterService);
   private alertService = inject(AlertService);
+  private tagSelector = viewChild<NgSelectComponent>('tagSelector');
 
-  image = input.required<CmsImage>();
+  image = model.required<CmsImage>();
   selectedTags = signal<string[]>([]);
   selectedAnimals = signal<string[]>([]);
   createdTag = output<CmsTag>()
@@ -69,9 +70,6 @@ export class ImageEditorComponent implements OnInit {
     const img = this.image();
     img.MediaTags = this.tagsService.availableTags().filter(tag => this.selectedTags().includes(tag.ID));
     img.TaggedAnimals = this.animalService.animals().filter(animal => this.selectedAnimals().includes(animal.Name));
-    console.log(img);
-    console.log(this.animalService.animals());
-    console.log(this.selectedAnimals());
     const editedImage = await this.cmsRequestSv.updateMedia(img);
     if (editedImage) {
       this.editedImage.emit(editedImage)
@@ -105,10 +103,6 @@ export class ImageEditorComponent implements OnInit {
   async editTags() {
     await this.updateMedia(); //Workaround for selectedTags resetting to the medias tags when the availableTags are updated
     this.modalService.open(TagsManagerComponent)
-  }
-
-  rotateImage(steps: number) {
-    this.image().RotationSteps += steps;
   }
 
   async replaceImage() {

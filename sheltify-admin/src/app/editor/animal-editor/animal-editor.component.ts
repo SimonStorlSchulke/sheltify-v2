@@ -1,4 +1,4 @@
-import { Component, input, inject, output, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, input, inject, output, ChangeDetectionStrategy, ChangeDetectorRef, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom, lastValueFrom, Subject } from 'rxjs';
@@ -43,7 +43,7 @@ import { CmsRequestService } from '../../services/cms-request.service';
   styleUrl: './animal-editor.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AnimalEditorComponent {
+export class AnimalEditorComponent implements OnInit {
   tenantConfigurationService = inject(TenantConfigurationService);
   cdRef = inject(ChangeDetectorRef);
   private cmsRequestService = inject(CmsRequestService);

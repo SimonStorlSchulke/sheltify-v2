@@ -1,13 +1,13 @@
-import { Component, inject, signal, ChangeDetectionStrategy, effect } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ActivatedRouteSnapshot, ResolveFn, Router } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
-import { LeftSidebarLayoutComponent } from '../layout/left-sidebar-layout/left-sidebar-layout.component';
-import { CmsRequestService } from '../services/cms-request.service';
-import { DatePipe } from '@angular/common';
-import { debounceTime, distinctUntilChanged, filter, firstValueFrom, map, switchMap, timer } from 'rxjs';
+import { distinctUntilChanged, filter, firstValueFrom, map, switchMap, timer } from 'rxjs';
 import { CmsFormSubmission } from 'sheltify-lib/cms-types';
+import { LeftSidebarLayoutComponent } from '../layout/left-sidebar-layout/left-sidebar-layout.component';
 import { AlertService } from '../services/alert.service';
+import { CmsRequestService } from '../services/cms-request.service';
 
 export const formResolver: ResolveFn<CmsFormSubmission> = (route: ActivatedRouteSnapshot) => {
   const id = route.paramMap.get('id')!;

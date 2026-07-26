@@ -1,11 +1,6 @@
-import { Component, computed, input, model, OnInit, output, inject, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, model, OnInit, output } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { AskSaveService } from '@app/services/ask-save.service';
-import { ManageEntryButtonsComponent } from '@app/ui/manage-entry-buttons/manage-entry-buttons.component';
-import { firstValueFrom, Subject } from 'rxjs';
-import { CmsArticle } from 'sheltify-lib/article-types';
 import { createEmptyArticle } from '@app/cms-types/cms-type.factory';
-import { CmsBlogEntry } from 'sheltify-lib/cms-types';
 import { ArticleEditorComponent } from '@app/editor/article-editor/article-editor.component';
 import { CheckboxInputComponent } from '@app/forms/checkbox-input/checkbox-input.component';
 import { ImagePickerSingleComponent } from '@app/forms/image-picker-single/image-picker-single.component';
@@ -13,11 +8,16 @@ import { NumberInputComponent } from '@app/forms/number-input/number-input.compo
 import { SelectInputComponent } from '@app/forms/select-input/select-input.component';
 import { TextInputComponent } from '@app/forms/text-input/text-input.component';
 import { AlertService } from '@app/services/alert.service';
+import { AskSaveService } from '@app/services/ask-save.service';
 import { BlogService } from '@app/services/blog.service';
 import { CmsRequestService } from '@app/services/cms-request.service';
 import { TenantConfigurationService } from '@app/services/tenant-configuration.service';
 import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
 import { LastEditedComponent } from '@app/ui/last-edited/last-edited.component';
+import { ManageEntryButtonsComponent } from '@app/ui/manage-entry-buttons/manage-entry-buttons.component';
+import { firstValueFrom, Subject } from 'rxjs';
+import { CmsArticle } from 'sheltify-lib/article-types';
+import { CmsBlogEntry } from 'sheltify-lib/cms-types';
 
 @Component({
   selector: 'app-blog-editor',
