@@ -42,7 +42,7 @@
       <section-animal-updates [section]="sectionVal"/>
     }
     @case ('html') {
-      <div [innerHTML]="sectionVal.Content.Html"></div>
+      <app-render-trusted-html [html]="sectionVal.Content.Html" />
     }
     @case ('separator-x') {
       <section-separator-x [section]="sectionVal" />

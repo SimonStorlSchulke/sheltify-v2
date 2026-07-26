@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, effect, ElementRef, input, output, viewChild, ChangeDetectionStrategy } from '@angular/core';
+import { AfterViewChecked, ChangeDetectionStrategy, Component, ElementRef, input, output, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { SectionHtml } from 'sheltify-lib/article-types';
 import { Highlight } from 'ngx-highlightjs';
+import { SectionHtml } from 'sheltify-lib/article-types';
 
 @Component({
   selector: 'app-section-editor-html',
@@ -10,7 +10,7 @@ import { Highlight } from 'ngx-highlightjs';
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './section-editor-html.component.scss',
 })
-export class SectionEditorHtmlComponent implements AfterViewInit {
+export class SectionEditorHtmlComponent implements AfterViewChecked  {
   section = input.required<SectionHtml>();
 
   html = output<SectionHtml>();
@@ -23,15 +23,15 @@ export class SectionEditorHtmlComponent implements AfterViewInit {
     this.adjustTextareaHeight();
   }
 
-  ngAfterViewInit() {
-    setTimeout(() => this.adjustTextareaHeight(), 0);
+  ngAfterViewChecked() {
+    this.adjustTextareaHeight();
   }
 
   private adjustTextareaHeight() {
-
+    const minHeight = 100;
     this.textarea()!.nativeElement.style.height = "auto";
-    this.textarea()!.nativeElement.style.height = this.textarea()!.nativeElement.scrollHeight + "px";
+    this.textarea()!.nativeElement.style.height = (this.textarea()!.nativeElement.scrollHeight || minHeight) + "px";
     this.wrapper()!.nativeElement.style.height = "auto";
-    this.wrapper()!.nativeElement.style.height = this.textarea()!.nativeElement.scrollHeight + "px";
+    this.wrapper()!.nativeElement.style.height = (this.textarea()!.nativeElement.scrollHeight || minHeight) + "px";
   }
 }
