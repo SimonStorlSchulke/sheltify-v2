@@ -11,7 +11,12 @@
   const anchor = $derived(() => section.Content.Anchor?.trim());
 </script>
 
-<svelte:element this={section.Content.Type} class="title">
+<svelte:element
+  this={section.Content.Type}
+  class="title"
+  class:centered={section.Content.Centered}
+  class:underline={section.Content.Underline}
+>
   {section.Content.Text}
 
   {#if anchor()}

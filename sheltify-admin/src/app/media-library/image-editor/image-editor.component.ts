@@ -1,9 +1,6 @@
 import { DatePipe } from '@angular/common';
-import { Component, effect, OnInit, output, signal, inject, ChangeDetectionStrategy, computed, untracked, model, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, model, OnInit, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
-import { lastValueFrom } from 'rxjs';
-import { CmsImage, CmsImagesSize, CmsTag } from 'sheltify-lib/cms-types';
 import { TagsManagerComponent } from '@app/editor/tags-manager/tags-manager.component';
 import { TextInputComponent } from '@app/forms/text-input/text-input.component';
 import { LoaderService } from '@app/layout/loader/loader.service';
@@ -16,6 +13,9 @@ import { TagsService } from '@app/services/tags.service';
 import { CmsImageDirective } from '@app/ui/cms-image.directive';
 import { ExplainedButtonComponent } from '@app/ui/explained-button/explained-button.component';
 import { TagComponent } from '@app/ui/tag/tag.component';
+import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
+import { lastValueFrom } from 'rxjs';
+import { CmsImage, CmsImagesSize } from 'sheltify-lib/cms-types';
 
 @Component({
   selector: 'app-image-editor',
@@ -34,19 +34,17 @@ import { TagComponent } from '@app/ui/tag/tag.component';
   styleUrl: './image-editor.component.scss'
 })
 export class ImageEditorComponent implements OnInit {
-  private cmsRequestSv = inject(CmsRequestService);
-  private modalService = inject(ModalService);
   tagsService = inject(TagsService);
   animalService = inject(AnimalService);
+  private cmsRequestSv = inject(CmsRequestService);
+  private modalService = inject(ModalService);
   private loaderService = inject(LoaderService);
   private imageConverterService = inject(ImageConverterService);
   private alertService = inject(AlertService);
-  private tagSelector = viewChild<NgSelectComponent>('tagSelector');
 
   image = model.required<CmsImage>();
   selectedTags = signal<string[]>([]);
   selectedAnimals = signal<string[]>([]);
-  createdTag = output<CmsTag>()
 
   editedImage = output<CmsImage>();
 

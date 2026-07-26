@@ -281,7 +281,7 @@ export class CmsRequestService {
       withCredentials: true,
     }
 
-    return this.httpClient.post(url, data, options)
+    return this.httpClient.post<CmsImage>(url, data, options)
       .pipe(this.handleRequest(url));
   }
 
@@ -327,7 +327,7 @@ export class CmsRequestService {
       withCredentials: true,
     }
 
-    return this.httpClient.post(url, data, options)
+    return this.httpClient.post<CmsImage>(url, data, options)
       .pipe(this.handleRequest(url));
   }
 

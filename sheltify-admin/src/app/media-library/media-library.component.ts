@@ -1,7 +1,6 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, computed, OnInit, output, Pipe, PipeTransform, Signal, signal, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { lastValueFrom, map, Observable } from 'rxjs';
-import { CmsAnimal, CmsImage, CmsTag } from 'sheltify-lib/cms-types';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, inject, OnInit, output, Pipe, PipeTransform, Signal, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { LoaderService } from '@app/layout/loader/loader.service';
 import { FileDropDirective } from '@app/media-library/file-drop.directive';
 import { ImageEditorComponent } from '@app/media-library/image-editor/image-editor.component';
@@ -16,7 +15,8 @@ import { FinishableDialog, ModalService } from '@app/services/modal.service';
 import { TagsService } from '@app/services/tags.service';
 import { TagComponent } from '@app/ui/tag/tag.component';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
-import { FormsModule } from '@angular/forms';
+import { lastValueFrom, map, Observable } from 'rxjs';
+import { CmsAnimal, CmsImage } from 'sheltify-lib/cms-types';
 
 @Pipe({name: "mediaSelection", pure: true})
 class MediaSelectionPipe implements PipeTransform {
@@ -102,7 +102,7 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
   async getOldUnusedMediaFiles(): Promise<CmsImage[]> {
     let unlinkedMediaFiles = await this.cmsRequestSv.getUnlinkedMediaFiles();
     const oldUnlinkedMediaFiles = unlinkedMediaFiles.filter(mediaFile => {
-      const diffMs = new Date().getTime() - new Date(mediaFile.CreatedAt as any).getTime();
+      const diffMs = Date.now() - new Date(mediaFile.CreatedAt as any).getTime();
       const minutes = diffMs / 60000;
       const hours = minutes / 60;
       const days = hours / 24;
@@ -189,21 +189,25 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
 
   async onFilesDropped(files: FileList) {
     this.loaderService.setLoading('Bilder hochladen...');
-    for (let i = 0; i < files.length; i++) {
+    const imageIds = new Set<string>();
+    for (const element of files) {
       const imageTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/svg"]);
 
       const tags = this.tagsService.availableTags().filter(tag => this.selectedTags().includes(tag.ID)).map(tag => tag.Name);
       const animalIds = this.selectedAnimals().map(animal => animal.ID);
 
-      if(imageTypes.has(files[i].type)) {
-        const scaledImages = await this.imageConverterService.generateAllSizes(files[i]);
-        await lastValueFrom(this.cmsRequestSv.uploadScaledImage(scaledImages, files[i].name, tags.join(","), animalIds.join(",")));
+      let img: CmsImage;
+      if (imageTypes.has(element.type)) {
+        const scaledImages = await this.imageConverterService.generateAllSizes(element);
+        img = await lastValueFrom(this.cmsRequestSv.uploadScaledImage(scaledImages, element.name, tags.join(","), animalIds.join(",")));
       } else {
-        await lastValueFrom(this.cmsRequestSv.uploadFiles([files[i]], files[i].name, tags.join(","), animalIds.join(",")));
+        img = await lastValueFrom(this.cmsRequestSv.uploadFiles([element], element.name, tags.join(","), animalIds.join(",")));
       }
+      imageIds.add(img.ID);
     }
     this.refreshImages.update((i) => i + 1);
     this.loaderService.unsetLoading('Bilder hochladen...');
+    this.selectedImageIds.set(imageIds)
   }
 
   onFilesHovered($event: boolean) {
@@ -214,10 +218,6 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
 
     if(this.unusedImages() === undefined) {
       this.unusedImages.set(await this.getUnusedMediaFiles());
-    }
-
-    if(this.unusedImages()!.length > 0) {
-
     }
 
     const toDelete = Array.from(this.selectedImageIds()).filter(id => this.unusedImages()!.map(img => img.ID).includes(id))
@@ -240,15 +240,6 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
 
   addEditedImage(image: CmsImage) {
     this.editedImages.update(map => map.set(image.ID, image));
-  }
-
-  onTagAdded(tag: CmsTag, image: CmsImage) {
-    image.MediaTags.push(tag);
-
-    // No idea why this is necessary
-    setTimeout(() => {
-      this.cdRef.markForCheck();
-    }, 100);
   }
 
   pickImages(selectedIds: Set<string>, images: CmsImage[]) {
