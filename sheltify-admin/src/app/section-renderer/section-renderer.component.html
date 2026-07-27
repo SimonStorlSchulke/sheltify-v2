@@ -1,78 +1,92 @@
 @let sectionVal = section();
 <div [class]="'section-renderer section-' + sectionVal.SectionType + ' themable-bg-' + sectionVal.BackgroundColor">
-  @if(sectionVal.SectionType == 'columns') {
-  <div class="column-row sui flex-x">
-    @for(column of sectionVal.Content.Columns; track $index) {
-      <div class="column" [style.flex]="`${column.Grow} 1 0px`">
-        @for(col of column.Sections; track $index) {
-          <div class="column-item sui">
-            <ng-container *ngTemplateOutlet="singleSection; context: { $implicit: col }"></ng-container>
-          </div>
-        }
-      </div>
-    }
-  </div>
-} @else {
-  <ng-container *ngTemplateOutlet="singleSection; context: { $implicit: sectionVal }"></ng-container>
-}
+  @if (sectionVal.SectionType == 'columns') {
+    <div class="column-row sui flex-x">
+      @for (column of sectionVal.Content.Columns; track $index) {
+        <div class="column" [style.flex]="`${column.Grow} 1 0px`">
+          @for (col of column.Sections; track $index) {
+            <div class="column-item sui">
+              <ng-container *ngTemplateOutlet="singleSection; context: { $implicit: col }"></ng-container>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  } @else {
+    <ng-container *ngTemplateOutlet="singleSection; context: { $implicit: sectionVal }"></ng-container>
+  }
 </div>
 
 <ng-template #singleSection let-sectionVal>
   @switch (sectionVal.SectionType) {
     @case ('title') {
       <!--suppress AngularUndefinedBinding -->
-      <section-title [section]="sectionVal" />
+      <section-title [section]="sectionVal"/>
     }
     @case ('text') {
-      <section-text [section]="sectionVal" />
+      <!--suppress AngularUndefinedBinding -->
+      <section-text [section]="sectionVal"/>
     }
     @case ('image') {
-      <section-images [section]="sectionVal" [uploadsUrl]="uploadsUrl" />
+      <!--suppress AngularUndefinedBinding -->
+      <section-images [section]="sectionVal" [uploadsUrl]="uploadsUrl"/>
     }
     @case ('hero') {
-      <section-hero [section]="sectionVal" [uploadsUrl]="uploadsUrl" />
+      <!--suppress AngularUndefinedBinding -->
+      <section-hero [section]="sectionVal" [uploadsUrl]="uploadsUrl"/>
     }
     @case ('video') {
-      <section-video [section]="sectionVal" />
+      <!--suppress AngularUndefinedBinding -->
+      <section-video [section]="sectionVal"/>
     }
     @case ('animal-list') {
-      <section-animal-list [section]="sectionVal" />
+      <!--suppress AngularUndefinedBinding -->
+      <section-animal-list [section]="sectionVal"/>
     }
     @case ('animal-updates') {
+      <!--suppress AngularUndefinedBinding -->
       <section-animal-updates [section]="sectionVal"/>
     }
     @case ('html') {
-      <app-render-trusted-html [html]="sectionVal.Content.Html" />
+      <app-render-trusted-html [html]="sectionVal.Content.Html"/>
     }
     @case ('separator-x') {
-      <section-separator-x [section]="sectionVal" />
+      <!--suppress AngularUndefinedBinding -->
+      <section-separator-x [section]="sectionVal"/>
     }
     @case ('home-found') {
-      <section-home-found [section]="sectionVal" />
+      <!--suppress AngularUndefinedBinding -->
+      <section-home-found [section]="sectionVal"/>
     }
     @case ('blogs') {
-      <section-blogs [section]="sectionVal" />
+      <!--suppress AngularUndefinedBinding -->
+      <section-blogs [section]="sectionVal"/>
       <p class="sui text-secondary">(Einträge werden in der Vorschau hier absichtlich nicht angezeigt)</p>
     }
     @case ('form') {
-      <section-form [section]="sectionVal" />
+      <!--suppress AngularUndefinedBinding -->
+      <section-form [section]="sectionVal"/>
     }
     @case ('file') {
-      <section-file [section]="sectionVal" />
+      <!--suppress AngularUndefinedBinding -->
+      <section-file [section]="sectionVal"/>
     }
-    @case('special') {
+    @case ('special') {
       @switch (sectionVal.Content.Type) {
-        @case('Sponsor') {
-          <section-special-mft-sponsor [section]="sectionVal" />
+        @case ('Sponsor') {
+          <!--suppress AngularUndefinedBinding -->
+          <section-special-mft-sponsor [section]="sectionVal"/>
         }
-        @case('Tierliste - Auswahl') {
-          <section-special-mft-tierliste-auswahl [section]="sectionVal" />
+        @case ('Tierliste - Auswahl') {
+          <!--suppress AngularUndefinedBinding -->
+          <section-special-mft-tierliste-auswahl [section]="sectionVal"/>
         }
-        @case('Dynamische Hundeliste') {
-          <section-special-hhg-hundeliste [section]="sectionVal" />
+        @case ('Dynamische Hundeliste') {
+          <!--suppress AngularUndefinedBinding -->
+          <section-special-hhg-hundeliste [section]="sectionVal"/>
         }
         @default {
-          <span class="sui text-secondary">Spezlaisektion <b>'{{sectionVal.Content.Type}}'</b>. Diese Sektion ist speziell auf die Webseite einer bestimmten Organisation zugeschnitten und hat hier daher keine Vorschau.</span>
+          <span class="sui text-secondary">Spezlaisektion <b>'{{ sectionVal.Content.Type }}'</b>. Diese Sektion ist speziell auf die Webseite einer bestimmten Organisation zugeschnitten und hat hier daher keine Vorschau.</span>
         }
       }
     }
