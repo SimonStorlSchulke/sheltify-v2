@@ -18,6 +18,7 @@ import { CmsImage } from 'sheltify-lib/cms-types';
 export class ImagePickerSingleComponent extends InputBaseComponent {
   twoWayModel = model<CmsImage>();
   cropped = input(false);
+  small = input(false);
 
   private modalPresenter = inject(ModalPresenter);
 

@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AdministrationComponent } from '@app/administration/administration.component';
+import { AnimalTableComponent } from '@app/editor/animal-table/animal-table.component';
 import { PageListComponent, pageResolver } from '@app/editor/blog-list/page-list.component';
 import { HomeFoundListComponent, homeFoundResolver } from '@app/editor/home-found-list/home-found-list.component';
 import { BlogListComponent, blogResolver } from '@app/editor/page-list/blog-list.component';
@@ -27,6 +28,7 @@ export const routes: Routes = [
   {path: "media", component: MediaLibraryComponent, canActivate: [AuthGuard]},
   {path: "optionen", component: TenantConfigurationComponent, canActivate: [AuthGuard], canDeactivate: [askSaveGuard]},
   {path: "tiere", component: AnimalListComponent, canActivate: [AuthGuard]},
+  {path: "tiertabelle", component: AnimalTableComponent, canActivate: [AuthGuard], canDeactivate: [askSaveGuard]},
   {path: "tiere/:id", component: AnimalListComponent, canActivate: [AuthGuard], canDeactivate: [askSaveGuard], resolve: {animal: animalResolver}},
   {path: "formulare", component: SubmittedFormsComponent, canActivate: [AuthGuard]},
   {path: "formulare/:id", component: SubmittedFormsComponent, canActivate: [AuthGuard], resolve: {form: formResolver}},

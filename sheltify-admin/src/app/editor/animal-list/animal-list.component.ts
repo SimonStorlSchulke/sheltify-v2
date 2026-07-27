@@ -75,6 +75,7 @@ export class AnimalListComponent {
   constructor() {
     this.tenantConfigurationService.animalKinds().then(animalKinds => this.animalKinds.set(['alle', ...animalKinds]));
     this.activatedRoute.data.pipe(takeUntilDestroyed()).subscribe(({animal}) => this.selectedAnimal.set(animal));
+    this.animalService.reloadAnimals();
   }
 
   animalList = computed(() => {

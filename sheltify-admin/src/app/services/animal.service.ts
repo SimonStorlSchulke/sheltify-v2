@@ -46,6 +46,15 @@ export class AnimalService {
     return !!animal.PublishedAt?.Valid && !!animal.ArticleID && animal.ArticleID != 'NoArticle'
   }
 
+  setStatus(animal: CmsAnimal, status: string, active: boolean, animalStati: string[]) {
+    let currentStati = animal.Status?.split(',') ?? []
+    currentStati = currentStati.filter(status => animalStati.includes(status));
+    const stati = new Set(currentStati);
+    active ? stati.add(status) : stati.delete(status);
+    animal.Status = [...stati].join(',');
+    console.log(animal.Status)
+  }
+
   async save(animal: CmsAnimal) {
     if (!animal) {
       console.log("animal is null or undefined");

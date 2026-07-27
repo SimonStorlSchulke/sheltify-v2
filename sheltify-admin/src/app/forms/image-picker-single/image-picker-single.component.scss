@@ -4,6 +4,10 @@
   background: $neutral100;
   height: 128px;
   width: 128px;
+  &.small {
+    height: 64px;
+    width: 64px;
+  }
   cursor: pointer;
 
   &:not(:has(img)) {

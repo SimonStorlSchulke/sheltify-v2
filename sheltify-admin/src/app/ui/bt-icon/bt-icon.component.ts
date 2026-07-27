@@ -22,7 +22,8 @@ import {
   bootstrapPaintBucket,
   bootstrapChevronDown,
   bootstrapChevronLeft,
-  bootstrapChevronRight
+  bootstrapChevronRight,
+  bootstrapTable
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
@@ -52,6 +53,7 @@ export type IconName =
   | 'ChevronDown'
   | 'ChevronLeft'
   | 'ChevronRight'
+  | 'Table'
 
 @Component({
   selector: 'app-bt-icon',
@@ -85,6 +87,7 @@ export type IconName =
       bootstrapChevronDown,
       bootstrapChevronLeft,
       bootstrapChevronRight,
+      bootstrapTable,
     }
   )]
 })

@@ -74,5 +74,6 @@ export class TenantConfigurationComponent implements OnInit {
   async save() {
     await firstValueFrom(this.cmsRequestService.saveTenantConfiguration(this.options()!));
     this.tenantConfigurationService.reloadConfig();
+    this.askSaveService.clean();
   }
 }

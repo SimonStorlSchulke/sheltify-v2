@@ -4,7 +4,7 @@
     <button class="small secondary questionmark" type="button" (click)="showExplanation()"><span>?</span></button>
   }
 </div>
-<div [id]="idName()" (click)="pickImage()" class="img-container">
+<div [id]="idName()" (click)="pickImage()" class="img-container" [class.small]="small()">
   @if(twoWayModel()?.NonImage) {
     <div class="sui flex-y mt-4">
       <app-bt-icon name="FileEarmarkFill"/>

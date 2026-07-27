@@ -1,0 +1,43 @@
+<div class="sui p-3">
+  <table>
+    <thead>
+    <th>Name</th>
+    <th>Bild</th>
+    <th>Kastriert</th>
+    <th>Vermittlungsstatus</th>
+    <th>Status</th>
+    </thead>
+
+    <tbody>
+      @for (animal of animalList(); track animal.ID) {
+        <tr>
+          <td>{{ animal.Name }}</td>
+          <td><app-image-picker-single [idName]="animal.Name + '-bild'" label="" [(twoWayModel)]="animal.Portrait" [small]="true" [cropped]="true"/> </td>
+          <td>
+            <app-checkbox-input [idName]="animal.Name + '-kastriert'" label="" [(nullBoolModel)]="animal.Castrated"/>
+          </td>
+          <td>
+            <app-radio-buttons-input
+              [idName]="animal.Name + '-vermittlungsstatus'" label=""
+              [(twoWayModel)]="animal.HomeFoundStatus"
+              [options]="['no', 'reserved', 'yes']"
+              [optionTranslations]="['unvermittelt', 'reserviert', 'Zuhause gefunden']"
+            />
+          </td>
+          <td>
+            <div class="sui flex-x gap-1">
+              @for(animalStatus of animalStati(); track $index) {
+                @let isStatisActive = animal.Status.split(',').includes(animalStatus);
+                <button
+                  (click)="setStatus(animal, animalStatus, !isStatisActive)"
+                  [class]="isStatisActive ? 'primary' : 'white'">
+                  {{ animalStatus }}
+                </button>
+              }
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

@@ -128,11 +128,6 @@ export class AnimalEditorComponent implements OnInit {
   setStatus(status: string, active: boolean) {
     this.askSaveService.markDirty();
     const animal = this.animal()!;
-    let currentStati = animal.Status?.split(',') ?? []
-    currentStati = currentStati.filter(status => this.animalStati.includes(status));
-    const stati = new Set(currentStati);
-    active ? stati.add(status) : stati.delete(status);
-    animal.Status = [...stati].join(',');
-    console.log(animal.Status)
+    this.animalService.setStatus(animal, status, active, this.animalStati)
   }
 }
