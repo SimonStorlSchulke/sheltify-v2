@@ -15,7 +15,7 @@ export class RangeInputComponent extends InputBaseComponent {
   stepSize = input<number>(1);
 
   onInput(event: Event, minOrMax: 0 | 1) {
-    this.askSaveService.markDirty();
+    this.markDirty();
     const numberString = (event.target as HTMLInputElement).value;
     const value = numberString ? parseFloat(numberString) : undefined;
     this.twoWayModel.update((values) => {

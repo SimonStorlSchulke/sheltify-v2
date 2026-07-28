@@ -23,7 +23,7 @@ export class SelectInputComponent extends InputBaseComponent {
   clearable = input<boolean>(true);
 
   onInput() {
-    this.askSaveService.markDirty();
+    this.markDirty();
     this.onInputChange.emit(this.twoWayModel());
   }
 }

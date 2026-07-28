@@ -71,17 +71,19 @@ export class AnimalEditorComponent implements OnInit {
   async ngOnInit() {
     this.animalKinds = (await this.tenantConfigurationService.animalKinds());
     this.animalStati = (await this.tenantConfigurationService.animalStati());
-    console.log("animalStati", this.animalStati)
   }
 
   async saveFromUI() {
     const saveOptions = await this.modalService.openFinishable(SaveAnimalComponent);
-    if (!saveOptions) return;
+    if (!saveOptions) {
+      this.askSaveService.markDirty();
+      return;
+    }
     this.save(saveOptions.pushUpdate, saveOptions.updateNote);
   }
 
-  async save(pushUpdate: boolean = false, updateNote: string = '') {
-    const savedAnimal = await this.animalService.save(this.animal()!);
+  async save(pushUpdate: boolean = true, updateNote: string = '') {
+    const savedAnimal = await this.animalService.save(this.animal()!, pushUpdate);
 
     if (savedAnimal) {
       this.saved.emit(savedAnimal!);

@@ -1,28 +1,34 @@
-<div class="sui p-3">
+<div class="sui p-2 flex-y gap-2">
+  <div class="sui flex-x jc-space-between">
+    <h1>Tiertabelle</h1>
+    <button class="primary" (click)="saveEditedAnimals()" [disabled]="!askSaveService.dirty()">Speichern</button>
+  </div>
   <table>
     <thead>
     <th>Name</th>
     <th>Bild</th>
-    <th>Kastriert</th>
     <th>Vermittlungsstatus</th>
+    <th>Kastriert</th>
     <th>Status</th>
+    <th></th>
     </thead>
 
     <tbody>
       @for (animal of animalList(); track animal.ID) {
         <tr>
           <td>{{ animal.Name }}</td>
-          <td><app-image-picker-single [idName]="animal.Name + '-bild'" label="" [(twoWayModel)]="animal.Portrait" [small]="true" [cropped]="true"/> </td>
-          <td>
-            <app-checkbox-input [idName]="animal.Name + '-kastriert'" label="" [(nullBoolModel)]="animal.Castrated"/>
-          </td>
+          <td><app-image-picker-single [editedId]="animal.ID" [idName]="animal.Name + '-bild'" label="" [(twoWayModel)]="animal.Portrait" [small]="true" [cropped]="true"/> </td>
           <td>
             <app-radio-buttons-input
+              [editedId]="animal.ID"
               [idName]="animal.Name + '-vermittlungsstatus'" label=""
               [(twoWayModel)]="animal.HomeFoundStatus"
               [options]="['no', 'reserved', 'yes']"
               [optionTranslations]="['unvermittelt', 'reserviert', 'Zuhause gefunden']"
             />
+          </td>
+          <td>
+            <app-checkbox-input [editedId]="animal.ID" [idName]="animal.Name + '-kastriert'" label="" [(nullBoolModel)]="animal.Castrated"/>
           </td>
           <td>
             <div class="sui flex-x gap-1">
@@ -34,6 +40,12 @@
                   {{ animalStatus }}
                 </button>
               }
+            </div>
+          </td>
+          <td>
+            <div class="sui flex-y gap-1">
+              <a [routerLink]="'/tiere/' + animal.ID" class="link"><button class="secondary small">Artikel bearbeiten</button></a>
+              <a class="link"><button class="secondary small">Löschen</button></a>
             </div>
           </td>
         </tr>

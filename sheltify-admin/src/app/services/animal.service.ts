@@ -15,9 +15,9 @@ export class AnimalService {
 
   animalsByArticleID = computed(() => {
     return this.animals().reduce((acc, animal) => {
-      animal.ArticleID ??= 'NoArticle'
-      acc[animal.ArticleID] = acc[animal.ArticleID] ?? [];
-      acc[animal.ArticleID].push(animal);
+      const key = animal.ArticleID ?? 'NoArticle';
+      acc[key] = acc[key] ?? [];
+      acc[key].push(animal);
       return acc;
     }, {} as Record<string, CmsAnimal[]>);
   })
@@ -43,7 +43,7 @@ export class AnimalService {
   }
 
   isPublished(animal: CmsAnimal): boolean {
-    return !!animal.PublishedAt?.Valid && !!animal.ArticleID && animal.ArticleID != 'NoArticle'
+    return !!animal.PublishedAt?.Valid && !!animal.ArticleID;
   }
 
   setStatus(animal: CmsAnimal, status: string, active: boolean, animalStati: string[]) {
@@ -55,13 +55,13 @@ export class AnimalService {
     console.log(animal.Status)
   }
 
-  async save(animal: CmsAnimal) {
+  async save(animal: CmsAnimal, updateModificationDate = true) {
     if (!animal) {
       console.log("animal is null or undefined");
       return;
     }
 
-    const savedAnimal = await firstValueFrom(this.cmsRequestService.saveAnimal(animal!));
+    const savedAnimal = await firstValueFrom(this.cmsRequestService.saveAnimal(animal!, updateModificationDate));
     console.log("saved animal", savedAnimal);
     return savedAnimal;
   }

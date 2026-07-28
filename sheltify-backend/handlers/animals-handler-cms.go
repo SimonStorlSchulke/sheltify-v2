@@ -9,6 +9,7 @@ import (
 )
 
 func SaveAnimal(w http.ResponseWriter, r *http.Request) {
+	skipUpdateModicationDate := r.URL.Query().Get("updateModificationDate") == "false"
 	animal, err := validatePublishable[*shtypes.Animal](w, r)
 	if err != nil {
 		return
@@ -18,7 +19,7 @@ func SaveAnimal(w http.ResponseWriter, r *http.Request) {
 		animal.PortraitID = &animal.Portrait.ID //TODO.. ugly
 	}
 
-	if repository.SaveAnimal(animal) != nil {
+	if repository.SaveAnimal(animal, skipUpdateModicationDate) != nil {
 		internalServerErrorResponse(w, r, fmt.Sprintf("Could not save animal: %v", animal.ID))
 	} else {
 		logger.Saved(r, animal.ID)

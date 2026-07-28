@@ -169,8 +169,8 @@ export class CmsRequestService {
       .pipe(map(response => sortByPriorityAndUpdatedAt(filterPublishedAndHasArticle(response))));
   }
 
-  saveAnimal(animal: CmsAnimal): Observable<CmsAnimal> {
-    return this.postOrPatch('animals', animal);
+  saveAnimal(animal: CmsAnimal, updateModificationDate = true): Observable<CmsAnimal> {
+    return this.postOrPatch(`animals`, animal, updateModificationDate);
   }
 
   deleteAnimals(ids: string[]) {
@@ -350,16 +350,16 @@ export class CmsRequestService {
       .pipe(this.handleRequest(url, 'Erstellen erfolgreich'), tap(() => this.postPatchOrDeleteCalled$.next(path)));
   }
 
-  patch<T>(path: string, body: any) {
-    const url = CmsRequestService.adminApiUrl + path;
+  patch<T>(path: string, body: any, updateModificationDate = true) {
+    const url = `${CmsRequestService.adminApiUrl}${path}?updateModificationDate=${updateModificationDate}`;
     return this.httpClient.patch<T>(url, body, this.options())
       .pipe(this.handleRequest(url, 'Speichern erfolgreich'), tap(() => this.postPatchOrDeleteCalled$.next(path)));
   }
 
   /** uses PATCH if data has ID, else PATCH */
-  postOrPatch<T>(path: string, data: { ID?: number | string }): Observable<T> {
+  postOrPatch<T>(path: string, data: { ID?: number | string }, updateModificationDate = true): Observable<T> {
     if (data.ID && data.ID != '') {
-      return this.patch<T>(path, data);
+      return this.patch<T>(path, data, updateModificationDate);
     } else {
       return this.post<T>(path, data);
     }

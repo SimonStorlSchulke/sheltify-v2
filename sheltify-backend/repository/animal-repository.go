@@ -83,11 +83,12 @@ func GetFilteredAnimals(filter AnimalsFilter, tenant string) (*[]shtypes.Animal,
 	return &animals, nil
 }
 
-func SaveAnimal(animal *shtypes.Animal) error {
-	if err := db.Save(&animal).Error; err != nil {
-		return err
+func SaveAnimal(animal *shtypes.Animal, skipUpdateModicationDate bool) error {
+	tx := db
+	if skipUpdateModicationDate {
+		tx = tx.Omit("UpdatedAt")
 	}
-	return nil
+	return tx.Save(animal).Error
 }
 
 func SaveHomeFoundEntry(entry *shtypes.HomeFoundEntry) error {
@@ -113,7 +114,7 @@ func GetAnimalsByArticleContentUpdatedAt(updatedAt time.Time, tenant string) (*[
 	if err := db.Where("animals.tenant_id = ?", tenant).Joins("JOIN articles ON articles.id = animals.article_id").
 		Where("articles.content_update_at >= ?", updatedAt).
 		Preload("Article").
-    Preload("Portrait").
+		Preload("Portrait").
 		Find(&animals).Error; err != nil {
 		return nil, err
 	}

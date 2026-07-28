@@ -17,10 +17,6 @@ export class CheckboxInputComponent extends InputBaseComponent {
   nullBoolModel = model<SqlNullBool | undefined>(undefined);
   showYesNo = input<boolean>(true);
 
-  markDirty() {
-    this.askSaveService.markDirty();
-  }
-
   checkedState = computed(() => {
     const nullBool = this.nullBoolModel();
     if(!nullBool) return this.twoWayModel();
@@ -31,7 +27,7 @@ export class CheckboxInputComponent extends InputBaseComponent {
   });
 
   toggle(newBool: boolean) {
-    this.askSaveService.markDirty();
+    this.markDirty();
     this.twoWayModel.set(newBool);
 
     const nullBool = this.nullBoolModel();

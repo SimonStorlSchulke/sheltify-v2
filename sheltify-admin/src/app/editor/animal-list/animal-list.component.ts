@@ -51,7 +51,7 @@ export class AnimalListComponent {
 
   animalsWithSameArticle = computed(() => {
     return this.animalService.animalsByArticleID()[this.selectedAnimal()?.ArticleID ?? ''] ?? []
-  })
+  });
 
   pageUrl = computed(() => {
     let url = this.tenantConfigurationService.config()?.SiteUrl;

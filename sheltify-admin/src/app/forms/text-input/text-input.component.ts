@@ -15,7 +15,7 @@ export class TextInputComponent extends InputBaseComponent {
   twoWayModel = model<string>('');
 
   onInput(event: Event) {
-    this.askSaveService.markDirty();
+    this.markDirty();
     this.twoWayModel.set((event.target as HTMLInputElement).value);
   }
 }
