@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"sheltify-new-backend/migrations"
+	"sheltify-backend/migrations"
 
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"

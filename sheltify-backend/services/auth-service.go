@@ -5,8 +5,8 @@ import (
 	"encoding/base64"
 	"log"
 	"net/http"
-	"sheltify-new-backend/repository"
-	"sheltify-new-backend/shtypes"
+	"sheltify-backend/repository"
+	"sheltify-backend/shtypes"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"

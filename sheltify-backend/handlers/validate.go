@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"sheltify-new-backend/services"
-	"sheltify-new-backend/shtypes"
+	"sheltify-backend/services"
+	"sheltify-backend/shtypes"
 )
 
 var errorContentValidation = fmt.Errorf("content validation error")

@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"net/http"
-	"sheltify-new-backend/repository"
-	"sheltify-new-backend/shtypes"
+	"sheltify-backend/repository"
+	"sheltify-backend/shtypes"
 )
 
 func SavePage(w http.ResponseWriter, r *http.Request) {

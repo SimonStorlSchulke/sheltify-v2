@@ -1,7 +1,7 @@
 package migrations
 
 import (
-	"sheltify-new-backend/shtypes"
+	"sheltify-backend/shtypes"
 
 	"gorm.io/gorm"
 )

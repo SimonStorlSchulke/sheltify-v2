@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"net/http"
-	"sheltify-new-backend/repository"
-	"sheltify-new-backend/services"
-	"sheltify-new-backend/shtypes"
+	"sheltify-backend/repository"
+	"sheltify-backend/services"
+	"sheltify-backend/shtypes"
 	"strconv"
 	"time"
 

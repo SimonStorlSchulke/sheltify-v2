@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"sheltify-new-backend/shtypes"
+	"sheltify-backend/shtypes"
 )
 
 func SaveFormSubmission(formSubmission *shtypes.FormSubmission) error {

@@ -1,6 +1,6 @@
 package repository
 
-import "sheltify-new-backend/shtypes"
+import "sheltify-backend/shtypes"
 
 func CreateTenant(id string) (*shtypes.Tenant, error) {
 	var tenant shtypes.Tenant

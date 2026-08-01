@@ -1,6 +1,6 @@
 package repository
 
-import "sheltify-new-backend/shtypes"
+import "sheltify-backend/shtypes"
 
 func SaveBlogEntry(page *shtypes.BlogEntry) error {
 	if err := db.Save(&page).Error; err != nil {

@@ -4,10 +4,10 @@ import (
 	"context"
 	"net/http"
 	"os"
-	"sheltify-new-backend/logger"
-	"sheltify-new-backend/repository"
-	"sheltify-new-backend/services"
-	"sheltify-new-backend/shtypes"
+	"sheltify-backend/logger"
+	"sheltify-backend/repository"
+	"sheltify-backend/services"
+	"sheltify-backend/shtypes"
 )
 
 func AuthMiddleware(next http.Handler) http.Handler {

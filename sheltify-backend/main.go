@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"sheltify-new-backend/handlers"
-	"sheltify-new-backend/services"
+	"sheltify-backend/handlers"
+	"sheltify-backend/services"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"

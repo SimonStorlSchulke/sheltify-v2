@@ -7,8 +7,8 @@ import (
 	"mime/multipart"
 	"os"
 	"path/filepath"
-	"sheltify-new-backend/repository"
-	"sheltify-new-backend/shtypes"
+	"sheltify-backend/repository"
+	"sheltify-backend/shtypes"
 	"strings"
 )
 

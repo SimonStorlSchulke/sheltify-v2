@@ -1,4 +1,4 @@
-module sheltify-new-backend
+module sheltify-backend
 
 go 1.25.0
 

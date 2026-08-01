@@ -5,8 +5,8 @@ import (
 	"encoding/base64"
 	"fmt"
 	"net/http"
-	"sheltify-new-backend/repository"
-	"sheltify-new-backend/shtypes"
+	"sheltify-backend/repository"
+	"sheltify-backend/shtypes"
 )
 
 func RequestError(r *http.Request, whichOne any, err error) shtypes.LogEntry {

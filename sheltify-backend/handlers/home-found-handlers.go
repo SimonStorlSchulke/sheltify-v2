@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"net/http"
-	"sheltify-new-backend/repository"
-	"sheltify-new-backend/shtypes"
+	"sheltify-backend/repository"
+	"sheltify-backend/shtypes"
 )
 
 func DeleteHomeFoundEntriesByIds(w http.ResponseWriter, r *http.Request) {

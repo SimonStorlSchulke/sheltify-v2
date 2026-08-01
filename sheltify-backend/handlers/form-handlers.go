@@ -5,9 +5,9 @@ import (
 	"sort"
 	"strings"
 
-	"sheltify-new-backend/repository"
-	"sheltify-new-backend/services"
-	"sheltify-new-backend/shtypes"
+	"sheltify-backend/repository"
+	"sheltify-backend/services"
+	"sheltify-backend/shtypes"
 )
 
 func FormSubmit(w http.ResponseWriter, r *http.Request) {

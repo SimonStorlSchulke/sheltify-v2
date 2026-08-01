@@ -1,6 +1,6 @@
 package repository
 
-import "sheltify-new-backend/shtypes"
+import "sheltify-backend/shtypes"
 
 func GetUserByName(name string) (*shtypes.User, error) {
 	var user shtypes.User

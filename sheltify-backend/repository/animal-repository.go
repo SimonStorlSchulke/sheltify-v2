@@ -2,7 +2,7 @@ package repository
 
 import (
 	"math"
-	"sheltify-new-backend/shtypes"
+	"sheltify-backend/shtypes"
 	"strings"
 	"time"
 

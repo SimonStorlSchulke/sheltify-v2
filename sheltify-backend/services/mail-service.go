@@ -3,7 +3,7 @@ package services
 import (
 	"net/http"
 	"os"
-	"sheltify-new-backend/logger"
+	"sheltify-backend/logger"
 	"strings"
 
 	htmlsanitizer "github.com/sym01/htmlsanitizer"

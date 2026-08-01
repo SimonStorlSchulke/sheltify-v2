@@ -2,7 +2,7 @@ package repository
 
 import (
 	"fmt"
-	"sheltify-new-backend/shtypes"
+	"sheltify-backend/shtypes"
 )
 
 func CreateMediaFileMeta(media *shtypes.MediaFile) error {

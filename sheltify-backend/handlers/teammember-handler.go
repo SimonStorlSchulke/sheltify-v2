@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"net/http"
-	"sheltify-new-backend/logger"
-	"sheltify-new-backend/repository"
-	"sheltify-new-backend/shtypes"
+	"sheltify-backend/logger"
+	"sheltify-backend/repository"
+	"sheltify-backend/shtypes"
 )
 
 func GetTeamMembers(w http.ResponseWriter, r *http.Request) {

@@ -1,6 +1,6 @@
 package repository
 
-import "sheltify-new-backend/shtypes"
+import "sheltify-backend/shtypes"
 
 func CreateLog(log *shtypes.LogEntry) error {
 	if err := db.Create(&log).Error; err != nil {

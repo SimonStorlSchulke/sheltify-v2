@@ -1,6 +1,6 @@
 package repository
 
-import "sheltify-new-backend/shtypes"
+import "sheltify-backend/shtypes"
 
 func GetPageByPath(tenantId string, path string) (*shtypes.Page, error) {
 	var page shtypes.Page

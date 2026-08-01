@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"net/http"
-	"sheltify-new-backend/repository"
-	"sheltify-new-backend/services"
-	"sheltify-new-backend/shtypes"
+	"sheltify-backend/repository"
+	"sheltify-backend/services"
+	"sheltify-backend/shtypes"
 )
 
 func CreateTenant(w http.ResponseWriter, r *http.Request) {
@@ -26,7 +26,7 @@ func CreateTenant(w http.ResponseWriter, r *http.Request) {
 		Name:     Name,
 		SiteUrl:  SiteUrl,
 	}
-	
+
 	err = repository.SaveTenantConfiguration(tenantConfig)
 
 	if err != nil {

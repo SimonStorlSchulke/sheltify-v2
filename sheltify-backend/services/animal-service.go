@@ -2,7 +2,7 @@ package services
 
 import (
 	"net/http"
-	"sheltify-new-backend/repository"
+	"sheltify-backend/repository"
 	"strconv"
 	"strings"
 )

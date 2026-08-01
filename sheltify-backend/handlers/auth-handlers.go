@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"net/http"
-	"sheltify-new-backend/services"
+	"sheltify-backend/services"
 	"slices"
 )
 

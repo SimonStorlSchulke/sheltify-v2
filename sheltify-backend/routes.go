@@ -1,7 +1,7 @@
 package main
 
 import (
-	"sheltify-new-backend/handlers"
+	"sheltify-backend/handlers"
 	"time"
 
 	"github.com/go-chi/chi/v5"

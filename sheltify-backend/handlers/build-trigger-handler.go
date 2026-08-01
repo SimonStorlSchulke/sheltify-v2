@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
-	"sheltify-new-backend/repository"
-	"sheltify-new-backend/services"
+	"sheltify-backend/repository"
+	"sheltify-backend/services"
 	"time"
 )
 
