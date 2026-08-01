@@ -1,41 +1,40 @@
-<div class="sui flex-x gap-2">
-  @if (images$() | async; as images) {
-    <div appFileDrop (filesDropped)="onFilesDropped($event)" (filesHovered)="onFilesHovered($event)"
-         class="sui flex-x gap-2 grow-1">
-      <div class="sui flex-y gap-2 grow-1 p-3">
-        <h1 class="sui px-3">Medien</h1>
+@let images = images$() | async;
+<div class="sui flex-x h-100">
+  <div class="tags-and-animals sui flex-y gap-1">
+    <b>Tags</b>
+    @for (tag of tagsService.availableTags(); track tag.ID) {
+      <div class="sui flex-x">
+        <input [id]="'tag-' + tag.ID" type="checkbox" [ngModel]="selectedTags().includes(tag.ID)" (change)="toggleTag($event, tag.ID)">
+        <label [for]="'tag-' + tag.ID" class="sui pl-1">
+          <app-tag [tag]="tag"/>
+        </label>
+      </div>
+    }
 
-        <div class="sui flex-x gap-2">
-          <div class="tag-selector">
-            <ng-select [(ngModel)]="selectedTags" (ngModelChange)="selectedAnimals.set([])" [multiple]="true"
-                       placeholder="...Tags auswählen">
-              @for (tag of tagsService.availableTags(); track tag.ID) {
-                <ng-option [value]="tag.ID">
-                  <app-tag [tag]="tag"/>
-                </ng-option>
-              }
-            </ng-select>
-            <br>
-          </div>
+    <b class="sui mt-2">Tiere</b>
+    @for (animal of animalService.animals(); track animal.ID) {
+      <div class="sui flex-x">
+        <input [id]="'tag-' + animal.ID" type="checkbox" [ngModel]="selectedAnimals().findIndex(c => c.ID == animal.ID) !== -1" (change)="toggleAnimal($event, animal)">
+        <label [for]="'tag-' + animal.ID" class="sui pl-1">
+          {{ animal.Name }}
+        </label>
+      </div>
+    }
+  </div>
 
-          <div class="tag-selector">
-            <ng-select [(ngModel)]="selectedAnimals" (ngModelChange)="selectedTags.set([])" [multiple]="true"
-                       placeholder="...Tiere auswählen">
-              @for (animal of animalService.animals(); track animal) {
-                <ng-option [value]="animal">
-                  {{ animal.Name }}
-                </ng-option>
-              }
-            </ng-select>
-            <br>
-          </div>
-        </div>
-        <div class="sui flex-x gap-2">
-          <button class="primary" data-testid="btn-upload-images" (click)="uploadImages()">Hochladen</button>
-          <button class="red" data-testid="btn-delete-images" (click)="deleteSelectedImages()">Löschen</button>
-          <button class="primary secondary" data-testid="btn-update-unused-images" (click)="updateUnusedMediaFiles()">unverwendete Bilder suchen</button>
-        </div>
 
+  <div appFileDrop (filesDropped)="onFilesDropped($event)" (filesHovered)="onFilesHovered($event)"
+       class="sui pl-2 flex-x gap-2 grow-1">
+
+    <div class="sui flex-y gap-2 grow-1 py-3">
+      <h1>Medien</h1>
+      <div class="sui flex-x gap-2">
+        <button class="primary" data-testid="btn-upload-images" (click)="uploadImages()">Hochladen</button>
+        <button class="red" data-testid="btn-delete-images" (click)="deleteSelectedImages()">Löschen</button>
+        <button class="primary secondary" data-testid="btn-update-unused-images" (click)="updateUnusedMediaFiles()">unverwendete Bilder suchen</button>
+      </div>
+
+      @if (images) {
         <div class="sui flex-x gap-2 wrap list dropzone" [class.files-hovered]="filesHovered()"
              [class.with-picker]="true">
           @for (image of images; track image.ID) {
@@ -65,16 +64,21 @@
             </button>
           </div>
         }
-
+        @if(pendingUploadsNumber() > 0) {
+          {{pendingUploadsNumber()}}
+        }
         @let unusedImagesVal = unusedImages();
-        @if(unusedImagesVal && unusedImagesVal.length > 0) {
-          <a class="unused-images-alert" (click)="openUnusedMediaDeleter()">Es wurden <b>{{unusedImagesVal.length}}</b> ungenutze Bild(er) gefunden.
+        @if (unusedImagesVal && unusedImagesVal.length > 0) {
+          <a class="unused-images-alert" (click)="openUnusedMediaDeleter()">Es wurden <b>{{ unusedImagesVal.length }}</b> ungenutze Bild(er) gefunden.
             Bitte klicke hier um zu bestimmen, welche davon gelöscht werden können um Speicherplatz zu sparen.</a>
         }
-
-      </div>
+      }
 
     </div>
+
+  </div>
+  @if (images) {
+
     @let selection = ({images: images, active: activeImageId(), selected: selectedImageIds()} | mediaSelection);
     <div class="sidebar">
       @if (selection.selected!.length == 1) {

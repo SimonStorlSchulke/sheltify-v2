@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"sheltify-new-backend/repository"
 	"strconv"
+	"strings"
 )
 
 func BuildAnimalsFilterFromQuery(r *http.Request) repository.AnimalsFilter {
@@ -24,12 +25,20 @@ func BuildAnimalsFilterFromQuery(r *http.Request) repository.AnimalsFilter {
 		return b
 	}
 
+	parseStringSlice := func(s string) []string {
+		if s == "" {
+			return nil
+		}
+		return strings.Split(s, ";")
+	}
+
 	return repository.AnimalsFilter{
 		AnimalKind: q.Get("animalKind"),
 		Names:      q.Get("names"),
 		MaxNumber:  parseInt(q.Get("maxNumber")),
 		AgeMin:     parseFloat(q.Get("ageMin")),
 		AgeMax:     parseFloat(q.Get("ageMax")),
+		Status:     parseStringSlice(q.Get("status")),
 		SizeMin:    parseInt(q.Get("sizeMin")),
 		SizeMax:    parseInt(q.Get("sizeMax")),
 		Gender:     q.Get("gender"),

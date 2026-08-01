@@ -70,6 +70,7 @@ export type Publishable = CmsType & {
 
 export type CmsAnimal = Publishable & {
   Name: string;
+  SubTitle: string;
   AnimalKind?: string;
   Race: string;
   Birthday: SqlNullTime;

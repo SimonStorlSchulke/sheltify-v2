@@ -1,4 +1,5 @@
-import { CmsImage } from './cms-types';
+import { AnimalsFilter } from './article-types';
+import { CmsAnimal, CmsImage } from './cms-types';
 
 export function sortByPriorityAndUpdatedAt<T extends { Priority: number; UpdatedAt?: string | Date | null }>(entries: T[]) {
   return entries.sort((a, b) => {
@@ -43,4 +44,26 @@ export function collectCmsImageGuidsDeep<T>(input: T): string[] {
   collect(input);
 
   return [...new Set(ids.filter(Boolean))];
+}
+
+
+export function sortOrderedAnimalList(filter: AnimalsFilter, animals: CmsAnimal[]): CmsAnimal[] {
+  const frontAnimals: CmsAnimal[] = [];
+  const backAnimals: CmsAnimal[] = [];
+
+  for (const id of filter.AnimalIdsFront ?? []) {
+    const animal = animals.find(animal => animal.ID === id);
+    if (animal) frontAnimals.push(animal);
+  }
+
+  for (const id of filter.AnimalIdsBack ?? []) {
+    const animal = animals.find(animal => animal.ID === id);
+    if (animal) backAnimals.push(animal);
+  }
+
+  const middleAnimals = animals.filter(a => !filter.AnimalIdsFront?.includes(a.ID) && !filter.AnimalIdsBack?.includes(a.ID));
+
+  sortByPriorityAndUpdatedAt(middleAnimals);
+
+  return [...frontAnimals, ...middleAnimals, ...backAnimals];
 }

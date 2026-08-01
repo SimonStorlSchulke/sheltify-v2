@@ -7,6 +7,7 @@ import (
 type Animal struct {
 	Publishable
 	Name             string
+	SubTitle         string
 	Birthday         sql.NullTime
 	WeightKg         uint
 	ShoulderHeightCm uint

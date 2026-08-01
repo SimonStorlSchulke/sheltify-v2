@@ -5,6 +5,7 @@
 :host {
   min-width: 80dvw;
   display: block;
+  height: 100%;
 }
 
 .list {
@@ -16,7 +17,6 @@
     height: calc(100dvh - 355px);
   }
 }
-
 
 .dropzone {
   position: relative;
@@ -35,6 +35,7 @@
 
 .sidebar {
   width: 450px;
+  min-width: 450px;
   background: $neutral100;
   border-radius: 8px;
   padding: 16px;
@@ -52,4 +53,11 @@
   outline: 1px solid $alert;
   cursor: pointer;
   color: $alert;
+}
+
+.tags-and-animals {
+  padding: 16px;
+  background: $neutral200;
+  width: 175px;
+  min-width: 175px;
 }

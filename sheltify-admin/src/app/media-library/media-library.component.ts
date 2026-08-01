@@ -15,6 +15,7 @@ import { FinishableDialog, ModalService } from '@app/services/modal.service';
 import { TagsService } from '@app/services/tags.service';
 import { TagComponent } from '@app/ui/tag/tag.component';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
+import pLimit from 'p-limit';
 import { lastValueFrom, map, Observable } from 'rxjs';
 import { CmsAnimal, CmsImage } from 'sheltify-lib/cms-types';
 
@@ -33,10 +34,8 @@ class MediaSelectionPipe implements PipeTransform {
   imports: [
     AsyncPipe,
     MediaEntryComponent,
-    NgSelectComponent,
     FormsModule,
     MediaSelectionPipe,
-    NgOptionComponent,
     TagComponent,
     FileDropDirective,
     ImageEditorComponent,
@@ -61,6 +60,7 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
   activeImageId = signal<string>("");
   selectedImageIds = signal(new Set<string>());
   filesHovered = signal<boolean>(false);
+  pendingUploadsNumber = signal<number>(0);
 
   isPicker = false;
   preselectedImage?: CmsImage;
@@ -196,26 +196,57 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
   }
 
   async onFilesDropped(files: FileList) {
+    this.pendingUploadsNumber.set(files.length);
     this.loaderService.setLoading('Bilder hochladen...');
-    const imageIds = new Set<string>();
-    for (const element of files) {
-      const imageTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/svg"]);
 
-      const tags = this.tagsService.availableTags().filter(tag => this.selectedTags().includes(tag.ID)).map(tag => tag.Name);
-      const animalIds = this.selectedAnimals().map(animal => animal.ID);
+    try {
+      console.log(`Uploading ${files.length} files...`);
 
-      let img: CmsImage;
-      if (imageTypes.has(element.type)) {
-        const scaledImages = await this.imageConverterService.generateAllSizes(element);
-        img = await lastValueFrom(this.cmsRequestSv.uploadScaledImage(scaledImages, element.name, tags.join(","), animalIds.join(",")));
-      } else {
-        img = await lastValueFrom(this.cmsRequestSv.uploadFiles([element], element.name, tags.join(","), animalIds.join(",")));
-      }
-      imageIds.add(img.ID);
+      const imageTypes = new Set([
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "image/svg",
+      ]);
+
+      const tags = this.tagsService
+        .availableTags()
+        .filter(tag => this.selectedTags().includes(tag.ID))
+        .map(tag => tag.Name)
+        .join(",");
+
+      const animalIds = this.selectedAnimals()
+        .map(animal => animal.ID)
+        .join(",");
+
+
+      const limit = pLimit(4);
+
+      const uploadPromises = Array.from(files).map(file =>
+        limit(async () => {
+          console.log(`Uploading`, files);
+          const scaledImages = await this.imageConverterService.generateAllSizes(file);
+          console.log("Scaled", file.name);
+          const cmsImage = await lastValueFrom(
+            this.cmsRequestSv.uploadScaledImage(scaledImages,
+              file.name,
+              tags,
+              animalIds)
+          );
+          this.pendingUploadsNumber.update(i => i-1);
+          return cmsImage;
+        })
+      );
+
+      const uploadedImages = await Promise.all(uploadPromises);
+
+      const imageIds = new Set(uploadedImages.map(img => img.ID));
+
+      this.refreshImages.update(i => i + 1);
+      this.selectedImageIds.set(imageIds);
+    } finally {
+      this.loaderService.unsetLoading('Bilder hochladen...');
     }
-    this.refreshImages.update((i) => i + 1);
-    this.loaderService.unsetLoading('Bilder hochladen...');
-    this.selectedImageIds.set(imageIds)
   }
 
   onFilesHovered($event: boolean) {
@@ -254,6 +285,28 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
     // TODO: Auch aktuell NICHT angezeigte Bilder auswählbar machen?
     const selectedImages = Array.from(images).filter(img => selectedIds.has(img.ID));
     this.finishSubject.next(selectedImages);
+  }
+
+  toggleTag(e: Event, tagId: string) {
+    const checked = (e.target as HTMLInputElement).checked;
+    const previousTags = this.selectedTags();
+    if(!checked) {
+    const tags = previousTags.filter(cTagId => cTagId !== tagId);
+      this.selectedTags.set(tags);
+    } else {
+      this.selectedTags.update(tags => [...tags, tagId])
+    }
+  }
+
+  toggleAnimal(e: Event, animal: CmsAnimal) {
+    const checked = (e.target as HTMLInputElement).checked;
+    const previousTags = this.selectedAnimals();
+    if(!checked) {
+    const animals = previousTags.filter(cAnimal => cAnimal.ID !== animal.ID);
+      this.selectedAnimals.set(animals);
+    } else {
+      this.selectedAnimals.update(animals => [...animals, animal]);
+    }
   }
 }
 

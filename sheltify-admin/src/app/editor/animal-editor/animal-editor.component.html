@@ -31,6 +31,7 @@
               <app-radio-buttons-input idName="gender" label="Geschlecht" [options]="['male', 'female']" [optionTranslations]="['Männlich', 'Weiblich']"
                                        [(twoWayModel)]="animal.Gender"/>
             </div>
+              <app-text-input class="sui grow-1" idName="animal-subtitle" label="Untertitel" [(twoWayModel)]="animal.SubTitle"/>
             <app-text-input
               class="description" idName="description" label="Beschreibung" [long]="true"
               [(twoWayModel)]="animal.Description"

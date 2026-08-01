@@ -96,11 +96,10 @@ export class AnimalListComponent {
       label: "Name eingeben"
     });
     if(!name) return;
-    const animalKinds = this.animalKinds();
 
-    const useDefaultAnimalKind = animalKinds.length == 1;
+    const useDefaultAnimalKind = await this.tenantConfigurationService.useDefaultAnimalKind();
 
-    const animal = createNewAnimal(name, useDefaultAnimalKind ? animalKinds[0] : undefined);
+    const animal = createNewAnimal(name, useDefaultAnimalKind);
 
     const savedAnimal = await firstValueFrom(this.cmsRequestService.saveAnimal(animal));
     await this.animalService.reloadAnimals();

@@ -11,8 +11,11 @@ interface Props {
 }
 
 const { section } = Astro.props;
----
 
+const tenant = import.meta.env.TENANT
+// todo - render only for the current tenant?
+
+---
 {section.Content.Type === 'Sponsor' && (<RenderSectionSponsor section={section}/>)}
 {section.Content.Type === 'Tierliste - Auswahl' && (<RenderSectionTierlisteAuswahl section={section}/>)}
 {section.Content.Type === 'Tierliste - Hunde' && (<RenderSectionTierlisteHunde section={section} client:load/>)}

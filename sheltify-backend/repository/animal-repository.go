@@ -1,11 +1,12 @@
 package repository
 
 import (
-	"fmt"
 	"math"
 	"sheltify-new-backend/shtypes"
 	"strings"
 	"time"
+
+	"github.com/lib/pq"
 )
 
 type AnimalsFilter struct {
@@ -15,6 +16,7 @@ type AnimalsFilter struct {
 	AgeMax     float64
 	SizeMin    int
 	SizeMax    int
+	Status     []string
 	Gender     string
 	InGermany  bool
 	Names      string //separated by "-"
@@ -48,13 +50,19 @@ func GetFilteredAnimals(filter AnimalsFilter, tenant string) (*[]shtypes.Animal,
 		query = query.Where("shoulder_height_cm <= ?", filter.SizeMax)
 	}
 
+	if len(filter.Status) > 0 {
+		query = query.Where(
+			"string_to_array(status, ',') && ?::text[]",
+			pq.Array(filter.Status),
+		)
+	}
+
 	now := time.Now()
 
 	if filter.AgeMin > 0 {
 		years := int(math.Floor(filter.AgeMin))
 		months := int(math.Round((filter.AgeMin - float64(years)) * 12))
 		minBirthdate := now.AddDate(-years, -months, 0)
-		fmt.Println("minBirthdate:", minBirthdate)
 		query = query.Where("birthday <= ?", minBirthdate)
 	}
 
@@ -62,7 +70,6 @@ func GetFilteredAnimals(filter AnimalsFilter, tenant string) (*[]shtypes.Animal,
 		years := int(math.Floor(filter.AgeMax))
 		months := int(math.Round((filter.AgeMax - float64(years)) * 12))
 		maxBirthdate := now.AddDate(-years, -months, 0)
-		fmt.Println("minBirthdate:", maxBirthdate)
 		query = query.Where("birthday >= ?", maxBirthdate)
 	}
 

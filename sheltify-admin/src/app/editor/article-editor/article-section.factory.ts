@@ -99,9 +99,12 @@ export function createEmptySection(SectionType: SectionType): Section {
           MaxNumber: undefined,
           AgeRange: [undefined, undefined],
           SizeRange: [undefined, undefined],
+          Status: [],
           Gender: 'both',
           InGermany: undefined,
           Names: '',
+          AnimalIdsFront: [],
+          AnimalIdsBack: [],
         },
         TempFoundAnimals: [],
       };

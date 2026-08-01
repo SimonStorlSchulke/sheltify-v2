@@ -11,7 +11,7 @@ import {
   CmsTeamMember,
   CmsTenantConfiguration,
 } from 'sheltify-lib/cms-types';
-import { collectCmsImageGuidsDeep, filterPublishedAndHasArticle, sortByPriorityAndUpdatedAt } from 'sheltify-lib/cms-utils';
+import { collectCmsImageGuidsDeep, filterPublishedAndHasArticle, sortByPriorityAndUpdatedAt, sortOrderedAnimalList } from 'sheltify-lib/cms-utils';
 import { LoaderService } from '@app/layout/loader/loader.service';
 import { AlertService } from '@app/services/alert.service';
 import { AuthService } from './auth.service';
@@ -154,6 +154,7 @@ export class CmsRequestService {
 
     if(filter.AnimalKind) query += `kind=${filter.AnimalKind}&`;
     if(filter.MaxNumber) query += `maxNumber=${filter.MaxNumber}&`;
+    if (filter.Status[0]) query += `status=${filter.Status.join(';')}&`;
     if(filter.AgeRange[0]) query += `ageMin=${filter.AgeRange[0]}&`;
     if(filter.AgeRange[1]) query += `ageMax=${filter.AgeRange[1]}&`;
     if(filter.SizeRange[0]) query += `sizeMin=${filter.SizeRange[0]}&`;
@@ -161,7 +162,7 @@ export class CmsRequestService {
     if(filter.Gender != 'both') query += `gender=${filter.Gender}&`;
 
     return this.get<CmsAnimal[]>(`${this.publicTenantsUrl}/animals/filtered?${query}`)
-      .pipe(map(response => sortByPriorityAndUpdatedAt(filterPublishedAndHasArticle(response))));
+      .pipe(map(animals => sortOrderedAnimalList(filter, filterPublishedAndHasArticle(animals))));
   }
 
   getAnimalUpdates(days: number): Observable<CmsAnimal[]> {

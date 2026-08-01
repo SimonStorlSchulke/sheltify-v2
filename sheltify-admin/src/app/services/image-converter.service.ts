@@ -1,7 +1,8 @@
-import { Service } from '@angular/core';
+import { Service, signal } from '@angular/core';
 
 @Service()
 export class ImageConverterService {
+
 
   private sizes: [string, number][] = [
     ["thumbnail", 150],
@@ -12,12 +13,16 @@ export class ImageConverterService {
   ];
 
   async generateAllSizes(image: File) {
+    console.log("1")
     const img = new Image();
     img.src = URL.createObjectURL(image);
 
-    await new Promise<void>((resolve) => {
+    await new Promise<void>((resolve, reject) => {
       img.onload = () => resolve();
+      img.onerror = () => reject(new Error(`Unable to decode image: ${image.name}`));
     });
+
+    console.log("2")
 
     let largestAvailableSize = "thumbnail";
     for (const size of this.sizes) {
@@ -25,9 +30,17 @@ export class ImageConverterService {
         largestAvailableSize = size[0];
       }
     }
-
+    console.log({
+      name: image.name,
+      type: image.type,
+      size: image.size,
+      width: img.width,
+      height: img.height,
+    });
+    console.log("START GENERATING SIZES FOR IMG", image.name);
     const images: {size: string, blob: Blob}[] = [];
     for (const size of this.sizes) {
+    console.log("GENERATED SIZE", size);
       images.push({size: size[0], blob: await this.toScaledWebP(img, size[1])});
       if (size[0] == largestAvailableSize) break;
     }
@@ -57,13 +70,13 @@ export class ImageConverterService {
       ctx.drawImage(img, 0, 0, width, Math.ceil(width * aspectRatio));
 
       // Convert the canvas content to a WebP Blob
-      const webpBlob = await new Promise<Blob>((resolve) => {
+      const webpBlob = await new Promise<Blob>((resolve, reject) => {
         canvas.toBlob(
           (blob) => {
             if (blob) {
               resolve(blob);
             } else {
-              throw new Error("Failed to convert to WebP format.");
+              reject(new Error("Failed to convert to WebP format."));
             }
           },
           "image/webp",

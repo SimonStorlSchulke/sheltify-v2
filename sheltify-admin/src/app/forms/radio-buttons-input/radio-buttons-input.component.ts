@@ -11,13 +11,25 @@ import { InputBaseComponent } from '@app/forms/input-base.component';
 export class RadioButtonsInputComponent extends InputBaseComponent{
 
   options = input.required<string[]>();
+  multiSelect = input(false);
   optionImages = input<string[]>();
   optionTranslations = input<string[]>([]);
 
   twoWayModel = model<string | undefined>(undefined);
+  twoWayModelMulti = model<string[] | undefined>(undefined);
 
   onInput(option: string) {
     this.markDirty();
-    this.twoWayModel.set(option);
+
+    if(this.multiSelect()) {
+      const current = this.twoWayModelMulti() ?? [];
+      if (current.includes(option)) {
+        this.twoWayModelMulti.set(current.filter(o => o !== option));
+      } else {
+        this.twoWayModelMulti.set([...current, option]);
+      }
+    } else {
+      this.twoWayModel.set(option);
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Component, computed, input, output, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, input, output, inject, ChangeDetectionStrategy, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CmsRequestService } from '@app/services/cms-request.service';
 import { bootstrapBoxArrowUpRight } from '@ng-icons/bootstrap-icons';
@@ -41,7 +41,7 @@ export class PageEditorComponent {
   private pagesService = inject(PagesService);
   private alertService = inject(AlertService);
   private askSaveService = inject(AskSaveService);
-
+  updatePath = signal(0);
   page = input.required<CmsPage>();
   saveArticle$ = new Subject<undefined>();
   deleted = output();
@@ -51,6 +51,7 @@ export class PageEditorComponent {
   }
 
   pageUrl = computed(() => {
+    this.updatePath();
     let url = this.tenantConfigurationService.config()?.SiteUrl;
     if (!url) return undefined;
     if (!url.endsWith('/')) url += '/';
@@ -63,6 +64,7 @@ export class PageEditorComponent {
     if (!skipArticle) {
       this.saveArticle$.next(undefined);
     }
+    this.updatePath.update(i => i+1);
   }
 
   async createArticle() {

@@ -1,6 +1,7 @@
 import { Component, DestroyRef, effect, input, model, OnInit, Renderer2, signal, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
+import { AskSaveService } from '@app/services/ask-save.service';
 import { bootstrapEye, bootstrapGripVertical, bootstrapPlus, bootstrapX } from '@ng-icons/bootstrap-icons';
 import { provideIcons } from '@ng-icons/core';
 import { lastValueFrom, Observable } from 'rxjs';
@@ -34,6 +35,7 @@ export class ArticleEditorComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private tenantConfigurationService = inject(TenantConfigurationService);
   private cdRef = inject(ChangeDetectorRef);
+  private askSaveService = inject(AskSaveService);
 
 
   showUpdateNote = input<boolean>(false);
@@ -84,6 +86,7 @@ export class ArticleEditorComponent implements OnInit {
     this.exitMoveMode();
     this.editedRow.set(row);
     this.cdRef.markForCheck();
+    this.askSaveService.markDirty();
   }
 
   private addGlobalStyle(css: string) {
@@ -125,10 +128,12 @@ export class ArticleEditorComponent implements OnInit {
     article.Structure.Rows.splice(rowFrom, 1);
     article.Structure.Rows.splice(rowTo, 0, movedItem.sectionRef);
     this.exitMoveMode();
+    this.askSaveService.markDirty();
   }
 
   colorFill(color: string | undefined) {
     this.selectedFillColor.set(color);
+    this.askSaveService.markDirty();
   }
 
   clickSection(section: Section, row: number) {

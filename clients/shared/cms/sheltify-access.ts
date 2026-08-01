@@ -2,7 +2,8 @@ import type { SeoData } from '@shared/types/seo-data';
 import { animalsByArticleId } from 'sheltify-lib/animal-util.ts';
 import { type AnimalsFilter, type CmsArticle } from 'sheltify-lib/article-types.ts';
 import { type CmsAnimal, type CmsBlogEntry, type CmsImage, type CmsPage, type CmsTenantConfiguration } from 'sheltify-lib/cms-types';
-import { filterPublishedAndHasArticle, sortByPriorityAndUpdatedAt } from 'sheltify-lib/cms-utils.ts';
+import { filterPublishedAndHasArticle, sortByPriorityAndUpdatedAt, sortOrderedAnimalList } from 'sheltify-lib/cms-utils.ts';
+
 
 export class SheltifyAccess {
 
@@ -118,6 +119,7 @@ export class SheltifyAccess {
 
     if (filter.AnimalKind) query += `kind=${filter.AnimalKind}&`;
     if (filter.MaxNumber) query += `maxNumber=${filter.MaxNumber}&`;
+    if (filter.Status[0]) query += `status=${filter.Status.join(';')}&`;
     if (filter.AgeRange[0]) query += `ageMin=${filter.AgeRange[0]}&`;
     if (filter.AgeRange[1]) query += `ageMax=${filter.AgeRange[1]}&`;
     if (filter.SizeRange[0]) query += `sizeMin=${filter.SizeRange[0]}&`;
@@ -125,16 +127,21 @@ export class SheltifyAccess {
     if (filter.Gender != 'both') query += `gender=${filter.Gender}&`;
     if (filter.Names != 'both') query += `names=${filter.Names}&`;
 
-    const animals = await this.get<CmsAnimal[]>(`animals/filtered?${query}`);
-    return sortByPriorityAndUpdatedAt(filterPublishedAndHasArticle(animals));
+    const animals = filterPublishedAndHasArticle(await this.get<CmsAnimal[]>(`animals/filtered?${query}`));
+
+    return sortOrderedAnimalList(filter, animals);
   }
 
+  // TODO - use separate endpoint
   async getAnimalsByNames(animalNames: string): Promise<CmsAnimal[]> {
     return this.getFilteredAnimals({
       AnimalKind: undefined,
       MaxNumber: undefined,
       AgeRange: [undefined, undefined],
       SizeRange: [undefined, undefined],
+      Status: [],
+      AnimalIdsFront: [],
+      AnimalIdsBack: [],
       Gender: "both",
       InGermany: undefined,
       Names: animalNames,

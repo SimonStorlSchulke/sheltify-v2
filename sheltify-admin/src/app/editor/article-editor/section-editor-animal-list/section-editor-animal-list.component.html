@@ -1,30 +1,92 @@
-<div class="sui flex-y gap-2" (input)="onInput.next()">
+<div class="sui flex-x gap-2 wrap" (input)="onInput.next()">
+  <div class="sui flex-y gap-2 grow-1">
 
-  <app-number-input
-    idName="amount" label="Maximal angezeigte Anzahl (freilassen für alle)"
-    [(twoWayModel)]="section().Content.MaxNumber"
-  />
+    <app-number-input
+      idName="amount" label="Maximal angezeigte Anzahl (freilassen für alle)"
+      [(twoWayModel)]="section().Content.MaxNumber"
+    />
 
-  <app-range-input
-    idName="age" label="Alter in Jahren"
-    [stepSize]="0.25"
-    explanation="von x bis y Jahre (von / bis kann auch leer sein um Alter in eine Richtung offen zu lassen)"
-    [(twoWayModel)]="section().Content.AgeRange"
-  />
-  <app-range-input
-    idName="size" label="Größe in cm"
-    explanation="von x bis y cm (von / bis kann auch leer sein um Alter in eine Richtung offen zu lassen)"
-    [(twoWayModel)]="section().Content.SizeRange"
-  />
+    <div class="sui flex-x gap-3 wrap">
+      <app-range-input
+        idName="age" label="Alter in Jahren"
+        [stepSize]="0.25"
+        explanation="von x bis y Jahre (von / bis kann auch leer sein um Alter in eine Richtung offen zu lassen)"
+        [(twoWayModel)]="section().Content.AgeRange"
+      />
+      <app-range-input
+        idName="size" label="Größe in cm"
+        explanation="von x bis y cm (von / bis kann auch leer sein um Alter in eine Richtung offen zu lassen)"
+        [(twoWayModel)]="section().Content.SizeRange"
+      />
+      <app-select-input
+        class="sui grow-1"
+        idName="gender" label="Geschlecht"
+        [options]="['both', 'male', 'female']"
+        [optionTranslations]="{
+        both: 'beide',
+        male: 'männlich',
+        female: 'weiblich',
+      }"
+        (onInputChange)="onInput.next()"
+        [(twoWayModel)]="section().Content.Gender"
+      />
+    </div>
 
-  <app-select-input
-    idName="gender" label="Geschlecht"
-    [options]="['both', 'male', 'female']"
-    [optionTranslations]="{
-      both: 'beide',
-      male: 'männlich',
-      female: 'weiblich',
-    }"
-    (onInputChange)="onInput.next()"
-    [(twoWayModel)]="section().Content.Gender"/>
+
+    <app-radio-buttons-input
+      idName="status"
+      label="Status"
+      [options]="animalStati"
+      [multiSelect]="true"
+      [(twoWayModelMulti)]="section().Content.Status"
+      (twoWayModelMultiChange)="onInput.next()"
+    />
+
+    @let animalsFront = section().Content.AnimalIdsFront;
+    @let animalsBack = section().Content.AnimalIdsBack;
+
+    <b>Tiere vorne in der Liste anzeigen</b>
+    <ng-select [(ngModel)]="section().Content.AnimalIdsFront" (ngModelChange)="onInput.next()" [multiple]="true" placeholder="...Tiere auswählen">
+      @for (animal of section().TempFoundAnimals?.filter(a => !animalsBack?.includes(a.ID)); track animal.ID) {
+        <ng-option [value]="animal.ID">
+          {{ animal.Name }}
+        </ng-option>
+      }
+    </ng-select>
+
+    <b>Tiere hinten in der Liste anzeigen</b>
+    <ng-select [(ngModel)]="section().Content.AnimalIdsBack" (ngModelChange)="onInput.next()" [multiple]="true" placeholder="...Tiere auswählen">
+      @for (animal of section().TempFoundAnimals?.filter(a => !animalsFront?.includes(a.ID)); track animal.ID) {
+        <ng-option [value]="animal.ID">
+          {{ animal.Name }}
+        </ng-option>
+      }
+    </ng-select>
+
+    <div
+      class="sui flex-x gap-2 wrap cards"
+      cdkDropList
+      [cdkDropListData]="section().TempFoundAnimals"
+      (cdkDropListDropped)="drop($event)"
+    >
+      @for (animal of section().TempFoundAnimals; track animal.ID) {
+        <div
+          class="animal-mini-card"
+          cdkDrag
+        >
+          @if (animal.Portrait) {
+            <img [cmsImage]="animal.Portrait">
+            <span>{{ animal.Name }}</span>
+          }
+        </div>
+      }
+    </div>
+
+  </div>
+  <div class="found-animals sui flex-y">
+    <b>Gefundene Tiere:</b>
+    @for(animal of section().TempFoundAnimals; track animal.ID) {
+      {{animal.Name}}
+    }
+  </div>
 </div>

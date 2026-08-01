@@ -36,6 +36,11 @@ export class TenantConfigurationService {
     return this.stringValueToArray('AnimalKinds');
   }
 
+  async useDefaultAnimalKind(): Promise<string | undefined> {
+    const animalKinds = await this.stringValueToArray('AnimalKinds');
+    return animalKinds.length == 1 ? animalKinds[0] : undefined;
+  }
+
   async blogCategories(): Promise<string[]> {
     return this.stringValueToArray('BlogCategories');
   }
