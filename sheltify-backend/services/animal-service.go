@@ -33,15 +33,16 @@ func BuildAnimalsFilterFromQuery(r *http.Request) repository.AnimalsFilter {
 	}
 
 	return repository.AnimalsFilter{
-		AnimalKind: q.Get("animalKind"),
-		Names:      q.Get("names"),
-		MaxNumber:  parseInt(q.Get("maxNumber")),
-		AgeMin:     parseFloat(q.Get("ageMin")),
-		AgeMax:     parseFloat(q.Get("ageMax")),
-		Status:     parseStringSlice(q.Get("status")),
-		SizeMin:    parseInt(q.Get("sizeMin")),
-		SizeMax:    parseInt(q.Get("sizeMax")),
-		Gender:     q.Get("gender"),
-		InGermany:  parseBool(q.Get("inGermany")),
+		AnimalKind:    q.Get("animalKind"),
+		Names:         q.Get("names"),
+		MaxNumber:     parseInt(q.Get("maxNumber")),
+		AgeMin:        parseFloat(q.Get("ageMin")),
+		AgeMax:        parseFloat(q.Get("ageMax")),
+		StatusInclude: parseStringSlice(q.Get("statusInclude")),
+		StatusExclude: parseStringSlice(q.Get("statusExclude")),
+		SizeMin:       parseInt(q.Get("sizeMin")),
+		SizeMax:       parseInt(q.Get("sizeMax")),
+		Gender:        q.Get("gender"),
+		InGermany:     parseBool(q.Get("inGermany")),
 	}
 }

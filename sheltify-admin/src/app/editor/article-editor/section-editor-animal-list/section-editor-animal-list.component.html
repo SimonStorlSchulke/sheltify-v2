@@ -1,5 +1,4 @@
-<div class="sui flex-x gap-2 wrap" (input)="onInput.next()">
-  <div class="sui flex-y gap-2 grow-1">
+<div class="sui flex-y gap-2 wrap" (input)="onInput.next()">
 
     <app-number-input
       idName="amount" label="Maximal angezeigte Anzahl (freilassen für alle)"
@@ -32,61 +31,85 @@
       />
     </div>
 
-
-    <app-radio-buttons-input
-      idName="status"
-      label="Status"
-      [options]="animalStati"
-      [multiSelect]="true"
-      [(twoWayModelMulti)]="section().Content.Status"
-      (twoWayModelMultiChange)="onInput.next()"
-    />
-
-    @let animalsFront = section().Content.AnimalIdsFront;
-    @let animalsBack = section().Content.AnimalIdsBack;
-
-    <b>Tiere vorne in der Liste anzeigen</b>
-    <ng-select [(ngModel)]="section().Content.AnimalIdsFront" (ngModelChange)="onInput.next()" [multiple]="true" placeholder="...Tiere auswählen">
-      @for (animal of section().TempFoundAnimals?.filter(a => !animalsBack?.includes(a.ID)); track animal.ID) {
-        <ng-option [value]="animal.ID">
-          {{ animal.Name }}
-        </ng-option>
-      }
-    </ng-select>
-
-    <b>Tiere hinten in der Liste anzeigen</b>
-    <ng-select [(ngModel)]="section().Content.AnimalIdsBack" (ngModelChange)="onInput.next()" [multiple]="true" placeholder="...Tiere auswählen">
-      @for (animal of section().TempFoundAnimals?.filter(a => !animalsFront?.includes(a.ID)); track animal.ID) {
-        <ng-option [value]="animal.ID">
-          {{ animal.Name }}
-        </ng-option>
-      }
-    </ng-select>
-
-    <div
-      class="sui flex-x gap-2 wrap cards"
-      cdkDropList
-      [cdkDropListData]="section().TempFoundAnimals"
-      (cdkDropListDropped)="drop($event)"
-    >
-      @for (animal of section().TempFoundAnimals; track animal.ID) {
-        <div
-          class="animal-mini-card"
-          cdkDrag
-        >
-          @if (animal.Portrait) {
-            <img [cmsImage]="animal.Portrait">
-            <span>{{ animal.Name }}</span>
-          }
-        </div>
-      }
+    <div class="sui flex-x gap-2 wrap">
+      <app-radio-buttons-input
+        idName="status"
+        label="Eingeschlossene Stati"
+        [options]="animalStati"
+        [multiSelect]="true"
+        [(twoWayModelMulti)]="section().Content.StatusInclude"
+        (twoWayModelMultiChange)="onInput.next()"
+      />
+      <app-radio-buttons-input
+        idName="status"
+        label="Ausgschlossene Stati"
+        [options]="animalStati"
+        [multiSelect]="true"
+        [(twoWayModelMulti)]="section().Content.StatusExclude"
+        (twoWayModelMultiChange)="onInput.next()"
+      />
     </div>
 
-  </div>
-  <div class="found-animals sui flex-y">
-    <b>Gefundene Tiere:</b>
-    @for(animal of section().TempFoundAnimals; track animal.ID) {
-      {{animal.Name}}
-    }
-  </div>
+  <br>
+  <h2>Reihenfolge <button class="small secondary questionmark" type="button" (click)="showExplanation()"><span>?</span></button></h2>
+    <div class="lists">
+      <b>Vorne anzuzeignde Hunde</b>
+      <div
+        class="droplist"
+        id="front"
+        cdkDropList
+        cdkDropListOrientation="mixed"
+        #frontList="cdkDropList"
+        [cdkDropListData]="frontAnimals"
+        [cdkDropListConnectedTo]="[middleList, backList]"
+        (cdkDropListDropped)="drop($event)">
+
+        @for (animal of frontAnimals; track animal.ID) {
+          <div class="animal-mini-card" cdkDrag>
+            <img [cmsImage]="animal.Portrait!">
+            <span>{{ animal.Name }}</span>
+          </div>
+        }
+      </div>
+      <br>
+      <b>Automatisch sortierte Hunde in der Mitte</b>
+      <div
+        class="droplist"
+        id="middle"
+        cdkDropList
+        cdkDropListOrientation="mixed"
+        #middleList="cdkDropList"
+        [cdkDropListSortingDisabled]="true"
+        [cdkDropListData]="middleAnimals"
+        [cdkDropListConnectedTo]="[frontList, backList]"
+        (cdkDropListDropped)="drop($event)">
+        @for (animal of middleAnimals; track animal.ID) {
+          <div class="animal-mini-card" cdkDrag>
+            <img [cmsImage]="animal.Portrait!">
+            <span>{{ animal.Name }}</span>
+          </div>
+        }
+      </div>
+      <br>
+      <b>Hinten anzuzeignde Hunde</b>
+      <div
+        class="droplist"
+        id="back"
+        cdkDropList
+        cdkDropListOrientation="mixed"
+        #backList="cdkDropList"
+        [cdkDropListData]="backAnimals"
+        [cdkDropListConnectedTo]="[frontList, middleList]"
+        (cdkDropListDropped)="drop($event)">
+
+        @for (animal of backAnimals; track animal.ID) {
+          <div class="animal-mini-card" cdkDrag>
+            <img [cmsImage]="animal.Portrait!">
+            <span>{{ animal.Name }}</span>
+          </div>
+        }
+      </div>
+
+    </div>
+
 </div>

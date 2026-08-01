@@ -10,16 +10,17 @@ import (
 )
 
 type AnimalsFilter struct {
-	AnimalKind string
-	MaxNumber  int
-	AgeMin     float64
-	AgeMax     float64
-	SizeMin    int
-	SizeMax    int
-	Status     []string
-	Gender     string
-	InGermany  bool
-	Names      string //separated by "-"
+	AnimalKind    string
+	MaxNumber     int
+	AgeMin        float64
+	AgeMax        float64
+	SizeMin       int
+	SizeMax       int
+	StatusInclude []string
+	StatusExclude []string
+	Gender        string
+	InGermany     bool
+	Names         string //separated by "-"
 }
 
 func GetFilteredAnimals(filter AnimalsFilter, tenant string) (*[]shtypes.Animal, error) {
@@ -50,10 +51,17 @@ func GetFilteredAnimals(filter AnimalsFilter, tenant string) (*[]shtypes.Animal,
 		query = query.Where("shoulder_height_cm <= ?", filter.SizeMax)
 	}
 
-	if len(filter.Status) > 0 {
+	if len(filter.StatusInclude) > 0 {
 		query = query.Where(
 			"string_to_array(status, ',') && ?::text[]",
-			pq.Array(filter.Status),
+			pq.Array(filter.StatusInclude),
+		)
+	}
+
+	if len(filter.StatusExclude) > 0 {
+		query = query.Where(
+			"NOT (string_to_array(status, ',') && ?::text[])",
+			pq.Array(filter.StatusExclude),
 		)
 	}
 

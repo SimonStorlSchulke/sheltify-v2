@@ -119,7 +119,7 @@ export class SheltifyAccess {
 
     if (filter.AnimalKind) query += `kind=${filter.AnimalKind}&`;
     if (filter.MaxNumber) query += `maxNumber=${filter.MaxNumber}&`;
-    if (filter.Status[0]) query += `status=${filter.Status.join(';')}&`;
+    if (filter.StatusInclude[0]) query += `status=${filter.StatusInclude.join(';')}&`;
     if (filter.AgeRange[0]) query += `ageMin=${filter.AgeRange[0]}&`;
     if (filter.AgeRange[1]) query += `ageMax=${filter.AgeRange[1]}&`;
     if (filter.SizeRange[0]) query += `sizeMin=${filter.SizeRange[0]}&`;
@@ -139,7 +139,7 @@ export class SheltifyAccess {
       MaxNumber: undefined,
       AgeRange: [undefined, undefined],
       SizeRange: [undefined, undefined],
-      Status: [],
+      StatusInclude: [],
       AnimalIdsFront: [],
       AnimalIdsBack: [],
       Gender: "both",
