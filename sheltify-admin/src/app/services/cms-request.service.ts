@@ -25,8 +25,8 @@ export type CollectionResult<T> = {
 
 @Service()
 export class CmsRequestService {
-  static readonly adminApiUrl = 'http://localhost:3000/admin/api/';
-  static readonly publicApiUrl = 'http://localhost:3000/api/';
+  static readonly adminApiUrl = '/admin/api/';
+  static readonly publicApiUrl = '/api/';
 
   private authService = inject(AuthService);
   private httpClient = inject(HttpClient);
@@ -376,7 +376,7 @@ export class CmsRequestService {
   ): OperatorFunction<T, T> {
     const loadTimerMs = 300;
     return (source: Observable<T>): Observable<T> => {
-      const loaderText = (new URL(url).pathname);
+      const loaderText = (new URL(url, window.location.origin).pathname);
 
       let timerSub = timer(loadTimerMs)
         .subscribe({
@@ -387,7 +387,7 @@ export class CmsRequestService {
         tap({
           next: () => {
               if (message != "") {
-                this.alertService.openToast(message, new URL(url).pathname, 'success')
+                this.alertService.openToast(message, new URL(url, window.location.origin).pathname, 'success')
               }
           },
           error: (e) => {

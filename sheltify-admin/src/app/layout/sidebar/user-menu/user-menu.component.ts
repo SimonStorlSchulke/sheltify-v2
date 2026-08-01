@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
 import { AuthService } from '../../../services/auth.service';
 import { AsyncPipe } from '@angular/common';
@@ -14,15 +14,11 @@ import { Router } from '@angular/router';
     changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './user-menu.component.scss'
 })
-export class UserMenuComponent implements OnInit {
+export class UserMenuComponent {
   authService = inject(AuthService);
   private router = inject(Router);
 
   user$ = this.authService.user$;
-
-  ngOnInit() {
-
-  }
 
   logout() {
     this.authService.logout();

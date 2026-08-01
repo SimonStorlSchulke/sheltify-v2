@@ -1,4 +1,4 @@
-git reset --hard
+git reset --hard origin/main
 git pull
 
 npm run --prefix ./article-renderer build
