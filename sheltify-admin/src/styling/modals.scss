@@ -6,7 +6,6 @@
 .modal-lg-no-padding {
   background: $neutral100;
   padding: 16px;
-  max-width: 1200px !important;
 
   & :focus {
     outline: none;
@@ -17,6 +16,7 @@
 .modal-alert,
 .modal-lg {
   border-radius: 12px;
+  max-width: 1200px !important;
 }
 
 .modal-alert {

@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { AlertService } from '@app/services/alert.service';
 import { firstValueFrom } from 'rxjs';
 import { AuthService } from '@app/services/auth.service';
 import { CmsRequestService } from '@app/services/cms-request.service';
@@ -24,6 +25,7 @@ import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 })
 export class SidebarComponent {
   private cmsRequestService = inject(CmsRequestService);
+  private alertService = inject(AlertService);
 
   router = inject(Router);
   tenantConfigurationService = inject(TenantConfigurationService);
@@ -36,6 +38,7 @@ export class SidebarComponent {
       const response = await firstValueFrom(this.cmsRequestService.triggerBuild());
       console.log(response)
       await this.tenantConfigurationService.reloadConfig();
+      this.alertService.openToast('Seite erfolgreich gebaut');
     } finally {
       this.building.set(false);
     }

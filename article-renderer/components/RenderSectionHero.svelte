@@ -62,7 +62,7 @@
         img={image}
         size="xlarge"
         cssClass="hero-img"
-        contain={true} refetch={true}
+        contain={true}
         cssStyle={`transform: translateX(${index * 100}%)`}
       />
     {/each}
@@ -71,7 +71,7 @@
       img={section.Content.MediaFiles[0]}
       size="xlarge"
       cssClass="hero-img"
-      contain={true} refetch={true}
+      contain={true}
       cssStyle={`transform: translateX(${section.Content.MediaFiles.length * 100}%)`}
     />
   </div>
