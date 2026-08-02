@@ -1,5 +1,5 @@
 const isProd =
-  (import.meta as any).env.ENVIRONMENT === 'production' ||
+  (import.meta as any).env?.ENVIRONMENT === 'production' ||
   (typeof window !== 'undefined' &&
     !window.location.origin.startsWith('http://localhost'));
 

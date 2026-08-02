@@ -5,7 +5,7 @@ import { type CmsAnimal, type CmsBlogEntry, type CmsImage, type CmsPage, type Cm
 import { filterPublishedAndHasArticle, sortByPriorityAndUpdatedAt, sortOrderedAnimalList } from 'sheltify-lib/cms-utils.ts';
 
 const isProd =
-  (import.meta as any).env.ENVIRONMENT === 'production' ||
+  (import.meta as any).env?.ENVIRONMENT === 'production' ||
   (typeof window !== 'undefined' &&
     !window.location.origin.startsWith('http://localhost'));
 
@@ -27,10 +27,8 @@ export class SheltifyAccess {
     "Content-Type": "application/json",
   };
 
-  uploadsUrl = isProd ? 'https://editor.sheltify.de/api/uploads/'
-    : 'http://localhost:3000/api/uploads/' as const;
-  staticUrl = isProd ? 'https://editor.sheltify.de/api/static/'
-    : 'http://localhost:3000/api/static/' as const;
+  uploadsUrl = config.uploadsUrl;
+  staticUrl = config.staticUrl;
 
   get apiBaseUrl() {
     return (isProd ? 'https://editor.sheltify.de/api/' : 'http://localhost:3000/api/') + this.tenant + '/';

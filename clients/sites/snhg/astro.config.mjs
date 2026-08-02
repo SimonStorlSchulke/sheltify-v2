@@ -1,7 +1,7 @@
 import baseConfig from '../../astro.config.mjs';
 import { defineConfig } from "astro/config";
 
-const isProduction = process.env.ENVIRONMENT === "production";
+const isProduction = process.env?.ENVIRONMENT === "production";
 
 export default defineConfig({
     ...baseConfig,

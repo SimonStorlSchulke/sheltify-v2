@@ -2,6 +2,7 @@ import { cms } from '@shared/cms/sheltify-access.ts';
 import type { CmsImage, CmsImagesSize } from 'sheltify-lib/cms-types.ts';
 
 export function getImageSrc(image: CmsImage, requestedSize: CmsImagesSize): string {
+  console.log("cms.uploadsUr", cms.uploadsUrl)
   if(image.OriginalFileName.endsWith('.svg')) {
     return `${cms.uploadsUrl}${image.ID}.svg`;
   }
