@@ -4,6 +4,20 @@ import { type AnimalsFilter, type CmsArticle } from 'sheltify-lib/article-types.
 import { type CmsAnimal, type CmsBlogEntry, type CmsImage, type CmsPage, type CmsTenantConfiguration } from 'sheltify-lib/cms-types';
 import { filterPublishedAndHasArticle, sortByPriorityAndUpdatedAt, sortOrderedAnimalList } from 'sheltify-lib/cms-utils.ts';
 
+const isProd =
+  (import.meta as any).env.ENVIRONMENT === 'production' ||
+  (typeof window !== 'undefined' &&
+    window.location.origin.startsWith('http://localhost'));
+
+export const config = {
+  uploadsUrl: isProd
+    ? 'https://editor.sheltify.de/api/uploads/'
+    : 'http://localhost:3000/api/uploads/',
+
+  staticUrl: isProd
+    ? 'https://editor.sheltify.de/api/static/'
+    : 'http://localhost:3000/api/static/',
+};
 
 export class SheltifyAccess {
 
@@ -13,11 +27,13 @@ export class SheltifyAccess {
     "Content-Type": "application/json",
   };
 
-  uploadsUrl = 'http://localhost:3000/api/uploads/' as const;
-  staticUrl = 'http://localhost:3000/api/static/' as const;
+  uploadsUrl = isProd ? 'https://editor.sheltify.de/api/uploads/'
+    : 'http://localhost:3000/api/uploads/' as const;
+  staticUrl = isProd ? 'https://editor.sheltify.de/api/static/'
+    : 'http://localhost:3000/api/static/' as const;
 
   get apiBaseUrl() {
-    return `http://localhost:3000/api/${this.tenant}/`;
+    return (isProd ? 'https://editor.sheltify.de/api/' : 'http://localhost:3000/api/') + this.tenant + '/';
   }
   
   get formSubmitUrl() {
@@ -140,6 +156,7 @@ export class SheltifyAccess {
       AgeRange: [undefined, undefined],
       SizeRange: [undefined, undefined],
       StatusInclude: [],
+      StatusExclude: [],
       AnimalIdsFront: [],
       AnimalIdsBack: [],
       Gender: "both",
