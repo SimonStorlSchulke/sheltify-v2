@@ -1,7 +1,7 @@
 const isProd =
   (import.meta as any).env.ENVIRONMENT === 'production' ||
   (typeof window !== 'undefined' &&
-    window.location.origin.startsWith('http://localhost'));
+    !window.location.origin.startsWith('http://localhost'));
 
 export const config = {
   uploadsUrl: isProd
