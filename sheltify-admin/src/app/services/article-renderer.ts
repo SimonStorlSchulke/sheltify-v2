@@ -3,7 +3,7 @@ import { SectionType } from 'sheltify-lib/article-types';
 import { CmsImage, CmsImagesSize } from 'sheltify-lib/cms-types';
 
 export const sectionLabels = new Map<SectionType, string>([
-  ['title', 'Titelsektion'],
+  ['title', 'Überschrift'],
   ['text', 'Textsektion'],
   ['image', 'Bildersektion'],
   ['video', 'Videosektion'],

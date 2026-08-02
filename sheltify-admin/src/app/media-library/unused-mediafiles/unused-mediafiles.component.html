@@ -3,9 +3,12 @@
   <h3>Die folgenden Bilder sind ungenutzt</h3>
   <span>Dürfen diese enternt werden um Speicherplatz zu sparen?</span>
 
+  <div class="sui flex-x gap-1 wrap">
+
   @for (mediaFile of unusedMediafiles; track $index) {
     <app-media-entry [media]="mediaFile" [selected]="selectedEntries().has(mediaFile.ID)" (click)="toggleSelectEntry(mediaFile.ID)"/>
   }
+  </div>
 
   <div class="sui flex-x gap-2 jc-end">
     <button (click)="dialogRef.close()" class="secondary">Nein!</button>

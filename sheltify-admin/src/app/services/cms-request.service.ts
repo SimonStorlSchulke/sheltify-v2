@@ -14,7 +14,7 @@ import {
 import { collectCmsImageGuidsDeep, filterPublishedAndHasArticle, sortByPriorityAndUpdatedAt, sortOrderedAnimalList } from 'sheltify-lib/cms-utils';
 import { LoaderService } from '@app/layout/loader/loader.service';
 import { AlertService } from '@app/services/alert.service';
-import { AuthService } from './auth.service';
+import { AuthService, CmsUser } from './auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, timer, tap, OperatorFunction, lastValueFrom, Subject, firstValueFrom } from 'rxjs';
 
@@ -58,6 +58,33 @@ export class CmsRequestService {
 
   saveTeamMember(user: CmsTeamMember): Observable<CmsTeamMember> {
     return this.postOrPatch<CmsTeamMember>('teammembers', user);
+  }
+
+  saveUser(user: CmsUser): Observable<CmsUser> {
+    return this.patch<CmsUser>('users', user);
+  }
+
+  changePassword(userId: string, newPassword: string): Observable<string> {
+    const formData = new FormData();
+
+    formData.append('password', newPassword);
+    formData.append('userid', userId);
+
+    return this.httpClient.patch<string>(
+      `${CmsRequestService.adminApiUrl}change-password`,
+      formData,
+      {
+        timeout: 10000,
+        headers: {
+          Authorization: `Bearer ${this.authService.bearer}`,
+        },
+        withCredentials: true,
+      }
+    );
+  }
+
+  deleteUser(userId: string): Observable<string> {
+    return this.delete<string>('users/' + userId);
   }
 
   deleteTeamMember(ids: string[]): Observable<void> {
@@ -252,8 +279,40 @@ export class CmsRequestService {
     return this.httpClient.get<CmsFormSubmission>(CmsRequestService.adminApiUrl + 'forms/submitted/' + id, this.options());
   }
 
-   deleteSubmittedForms(ids: string[]): Observable<void> {
+  deleteSubmittedForms(ids: string[]): Observable<void> {
     return this.delete(`forms/submitted?ids=${ids.join(',')}`)
+  }
+
+  getUsers(): Observable<CmsUser[]> {
+    return this.get<CmsUser[]>(`${CmsRequestService.adminApiUrl}users`);
+  }
+
+  createUser(
+    tenant: string,
+    username: string,
+    password: string,
+    email: string,
+    role: string
+  ): Observable<CmsUser> {
+    const formData = new FormData();
+
+    formData.append('tenant', tenant);
+    formData.append('username', username);
+    formData.append('password', password);
+    formData.append('email', email);
+    formData.append('role', role);
+
+    return this.httpClient.post<CmsUser>(
+      `${CmsRequestService.adminApiUrl}create-user`,
+      formData,
+      {
+        timeout: 10000,
+        headers: {
+          Authorization: `Bearer ${this.authService.bearer}`,
+        },
+        withCredentials: true,
+      }
+    );
   }
 
   uploadScaledImage(files: { size: string; blob: Blob; }[], fileName: string, commaSeparatedTags: string, commaSeparatedAnimalIds: string) {

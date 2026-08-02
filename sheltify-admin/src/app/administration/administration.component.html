@@ -1,9 +1,36 @@
-<p>
-  Toodo:
-  - Nutzerliste
-  - Tenants Liste
-  - Nutzer erstellen, bearbeiten / löschen
-  - Tenants erstellen, bearbeiten / löschen
+<div class="sui py-2 px-3">
+  <h1>Administration</h1>
+  <div class="sui flex-x gap-2 wrap py-2">
+    <button class="primary" (click)="createUser()">+ Nutzer erstellen</button>
+  </div>
 
-  im backend jede Rute absichern mit check auf SuperAdmin
-</p>
+
+  <table>
+    <thead>
+      <th>Name</th>
+      <th>Tenant</th>
+      <th>Role</th>
+      <th>Email</th>
+      <th>Actions</th>
+    </thead>
+
+    <tbody>
+    @for (user of users(); track user.ID) {
+      <tr>
+        <td><app-text-input [(twoWayModel)]="user.Name" [idName]="user.ID + '-name'" label="" /></td>
+        <td><app-text-input [(twoWayModel)]="user.TenantID" [idName]="user.ID + '-name'" label="" /></td>
+        <td><app-text-input [(twoWayModel)]="user.Role" [idName]="user.ID + '-name'" label="" /></td>
+        <td><app-text-input [(twoWayModel)]="user.Email" [idName]="user.ID + '-name'" label="" /></td>
+        <td>
+          <div class="sui flex-x gap-1">
+            <button class="secondary" (click)="save(user)">Speichern</button>
+            <button class="secondary" (click)="changePassword(user.ID)">Passwort ändern</button>
+            <button class="secondary" (click)="deleteUser(user.ID)">Nutzer löschen</button>
+          </div>
+        </td>
+      </tr>
+    }
+    </tbody>
+  </table>
+
+</div>

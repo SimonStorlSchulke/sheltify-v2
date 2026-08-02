@@ -13,8 +13,15 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	tenant := r.FormValue("tenant")
 	role := r.FormValue("role")
 
+	currentUser := services.UserFromRequest(r)
+
+	if currentUser == nil || currentUser.Role != "SUPERADMIN" {
+		forbiddenResponse(w, r, "Only SUPERADMIN can register new users")
+		return
+	}
+
 	if !slices.Contains([]string{"SUPERADMIN", "ADMIN", "EDITOR", "UPLOADER"}, role) {
-		badRequestResponse(w, r, "Invalid role. Only ADMIN, EDITOR and UPLOADER are allowed.")
+		badRequestResponse(w, r, "Invalid role "+role+". Only ADMIN, EDITOR and UPLOADER are allowed.")
 		return
 	}
 

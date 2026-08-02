@@ -1,9 +1,13 @@
+@use "colors" as *;
+
 table {
   border-collapse: collapse;
+  box-shadow: 4px 4px 8px $neutral200;
 }
 
 th, td {
   text-align: left;
+  background: #fff;
   padding: 4px 8px;
-  border: 1px solid;
+  border: 1px solid $neutral400;
 }

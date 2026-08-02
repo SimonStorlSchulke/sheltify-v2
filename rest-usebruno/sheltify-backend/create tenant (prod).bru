@@ -1,13 +1,21 @@
 meta {
-  name: create tenant
+  name: create tenant (prod)
   type: http
-  seq: 21
+  seq: 23
 }
 
 post {
-  url: http://localhost:3000/admin/api/create-tenant
+  url: https://editor.sheltify.de/admin/api/create-tenant?Streunernothilfe Grenzenlos e.V.=snhg
   body: multipartForm
-  auth: inherit
+  auth: bearer
+}
+
+params:query {
+  "Streunernothilfe Grenzenlos e.V.": snhg
+}
+
+auth:bearer {
+  token: 8347tuijeworkmt59zjiok
 }
 
 body:json {

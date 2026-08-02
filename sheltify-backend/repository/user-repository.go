@@ -10,6 +10,14 @@ func GetUserByName(name string) (*shtypes.User, error) {
 	return &user, nil
 }
 
+func GetUserById(id string) (*shtypes.User, error) {
+	var user shtypes.User
+	if err := db.Where("id = ?", id).First(&user).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
 func GetUserBySessionToken(sessionToken string) (*shtypes.User, error) {
 	var user shtypes.User
 	if err := db.Where("session_token = ?", sessionToken).First(&user).Error; err != nil {
@@ -40,6 +48,13 @@ func SaveUser(user *shtypes.User) error {
 	return nil
 }
 
+func DeleteUserById(id string) error {
+	if err := db.Delete(&shtypes.User{}, "id = ?", id).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 func UserAlreadyExistsForTenantAndEmail(email string, tenant string) (bool, error) {
 	var count int64
 
@@ -51,4 +66,12 @@ func UserAlreadyExistsForTenantAndEmail(email string, tenant string) (bool, erro
 	}
 
 	return count > 0, nil
+}
+
+func GetUsers(tenant string, out *[]shtypes.User) error {
+
+	if err := db.Find(out).Error; err != nil {
+		return err
+	}
+	return nil
 }

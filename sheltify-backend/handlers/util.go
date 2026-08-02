@@ -186,3 +186,12 @@ func DefaultDeleteByIds[T shtypes.Validatable](w http.ResponseWriter, r *http.Re
 	}
 	return []string{}
 }
+
+func CheckSuperUserRole(w http.ResponseWriter, r *http.Request) bool {
+	currentUser := services.UserFromRequest(r)
+	if currentUser == nil || currentUser.Role != "SUPERADMIN" {
+		forbiddenResponse(w, r, "Only SUPERADMIN can perform this action")
+		return false
+	}
+	return true
+}

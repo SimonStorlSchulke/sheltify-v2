@@ -1,0 +1,32 @@
+meta {
+  name: create user (prod)
+  type: http
+  seq: 24
+}
+
+post {
+  url: https://editor.sheltify.de/admin/api/create-user
+  body: multipartForm
+  auth: bearer
+}
+
+auth:bearer {
+  token: 8347tuijeworkmt59zjiok
+}
+
+body:json {
+  {
+    "Name": "hhgs dog 3",
+    "Gender": "Male",
+    "Castrated": false,
+    "Birthday": "2018-03-29T15:04:05Z"
+  }
+}
+
+body:multipart-form {
+  username: snhg-simon
+  password: isugjksdfklghjdl
+  tenant: snhg
+  email: simonstoschu@gmail.com
+  role: SUPERADMIN
+}

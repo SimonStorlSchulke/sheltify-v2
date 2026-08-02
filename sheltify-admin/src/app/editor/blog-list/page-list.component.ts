@@ -5,7 +5,6 @@ import { createNewPage } from '@app/cms-types/cms-type.factory';
 import { PageEditorComponent } from '@app/editor/page-editor/page-editor.component';
 import { TextInputModalComponent } from '@app/forms/text-input-modal/text-input-modal.component';
 import { LeftSidebarLayoutComponent } from '@app/layout/left-sidebar-layout/left-sidebar-layout.component';
-import { LoaderService } from '@app/layout/loader/loader.service';
 import { AlertService } from '@app/services/alert.service';
 import { CmsRequestService } from '@app/services/cms-request.service';
 import { ModalService } from '@app/services/modal.service';
@@ -29,7 +28,6 @@ export const pageResolver: ResolveFn<CmsPage | undefined> = (
     })
   );
 };
-
 
 @Component({
   selector: 'app-page-list',
@@ -85,6 +83,4 @@ export class PageListComponent {
     this.pagesService.reloadPages();
     this.selectedPage.set(null);
   }
-
-  readonly encodeURIComponent = encodeURIComponent;
 }

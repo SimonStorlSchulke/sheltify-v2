@@ -72,6 +72,11 @@ func adminRoutes(r *chi.Mux) {
 	r.Patch("/blogs", handlers.SaveBlogEntry)
 	r.Delete("/blogs", handlers.DeleteBlogEntriesById)
 
+	r.Get("/users", handlers.GetUsers)
+	r.Patch("/users", handlers.SaveUser)
+	r.Patch("/change-password", handlers.ChangePassword)
+	r.Delete("/users/{id}", handlers.DeleteUserById)
+
 	r.Post("/teammembers", handlers.SaveTeamMember)
 	r.Patch("/teammembers", handlers.SaveTeamMember)
 	r.Delete("/teammembers", handlers.DeleteTeamMember)

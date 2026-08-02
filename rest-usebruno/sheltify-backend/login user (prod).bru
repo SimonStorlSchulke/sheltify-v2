@@ -1,13 +1,13 @@
 meta {
-  name: create tenant
+  name: login user (prod)
   type: http
-  seq: 21
+  seq: 25
 }
 
 post {
-  url: http://localhost:3000/admin/api/create-tenant
+  url: https://editor.sheltify.de/admin/api/login
   body: multipartForm
-  auth: inherit
+  auth: none
 }
 
 body:json {
@@ -20,7 +20,6 @@ body:json {
 }
 
 body:multipart-form {
-  ID: hhg
-  Name: Herzenhunde Griechenland e.V.
-  SiteUrl: http://localhost:4205
+  username: snhg-simon
+  password: isugjksdfklghjdl
 }
