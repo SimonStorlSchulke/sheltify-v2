@@ -57,8 +57,16 @@ export class TenantConfigurationService {
   async providedSpecialSections(): Promise<SpecialArticleSections | undefined> {
     if (this._specialSections) return this._specialSections;
 
+
+
+
     const url = await this.siteUrl() + 'provided-special-sections.json';
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      headers: {
+        Authorization:
+          "Basic " + btoa(`snhg:bulgarien`),
+      },
+    });
 
     if (!response.ok) {
       if (response.status === 404) return undefined;
