@@ -31,6 +31,7 @@ type Animal struct {
 	Race             string
 	MediaFiles       []*MediaFile `gorm:"many2many:media_file_animals;constraint:OnDelete:CASCADE;"`
 	HomeFoundStatus  string
+	HomeFoundAt      sql.NullTime
 }
 
 func (a *Animal) Validate() string {
@@ -42,6 +43,11 @@ func (a *Animal) ValidateForPublishing() string {
 	if a.ArticleID == nil || *a.ArticleID == "" {
 		articleIDErr = "Artikel zum Tier muss bestehen\n"
 	}
+
+	if a.HomeFoundStatus == "yes" && !a.HomeFoundAt.Valid {
+		articleIDErr += "Vermittlungsdatum muss angegeben werden\n"
+	}
+
 	return a.Validate() +
 		valMaxLength("Beschreibung", a.Description, 500) +
 		valIsInList("Geschlecht", a.Gender, []string{"male", "female"}) +

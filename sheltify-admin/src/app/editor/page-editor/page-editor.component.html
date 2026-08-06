@@ -22,10 +22,23 @@
   <div data-testid="form-animal-editor" class="sui flex-y gap-3 grow-1 card">
     <h3>Seiteneinstellungen</h3>
     <form class="sui grow-1 flex-y gap-2">
-      <div class="sui flex-x gap-2 wrap">
-        <app-text-input idName="path" label="Pfad" [(twoWayModel)]="page().Path" explanation="Hier kann ein URL Pfad, endend mit dem Titel der Seite angegeben werden. Z.B. 'hunde/Rüden' - dann wird der Link Seite im Header-Menü unter dem Reiter 'Hunde' -> 'Rüden' angezeigt und ist unter dem Link 'https://meine-seite.de/hunde/Rüden' aufrufbar"/>
+      <div class="sui grow-1 flex-y">
+        <div class="sui flex-x ai-center gap-1">
+          @let url = tenantConfigurationService.config()?.SiteUrl + '/';
+          <b>Pfad</b>
+          <app-explainer
+            title="Seitenpfad"
+            [text]="`Hier kann ein URL Pfad, endend mit dem Titel der Seite angegeben werden. Z.B. 'hunde/Rüden' - dann wird der Link Seite im Header-Menü unter dem Reiter 'Hunde' → 'Rüden' angezeigt und ist unter dem Link '${url}hunde/Rüden' aufrufbar`"
+          />
+        </div>
+        <div class="sui flex-x ai-center">
+        <span class="path-prefix">{{ url }}</span>
+        <app-text-input idName="path" label="" [(twoWayModel)]="page().Path"/>
+      </div>
+      </div>
+        <div class="sui flex-x gap-2 wrap">
         <app-number-input idName="priority" label="Priorität" explanation="Bei höherer Priorität wird diese Seite weiter vorne im Header angezeigt. Auch negative Werte sind möglich. Es ist zu empfehlen in Zehnerschritten zu arbeiten, damit man notfalls Seiten dazwischenschieben kann." [(twoWayModel)]="page().Priority"/>
-        <app-checkbox-input idName="show-in-menu" label="In Menü anzeigen" [(twoWayModel)]="page().ShowInMenu"/>
+        <app-checkbox-input idName="show-in-menu" label="In Header-Menü anzeigen" [(twoWayModel)]="page().ShowInMenu"/>
         <app-checkbox-input idName="show-in-footer" label="Im Footer verlinken" [(twoWayModel)]="page().LinkInFooter"/>
       </div>
       <app-last-edited [entry]="page()"/>

@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, ModelSignal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, input, ModelSignal, ChangeDetectionStrategy } from '@angular/core';
 import { AlertService } from '@app/services/alert.service';
 import { AskSaveService } from '@app/services/ask-save.service';
 

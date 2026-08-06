@@ -1,8 +1,9 @@
 import { Component, computed, input, output, inject, ChangeDetectionStrategy, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CmsRequestService } from '@app/services/cms-request.service';
+import { ExplainerComponent } from '@app/ui/explainer/explainer.component';
 import { bootstrapBoxArrowUpRight } from '@ng-icons/bootstrap-icons';
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { provideIcons } from '@ng-icons/core';
 import { firstValueFrom, Subject } from 'rxjs';
 import { CmsArticle } from 'sheltify-lib/article-types';
 import { createEmptyArticle } from '@app/cms-types/cms-type.factory';
@@ -29,6 +30,7 @@ import { ManageEntryButtonsComponent } from '@app/ui/manage-entry-buttons/manage
     NumberInputComponent,
     BtIconComponent,
     ManageEntryButtonsComponent,
+    ExplainerComponent,
   ],
   providers: [provideIcons({bootstrapBoxArrowUpRight})],
   templateUrl: './page-editor.component.html',

@@ -9,3 +9,8 @@
     background: none !important;
   }
 }
+
+ hr {
+   // needed because the astro rendered rows have padding - this one hasn't.
+   margin-top: 20px
+ }

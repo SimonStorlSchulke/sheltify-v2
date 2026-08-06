@@ -1,6 +1,6 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, computed, CUSTOM_ELEMENTS_SCHEMA, ElementRef, HostListener, input, model, signal, TemplateRef, ViewChild, ViewContainerRef, inject, ChangeDetectionStrategy } from '@angular/core';
-import { NgIcon } from '@ng-icons/core';
+import { Component, computed, CUSTOM_ELEMENTS_SCHEMA, ElementRef, HostListener, input, model, TemplateRef, ViewChild, ViewContainerRef, inject, ChangeDetectionStrategy } from '@angular/core';
+import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
 import { Section } from 'sheltify-lib/article-types';
 import { ArticleEditorService } from '@app/editor/article-editor/article-editor.service';
 import { SectionEditorAllSectionsComponent } from '@app/editor/article-editor/section-editor/section-editor-all-sections/section-editor-all-sections.component';
@@ -11,10 +11,10 @@ import { sectionLabels } from '@app/services/article-renderer';
 @Component({
   selector: 'app-section-editor',
   imports: [
-    NgIcon,
     SectionEditorAllSectionsComponent,
     SectionRendererComponent,
     NgTemplateOutlet,
+    BtIconComponent,
   ],
   templateUrl: './section-editor.component.html',
   styleUrl: './section-editor.component.scss',

@@ -29,7 +29,7 @@
         @if(input.Type == 'radio') {
         <app-text-input idName="" label="Radio-Optionen (Kommasepariert)"
             [twoWayModel]="input.RadioOptions ? input.RadioOptions.join(',') : ''"
-            (twoWayModelChange)="setRadioOptions($index, $event)" />
+            (twoWayModelChange)="setRadioOptions($index, $event ?? '')" />
         }
 
         <div class="sui grow-1"></div>
@@ -52,6 +52,6 @@
 
     <app-text-input idName="" label="Weiterleiten an" explanation="An die hier angegebenen Emailadressen werden ausgefüllte Formulare dieser Oberfläche weitergeleitet"
         [twoWayModel]="section().Content.ForwardToEmails ? section().Content.ForwardToEmails.join(',') : ''"
-        (twoWayModelChange)="setForwardMails($event)" />
+        (twoWayModelChange)="setForwardMails($event ?? '')" />
 
 </div>

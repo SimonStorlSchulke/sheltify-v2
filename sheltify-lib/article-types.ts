@@ -95,7 +95,8 @@ export type SectionImages = {
   Content: {
     Size: 'small' | 'medium' | 'large',
     Layout: 'vertical' | 'horizontal' | 'gallery' | 'single',
-    MediaFiles: CmsImage[];
+    MediaFiles: CmsImage[],
+    Link?: string,
   },
 };
 

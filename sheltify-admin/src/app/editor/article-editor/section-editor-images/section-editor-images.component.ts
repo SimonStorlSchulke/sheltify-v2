@@ -1,4 +1,5 @@
 import { Component, input, ChangeDetectionStrategy } from '@angular/core';
+import { TextInputComponent } from '@app/forms/text-input/text-input.component';
 import { SectionImages } from 'sheltify-lib/article-types';
 import { CmsImage } from 'sheltify-lib/cms-types';
 import { ImagePickerMultiComponent } from '@app/forms/image-picker-multi/image-picker-multi.component';
@@ -8,7 +9,8 @@ import { RadioButtonsInputComponent } from '@app/forms/radio-buttons-input/radio
   selector: 'app-section-editor-images',
   imports: [
     ImagePickerMultiComponent,
-    RadioButtonsInputComponent
+    RadioButtonsInputComponent,
+    TextInputComponent
   ],
   templateUrl: './section-editor-images.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,

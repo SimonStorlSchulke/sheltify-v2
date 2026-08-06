@@ -55,10 +55,17 @@ export class TenantConfigurationService {
 
   private _specialSections?: SpecialArticleSections;
   async providedSpecialSections(): Promise<SpecialArticleSections | undefined> {
-    if(this._specialSections) return this._specialSections;
-    const url = await this.siteUrl() + 'provided-special-sections.js';
-    const module = await import(url);
-    this._specialSections = module.default;
+    if (this._specialSections) return this._specialSections;
+
+    const url = await this.siteUrl() + 'provided-special-sections.json';
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      if (response.status === 404) return undefined;
+      throw new Error(`Failed to load special sections: ${response.status} ${response.statusText}`);
+    }
+
+    this._specialSections = await response.json() as SpecialArticleSections;
     return this._specialSections;
   }
 

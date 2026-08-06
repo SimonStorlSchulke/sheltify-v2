@@ -28,7 +28,6 @@ await populateDynamicData();
 article = await refetchCmsImagesDeep(article);
 
 const fullWidthSections: SectionType[] = ['hero'];
-let rowindex = 0;
 const hasTopHero = article.Structure.Rows[0]?.SectionType == 'hero';
 const topPadding = hasTopHero ? -16 : 48;
 const cssClasses = ['themable', 'article', 'sui', 'flex-y'];
@@ -67,7 +66,7 @@ async function populateDynamicData() {
   }
 }
 
-//TODO - wenn mehrere tiere einem artikel zugewieen sind und nicht alle valide published sind, schlägt das fehl weil der link nicht stimmt.
+//TODO - wenn mehrere tiere einem artikel zugewiesen sind und nicht alle valide published sind, schlägt das fehl weil der link nicht stimmt.
 const allAnimals = await cms.animals;
 const allAnimalsByArticle = animalsByArticleId(allAnimals);
 const publishedAnimals = await cms.getPublishedAnimals();
@@ -75,11 +74,10 @@ const publishedAnimals = await cms.getPublishedAnimals();
 ---
 <div style={'margin-top: ' + topPadding + 'px'} class:list={cssClasses}>
 {
-  article.Structure.Rows.map(section =>
+  article.Structure.Rows.map((section, i) =>
     {
-      // if a hero is the first row, we need negate of the initial top padding so it's placed right below the header
-      const isTopHero = rowindex == 0 && section.SectionType == 'hero';
-      rowindex++;
+      const useReducedTopPadding = i > 1 && article.Structure.Rows[i - 1].SectionType == 'title';
+      const useReducedBotPadding = section.SectionType == 'title';
       const isFullWidth = fullWidthSections.includes(section.SectionType);
       const isFullWidthAndPadding = section.SectionType == 'columns' && section.Content.FullWidth;
         let comp;
@@ -131,6 +129,8 @@ const publishedAnimals = await cms.getPublishedAnimals();
       const rowClasses = (isFullWidth ? ' full-width' : '')
         + (isFullWidthAndPadding ? ' full-width full-width-padding' : '')
         + (section.BackgroundColor ? ' themable themable-bg-' + section.BackgroundColor : '')
+        + (useReducedTopPadding ? ' reduced-top-padding' : '')
+        + (useReducedBotPadding ? ' reduced-bot-padding' : '')
 
       return <div class={`row section-${section.SectionType}` + rowClasses}><div class={`row-wrapper` + rowClasses}>{comp}</div></div>
       }
@@ -140,10 +140,17 @@ const publishedAnimals = await cms.getPublishedAnimals();
 
 <style is:global lang="scss">
   .article {
-    //gap: var(--section-gap-y);
     .row {
         padding-top: calc(var(--section-gap-y) / 2);
         padding-bottom: calc(var(--section-gap-y) / 2);
+
+      &.reduced-bot-padding {
+        padding-bottom: 0
+      }
+
+      &.reduced-top-padding {
+        padding-top: calc(var(--section-gap-y) / 5);
+      }
 
       &:first-of-type {
         &.section-hero {

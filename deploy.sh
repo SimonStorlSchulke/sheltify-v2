@@ -1,6 +1,7 @@
 git reset --hard origin/main
 git pull
 
+nvm use 24
 npm run --prefix ./article-renderer build
 tsc -p sheltify-lib
 

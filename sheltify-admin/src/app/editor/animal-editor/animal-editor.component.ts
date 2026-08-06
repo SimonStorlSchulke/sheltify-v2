@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { firstValueFrom, lastValueFrom, Subject } from 'rxjs';
 import { CmsArticle } from 'sheltify-lib/article-types';
 import { createEmptyArticle } from '@app/cms-types/cms-type.factory';
-import { CmsAnimal } from 'sheltify-lib/cms-types';
+import { CmsAnimal, SqlNullTimeNow } from 'sheltify-lib/cms-types';
 import { SaveAnimalComponent } from '@app/editor/animal-editor/save-animal/save-animal.component';
 import { ArticleEditorComponent } from '@app/editor/article-editor/article-editor.component';
 import { CheckboxInputComponent } from '@app/forms/checkbox-input/checkbox-input.component';
@@ -131,5 +131,12 @@ export class AnimalEditorComponent implements OnInit {
     this.askSaveService.markDirty();
     const animal = this.animal()!;
     this.animalService.setStatus(animal, status, active, this.animalStati)
+  }
+
+  setHomeFoundAt(homeFoundStatus: string | undefined) {
+    const animal = this.animal();
+    if(homeFoundStatus == 'yes' && animal) {
+      animal.HomeFoundAt = SqlNullTimeNow();
+    }
   }
 }

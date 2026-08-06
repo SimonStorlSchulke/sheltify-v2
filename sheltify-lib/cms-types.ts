@@ -93,6 +93,7 @@ export type CmsAnimal = Publishable & {
   PatronsNeeded: boolean;
   FreeRoamer: SqlNullBool;
   HomeFoundStatus: 'no' | 'reserved' | 'yes';
+  HomeFoundAt: SqlNullTime;
 };
 
 export type CmsHomeFoundEntry = CmsType & {

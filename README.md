@@ -19,7 +19,7 @@
 * build article-theme: `npm run provided-article-theme:snhg`
 
 ## Spezialsektion für tenant erstellen:
-- Sektionsdefinition hinzufügen in hinzufügen clients/sites/{tenant}/public/provided-special-sections.js
+- Sektionsdefinition hinzufügen in hinzufügen clients/sites/{tenant}/public/provided-special-sections.json
 - Renderer in `article-renderer/components/special-sections/{tenant}` entwickeln
   - export in index.js und _index.scss nicht vergessen
 - in `Article.astro` zu componentMap hinzufügen

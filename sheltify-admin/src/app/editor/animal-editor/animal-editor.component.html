@@ -43,8 +43,6 @@
               <app-number-input idName="size" label="Schulterhöhe in cm" [(twoWayModel)]="animal.ShoulderHeightCm"/>
             </div>
 
-            <app-text-input idName="where" label="Wo in Deutschland?" [(twoWayModel)]="animal.Where"/>
-
             <div class="sui flex-x gap-3">
               @if (config?.AnimalFeatureNoAdoption) {
                 <app-checkbox-input idName="noAdoption" label="Keine Adoption (nur Paten)" [showYesNo]="false" [(twoWayModel)]="animal.NoAdoption"/>
@@ -73,21 +71,30 @@
               </button>
             }
           </div>
+
+          <!-- Unschön. Nur valide wenn man überhaupt 'in Deutschland' als Status auswählen kann. Naja.' -->
+          @if(animal.Status.split(',').includes('in Deutschland')) {
+            <app-text-input idName="where" label="Wo in Deutschland?" [(twoWayModel)]="animal.Where"/>
+          }
         }
 
       } @else {
         <div class="sui flex-x ai-center gap-3">
           <app-image-picker-single label="Portrait" idName="portrait" [(twoWayModel)]="animal.Portrait"/>
+          <div class="sui flex-y gap-2">
+
           <h3>{{ animal.Name }} hat ein Zuhause gefunden ♥</h3>
+          <app-date-picker idName="birthday" label="Vermittelt am" mode="SqlNullTime" [(twoWayModelSqlNullTime)]="animal.HomeFoundAt"/>
+          </div>
+
         </div>
       }
 
       <div class="sui flex-y gap-2 wrap jc-space-between ai-stretch">
-
-
           <app-radio-buttons-input
             idName="homeFoundStatus" label="Vermittlungsstatus"
             [(twoWayModel)]="animal.HomeFoundStatus"
+            (twoWayModelChange)="setHomeFoundAt($event)"
             [options]="['no', 'reserved', 'yes']"
             [optionTranslations]="['unvermittelt', 'reserviert', animal.HomeFoundStatus == 'yes' ? 'Zuhause gefunden ♥' : 'Zuhause gefunden']"
           />

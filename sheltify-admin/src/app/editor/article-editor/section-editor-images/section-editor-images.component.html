@@ -14,6 +14,9 @@
     [options]="['small', 'medium', 'large']"
     [optionTranslations]="['klein', 'mittel', 'groß']"
   />
+  @if(section().Content.Layout == 'single') {
+    <app-text-input [(twoWayModel)]="section().Content.Link" label="Link" idName="Link" />
+  }
   <app-image-picker-multi idName="bilder" label="Bilder auswählen" (twoWayModelChange)="setImages($event)" [(twoWayModel)]="section().Content!.MediaFiles"/>
   @if(section().Content.Layout == 'single' && section().Content.MediaFiles.length > 1) {
     <p style="color: red">Nur das erste Bild wird angezeigt wenn als Layout 'einzeln' eingestellt ist</p>

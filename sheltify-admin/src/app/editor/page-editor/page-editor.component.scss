@@ -1,3 +1,9 @@
+@use "variables" as *;
+
 .content-info-header h1 {
   text-transform: capitalize;
+}
+
+.path-prefix {
+  font-size: $fontsize-small;
 }
