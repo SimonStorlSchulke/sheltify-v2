@@ -8,12 +8,15 @@
   @if (articleEditorService.article(); as article) {
 
     @if (showUpdateNote()) {
-      <app-text-input
-        class="contentUpdateNote" idName="contentUpdateNote" label="letzte Updateinfo" [long]="true"
-        [(twoWayModel)]="article.ContentUpdateNote"
-        style="width: 100%;"
-        explanation="z.B: 'Neue Bilder von Snoopy'. Kurzer Text, der in 'Tierupdates'-Sektionen angezeigt wird - dort (z.B. auf der Startseite) werden Tiere für eine gewisse Zeit nachdem man sie bearbeitet hat angezeigt."
-      />
+      <details class="sui pb-1" style="cursor: pointer">
+        <summary>Letzte Updateinfo</summary>
+        <app-text-input
+          class="contentUpdateNote sui pt-2" idName="contentUpdateNote" label="" [long]="true"
+          [(twoWayModel)]="article.ContentUpdateNote"
+          style="width: 100%;"
+          explanation="z.B: 'Neue Bilder von Snoopy'. Kurzer Text, der in 'Tierupdates'-Sektionen angezeigt wird - dort (z.B. auf der Startseite) werden Tiere für eine gewisse Zeit nachdem man sie bearbeitet hat angezeigt."
+        />
+      </details>
     }
 
     <div
@@ -32,7 +35,7 @@
       }
     </div>
 
-    @for (section of article.Structure.Rows; track section) {
+    @for (section of article.Structure.Rows; track $index) {
 
       <app-section-editor
         (click)="clickSection(section, $index)"

@@ -8,6 +8,7 @@
 <script lang="ts">
   import type { SectionImages } from 'sheltify-lib/dist/article-types';
   import { getImageSrc } from '../util';
+  import { onMount } from "svelte";
 
   let {section}: { section: SectionImages } = $props();
 
@@ -15,8 +16,20 @@
   const size = $derived(() => section.Content.Size);
   const layout = $derived(() => section.Content.Layout);
 
-  let shownId: number | undefined = $state();
+  let intervalId: number;
 
+  onMount(() => {
+    if (layout() !== "gallery") return;
+
+    intervalId = setInterval(() => {
+      carouselNext();
+    }, 5000);
+
+    return () => clearInterval(intervalId);
+  });
+
+  let lightboxOpen = $state(false)
+  let shownId: number = $state(0);
 
   let description = $derived(() => {
     const counter = `${(shownId ?? 0) + 1} / ${images.length}`;
@@ -26,12 +39,29 @@
     return `${counter}<br>${images()[shownId].Description.substring(0, 150)}...`;
   })
 
+  function carouselNext(e?: MouseEvent, cancelInterval = true) {
+    e?.stopPropagation();
+    if(cancelInterval) {
+      clearInterval(intervalId);
+    }
+    shownId = (shownId + 1) % images().length;
+  }
+
+  function carouselPrevious(e?: MouseEvent, cancelInterval = true) {
+    e?.stopPropagation();
+    if(cancelInterval) {
+      clearInterval(intervalId);
+    }
+    shownId = (shownId - 1 + images().length) % images().length;
+  }
+
   function openLightBox(id: number) {
     shownId = id;
+    lightboxOpen = true;
   }
 
   function closeLightBox() {
-    shownId = undefined;
+    lightboxOpen = false;
   }
 
   function onKeyDown(e: KeyboardEvent) {
@@ -60,18 +90,51 @@
     shownId! -= 1;
     console.log(shownId)
   }
-
 </script>
 
 
-<div class={`image-grid count-${images.length} ${layout()} ${size()}`}>
-  {#each images() as image, index}
-    <img onclick={() => openLightBox(index)} src={getImageSrc(image, size())} alt={image.Description || image.Title}>
-  {/each}
-</div>
+{#if layout() === "gallery"}
+  <div class="image-carousel">
+    <button
+      class="carousel-button previous"
+      onclick={carouselPrevious}>
+      ‹
+    </button>
+    <div class="viewport">
+      <div
+        class="track"
+        style={`transform: translateX(-${shownId * 100}%);`}
+      >
+        {#each images() as image, index}
+          <img
+            role="none"
+            alt={image.Description || image.Title}
+            src={getImageSrc(image, 'large')} onclick={() => openLightBox(index)}
+          />
+        {/each}
+      </div>
+    </div>
+    <button
+      class="carousel-button next"
+      onclick={carouselNext}>
+      ›
+    </button>
+  </div>
+{:else}
+  <div class={`image-grid count-${images.length} ${layout()} ${size()}`}>
+    {#each images() as image, index}
+      <img
+        role="none"
+        onclick={() => openLightBox(index)}
+        src={getImageSrc(image, size())}
+        alt={image.Description || image.Title}
+      />
+    {/each}
+  </div>
+{/if}
 
-{#if shownId !== undefined}
-  <div onclick={closeLightBox} class="lightbox">
+{#if lightboxOpen }
+  <div onclick={closeLightBox} class="lightbox" onkeyup={e => e.code === "Escape" ? closeLightBox() : false} role="none">
     <div class="lightbox-content">
       <button class="previous" onclick={(e) => previous(e)}><span>‹</span></button>
       <div class="sui flex-y ai-center jc-space-evenly gap-3 w-100">
