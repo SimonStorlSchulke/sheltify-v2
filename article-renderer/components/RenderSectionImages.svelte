@@ -41,7 +41,7 @@
 
   function carouselNext(e?: MouseEvent, cancelInterval = true) {
     e?.stopPropagation();
-    if(cancelInterval) {
+    if (cancelInterval) {
       clearInterval(intervalId);
     }
     shownId = (shownId + 1) % images().length;
@@ -49,13 +49,16 @@
 
   function carouselPrevious(e?: MouseEvent, cancelInterval = true) {
     e?.stopPropagation();
-    if(cancelInterval) {
+    if (cancelInterval) {
       clearInterval(intervalId);
     }
     shownId = (shownId - 1 + images().length) % images().length;
   }
 
   function openLightBox(id: number) {
+    if(layout() == "single" && section.Content.Link) {
+      return;
+    }
     shownId = id;
     lightboxOpen = true;
   }
@@ -120,7 +123,7 @@
       ›
     </button>
   </div>
-{:else}
+{:else if layout() === "horizontal" || layout() === "vertical"}
   <div class={`image-grid count-${images.length} ${layout()} ${size()}`}>
     {#each images() as image, index}
       <img
@@ -130,6 +133,24 @@
         alt={image.Description || image.Title}
       />
     {/each}
+  </div>
+{:else}
+  <div class={`image-single count-${images.length} ${layout()} ${size()}`}>
+    {#if section.Content.Link}
+      <a href={section.Content.Link} rel="noopener noreferrer">
+        <img
+          src={getImageSrc(images()[0], size())}
+          alt={images()[0].Description || images()[0].Title}
+        />
+      </a>
+    {:else}
+      <img
+        role="none"
+        onclick={() => openLightBox(0)}
+        src={getImageSrc(images()[0], size())}
+        alt={images()[0].Description || images()[0].Title}
+      />
+    {/if}
   </div>
 {/if}
 
