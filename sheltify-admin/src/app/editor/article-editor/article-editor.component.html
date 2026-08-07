@@ -8,7 +8,7 @@
   @if (articleEditorService.article(); as article) {
 
     @if (showUpdateNote()) {
-      <details class="sui pb-1" style="cursor: pointer">
+      <details class="sui pb-1">
         <summary>Letzte Updateinfo</summary>
         <app-text-input
           class="contentUpdateNote sui pt-2" idName="contentUpdateNote" label="" [long]="true"

@@ -157,6 +157,7 @@ export class ArticleEditorComponent implements OnInit {
 
     let sectionRef = structuredClone(this.articleEditorService.copiedSection()!);
     article.Structure.Rows.splice(row, 0, sectionRef);
+    this.askSaveService.markDirty();
   }
 
   readonly sectionLabels = sectionLabels;

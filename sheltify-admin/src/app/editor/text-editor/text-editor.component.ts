@@ -3,15 +3,13 @@ import { FormsModule } from '@angular/forms';
 import { EditorView } from 'prosemirror-view';
 import { toggleMark } from 'prosemirror-commands';
 import { Plugin } from 'prosemirror-state';
-import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
-import { Schema, NodeSpec, MarkSpec, Mark, DOMOutputSpec } from 'prosemirror-model';
+import { Schema, MarkSpec, Mark, DOMOutputSpec } from 'prosemirror-model';
 import { firstValueFrom } from 'rxjs';
 import { ButtonLinkDialogComponent } from '@app/editor/text-editor/button-link-dialog/button-link-dialog.component';
 import { AskSaveService } from '@app/services/ask-save.service';
 import { CmsRequestService } from '@app/services/cms-request.service';
 import { ModalService } from '@app/services/modal.service';
-import { marks as defaultMarks } from 'ngx-editor';
-import { nodes as defaultNodes } from 'ngx-editor';
+import { marks as defaultMarks, nodes as defaultNodes, Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
 import { AnimalPickerDialogComponent } from '@app/ui/animal-picker-dialog/animal-picker-dialog.component';
 
 const myLink: MarkSpec = {
@@ -64,7 +62,7 @@ const schema = new Schema({
 export class TextEditorComponent implements OnInit {
   private modalService = inject(ModalService);
   private cmsRequestService = inject(CmsRequestService);
-  private readonly askSaveService = inject(AskSaveService);
+  private askSaveService = inject(AskSaveService);
 
   editor: Editor;
 
@@ -152,7 +150,6 @@ export class TextEditorComponent implements OnInit {
   }
 
   markDirty() {
-    console.log("value");
     this.askSaveService.markDirty();
   };
 

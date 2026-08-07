@@ -25,6 +25,7 @@ import {
   bootstrapChevronRight,
   bootstrapTable,
   bootstrapTrash,
+  bootstrapExclamation,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
@@ -56,6 +57,7 @@ export type IconName =
   | 'ChevronRight'
   | 'Table'
   | 'Trash'
+  | 'Exclamation'
 
 @Component({
   selector: 'app-bt-icon',
@@ -91,6 +93,7 @@ export type IconName =
       bootstrapChevronRight,
       bootstrapTable,
       bootstrapTrash,
+      bootstrapExclamation,
     }
   )]
 })

@@ -1,5 +1,6 @@
 import { NgTemplateOutlet } from '@angular/common';
 import { Component, computed, CUSTOM_ELEMENTS_SCHEMA, ElementRef, HostListener, input, model, TemplateRef, ViewChild, ViewContainerRef, inject, ChangeDetectionStrategy } from '@angular/core';
+import { AskSaveService } from '@app/services/ask-save.service';
 import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
 import { Section } from 'sheltify-lib/article-types';
 import { ArticleEditorService } from '@app/editor/article-editor/article-editor.service';
@@ -25,6 +26,7 @@ export class SectionEditorComponent {
   private articleEditorService = inject(ArticleEditorService);
   private elementRef = inject(ElementRef);
   private alertService = inject(AlertService);
+  private askSaveService = inject(AskSaveService);
 
   section = input.required<Section>();
   rowIndex = input.required<number>();
@@ -57,6 +59,7 @@ export class SectionEditorComponent {
     this.articleEditorService.copiedSection.set(this.section());
     this.alertService.openToast('Sektion kann nun über den "Einfügen" Knopf beim Hover zwischen den Sektionen wieder eingefügt werden (auch in anderen Artikeln).', 'Ausgeschnitten');
     this.articleEditorService.deleteSection(this.rowIndex(), false);
+    this.askSaveService.markDirty();
   }
 
   enterMoveMode() {
@@ -65,6 +68,7 @@ export class SectionEditorComponent {
 
   deleteSection() {
     this.articleEditorService.deleteSection(this.rowIndex());
+    this.askSaveService.markDirty();
   }
 
   @HostListener('document:click', ['$event'])

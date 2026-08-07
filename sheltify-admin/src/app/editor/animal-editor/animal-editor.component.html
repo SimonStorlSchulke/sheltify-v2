@@ -9,7 +9,12 @@
   />
   <div class="editor-layout sui p-2">
     <div class="sui flex-y gap-2 grow-1 card">
-      <app-text-input idName="internalNote" label="Kommentar" [(twoWayModel)]="animal.InternalNote" [long]="true"/>
+      <details [open]="!!animal.InternalNote">
+        <summary [class.has-comment]="!!animal.InternalNote">
+          <span class="sui ai-center gap-2">Kommentar (intern)</span>
+        </summary>
+        <app-text-input idName="internalNote" label="" [(twoWayModel)]="animal.InternalNote" [long]="true"/>
+      </details>
       @if (animal.HomeFoundStatus !== 'yes') {
 
         <div data-testid="form-animal-editor" class="sui flex-x gap-3 grow-1 wrap">
@@ -117,5 +122,5 @@
     }
   </div>
 } @else {
-  404 Tier nicht gefunden
+  Kein Tier ausgewählt
 }

@@ -61,7 +61,7 @@ export class PageListComponent {
 
     if (page.Path.includes('&')) {
       this.alertService.openAlert("Pfad kann kein '&' Zeichen enthalten", "Es wurde durch 'und' ersetzt. In der Titelleiste wird trotzdem '&' angezeigt")
-      page.Path = page.Path.replaceAll('&', '');
+      page.Path = page.Path.replaceAll('&', 'und');
     }
 
     // this should really be done in the backend but ¯\_(ツ)_/¯

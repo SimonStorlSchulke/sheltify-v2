@@ -1,3 +1,5 @@
+@use "colors" as *;
+
 app-manage-entry-buttons {
   margin-top: -56px;
   margin-right: 16px;
@@ -13,4 +15,9 @@ app-manage-entry-buttons {
   &:last-of-type.primary {
     background: #e66794;
   }
+}
+
+.has-comment {
+  color: $primary;
+  font-weight: bold;
 }
