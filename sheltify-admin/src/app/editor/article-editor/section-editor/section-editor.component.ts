@@ -71,24 +71,35 @@ export class SectionEditorComponent {
     this.askSaveService.markDirty();
   }
 
-  @HostListener('document:click', ['$event'])
-  deselectSection(event: any) {
-    if (this.editedRow() == this.rowIndex()) {
+  private pointerDownOutsideEditor = false;
+  @HostListener('document:pointerdown', ['$event'])
+  onPointerDown(event: PointerEvent) {
+    const target = event.target as HTMLElement;
 
-      const target = event!.target as HTMLElement;
+    this.pointerDownOutsideEditor = !this.elementRef.nativeElement.contains(target);
+  }
 
-      // Only react if the click outside this section editor
-      if(this.elementRef.nativeElement.contains(target)) {
-        return
-      }
-
-      // ...and if the inside <main> (not sidebar)
-      if (!target.closest('main')) {
-        return;
-      }
-
-      this.editedRow.set(-1);
-      this.triggerRerender();
+  @HostListener('document:pointerup', ['$event'])
+  deselectSection(event: PointerEvent) {
+    if (this.editedRow() !== this.rowIndex()) {
+      return;
     }
+
+    const target = event.target as HTMLElement;
+
+    const pointerUpOutsideEditor = !this.elementRef.nativeElement.contains(target);
+
+    // Ignore if either the press or release happened inside the editor.
+    if (!this.pointerDownOutsideEditor || !pointerUpOutsideEditor) {
+      return;
+    }
+
+    // Only react if inside <main> (not sidebar)
+    if (!target.closest('main')) {
+      return;
+    }
+
+    this.editedRow.set(-1);
+    this.triggerRerender();
   }
 }

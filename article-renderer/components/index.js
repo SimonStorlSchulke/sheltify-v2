@@ -5,6 +5,7 @@ export { default as RenderSectionHero } from './RenderSectionHero.svelte';
 export { default as RenderSectionAnimalList } from './RenderSectionAnimalList.svelte';
 export { default as RenderSectionForm } from './RenderSectionForm.svelte';
 export { default as RenderSectionFile } from './RenderSectionFile.svelte';
+export { default as RenderSectionVideo } from './RenderSectionVideo.svelte';
 export { default as RenderSectionAnimalUpdates } from './RenderSectionAnimalUpdates.svelte';
 export { default as RenderSectionBlogs } from './RenderSectionBlogs.svelte';
 export { default as RenderSectionSponsor } from './special-sections/mft/RenderSectionSponsor.svelte';

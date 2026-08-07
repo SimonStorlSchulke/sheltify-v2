@@ -1,0 +1,10 @@
+.section-video {
+    iframe {
+        aspect-ratio: 16 / 9;
+
+        &.vertical {
+            aspect-ratio: 9 / 16;
+            max-width: 500px;
+        }
+    }
+}

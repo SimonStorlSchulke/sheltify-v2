@@ -191,6 +191,7 @@ export type SectionVideo = {
   Content: {
     Title: string,
     Url: string,
+    Vertical: boolean,
   },
 };
 

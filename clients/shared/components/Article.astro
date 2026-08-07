@@ -12,6 +12,7 @@ import RenderSectionHero from 'article-renderer/components/RenderSectionHero.sve
 import RenderSectionForm from 'article-renderer/components/RenderSectionForm.svelte';
 import RenderSectionAnimalUpdates from 'article-renderer/components/RenderSectionAnimalUpdates.svelte';
 import RenderSectionBlogs from 'article-renderer/components/RenderSectionBlogs.svelte';
+import RenderSectionVideo from 'article-renderer/components/RenderSectionVideo.svelte';
 import "article-renderer/styles/_index.scss"
 import { animalsByArticleId } from 'sheltify-lib/animal-util.ts';
 import SpecialSectionRenderer from './SpecialSectionRenderer.astro';
@@ -93,6 +94,9 @@ const publishedAnimals = await cms.getPublishedAnimals();
             break;
           case 'hero':
             comp = <RenderSectionHero section={section} client:visible/>;
+            break;
+          case 'video':
+            comp = <RenderSectionVideo section={section}/>;
             break;
           case 'animal-list':
             comp = <RenderSectionAnimalList section={section} allAnimalsByArticle={allAnimalsByArticle}/>;

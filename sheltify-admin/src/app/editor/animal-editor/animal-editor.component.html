@@ -21,7 +21,6 @@
           <app-image-picker-single label="Portrait" idName="portrait" [(twoWayModel)]="animal.Portrait" [cropped]="true"/>
 
           <div class="sui flex-y gap-2 grow-1 pr-1">
-
             <div [class]="rowClass">
               @if (animalKinds.length > 1) {
                 <app-select-input style="min-width: 200px;" idName="animalKind" label="Art" [(twoWayModel)]="animal.AnimalKind" [options]="animalKinds"/>

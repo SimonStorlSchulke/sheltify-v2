@@ -18,4 +18,11 @@
       }
     }
   }
+
+}
+
+@media print {
+  .sui.ignore-print {
+    display: none !important;
+  }
 }

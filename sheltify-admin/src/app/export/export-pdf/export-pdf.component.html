@@ -1,0 +1,11 @@
+<div class="sui wrapper ignore-print card my-2">
+  <h2>Tierartikel {{animal()?.Name}} als PDF exportieren</h2>
+</div>
+
+<div class="sui wrapper themable article pdf">
+  @if (article(); as article) {
+    @for (section of article.Structure.Rows; track $index) {
+      <app-section-renderer [section]="section"/>
+    }
+  }
+</div>

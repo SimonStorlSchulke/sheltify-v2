@@ -1,4 +1,4 @@
-import { Service, signal, inject } from '@angular/core';
+import { Service, signal, inject, Renderer2 } from '@angular/core';
 import { firstValueFrom, of, tap } from 'rxjs';
 import { CmsTenantConfiguration, SpecialArticleSections } from 'sheltify-lib/cms-types';
 import { CmsRequestService } from '@app/services/cms-request.service';
@@ -91,6 +91,25 @@ export class TenantConfigurationService {
     }
     return this.cmsRequestService.getTenantConfiguration()
       .pipe(tap(config => this.config.set(config)));
+  }
+
+
+  public async loadTenantStyle(renderer: Renderer2) {
+    const tenantId = (await firstValueFrom(this.getOrLoad()))?.TenantID;
+    if(tenantId) {
+      const url = await this.siteUrl() + 'provided-article-theme.css';
+      const id = `style-${tenantId}`;
+      const elementExists = !!document.getElementById(id);
+      if(elementExists || !url) return;
+      const link = document.createElement( "link" );
+      link.id = id;
+      link.href = url;
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      renderer.appendChild(document.head, link);
+    } else {
+      console.log("No tenant defined to load style")
+    }
   }
 
   async reloadConfig() {

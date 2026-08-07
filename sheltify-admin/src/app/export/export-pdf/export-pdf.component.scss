@@ -1,0 +1,9 @@
+@use "colors" as *;
+
+::ng-deep body {
+  background-color: #fff;
+}
+
+.ignore-print {
+  background-color: $primary-h8;
+}

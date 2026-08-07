@@ -1,3 +1,6 @@
-<app-text-input idName="title" label="Titel" [(twoWayModel)]="section().Content.Title" />
+<i>Unterstützt momentan nur YouTube</i>
 <br>
-<app-text-input idName="ulr" label="Url" [(twoWayModel)]="section().Content.Url" />
+<br>
+<app-text-input idName="ulr" label="Url" [(twoWayModel)]="section().Content.Url" explanation="Die Url des gewünschten Videos entweder aus der Addressleiste des Browsers herauskopieren oder unter dem Video auf 'Teilen' → 'Link kopieren'. Dann Rechtsklick auf dieses Feld und 'Einfügen' auswählen "/>
+<br>
+<app-checkbox-input idName="vertical" label="Hochkant?" [(twoWayModel)]="section().Content.Vertical" />

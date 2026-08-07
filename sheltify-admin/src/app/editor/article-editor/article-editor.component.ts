@@ -50,7 +50,7 @@ export class ArticleEditorComponent implements OnInit {
 
   constructor() {
 
-    this.tenantConfigurationService.providedArticleThemeUrl().then(url => url ? this.addGlobalStyle(url) : false);
+    this.tenantConfigurationService.loadTenantStyle(this.renderer);
 
     effect(async () => {
       const articleId = this.articleId();
@@ -90,12 +90,18 @@ export class ArticleEditorComponent implements OnInit {
   }
 
   private addGlobalStyle(css: string) {
-    const link = document.createElement( "link" );
-    link.href = css;
-    link.type = "text/css";
-    link.rel = "stylesheet";
-
-    this.renderer.appendChild(document.head, link);
+    const tenantId = this.tenantConfigurationService.config()?.TenantID;
+    if(tenantId) {
+      const id = `style-${this.tenantConfigurationService.config()?.TenantID}`;
+      const elementExists = !!document.getElementById(id);
+      if(elementExists) return;
+      const link = document.createElement( "link" );
+      link.id = id;
+      link.href = css;
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      this.renderer.appendChild(document.head, link);
+    }
   }
 
   async save(saveOptions: { updateNote: string, pushUpdate: boolean } | undefined) {

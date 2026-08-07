@@ -60,6 +60,7 @@ export function createEmptySection(SectionType: SectionType): Section {
         Content: {
           Title: '',
           Url: '',
+          Vertical: false,
         }
       };
     case 'image':

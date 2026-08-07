@@ -1,11 +1,13 @@
 import { Component, input, ChangeDetectionStrategy } from '@angular/core';
+import { CheckboxInputComponent } from '@app/forms/checkbox-input/checkbox-input.component';
 import { SectionVideo } from 'sheltify-lib/article-types';
 import { TextInputComponent } from '@app/forms/text-input/text-input.component';
 
 @Component({
   selector: 'app-section-editor-video',
   imports: [
-    TextInputComponent
+    TextInputComponent,
+    CheckboxInputComponent
   ],
   templateUrl: './section-editor-video.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
