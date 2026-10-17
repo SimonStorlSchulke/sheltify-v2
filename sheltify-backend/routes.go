@@ -97,6 +97,7 @@ func adminRoutes(r *chi.Mux) {
 
 	r.Post("/article", handlers.SaveArticle)
 	r.Patch("/article", handlers.SaveArticle)
+	r.Delete("/article", handlers.DeleteArticles)
 
 	r.Post("/pages", handlers.SavePage)
 	r.Patch("/pages", handlers.SavePage)

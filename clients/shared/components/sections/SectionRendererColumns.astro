@@ -7,6 +7,7 @@ import RenderSectionImages from 'article-renderer/components/RenderSectionImages
 import RenderSectionAnimalUpdates from 'article-renderer/components/RenderSectionAnimalUpdates.svelte';
 import RenderSectionFile from 'article-renderer/components/RenderSectionFile.svelte';
 import RenderSectionHero from 'article-renderer/components/RenderSectionHero.svelte';
+import RenderSectionVideo from 'article-renderer/components/RenderSectionVideo.svelte';
 
 interface Props {
   section: SectionColumns
@@ -32,6 +33,9 @@ const {section} = Astro.props;
           break;
         case 'hero':
           comp = <RenderSectionHero section={section} client:visible/>;
+          break;
+        case 'video':
+          comp = <RenderSectionVideo section={section} client:visible/>;
           break;
         case 'animal-list':
           comp = <RenderSectionAnimalList section={section}/>;

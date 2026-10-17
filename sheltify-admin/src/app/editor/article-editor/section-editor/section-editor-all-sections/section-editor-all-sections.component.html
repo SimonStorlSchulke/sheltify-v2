@@ -36,6 +36,9 @@
   @case ('home-found') {
     <app-section-editor-home-found [section]="sectionVal"/>
   }
+  @case ('home-found-feedback') {
+    <app-section-editor-home-found-feedback [section]="sectionVal" (triggerRerender)="triggerRerender.emit()"/>
+  }
   @case ('blogs') {
     <app-section-editor-blogs [section]="sectionVal"/>
   }

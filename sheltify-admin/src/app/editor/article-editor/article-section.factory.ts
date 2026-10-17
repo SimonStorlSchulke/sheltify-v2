@@ -1,5 +1,4 @@
 import { Section, SectionSpecial, SectionType } from 'sheltify-lib/article-types';
-import { CmsImage } from 'sheltify-lib/dist/cms-types';
 
 export function createEmptySection(SectionType: SectionType): Section {
   switch (SectionType) {
@@ -118,6 +117,17 @@ export function createEmptySection(SectionType: SectionType): Section {
           From: undefined,
           To: undefined,
         },
+        TempData: [],
+      };
+    case 'home-found-feedback':
+      return {
+        SectionType,
+        BackgroundColor: '',
+        Content: {
+          From: undefined,
+          To: undefined,
+        },
+        TempData: [],
       };
     case 'separator-x':
       return {

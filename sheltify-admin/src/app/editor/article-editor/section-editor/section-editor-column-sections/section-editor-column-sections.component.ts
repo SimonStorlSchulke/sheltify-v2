@@ -1,8 +1,12 @@
 import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
+import { SectionEditorBlogsComponent } from '@app/editor/article-editor/section-editor-blogs/section-editor-blogs.component';
+import { SectionEditorFileComponent } from '@app/editor/article-editor/section-editor-file/section-editor-file.component';
+import { SectionEditorFormComponent } from '@app/editor/article-editor/section-editor-form/section-editor-form.component';
+import { SectionEditorHomeFoundFeedbackComponent } from '@app/editor/article-editor/section-editor-home-found-feedback/section-editor-home-found-feedback.component';
+import { SectionEditorHomeFoundComponent } from '@app/editor/article-editor/section-editor-home-found/section-editor-home-found.component';
+import { SectionEditorSpecialComponent } from '@app/editor/article-editor/section-editor-special/section-editor-special.component';
 import { NgIcon } from '@ng-icons/core';
 import { Section } from 'sheltify-lib/article-types';
-import { SectionEditorAnimalListComponent } from '@app/editor/article-editor/section-editor-animal-list/section-editor-animal-list.component';
-import { SectionEditorColumnsComponent } from '@app/editor/article-editor/section-editor-columns/section-editor-columns.component';
 import { SectionEditorHeroComponent } from '@app/editor/article-editor/section-editor-hero/section-editor-hero.component';
 import { SectionEditorHtmlComponent } from '@app/editor/article-editor/section-editor-html/section-editor-html.component';
 import { SectionEditorImagesComponent } from '@app/editor/article-editor/section-editor-images/section-editor-images.component';
@@ -14,7 +18,6 @@ import { sectionLabels } from '@app/services/article-renderer';
 @Component({
   selector: 'app-section-editor-column-sections',
   imports: [
-    SectionEditorAnimalListComponent,
     SectionEditorHeroComponent,
     SectionEditorHtmlComponent,
     SectionEditorImagesComponent,
@@ -22,17 +25,19 @@ import { sectionLabels } from '@app/services/article-renderer';
     SectionEditorTitleComponent,
     SectionEditorVideoComponent,
     NgIcon,
+    SectionEditorBlogsComponent,
+    SectionEditorFileComponent,
+    SectionEditorFormComponent,
+    SectionEditorHomeFoundComponent,
+    SectionEditorSpecialComponent,
+    SectionEditorHomeFoundFeedbackComponent,
   ],
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './section-editor-column-sections.component.html',
+  styleUrls: ['./section-editor-column-sections.component.scss'],
 })
 export class SectionEditorColumnSectionsComponent {
   section = input.required<Section>();
   deletedSection = output();
-
-  triggerRerender() {
-
-  }
-
   readonly sectionLabels = sectionLabels;
 }

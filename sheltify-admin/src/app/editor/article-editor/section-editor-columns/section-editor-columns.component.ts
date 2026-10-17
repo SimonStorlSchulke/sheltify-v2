@@ -1,5 +1,4 @@
 import { Component, input, inject, ChangeDetectionStrategy } from '@angular/core';
-import { NgIcon } from '@ng-icons/core';
 import { Section, SectionColumns } from 'sheltify-lib/article-types';
 import { createEmptySection } from '@app/editor/article-editor/article-section.factory';
 import { PickNewSectionComponent } from '@app/editor/article-editor/pick-new-section/pick-new-section.component';
@@ -35,7 +34,7 @@ export class SectionEditorColumnsComponent {
   }
 
   deleteSection(iColumn: number, iSection: number) {
-    this.section().Content.Columns[iColumn].Sections.splice(iColumn, 1);
+    this.section().Content.Columns[iColumn].Sections.splice(iSection, 1);
   }
 
   addColumn() {

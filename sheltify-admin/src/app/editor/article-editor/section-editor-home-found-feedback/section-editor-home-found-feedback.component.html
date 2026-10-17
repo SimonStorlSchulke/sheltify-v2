@@ -1,0 +1,4 @@
+<div class="sui flex-x wrap gap-1">
+  <app-date-picker (twoWayModelChange)="onInput.next()" idName="from" label="von" [(twoWayModelISOString)]="section().Content.From"/>
+  <app-date-picker (twoWayModelChange)="onInput.next()" idName="to" label="bis" [(twoWayModelISOString)]="section().Content.To"/>
+</div>

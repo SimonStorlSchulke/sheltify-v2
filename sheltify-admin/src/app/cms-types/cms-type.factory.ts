@@ -27,6 +27,7 @@ export function createNewAnimal(name: string, animalKind?: string): CmsAnimal {
     HomeFoundStatus: 'no',
     Race: '',
     HomeFoundAt: SqlNullTimeNull(),
+    HomeFoundText: '',
   };
 }
 

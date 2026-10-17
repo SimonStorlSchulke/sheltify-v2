@@ -1,10 +1,25 @@
 .section-video {
-    iframe {
-        aspect-ratio: 16 / 9;
+  .frame {
+    aspect-ratio: 16 / 9;
 
-        &.vertical {
-            aspect-ratio: 9 / 16;
-            max-width: 500px;
-        }
+    &.vertical {
+      aspect-ratio: 9 / 16;
+      max-width: 500px;
     }
+  }
+
+  .youtube-consent {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+
+    &.vertical {
+      aspect-ratio: 9 / 16;
+      max-width: 500px;
+    }
+
+    outline: 1px solid #aaa;
+    min-height: 300px;
+    text-align: center;
+    overflow-y: auto;
+  }
 }

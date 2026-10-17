@@ -1,11 +1,9 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { LoaderComponent } from '@app/layout/loader/loader.component';
-import { SidebarComponent } from './layout/sidebar/sidebar.component';
 
 @Component({
     selector: 'app-root',
-  imports: [RouterOutlet, SidebarComponent, LoaderComponent],
+  imports: [RouterOutlet],
     templateUrl: './app.component.html',
     changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './app.component.scss'

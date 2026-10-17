@@ -13,7 +13,6 @@ export class ImageConverterService {
   ];
 
   async generateAllSizes(image: File) {
-    console.log("1")
     const img = new Image();
     img.src = URL.createObjectURL(image);
 
@@ -22,21 +21,13 @@ export class ImageConverterService {
       img.onerror = () => reject(new Error(`Unable to decode image: ${image.name}`));
     });
 
-    console.log("2")
-
     let largestAvailableSize = "thumbnail";
     for (const size of this.sizes) {
       if (img.width >= size[1]) {
         largestAvailableSize = size[0];
       }
     }
-    console.log({
-      name: image.name,
-      type: image.type,
-      size: image.size,
-      width: img.width,
-      height: img.height,
-    });
+
     console.log("START GENERATING SIZES FOR IMG", image.name);
     const images: {size: string, blob: Blob}[] = [];
     for (const size of this.sizes) {

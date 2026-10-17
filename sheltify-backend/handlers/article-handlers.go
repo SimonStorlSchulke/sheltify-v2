@@ -31,3 +31,7 @@ func SaveArticle(w http.ResponseWriter, r *http.Request) {
 		okResponse(w, article)
 	}
 }
+
+func DeleteArticles(w http.ResponseWriter, r *http.Request) {
+	DefaultDeleteByIds[*shtypes.Article](w, r, false)
+}

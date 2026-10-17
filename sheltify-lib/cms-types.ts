@@ -94,6 +94,7 @@ export type CmsAnimal = Publishable & {
   FreeRoamer: SqlNullBool;
   HomeFoundStatus: 'no' | 'reserved' | 'yes';
   HomeFoundAt: SqlNullTime;
+  HomeFoundText: string;
 };
 
 export type CmsHomeFoundEntry = CmsType & {

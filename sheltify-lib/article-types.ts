@@ -1,6 +1,6 @@
-import { CmsAnimal, CmsBlogEntry, CmsImage, CmsType, SqlNullTime } from './cms-types';
+import { CmsAnimal, CmsBlogEntry, CmsHomeFoundEntry, CmsImage, CmsType, SqlNullTime } from './cms-types';
 
-export const SectionTypes = ['title', 'text', 'video', 'image', 'hero', 'animal-list', 'html', 'separator-x', 'home-found', 'columns', 'form', 'file', 'animal-updates', 'special', 'blogs'] as const;
+export const SectionTypes = ['title', 'text', 'video', 'image', 'hero', 'animal-list', 'html', 'separator-x', 'home-found', 'home-found-feedback', 'columns', 'form', 'file', 'animal-updates', 'special', 'blogs'] as const;
 
 export type SectionType = (typeof SectionTypes)[number];
 
@@ -26,6 +26,7 @@ export type Section =
   | SectionSeparatorX
   | SectionHero
   | SectionHomeFound
+  | SectionHomeFoundFeedback
   | SectionColumns
   | SectionForm
   | SectionFile
@@ -149,15 +150,26 @@ export type SectionSpecial = {
     PropertyValues: any[], //yeah, yeah I know...
   },
   TempData: any,
-}
+};
 
 export type SectionHomeFound = {
   SectionType: 'home-found',
   BackgroundColor: string,
   Content: {
-    From: Date | undefined,
-    To: Date |undefined,
+    From: string | undefined, // iso-string
+    To: string |undefined, // iso-string
   }
+  TempData: CmsAnimal[],
+};
+
+export type SectionHomeFoundFeedback = {
+  SectionType: 'home-found-feedback',
+  BackgroundColor: string,
+  Content: {
+    From: string | undefined, // iso-string
+    To: string |undefined, // iso-string
+  }
+  TempData: CmsHomeFoundEntry[],
 };
 
 export type SectionBlogs = {

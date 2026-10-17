@@ -19,7 +19,10 @@
     <app-section-editor-hero [section]="sectionVal"/>
   }
   @case ('animal-list') {
-    <app-section-editor-animal-list [section]="sectionVal" (triggerRerender)="triggerRerender()"/>
+    <p>Nicht unterstützt im Spalten-Layout</p>
+  }
+  @case ('animal-updates') {
+    <p>Nicht unterstützt im Spalten-Layout</p>
   }
   @case ('html') {
     <app-section-editor-html [section]="sectionVal"/>
@@ -27,6 +30,23 @@
   @case ('video') {
     <app-section-editor-video [section]="sectionVal"/>
   }
+  @case ('form') {
+    <app-section-editor-form [section]="sectionVal"/>
+  }
+  @case ('file') {
+    <app-section-editor-file [section]="sectionVal"/>
+  }
+  @case ('home-found') {
+    <app-section-editor-home-found [section]="sectionVal"/>
+  }
+  @case ('home-found-feedback') {
+    <app-section-editor-home-found-feedback [section]="sectionVal"/>
+  }
+  @case ('blogs') {
+    <app-section-editor-blogs [section]="sectionVal"/>
+  }
+  @case ('special') {
+    <app-section-editor-special [section]="sectionVal"/>
+  }
 }
 <br>
-<hr>

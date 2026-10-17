@@ -55,7 +55,7 @@
   });
 </script>
 
-<div class={"hero-container" + (isTopHero ? " top-hero" : "")}>
+<div class={"hero-container sui grow-1" + (isTopHero ? " top-hero" : "")}>
   <div class="hero-scroller" bind:this={scroller}>
     {#each section.Content.MediaFiles as image, index}
       <Image

@@ -21,7 +21,7 @@ type Animal struct {
 	Health           string
 	Priority         int
 	ArticleID        *string
-	Article          *Article `gorm:"->;"`
+	Article          *Article `gorm:"foreignKey:ArticleID;references:ID;constraint:OnDelete:SET NULL;"`
 	PortraitID       *string
 	Portrait         *MediaFile `gorm:"->"`
 	AnimalKind       string
@@ -32,6 +32,7 @@ type Animal struct {
 	MediaFiles       []*MediaFile `gorm:"many2many:media_file_animals;constraint:OnDelete:CASCADE;"`
 	HomeFoundStatus  string
 	HomeFoundAt      sql.NullTime
+	HomeFoundText    string
 }
 
 func (a *Animal) Validate() string {
@@ -46,6 +47,11 @@ func (a *Animal) ValidateForPublishing() string {
 
 	if a.HomeFoundStatus == "yes" && !a.HomeFoundAt.Valid {
 		articleIDErr += "Vermittlungsdatum muss angegeben werden\n"
+	}
+
+	// skip validations because other fields are irrelevant if the animal is home found
+	if a.HomeFoundStatus == "yes" {
+		return ""
 	}
 
 	return a.Validate() +

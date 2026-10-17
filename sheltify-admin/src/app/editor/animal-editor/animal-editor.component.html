@@ -81,14 +81,22 @@
             <app-text-input idName="where" label="Wo in Deutschland?" [(twoWayModel)]="animal.Where"/>
           }
         }
-
       } @else {
         <div class="sui flex-x ai-center gap-3">
           <app-image-picker-single label="Portrait" idName="portrait" [(twoWayModel)]="animal.Portrait"/>
-          <div class="sui flex-y gap-2">
+          <div class="sui flex-y gap-2 grow-1">
 
           <h3>{{ animal.Name }} hat ein Zuhause gefunden ♥</h3>
-          <app-date-picker idName="birthday" label="Vermittelt am" mode="SqlNullTime" [(twoWayModelSqlNullTime)]="animal.HomeFoundAt"/>
+            <div class="sui flex-x gap-2 grow-1">
+              <app-date-picker idName="homeFoundAt" label="Vermittelt am" mode="SqlNullTime" [(twoWayModelSqlNullTime)]="animal.HomeFoundAt"/>
+              <app-text-input
+                class="sui grow-1"
+                idName="homeFoundText"
+                label="Vermittelt - Text"
+                [placeholder]="animal.Name"
+                explanation="Dieser Text wird unter dem Portrait in 'Vermittelt' Sektionen angezeigt"
+                [(twoWayModel)]="animal.HomeFoundText"/>
+            </div>
           </div>
 
         </div>

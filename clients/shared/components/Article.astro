@@ -13,8 +13,9 @@ import RenderSectionForm from 'article-renderer/components/RenderSectionForm.sve
 import RenderSectionAnimalUpdates from 'article-renderer/components/RenderSectionAnimalUpdates.svelte';
 import RenderSectionBlogs from 'article-renderer/components/RenderSectionBlogs.svelte';
 import RenderSectionVideo from 'article-renderer/components/RenderSectionVideo.svelte';
+import RenderSectionHomeFound from 'article-renderer/components/RenderSectionHomeFound.svelte';
 import "article-renderer/styles/_index.scss"
-import { animalsByArticleId } from 'sheltify-lib/animal-util.ts';
+import { animalsByArticleId, isAnimalHomeFoundBetween } from 'sheltify-lib/animal-util.ts';
 import SpecialSectionRenderer from './SpecialSectionRenderer.astro';
 
 interface Props {
@@ -24,7 +25,6 @@ interface Props {
 
 let { article, title } = Astro.props;
 
-await populateDynamicData();
 
 article = await refetchCmsImagesDeep(article);
 
@@ -49,11 +49,25 @@ if (title) {
   article.Structure.Rows.splice(hasTopHero ? 1 : 0, 0, titleSection);
 }
 
+
+//TODO - wenn mehrere tiere einem artikel zugewiesen sind und nicht alle valide published sind, schlägt das fehl weil der link nicht stimmt.
+const allAnimals = await cms.animals;
+const allAnimalsByArticle = animalsByArticleId(allAnimals);
+const publishedAnimals = await cms.getPublishedAnimals();
+
+await populateDynamicData();
+
 async function populateDynamicData() {
   for (const section of article.Structure.Rows) {
     switch (section.SectionType) {
       case 'animal-list':
         section.TempFoundAnimals = await cms.getFilteredAnimals(section.Content);
+        break;
+      case 'home-found':
+        section.TempData = allAnimals.filter(a => isAnimalHomeFoundBetween(a, section.Content.From, section.Content.To));
+        break;
+      case 'home-found-feedback':
+        section.TempData = await cms.getHomeFoundEntries();
         break;
       case 'animal-updates':
         section.TempAnimalsByArticle = animalsByArticleId(await cms.getAnimalUpdates(section.Content.days));
@@ -66,11 +80,6 @@ async function populateDynamicData() {
     }
   }
 }
-
-//TODO - wenn mehrere tiere einem artikel zugewiesen sind und nicht alle valide published sind, schlägt das fehl weil der link nicht stimmt.
-const allAnimals = await cms.animals;
-const allAnimalsByArticle = animalsByArticleId(allAnimals);
-const publishedAnimals = await cms.getPublishedAnimals();
 
 ---
 <div style={'margin-top: ' + topPadding + 'px'} class:list={cssClasses}>
@@ -96,7 +105,7 @@ const publishedAnimals = await cms.getPublishedAnimals();
             comp = <RenderSectionHero section={section} client:visible/>;
             break;
           case 'video':
-            comp = <RenderSectionVideo section={section}/>;
+            comp = <RenderSectionVideo section={section} client:visible/>;
             break;
           case 'animal-list':
             comp = <RenderSectionAnimalList section={section} allAnimalsByArticle={allAnimalsByArticle}/>;
@@ -115,6 +124,9 @@ const publishedAnimals = await cms.getPublishedAnimals();
             break;
           case 'html':
             comp = <div set:html={section.Content.Html}/>;
+            break;
+          case 'home-found':
+            comp = <RenderSectionHomeFound section={section}/>
             break;
           case 'animal-updates':
             comp = <RenderSectionAnimalUpdates section={section}  allAnimalsByArticle={allAnimalsByArticle}/>;

@@ -1,7 +1,13 @@
 @use "colors" as *;
 
-::ng-deep body {
-  background-color: #fff;
+::ng-deep {
+  body {
+    background-color: #fff;
+  }
+
+  .ignore-print {
+    display: none;
+  }
 }
 
 .ignore-print {

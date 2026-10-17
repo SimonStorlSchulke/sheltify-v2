@@ -5,7 +5,7 @@
       @for (column of sectionVal.Content.Columns; track $index) {
         <div class="column" [style.flex]="`${column.Grow} 1 0px`">
           @for (col of column.Sections; track $index) {
-            <div class="column-item sui">
+            <div [class]="'column-item sui section-' + col.SectionType">
               <ng-container *ngTemplateOutlet="singleSection; context: { $implicit: col }"></ng-container>
             </div>
           }
@@ -56,6 +56,10 @@
     @case ('home-found') {
       <!--suppress AngularUndefinedBinding -->
       <section-home-found [section]="sectionVal"/>
+    }
+    @case ('home-found-feedback') {
+      <!--suppress AngularUndefinedBinding -->
+      <section-home-found-feedback [section]="sectionVal"/>
     }
     @case ('blogs') {
       <!--suppress AngularUndefinedBinding -->

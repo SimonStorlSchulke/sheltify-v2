@@ -55,9 +55,9 @@ export class SectionEditorAnimalListComponent implements OnInit, OnDestroy {
       );
 
     this.rebuildLists();
-
     this.triggerRerender.emit();
   }
+
   ngOnDestroy() {
     this.updateSubscription?.unsubscribe();
   }

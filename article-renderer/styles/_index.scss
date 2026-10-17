@@ -3,10 +3,13 @@
 @use './RenderSectionImages';
 @use './RenderSectionSeparatorX';
 @use './RenderSectionHero';
+@use './RenderSectionHomeFound';
+@use './RenderSectionHomeFoundFeedback';
 @use './RenderSectionAnimalList';
 @use './RenderSectionBlogs';
 @use './RenderSectionVideo';
 @use './AnimalCard';
+@use './LightBox';
 @use './RenderSectionForm';
 @use './RenderSectionFile';
 @use './RenderSectionAnimalUpdates';

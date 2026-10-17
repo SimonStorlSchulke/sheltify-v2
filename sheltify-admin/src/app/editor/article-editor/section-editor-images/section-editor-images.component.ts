@@ -21,6 +21,5 @@ export class SectionEditorImagesComponent {
 
   setImages(images: CmsImage[]) {
     this.section().Content.MediaFiles = images;
-    console.log("AAA", images.map(i => i.Title));
   }
 }

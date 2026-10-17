@@ -15,7 +15,6 @@ export class HomeFoundService {
 
   async reloadEntries() {
     const entries = await firstValueFrom(this.cmsRequestService.getHomeFoundEntries());
-    console.log("e", entries);
     this.entries.set(entries ?? []);
   }
 }

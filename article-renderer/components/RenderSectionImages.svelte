@@ -6,11 +6,14 @@
 />
 
 <script lang="ts">
+  import LightBox from './shared/LightBox.svelte';
   import type { SectionImages } from 'sheltify-lib/dist/article-types';
   import { getImageSrc } from '../util';
   import { onMount } from "svelte";
 
   let {section}: { section: SectionImages } = $props();
+
+  let lightBox: LightBox;
 
   const images = $derived(() => section.Content.MediaFiles);
   const size = $derived(() => section.Content.Size);
@@ -28,7 +31,6 @@
     return () => clearInterval(intervalId);
   });
 
-  let lightboxOpen = $state(false)
   let shownId: number = $state(0);
 
   let description = $derived(() => {
@@ -56,22 +58,17 @@
   }
 
   function openLightBox(id: number) {
+    console.log("EXX")
     if(layout() == "single" && section.Content.Link) {
       return;
     }
-    shownId = id;
-    lightboxOpen = true;
-  }
-
-  function closeLightBox() {
-    lightboxOpen = false;
+    lightBox.open(id);
   }
 
   function onKeyDown(e: KeyboardEvent) {
     if (shownId === undefined) return;
     if (e.key == 'a' || e.key === 'ArrowLeft') previous();
     if (e.key == 'd' || e.key === 'ArrowRight') next();
-    if (e.key === 'Escape') closeLightBox();
   }
 
   function next(e?: MouseEvent) {
@@ -81,7 +78,6 @@
       return;
     }
     shownId! += 1;
-    console.log(shownId)
   }
 
   function previous(e?: MouseEvent) {
@@ -154,17 +150,6 @@
   </div>
 {/if}
 
-{#if lightboxOpen }
-  <div onclick={closeLightBox} class="lightbox" onkeyup={e => e.code === "Escape" ? closeLightBox() : false} role="none">
-    <div class="lightbox-content">
-      <button class="previous" onclick={(e) => previous(e)}><span>‹</span></button>
-      <div class="sui flex-y ai-center jc-space-evenly gap-3 w-100">
-        <img src={getImageSrc(images()[shownId], 'xlarge')} alt={images()[shownId].Description || images()[shownId].Title}>
-        <span class="description sui text-center py-1">{@html description()}</span>
-      </div>
-      <button class="next" onclick={(e) => next(e)}><span>›</span></button>
-    </div>
-  </div>
-{/if}
+<LightBox images={images()} bind:this={lightBox} />
 
 <svelte:window on:keydown={onKeyDown}/>

@@ -1,6 +1,7 @@
-import { Component, input, inject, output, ChangeDetectionStrategy, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, input, inject, output, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
+import { Log } from '@app/services/log';
 import { firstValueFrom, lastValueFrom, Subject } from 'rxjs';
 import { CmsArticle } from 'sheltify-lib/article-types';
 import { createEmptyArticle } from '@app/cms-types/cms-type.factory';
@@ -45,7 +46,6 @@ import { CmsRequestService } from '../../services/cms-request.service';
 })
 export class AnimalEditorComponent implements OnInit {
   tenantConfigurationService = inject(TenantConfigurationService);
-  cdRef = inject(ChangeDetectorRef);
   private cmsRequestService = inject(CmsRequestService);
   private modalService = inject(ModalService);
   private animalService = inject(AnimalService);
@@ -133,10 +133,26 @@ export class AnimalEditorComponent implements OnInit {
     this.animalService.setStatus(animal, status, active, this.animalStati)
   }
 
-  setHomeFoundAt(homeFoundStatus: string | undefined) {
+  async setHomeFoundAt(homeFoundStatus: string | undefined) {
     const animal = this.animal();
     if(homeFoundStatus == 'yes' && animal) {
       animal.HomeFoundAt = SqlNullTimeNow();
+      const animalsInArticle = this.animalService.animalsByArticleID()[animal.ArticleID ?? ''];
+
+      if (Log.assertExists(animalsInArticle)) {
+        if(animalsInArticle.some(cAnimal => cAnimal.ID !== animal.ID && cAnimal.HomeFoundStatus !== 'yes')) return;
+
+        const prefix = animalsInArticle.length > 1 ? 'Alle Tiere des Artikels wurden' : `${animal.Name} wurde`;
+        const answer = await this.alertService.openAlert(
+          'Darf der Artikel gelöscht werden?',
+          `${prefix} auf 'vermittelt' gestellt. Kann der Artikel gelöscht werden um Speicherplatz zu sparen? Die Steckbriefinformationen des Tieres bleiben bestehen."`,
+          ['ja', 'nein']
+        );
+
+        if(answer == 'ja') {
+          await lastValueFrom(this.cmsRequestService.deleteArticles([animal.ArticleID!]));
+        }
+      }
     }
   }
 }

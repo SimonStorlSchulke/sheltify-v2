@@ -1,7 +1,7 @@
 import type { SeoData } from '@shared/types/seo-data';
 import { animalsByArticleId } from 'sheltify-lib/animal-util.ts';
 import { type AnimalsFilter, type CmsArticle } from 'sheltify-lib/article-types.ts';
-import { type CmsAnimal, type CmsBlogEntry, type CmsImage, type CmsPage, type CmsTenantConfiguration } from 'sheltify-lib/cms-types';
+import { type CmsAnimal, type CmsBlogEntry, type CmsHomeFoundEntry, type CmsImage, type CmsPage, type CmsTenantConfiguration } from 'sheltify-lib/cms-types';
 import { filterPublishedAndHasArticle, sortByPriorityAndUpdatedAt, sortOrderedAnimalList } from 'sheltify-lib/cms-utils.ts';
 
 const isProd =
@@ -178,6 +178,10 @@ export class SheltifyAccess {
 
   async getBlogEntrybyTitle(title: string): Promise<CmsBlogEntry> {
     return await this.get<CmsBlogEntry>(`blogs/by-title?title=${title}`);
+  }
+
+  async getHomeFoundEntries(): Promise<CmsHomeFoundEntry[]> {
+    return await this.get<CmsHomeFoundEntry[]>(`home-found-entries`);
   }
 
   animalById(id: number): Promise<CmsAnimal> {

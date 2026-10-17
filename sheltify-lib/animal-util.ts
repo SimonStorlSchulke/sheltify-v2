@@ -1,4 +1,4 @@
-import { CmsAnimal } from 'cms-types';
+import { CmsAnimal, SqlNullTime } from 'cms-types';
 
 export function animalsByArticleId(animals: CmsAnimal[]): Record<string, CmsAnimal[]> {
   return animals.reduce((acc, animal) => {
@@ -31,4 +31,18 @@ export function getMultiAnimalTitle(animals: CmsAnimal[]): string {
     return `${names[0]} & ${names[1]}`;
   }
   return names.slice(0, -1).join(", ") + ` & ${names.at(-1)}`;
+}
+
+export function isAnimalHomeFoundBetween(
+  animal: CmsAnimal,
+  dateFrom: SqlNullTime,
+  dateTo: SqlNullTime,
+) {
+  if (animal.HomeFoundStatus !== 'yes') return false;
+
+  const homeFoundAt = new Date(animal.HomeFoundAt.Time!);
+  const fromValid = dateFrom?.Valid ? new Date(dateFrom.Time!) : null;
+  const toValid = dateTo?.Valid ? new Date(dateTo.Time!) : null;
+
+  return (!fromValid || homeFoundAt >= fromValid) && (!toValid || homeFoundAt <= toValid);
 }

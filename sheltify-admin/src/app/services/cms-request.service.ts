@@ -244,6 +244,10 @@ export class CmsRequestService {
     return this.get<CmsArticle>(`${this.publicTenantsUrl}/article/${id}`)
   }
 
+  deleteArticles(ids: string[]) {
+    return this.delete(`article?ids=${ids.join(',')}`)
+  }
+
   saveArticle( article: CmsArticle) {
     return this.postOrPatch<CmsArticle>(`article`, article);
   }
