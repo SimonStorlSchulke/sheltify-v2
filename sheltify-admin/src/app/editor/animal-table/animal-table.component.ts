@@ -1,4 +1,4 @@
-import { Component, computed, inject, model, signal } from '@angular/core';
+import { Component, computed, inject, model, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { CheckboxInputComponent } from '@app/forms/checkbox-input/checkbox-input.component';
@@ -20,7 +20,7 @@ import { CmsAnimal } from 'sheltify-lib/dist/cms-types';
   templateUrl: './animal-table.component.html',
   styleUrl: './animal-table.component.scss',
 })
-export class AnimalTableComponent {
+export class AnimalTableComponent implements OnInit {
   private animalService = inject(AnimalService);
   private tenantConfigurationService = inject(TenantConfigurationService);
   protected askSaveService = inject(AskSaveService);
@@ -56,12 +56,12 @@ export class AnimalTableComponent {
     this.animalService.setStatus(animal, status, active, this.animalStati())
   }
 
-  public async saveEditedAnimals() {
+  async saveEditedAnimals() {
     const unsavedAnimals = this.animalList().filter(animal => this.askSaveService.getDirtyIds().has(animal.ID));
     await this.saveAnimals(unsavedAnimals);
   }
 
-  private async saveOnReroute(ids: string[]): Promise<void> {
+  private async saveOnReroute(ids: string[]) {
     const unsavedAnimals = this.animalList().filter(animal => ids.includes(animal.ID));
     await this.saveAnimals(unsavedAnimals);
   }

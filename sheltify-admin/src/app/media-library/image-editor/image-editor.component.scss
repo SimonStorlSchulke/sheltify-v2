@@ -70,3 +70,20 @@
 #open-tag-manager {
     box-shadow: none;
 }
+
+.img-fullscreen {
+  position: fixed;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: #000000aa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  img {
+    height: 90%;
+    object-fit: contain;
+  }
+}

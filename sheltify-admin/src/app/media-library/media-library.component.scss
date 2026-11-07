@@ -51,8 +51,13 @@
   padding: 16px;
   border-radius: 8px;
   outline: 1px solid $alert;
+  outline-offset: -1px;
   cursor: pointer;
   color: $alert;
+
+  &:hover {
+    background-color: color.mix($alert, transparent, 30%);
+  }
 }
 
 .tags-and-animals {

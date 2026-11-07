@@ -26,7 +26,7 @@ export class TenantConfigurationService {
   async siteUrl(): Promise<string | undefined> {
     const siteUrl = (await firstValueFrom(this.getOrLoad()))?.SiteUrl;
 
-    if(siteUrl) {
+    if (siteUrl) {
       return siteUrl.endsWith('/') ? siteUrl : siteUrl + '/';
     }
     return undefined;
@@ -54,11 +54,9 @@ export class TenantConfigurationService {
   }
 
   private _specialSections?: SpecialArticleSections;
+
   async providedSpecialSections(): Promise<SpecialArticleSections | undefined> {
     if (this._specialSections) return this._specialSections;
-
-
-
 
     const url = await this.siteUrl() + 'provided-special-sections.json';
     const response = await fetch(url, {
@@ -79,14 +77,14 @@ export class TenantConfigurationService {
 
   private async stringValueToArray(key: keyof CmsTenantConfiguration): Promise<string[]> {
     const config = await firstValueFrom(this.getOrLoad());
-    if(!config) return [];
+    if (!config) return [];
     const str = config[key] as string;
-    if(!str) return [];
-    return str.split(",") ?? []
+    if (!str) return [];
+    return str.split(",") ?? [];
   }
 
   getOrLoad() {
-    if(this.config()) {
+    if (this.config()) {
       return of(this.config());
     }
     return this.cmsRequestService.getTenantConfiguration()
@@ -94,14 +92,14 @@ export class TenantConfigurationService {
   }
 
 
-  public async loadTenantStyle(renderer: Renderer2) {
+  async loadTenantStyle(renderer: Renderer2) {
     const tenantId = (await firstValueFrom(this.getOrLoad()))?.TenantID;
-    if(tenantId) {
+    if (tenantId) {
       const url = await this.siteUrl() + 'provided-article-theme.css';
       const id = `style-${tenantId}`;
       const elementExists = !!document.getElementById(id);
-      if(elementExists || !url) return;
-      const link = document.createElement( "link" );
+      if (elementExists || !url) return;
+      const link = document.createElement("link");
       link.id = id;
       link.href = url;
       link.type = "text/css";

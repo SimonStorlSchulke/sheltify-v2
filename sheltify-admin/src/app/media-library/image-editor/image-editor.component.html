@@ -4,7 +4,7 @@
   <div class="img-container" [class.focus-mode]="editFocusMode">
     <div class="img-crosshair-wrapper">
       <img
-        (click)="setFocusPoint($event)"
+        (click)="setFocusPointOrFullscreen($event)"
         [cmsImage]="image()"
         alt="Vorschau"
         [withCacheInvalidation]="true"
@@ -34,19 +34,16 @@
     <span>Größe: {{ getSizeString(image().LargestAvailableSize) }}</span>
   </div>
 
-  <!-- Don't show replaceImage in modal mode as it would be confusing -->
-  @if(!isModal) {
-    <div class="button-group">
-      <app-explained-button
-        (action)="replaceImage()"
-        text="Bild ersetzen"
-        explainer="Ersetzt das Bild an allen Stellen, an denen es verwendet wird. Es kann jedoch sein, dass
-        einigen Nutzern temporär noch das alte Bild angezeigt wird, da es sich noch im Speicher von deren Webbrowser befindet."
-        [small]="true"
-        [secondary]="true"
-      />
-    </div>
-  }
+  <div class="button-group">
+    <app-explained-button
+      (action)="replaceImage()"
+      text="Bild ersetzen"
+      explainer="Ersetzt das Bild an allen Stellen, an denen es verwendet wird. Es kann jedoch sein, dass
+      einigen Nutzern temporär noch das alte Bild angezeigt wird, da es sich noch im Speicher von deren Webbrowser befindet."
+      [small]="true"
+      [secondary]="true"
+    />
+  </div>
 
   <app-text-input
     idName="title"
@@ -101,3 +98,16 @@
 </div>
 
 <button class="primary sui w-100" (click)="save()">Speichern</button>
+
+@if(showFullscreenImg()) {
+  <div class="img-fullscreen" (click)="showFullscreenImg.set(false)">
+    <img
+      (click)="setFocusPointOrFullscreen($event)"
+      [cmsImage]="image()"
+      cmsImageSize="xlarge"
+      alt="Vorschau"
+      [withCacheInvalidation]="true"
+      [useFocusPoint]="false"
+    >
+  </div>
+}

@@ -41,6 +41,7 @@
             <app-media-entry
               [attr.data-testid]="'media-entry-' + image.Title"
               (click)="toggleSelect(image.ID, $event, images)"
+              (dblclick)="dblClickSelectImage(image)"
               [media]="editedImages().get(image.ID) ?? image"
               [selected]="selectedImageIds().has(image.ID)"
               [active]="activeImageId() == image.ID"

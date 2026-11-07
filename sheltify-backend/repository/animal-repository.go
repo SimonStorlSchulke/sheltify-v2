@@ -98,57 +98,6 @@ func GetFilteredAnimals(filter AnimalsFilter, tenant string) (*[]shtypes.Animal,
 	return &animals, nil
 }
 
-func getHomeFoundAnimals(from time.Time, to time.Time, tenant string) (*[]shtypes.Animal, error) {
-	var animals []shtypes.Animal
-
-	query := db.Model(&shtypes.Animal{})
-
-	query = query.Where("tenant_id = ?", tenant)
-
-	query = query.Where(
-		"string_to_array(status, ',') && ?::text[]",
-		pq.Array(filter.StatusInclude),
-	)
-
-	years := int(math.Floor(filter.AgeMin))
-	months := int(math.Round((filter.AgeMin - float64(years)) * 12))
-	minBirthdate := now.AddDate(-years, -months, 0)
-
-	query = query.Where("birthday <= ?", minBirthdate)
-
-	now := time.Now()
-
-	if filter.AgeMin > 0 {
-		years := int(math.Floor(filter.AgeMin))
-		months := int(math.Round((filter.AgeMin - float64(years)) * 12))
-		minBirthdate := now.AddDate(-years, -months, 0)
-		query = query.Where("birthday <= ?", minBirthdate)
-	}
-
-	if filter.AgeMax > 0 {
-		years := int(math.Floor(filter.AgeMax))
-		months := int(math.Round((filter.AgeMax - float64(years)) * 12))
-		maxBirthdate := now.AddDate(-years, -months, 0)
-		query = query.Where("birthday >= ?", maxBirthdate)
-	}
-
-	if filter.InGermany {
-		query = query.Where("status = ?", "germany")
-	}
-
-	if filter.MaxNumber > 0 {
-		query = query.Limit(filter.MaxNumber)
-	}
-
-	query = query.Preload("Portrait")
-
-	if err := query.Find(&animals).Error; err != nil {
-		return nil, err
-	}
-
-	return &animals, nil
-}
-
 func SaveAnimal(animal *shtypes.Animal, skipUpdateModicationDate bool) error {
 	tx := db
 	if skipUpdateModicationDate {

@@ -40,8 +40,8 @@ export class BlogListComponent {
   private activatedRoute = inject(ActivatedRoute);
   private tenantConfigurationService = inject(TenantConfigurationService);
 
-  public blogCategories = signal<string[]>(['alle']);
-  public selectedCategory = signal<string>('alle');
+  blogCategories = signal<string[]>(['alle']);
+  selectedCategory = signal<string>('alle');
 
   constructor() {
     this.activatedRoute.data.pipe(takeUntilDestroyed()).subscribe(({blog}) => this.selectedBlog.set(blog));

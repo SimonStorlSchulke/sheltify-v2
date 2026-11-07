@@ -46,6 +46,7 @@ export class ImageEditorComponent extends FinishableDialog<CmsImage> implements 
   image = model<CmsImage>() as ModelSignal<CmsImage>; //Workaround for modalService manually setting image
   selectedTags = signal<string[]>([]);
   selectedAnimals = signal<string[]>([]);
+  showFullscreenImg = signal(false);
 
   editedImage = output<CmsImage>();
 
@@ -96,8 +97,10 @@ export class ImageEditorComponent extends FinishableDialog<CmsImage> implements 
     this.editFocusMode = true;
   }
 
-  setFocusPoint(event: MouseEvent) {
-    if (!this.editFocusMode) return;
+  setFocusPointOrFullscreen(event: MouseEvent) {
+    if (!this.editFocusMode) {
+      this.showFullscreenImg.set(true);
+    };
     const rect = (event.target as HTMLElement).getBoundingClientRect();
     const x = (event.clientX - rect.left) / rect.width;
     const y = (event.clientY - rect.top) / rect.height;
@@ -122,7 +125,11 @@ export class ImageEditorComponent extends FinishableDialog<CmsImage> implements 
   }
 
   async replaceImage() {
-    const answer = await this.alertService.openAlert('Bild wirklich ersetzen?', 'Das Bild wird dann an ALLEN Stellen, an denen es auftaucht durch ein anderes ersetzt.', ['abbrechen', 'ok'])
+    let message = 'Das Bild wird dann an ALLEN Stellen, an denen es auftaucht durch ein anderes ersetzt.';
+    if(this.isModal) {
+      message += ' Um das Bild nur HIER zu ersetzen, muss es entfernt und ein Neues ausgewählt werden.'
+    }
+    const answer = await this.alertService.openAlert('Bild wirklich ersetzen?', message, ['abbrechen', 'ok'])
     if(answer != 'ok') {
       return;
     }

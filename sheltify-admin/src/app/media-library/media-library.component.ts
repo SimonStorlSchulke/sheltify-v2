@@ -14,7 +14,6 @@ import { ImageConverterService } from '@app/services/image-converter.service';
 import { FinishableDialog, ModalService } from '@app/services/modal.service';
 import { TagsService } from '@app/services/tags.service';
 import { TagComponent } from '@app/ui/tag/tag.component';
-import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import pLimit from 'p-limit';
 import { lastValueFrom, map, Observable } from 'rxjs';
 import { CmsAnimal, CmsImage } from 'sheltify-lib/cms-types';
@@ -285,6 +284,12 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
     // TODO: Auch aktuell NICHT angezeigte Bilder auswählbar machen?
     const selectedImages = Array.from(images).filter(img => selectedIds.has(img.ID));
     this.finishSubject.next(selectedImages);
+  }
+
+  dblClickSelectImage(image: CmsImage) {
+    if(this.isModal) {
+      this.finishSubject.next([image]);
+    }
   }
 
   toggleTag(e: Event, tagId: string) {

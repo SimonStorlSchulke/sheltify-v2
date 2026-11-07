@@ -33,7 +33,7 @@ export class SectionEditorComponent {
   editable = input.required<boolean>();
   editedRow = model<number>();
 
-  public sectionLabel = computed(() => {
+  sectionLabel = computed(() => {
     const section = this.section();
     if(!section) return '';
     if(section.SectionType == 'special') return section.Content.Type;
