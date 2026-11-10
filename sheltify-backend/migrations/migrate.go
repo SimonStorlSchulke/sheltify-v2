@@ -15,7 +15,6 @@ func Migrate(db *gorm.DB) {
 		&shtypes.Page{},
 		&shtypes.BlogEntry{},
 		&shtypes.MediaFile{},
-		&shtypes.TeamMember{},
 		&shtypes.Tag{},
 		&shtypes.User{},
 		&shtypes.LogEntry{},

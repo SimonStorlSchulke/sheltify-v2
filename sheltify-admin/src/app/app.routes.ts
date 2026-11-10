@@ -4,7 +4,6 @@ import { AnimalTableComponent } from '@app/editor/animal-table/animal-table.comp
 import { PageListComponent, pageResolver } from '@app/editor/blog-list/page-list.component';
 import { HomeFoundListComponent, homeFoundResolver } from '@app/editor/home-found-list/home-found-list.component';
 import { BlogListComponent, blogResolver } from '@app/editor/page-list/blog-list.component';
-import { TeammemberListComponent, teamMemberResolver } from '@app/editor/teammember-list/teammember-list.component';
 import { ExportPdfComponent } from '@app/export/export-pdf/export-pdf.component';
 import { DefaultLayoutComponent } from '@app/layouts/default-layout/default-layout.component';
 import { MediaLibraryComponent } from '@app/media-library/media-library.component';
@@ -32,8 +31,6 @@ export const routes: Routes = [
       {path: "blog/:id", component: BlogListComponent, canActivate: [AuthGuard], canDeactivate: [askSaveGuard], resolve: {blog: blogResolver}},
       {path: "rueckmeldungen", component: HomeFoundListComponent, canActivate: [AuthGuard]},
       {path: "rueckmeldungen/:id", component: HomeFoundListComponent, canActivate: [AuthGuard], canDeactivate: [askSaveGuard], resolve: {entry: homeFoundResolver}},
-      {path: "team", component: TeammemberListComponent, canActivate: [AuthGuard]},
-      {path: "team/:id", component: TeammemberListComponent, canActivate: [AuthGuard], canDeactivate: [askSaveGuard], resolve: {entry: teamMemberResolver}},
       {path: "media", component: MediaLibraryComponent, canActivate: [AuthGuard]},
       {path: "optionen", component: TenantConfigurationComponent, canActivate: [AuthGuard], canDeactivate: [askSaveGuard]},
       {path: "tiere", component: AnimalListComponent, canActivate: [AuthGuard]},
