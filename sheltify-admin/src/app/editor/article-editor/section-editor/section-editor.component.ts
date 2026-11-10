@@ -48,8 +48,6 @@ export class SectionEditorComponent {
     this.outletRef.createEmbeddedView(this.previewRef);
   }
 
-  readonly sectionLabels = sectionLabels;
-
   copySection() {
     this.articleEditorService.copiedSection.set(this.section());
     this.alertService.openToast('Sektion kann nun über den "Einfügen" Knopf beim Hover zwischen den Sektionen wieder eingefügt werden (auch in anderen Artikeln).', 'Kopiert')

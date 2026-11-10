@@ -1,5 +1,17 @@
 <app-checkbox-input idName="fulLWidth" label="Ganze Breite einnehmen" explanation="Nutzt die ganze Breite des Bildschirms und lässt keinen Rand an den Seiten" [(twoWayModel)]="section().Content.FullWidth"/>
 <br>
+
+@if(editedSection(); as editedSectionVal) {
+  <div class="column-section-editor">
+    <app-section-editor-column-sections
+      class="sui card flex-y"
+      [section]="editedSectionVal.section"
+      (apply)="applyEditedSection(editedSectionVal.iCol, editedSectionVal.iRow)"
+      (deletedSection)="deleteSection(editedSectionVal.iCol, editedSectionVal.iRow)"
+    />
+  </div>
+}
+
 <div class="columns sui flex-x">
   @for (column of section().Content.Columns; track column) {
     @let iCol = $index;
@@ -16,13 +28,15 @@
       </div>
 
       <div class="column-sections">
-
         <div (click)="addSectionAtRow(iCol, 0)" [attr.data-testid]="'row-selector-' + $index + 1" class="move-to-row"></div>
 
         @for (section of column.Sections; track section) {
-          @let iSection = $index;
-          <app-section-editor-column-sections class="sui card flex-y" [section]="section" (deletedSection)="deleteSection(iCol, iSection)"/>
-          <div (click)="addSectionAtRow(iCol, iSection + 1)" [attr.data-testid]="'row-selector-' + $index + 1" class="move-to-row"></div>
+          @let iRow = $index;
+          <div class="section-preview themable article" (click)="editSection(section, iCol, iRow)">
+            <app-section-renderer [section]="section"/>
+          </div>
+
+          <div (click)="addSectionAtRow(iCol, iRow + 1)" [attr.data-testid]="'row-selector-' + $index + 1" class="move-to-row"></div>
         }
       </div>
     </div>
@@ -31,3 +45,5 @@
     <app-bt-icon class="" name="Plus"/>
   </button>
 </div>
+
+

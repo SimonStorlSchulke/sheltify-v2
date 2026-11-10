@@ -14,6 +14,7 @@ import RenderSectionAnimalUpdates from 'article-renderer/components/RenderSectio
 import RenderSectionBlogs from 'article-renderer/components/RenderSectionBlogs.svelte';
 import RenderSectionVideo from 'article-renderer/components/RenderSectionVideo.svelte';
 import RenderSectionHomeFound from 'article-renderer/components/RenderSectionHomeFound.svelte';
+import RenderSectionTeamMember from 'article-renderer/components/RenderSectionTeamMember.svelte';
 import "article-renderer/styles/_index.scss"
 import { animalsByArticleId, isAnimalHomeFoundBetween } from 'sheltify-lib/animal-util.ts';
 import SpecialSectionRenderer from './SpecialSectionRenderer.astro';
@@ -134,6 +135,9 @@ async function populateDynamicData() {
           case 'blogs':
             comp = <RenderSectionBlogs section={section} client:visible/>;
           break;
+          case 'team-member':
+            comp = <RenderSectionTeamMember section={section}/>;
+            break;
           case 'special':
             section.TempData = {allAnimals: publishedAnimals, allAnimalsByArticle};
             comp = <SpecialSectionRenderer section={section}/>;

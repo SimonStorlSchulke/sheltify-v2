@@ -175,6 +175,18 @@ export function createEmptySection(SectionType: SectionType): Section {
           },
           TempData: undefined,
         };
+    case 'team-member':
+        return {
+          SectionType,
+          BackgroundColor: '',
+          Content: {
+            Name: '',
+            Role: '',
+            EMail: '',
+            Phone: '',
+            Description: '',
+          },
+        };
     default:
       assertUnreachable(SectionType);
   }

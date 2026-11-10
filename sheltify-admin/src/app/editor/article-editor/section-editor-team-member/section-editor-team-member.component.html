@@ -1,0 +1,18 @@
+<div data-testid="section-teammember-editor" class="sui flex-x gap-3 grow-1">
+  <form class="sui grow-1 flex-y gap-2 card">
+    <div class="sui flex-x gap-2">
+      <app-image-picker-single label="Portrait" idName="portrait" [(twoWayModel)]="section().Content.Portrait"/>
+      <div class="sui flex-y gap-2">
+        <div class="sui flex-x gap-2">
+          <app-text-input idName="name" label="Name" [(twoWayModel)]="section().Content.Name"/>
+          <app-text-input idName="role" label="Rolle" [(twoWayModel)]="section().Content.Role"/>
+        </div>
+        <div class="sui flex-x gap-2">
+          <app-text-input [isEmail]="true" idName="name" label="Emailadresse" [(twoWayModel)]="section().Content.EMail"/>
+          <app-text-input idName="role" label="Telefonnummer" [(twoWayModel)]="section().Content.Phone"/>
+        </div>
+      </div>
+    </div>
+    <app-text-input [long]="true" idName="description" label="Beschreibung" [(twoWayModel)]="section().Content.Description"/>
+  </form>
+</div>

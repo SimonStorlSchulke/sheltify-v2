@@ -34,6 +34,7 @@ export class TeammemberEditorComponent {
 
   async save() {
     const teamMember = await firstValueFrom(this.cmsRequestService.saveTeamMember(this.teamMember()));
+    this.askSaveService.clean();
     if (teamMember) {
       this.teamMembersService.reloadTeamMembers();
     }

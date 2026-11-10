@@ -74,6 +74,10 @@
       <!--suppress AngularUndefinedBinding -->
       <section-file [section]="sectionVal"/>
     }
+    @case ('team-member') {
+      <!--suppress AngularUndefinedBinding -->
+      <section-team-member [section]="sectionVal"/>
+    }
     @case ('special') {
       @switch (sectionVal.Content.Type) {
         @case ('Sponsor') {

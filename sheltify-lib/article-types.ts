@@ -1,6 +1,6 @@
 import { CmsAnimal, CmsBlogEntry, CmsHomeFoundEntry, CmsImage, CmsType, SqlNullTime } from './cms-types';
 
-export const SectionTypes = ['title', 'text', 'video', 'image', 'hero', 'animal-list', 'html', 'separator-x', 'home-found', 'home-found-feedback', 'columns', 'form', 'file', 'animal-updates', 'special', 'blogs'] as const;
+export const SectionTypes = ['title', 'text', 'video', 'image', 'hero', 'animal-list', 'html', 'separator-x', 'home-found', 'home-found-feedback', 'columns', 'form', 'file', 'animal-updates', 'special', 'blogs', 'team-member'] as const;
 
 export type SectionType = (typeof SectionTypes)[number];
 
@@ -33,6 +33,7 @@ export type Section =
   | SectionAnimalUpdates
   | SectionSpecial
   | SectionBlogs
+  | SectionTeamMember
 
 export type SectionColumns = {
   SectionType: 'columns',
@@ -181,6 +182,20 @@ export type SectionBlogs = {
     ShowAllCategoriesButton: boolean,
   },
   TempBlogs: CmsBlogEntry[],
+};
+
+export type SectionTeamMember = {
+  SectionType: 'team-member',
+  BackgroundColor: string,
+  Content: {
+    Name: string;
+    Role: string;
+    Description: string;
+    EMail: string;
+    Phone: string;
+    PortraitID?: string;
+    Portrait?: CmsImage;
+  },
 };
 
 export type AnimalsFilter = {

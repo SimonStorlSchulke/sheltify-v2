@@ -17,6 +17,7 @@ export const sectionLabels = new Map<SectionType, string>([
   ['home-found-feedback','Rückmeldungen'],
   ['animal-updates','Tier-Updates'],
   ['blogs','Blogeinträge Übersicht'],
+  ['team-member','Teammitglied'],
 ]);
 
 export function getImageFormatUrl(image: CmsImage, requestedSize: CmsImagesSize): string {

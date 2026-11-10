@@ -1,0 +1,12 @@
+{
+  "/api": {
+    "target": "https://editor.sheltify.de",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/admin/api": {
+    "target": "https://editor.sheltify.de",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

@@ -5,7 +5,8 @@ import { SectionEditorFormComponent } from '@app/editor/article-editor/section-e
 import { SectionEditorHomeFoundFeedbackComponent } from '@app/editor/article-editor/section-editor-home-found-feedback/section-editor-home-found-feedback.component';
 import { SectionEditorHomeFoundComponent } from '@app/editor/article-editor/section-editor-home-found/section-editor-home-found.component';
 import { SectionEditorSpecialComponent } from '@app/editor/article-editor/section-editor-special/section-editor-special.component';
-import { NgIcon } from '@ng-icons/core';
+import { SectionEditorTeamMember } from '@app/editor/article-editor/section-editor-team-member/section-editor-team-member.component';
+import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
 import { Section } from 'sheltify-lib/article-types';
 import { SectionEditorHeroComponent } from '@app/editor/article-editor/section-editor-hero/section-editor-hero.component';
 import { SectionEditorHtmlComponent } from '@app/editor/article-editor/section-editor-html/section-editor-html.component';
@@ -24,13 +25,14 @@ import { sectionLabels } from '@app/services/article-renderer';
     SectionEditorTextComponent,
     SectionEditorTitleComponent,
     SectionEditorVideoComponent,
-    NgIcon,
     SectionEditorBlogsComponent,
     SectionEditorFileComponent,
     SectionEditorFormComponent,
     SectionEditorHomeFoundComponent,
     SectionEditorSpecialComponent,
     SectionEditorHomeFoundFeedbackComponent,
+    SectionEditorTeamMember,
+    BtIconComponent,
   ],
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './section-editor-column-sections.component.html',
@@ -39,5 +41,6 @@ import { sectionLabels } from '@app/services/article-renderer';
 export class SectionEditorColumnSectionsComponent {
   section = input.required<Section>();
   deletedSection = output();
+  apply = output();
   readonly sectionLabels = sectionLabels;
 }

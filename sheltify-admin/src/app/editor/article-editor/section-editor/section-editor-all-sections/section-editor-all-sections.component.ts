@@ -1,5 +1,6 @@
 import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { SectionEditorHomeFoundFeedbackComponent } from '@app/editor/article-editor/section-editor-home-found-feedback/section-editor-home-found-feedback.component';
+import { SectionEditorTeamMember } from '@app/editor/article-editor/section-editor-team-member/section-editor-team-member.component';
 import { Section } from 'sheltify-lib/article-types';
 import { SectionEditorAnimalListComponent } from '@app/editor/article-editor/section-editor-animal-list/section-editor-animal-list.component';
 import { SectionEditorAnimalUpdatesComponent } from '@app/editor/article-editor/section-editor-animal-updates/section-editor-animal-updates.component';
@@ -34,6 +35,7 @@ import { SectionEditorFileComponent } from '../../section-editor-file/section-ed
     SectionEditorHomeFoundComponent,
     SectionEditorBlogsComponent,
     SectionEditorHomeFoundFeedbackComponent,
+    SectionEditorTeamMember,
   ],
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './section-editor-all-sections.component.html',

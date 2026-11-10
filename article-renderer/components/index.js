@@ -7,6 +7,7 @@ export { default as RenderSectionHomeFoundFeedback } from './RenderSectionHomeFo
 export { default as RenderSectionAnimalList } from './RenderSectionAnimalList.svelte';
 export { default as RenderSectionForm } from './RenderSectionForm.svelte';
 export { default as RenderSectionFile } from './RenderSectionFile.svelte';
+export { default as RenderSectionTeamMember } from './RenderSectionTeamMember.svelte';
 export { default as RenderSectionVideo } from './RenderSectionVideo.svelte';
 export { default as RenderSectionAnimalUpdates } from './RenderSectionAnimalUpdates.svelte';
 export { default as RenderSectionBlogs } from './RenderSectionBlogs.svelte';

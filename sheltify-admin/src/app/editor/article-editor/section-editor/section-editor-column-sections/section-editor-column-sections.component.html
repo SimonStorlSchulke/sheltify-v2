@@ -2,7 +2,7 @@
 
 <div class="section-titlebar sui flex-x gap-1 ai-center only-editmode">
   <b class="sui py-2 grow-1">{{ sectionLabels.get(sectionVal.SectionType) ?? 'Sektion' }}</b>
-  <ng-icon class="x" (click)="deletedSection.emit()" name="bootstrapX" size="22px"/>
+  <app-bt-icon class="x sui p-1" name="Trash" (click)="deletedSection.emit()"/>
 </div>
 
 @switch (sectionVal.SectionType) {
@@ -48,5 +48,9 @@
   @case ('special') {
     <app-section-editor-special [section]="sectionVal"/>
   }
+  @case ('team-member') {
+    <app-section-editor-team-member [section]="sectionVal"/>
+  }
 }
 <br>
+<button class="primary" (click)="apply.emit()">Anwenden</button>

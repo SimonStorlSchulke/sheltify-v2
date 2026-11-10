@@ -1,4 +1,5 @@
-import { Component, input, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, input, inject, ChangeDetectionStrategy, signal } from '@angular/core';
+import { SectionRendererComponent } from '@app/section-renderer/section-renderer.component';
 import { Section, SectionColumns } from 'sheltify-lib/article-types';
 import { createEmptySection } from '@app/editor/article-editor/article-section.factory';
 import { PickNewSectionComponent } from '@app/editor/article-editor/pick-new-section/pick-new-section.component';
@@ -18,6 +19,7 @@ const maxColumns = 4;
     BtIconComponent,
     SectionEditorColumnSectionsComponent,
     CheckboxInputComponent,
+    SectionRendererComponent,
   ],
   templateUrl: './section-editor-columns.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
@@ -28,13 +30,15 @@ export class SectionEditorColumnsComponent {
   private modalService = inject(ModalService);
 
   section = input.required<SectionColumns>();
+  editedSection = signal<{ section: Section, iCol: number, iRow: number } | undefined>(undefined);
 
   deleteColumn(index: number) {
     this.section().Content.Columns.splice(index, 1);
   }
 
-  deleteSection(iColumn: number, iSection: number) {
-    this.section().Content.Columns[iColumn].Sections.splice(iSection, 1);
+  deleteSection(iColumn: number, iRow: number) {
+    this.section().Content.Columns[iColumn].Sections.splice(iRow, 1);
+    this.editedSection.set(undefined);
   }
 
   addColumn() {
@@ -48,7 +52,7 @@ export class SectionEditorColumnsComponent {
     })
   }
 
-  async addSectionAtRow(columnId: number, rowId: number) {
+  async addSectionAtRow(iCol: number, iRow: number) {
 
     const sectionPickReturn = await this.modalService.openFinishable(PickNewSectionComponent);
     if (!sectionPickReturn) return;
@@ -60,7 +64,8 @@ export class SectionEditorColumnsComponent {
       sectionRef = sectionPickReturn;
     }
 
-    this.section().Content.Columns[columnId].Sections.splice(rowId, 0, sectionRef);
+    this.section().Content.Columns[iCol].Sections.splice(iRow, 0, sectionRef);
+    this.editedSection.set({section: sectionRef, iCol, iRow});
 
     //setTimeout(() => this.editSectionAtPosition(rowId, 0), 0);
   }
@@ -83,5 +88,14 @@ export class SectionEditorColumnsComponent {
     }
 
     [columns[iColumn], columns[iColumn - 1]] = [columns[iColumn - 1], columns[iColumn]];
+  }
+
+  editSection(section: Section, iCol: number, iRow: number) {
+    this.editedSection.set({section, iCol, iRow});
+  }
+
+  applyEditedSection(iCol: number, iRow: number) {
+    this.section().Content.Columns[iCol].Sections[iRow] = structuredClone(this.editedSection()?.section)!;
+    this.editedSection.set(undefined);
   }
 }

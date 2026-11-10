@@ -14,12 +14,12 @@ export class ManageEntryButtonsComponent {
   togglePublished = output();
   save = output();
   delete = output();
-  private askService = inject(AskSaveService);
+  private askSaveService = inject(AskSaveService);
 
-  dirty = this.askService.dirty;
+  dirty = this.askSaveService.dirty;
 
   triggerSave() {
     this.save.emit();
-    this.askService.clean();
+    this.askSaveService.clean();
   }
 }
