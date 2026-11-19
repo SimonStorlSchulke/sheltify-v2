@@ -1,5 +1,10 @@
 @use "colors" as *;
 
+.table-wrapper {
+  overflow: auto;
+  max-height: calc(100dvh - 150px);
+}
+
 table {
   border-collapse: collapse;
   box-shadow: 4px 4px 8px $neutral200;

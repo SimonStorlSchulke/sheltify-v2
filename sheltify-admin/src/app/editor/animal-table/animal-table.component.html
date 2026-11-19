@@ -4,67 +4,69 @@
     <button class="primary" (click)="saveEditedAnimals()" [disabled]="!askSaveService.dirty()">Speichern</button>
   </div>
   <button (click)="newAnimal()" class="primary sui flex-x gap-2" style="width: 170px"><app-bt-icon name="Plus"/>Neues Tier</button>
-  <table>
-    <thead>
-    <th>Name</th>
-    <th>Bild</th>
-    <th>Geschlecht</th>
-    <th>Schulterhöhe (cm)</th>
-    <th>Beschreibung</th>
-    <th>Vermittlungsstatus</th>
-    <th>Kastriert</th>
-    <th>Status</th>
-    <th></th>
-    </thead>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+      <th>Name</th>
+      <th>Bild</th>
+      <th>Geschlecht</th>
+      <th>Schulterhöhe (cm)</th>
+      <th>Beschreibung</th>
+      <th>Vermittlungsstatus</th>
+      <th>Kastriert</th>
+      <th>Status</th>
+      <th></th>
+      </thead>
 
-    <tbody>
-      @for (animal of animalList(); track animal.ID) {
-        <tr>
-          <td>{{ animal.Name }}</td>
-          <td><app-image-picker-single [editedId]="animal.ID" [idName]="animal.Name + '-bild'" label="" [(twoWayModel)]="animal.Portrait" [small]="true" [cropped]="true"/></td>
-          <td>
-            <app-radio-buttons-input
-              [editedId]="animal.ID"
-              [idName]="animal.Name + '-gender'" label=""
-              [(twoWayModel)]="animal.Gender"
-              [options]="['male', 'female']"
-              [optionTranslations]="['M', 'W']"
-            />
-          </td>
-          <td><app-number-input [editedId]="animal.ID" [idName]="animal.Name + '-shoulderheight'" label="" [(twoWayModel)]="animal.ShoulderHeightCm"/></td>
-          <td class="animal-description" (click)="editDescription(animal)"><span>{{animal.Description.slice(0, 120)}} ...</span></td>
-          <td>
-            <app-radio-buttons-input
-              [editedId]="animal.ID"
-              [idName]="animal.Name + '-vermittlungsstatus'" label=""
-              [(twoWayModel)]="animal.HomeFoundStatus"
-              [options]="['no', 'reserved', 'yes']"
-              [optionTranslations]="['unvermittelt', 'reserviert', 'Zuhause gefunden']"
-            />
-          </td>
-          <td>
-            <app-checkbox-input [editedId]="animal.ID" [idName]="animal.Name + '-kastriert'" label="" [(nullBoolModel)]="animal.Castrated"/>
-          </td>
-          <td>
-            <div class="sui flex-x gap-1">
-              @for(animalStatus of animalStati(); track $index) {
-                @let isStatisActive = animal.Status.split(',').includes(animalStatus);
-                <button
-                  (click)="setStatus(animal, animalStatus, !isStatisActive)"
-                  [class]="isStatisActive ? 'primary' : 'white'">
-                  {{ animalStatus }}
-                </button>
-              }
-            </div>
-          </td>
-          <td>
-            <div class="sui flex-y gap-1">
-              <a [routerLink]="'/tiere/' + animal.ID" class="link"><button class="secondary small">Artikel bearbeiten</button></a>
-              <a class="link"><button class="secondary small">Löschen</button></a>
-            </div>
-          </td>
-        </tr>
-      }
-    </tbody>
-  </table>
+      <tbody>
+        @for (animal of animalList(); track animal.ID) {
+          <tr>
+            <td>{{ animal.Name }}</td>
+            <td><app-image-picker-single [editedId]="animal.ID" [idName]="animal.Name + '-bild'" label="" [(twoWayModel)]="animal.Portrait" [small]="true" [cropped]="true"/></td>
+            <td>
+              <app-radio-buttons-input
+                [editedId]="animal.ID"
+                [idName]="animal.Name + '-gender'" label=""
+                [(twoWayModel)]="animal.Gender"
+                [options]="['male', 'female']"
+                [optionTranslations]="['M', 'W']"
+              />
+            </td>
+            <td><app-number-input [editedId]="animal.ID" [idName]="animal.Name + '-shoulderheight'" label="" [(twoWayModel)]="animal.ShoulderHeightCm"/></td>
+            <td class="animal-description" (click)="editDescription(animal)"><span>{{animal.Description.slice(0, 120)}} ...</span></td>
+            <td>
+              <app-radio-buttons-input
+                [editedId]="animal.ID"
+                [idName]="animal.Name + '-vermittlungsstatus'" label=""
+                [(twoWayModel)]="animal.HomeFoundStatus"
+                [options]="['no', 'reserved', 'yes']"
+                [optionTranslations]="['unvermittelt', 'reserviert', 'Zuhause gefunden']"
+              />
+            </td>
+            <td>
+              <app-checkbox-input [editedId]="animal.ID" [idName]="animal.Name + '-kastriert'" label="" [(nullBoolModel)]="animal.Castrated"/>
+            </td>
+            <td>
+              <div class="sui flex-x gap-1">
+                @for(animalStatus of animalStati(); track $index) {
+                  @let isStatisActive = animal.Status.split(',').includes(animalStatus);
+                  <button
+                    (click)="setStatus(animal, animalStatus, !isStatisActive)"
+                    [class]="isStatisActive ? 'primary' : 'white'">
+                    {{ animalStatus }}
+                  </button>
+                }
+              </div>
+            </td>
+            <td>
+              <div class="sui flex-y gap-1">
+                <a [routerLink]="'/tiere/' + animal.ID" class="link"><button class="secondary small">Artikel bearbeiten</button></a>
+                <a class="link"><button class="secondary small">Löschen</button></a>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
 </div>
