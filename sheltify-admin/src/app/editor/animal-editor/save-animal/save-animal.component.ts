@@ -1,4 +1,4 @@
-import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { TextInputComponent } from '@app/forms/text-input/text-input.component';
 import { FinishableDialog } from '@app/services/modal.service';
 
@@ -11,8 +11,18 @@ import { FinishableDialog } from '@app/services/modal.service';
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './save-animal.component.scss',
 })
-export class SaveAnimalComponent extends FinishableDialog<{updateNote: string, pushUpdate: boolean}> {
+export class SaveAnimalComponent extends FinishableDialog<{updateNote: string, pushUpdate: boolean}> implements OnInit {
+  askForUpdateText = true;
   updateNote = signal<string>('');
+
+  ngOnInit() {
+    if(!this.askForUpdateText) {
+      this.finishWith({
+        updateNote: '',
+        pushUpdate: false,
+      })
+    }
+  }
 
   sendSaveInfo(pushUpdate: boolean) {
     this.finishWith({

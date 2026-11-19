@@ -13,6 +13,7 @@ export class TextInputComponent extends InputBaseComponent implements OnInit {
   long = input<boolean>(false);
   isEmail = input<boolean>(false);
   twoWayModel = model<string | undefined>('');
+  height = input<string | undefined>(undefined);
 
   ngOnInit() {
     if(this.twoWayModel() === undefined) {

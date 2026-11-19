@@ -1,12 +1,20 @@
 import { Component, computed, inject, model, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
+import { createNewAnimal } from '@app/cms-types/cms-type.factory';
 import { CheckboxInputComponent } from '@app/forms/checkbox-input/checkbox-input.component';
 import { ImagePickerSingleComponent } from '@app/forms/image-picker-single/image-picker-single.component';
+import { NumberInputComponent } from '@app/forms/number-input/number-input.component';
 import { RadioButtonsInputComponent } from '@app/forms/radio-buttons-input/radio-buttons-input.component';
+import { TextInputModalComponent } from '@app/forms/text-input-modal/text-input-modal.component';
+import { TextInputComponent } from '@app/forms/text-input/text-input.component';
 import { AnimalService } from '@app/services/animal.service';
 import { AskSaveService } from '@app/services/ask-save.service';
+import { CmsRequestService } from '@app/services/cms-request.service';
+import { ModalService } from '@app/services/modal.service';
 import { TenantConfigurationService } from '@app/services/tenant-configuration.service';
+import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
+import { firstValueFrom } from 'rxjs';
 import { CmsAnimal } from 'sheltify-lib/dist/cms-types';
 
 @Component({
@@ -15,7 +23,10 @@ import { CmsAnimal } from 'sheltify-lib/dist/cms-types';
     CheckboxInputComponent,
     RadioButtonsInputComponent,
     ImagePickerSingleComponent,
-    RouterLink
+    RouterLink,
+    TextInputComponent,
+    BtIconComponent,
+    NumberInputComponent
   ],
   templateUrl: './animal-table.component.html',
   styleUrl: './animal-table.component.scss',
@@ -24,6 +35,8 @@ export class AnimalTableComponent implements OnInit {
   private animalService = inject(AnimalService);
   private tenantConfigurationService = inject(TenantConfigurationService);
   protected askSaveService = inject(AskSaveService);
+  protected modalService = inject(ModalService);
+  protected cmsRequestService = inject(CmsRequestService);
 
   search = signal('');
 
@@ -52,8 +65,22 @@ export class AnimalTableComponent implements OnInit {
   }
 
   setStatus(animal: CmsAnimal, status: string, active: boolean) {
-    this.askSaveService.markDirty(animal.ID);
+    this.setDirty(animal);
     this.animalService.setStatus(animal, status, active, this.animalStati())
+  }
+
+  async editDescription(animal: CmsAnimal) {
+    this.setDirty(animal);
+    animal.Description = await this.modalService.openFinishable(TextInputModalComponent, {
+      label: "Beschreibung eingeben",
+      presetText: animal.Description,
+      long: true,
+    }, 'modal-lg', true) ?? animal.Description;
+  }
+
+
+  setDirty(animal: CmsAnimal) {
+    this.askSaveService.markDirty(animal.ID);
   }
 
   async saveEditedAnimals() {
@@ -75,5 +102,21 @@ export class AnimalTableComponent implements OnInit {
         console.error(error);
       }
     }
+  }
+
+
+  async newAnimal() {
+
+    const name = await this.modalService.openFinishable(TextInputModalComponent, {
+      label: "Name eingeben"
+    });
+    if(!name) return;
+
+    const useDefaultAnimalKind = await this.tenantConfigurationService.useDefaultAnimalKind();
+
+    const animal = createNewAnimal(name, useDefaultAnimalKind);
+
+    await firstValueFrom(this.cmsRequestService.saveAnimal(animal));
+    await this.animalService.reloadAnimals();
   }
 }

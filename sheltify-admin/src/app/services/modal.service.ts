@@ -50,10 +50,12 @@ export class ModalService {
   async openFinishable<TValue, TComponent extends Finishable<TValue>>(
     component: Type<TComponent>,
     inputs?: Partial<TComponent>,
-    cssClass = 'modal-lg'
+    cssClass = 'modal-lg',
+    disableClose = false,
   ): Promise<TComponent extends FinishableDialog<infer TValue> ? (TValue | undefined) : never> {
     const dialogRef = this.dialog.open(component, {
       panelClass: cssClass,
+      disableClose,
     });
 
     if (inputs) {

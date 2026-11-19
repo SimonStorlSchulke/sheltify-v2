@@ -3,10 +3,14 @@
     <h1>Tiertabelle</h1>
     <button class="primary" (click)="saveEditedAnimals()" [disabled]="!askSaveService.dirty()">Speichern</button>
   </div>
+  <button (click)="newAnimal()" class="primary sui flex-x gap-2" style="width: 170px"><app-bt-icon name="Plus"/>Neues Tier</button>
   <table>
     <thead>
     <th>Name</th>
     <th>Bild</th>
+    <th>Geschlecht</th>
+    <th>Schulterhöhe (cm)</th>
+    <th>Beschreibung</th>
     <th>Vermittlungsstatus</th>
     <th>Kastriert</th>
     <th>Status</th>
@@ -17,7 +21,18 @@
       @for (animal of animalList(); track animal.ID) {
         <tr>
           <td>{{ animal.Name }}</td>
-          <td><app-image-picker-single [editedId]="animal.ID" [idName]="animal.Name + '-bild'" label="" [(twoWayModel)]="animal.Portrait" [small]="true" [cropped]="true"/> </td>
+          <td><app-image-picker-single [editedId]="animal.ID" [idName]="animal.Name + '-bild'" label="" [(twoWayModel)]="animal.Portrait" [small]="true" [cropped]="true"/></td>
+          <td>
+            <app-radio-buttons-input
+              [editedId]="animal.ID"
+              [idName]="animal.Name + '-gender'" label=""
+              [(twoWayModel)]="animal.Gender"
+              [options]="['male', 'female']"
+              [optionTranslations]="['M', 'W']"
+            />
+          </td>
+          <td><app-number-input [editedId]="animal.ID" [idName]="animal.Name + '-shoulderheight'" label="" [(twoWayModel)]="animal.ShoulderHeightCm"/></td>
+          <td class="animal-description" (click)="editDescription(animal)"><span>{{animal.Description.slice(0, 120)}} ...</span></td>
           <td>
             <app-radio-buttons-input
               [editedId]="animal.ID"

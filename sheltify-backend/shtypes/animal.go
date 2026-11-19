@@ -42,7 +42,7 @@ func (a *Animal) Validate() string {
 func (a *Animal) ValidateForPublishing() string {
 	articleIDErr := ""
 	if a.ArticleID == nil || *a.ArticleID == "" {
-		articleIDErr = "Artikel zum Tier muss bestehen\n"
+		articleIDErr = "Artikel zum Tier " + a.Name + " muss bestehen\n"
 	}
 
 	if a.HomeFoundStatus == "yes" && !a.HomeFoundAt.Valid {

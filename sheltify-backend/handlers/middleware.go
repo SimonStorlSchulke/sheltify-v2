@@ -36,7 +36,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		user, err := services.Authorize(r)
 
 		if err != nil {
-			http.Error(w, "Authorization Failed", http.StatusForbidden)
+			http.Error(w, "Login fehlgeschlagen", http.StatusForbidden)
 			return
 		}
 

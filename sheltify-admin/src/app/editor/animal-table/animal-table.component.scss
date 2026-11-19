@@ -10,4 +10,19 @@ th, td {
   background: #fff;
   padding: 4px 8px;
   border: 1px solid $neutral400;
+
+
+}
+
+tr {
+  &:nth-child(even) {
+    td {
+      background: #f8f8f8;
+    }
+  }
+}
+
+.animal-description {
+  max-width: 200px;
+  cursor: pointer;
 }

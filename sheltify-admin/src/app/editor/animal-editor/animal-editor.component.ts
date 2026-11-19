@@ -74,7 +74,8 @@ export class AnimalEditorComponent implements OnInit {
   }
 
   async saveFromUI() {
-    const saveOptions = await this.modalService.openFinishable(SaveAnimalComponent);
+    const askForUpdateText = this.animal()?.HomeFoundStatus !== 'yes';
+    const saveOptions = await this.modalService.openFinishable(SaveAnimalComponent, {askForUpdateText});
     if (!saveOptions) {
       this.askSaveService.markDirty();
       return;
