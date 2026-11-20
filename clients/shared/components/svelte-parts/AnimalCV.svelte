@@ -32,41 +32,121 @@
 </script>
 
 <div class="sui wrapper themable article pt-4">
-  <div class="sui flex-x ai-center">
-    <div class="sui grow-1 flex-y">
-      <h1 class="sui mb-3 flex-x ai-center gap-2">
-        <span>{animal.Name}</span>
-        {#if animal.Gender}
-          <SvgIcon type={animal.Gender} size="largest"/>
-        {/if}
-      </h1>
-    </div><a target="_blank" class="print" href="./print">
-    <img alt="print" src="assets/icons/printer.svg" class="sui inline-icon"></a>
-  </div>
-  <div class="cvs">
-    <div class="tabs sui flex-x wrap"></div>
-    <div class="tab-body sui p-4 flex-y gap-5">
+  <h1 class="cv-title sui flex-x ai-center gap-2">
+    <!-- svelte-ignore a11y_invalid_attribute -->
+    <a class="back-link" href="javascript:history.back()" aria-label="Zurück">‹</a>
+    <span>{animal.Name}</span>
+  </h1>
+
+  <div class="cv">
+    <div class="cv-tab">
+      <span>Steckbrief</span>
+      {#if animal.Gender}
+        <SvgIcon type={animal.Gender} size="medium-large" color="#fff"/>
+      {/if}
+    </div>
+    <div class="cv-body">
       <div class="cv-grid">
         <div class="cv-attributes">
-          <div class="sui flex-y gap-2">
-            {#if animal.Birthday.Valid}<span><strong>Alter:</strong> {getAgeString(animal)}</span>{/if}
-            {#if animal.Race}<span><strong>Rasse:</strong> {animal.Race}</span>{/if}
-            {#if animal.Castrated.Valid}<span><strong>Kastriert:</strong> {animal.Castrated ? 'ja' : 'nein'}</span>{/if}
-            {#if animal.WeightKg}<span><strong>Gewicht:</strong> ca. {animal.WeightKg}kg</span>{/if}
-          </div>
+          {#if animal.Birthday?.Valid}<div><strong>Alter:</strong> {getAgeString(animal)}</div>{/if}
+          {#if animal.Race}<div><strong>Rasse:</strong> {animal.Race}</div>{/if}
+          {#if animal.Castrated?.Valid}<div><strong>Kastriert:</strong> {animal.Castrated.Bool ? 'ja' : 'nein'}</div>{/if}
+          {#if animal.ShoulderHeightCm}<div><strong>Schulterhöhe:</strong> ca. {animal.ShoulderHeightCm}cm</div>{/if}
+          {#if animal.WeightKg}<div><strong>Gewicht:</strong> ca. {animal.WeightKg}kg</div>{/if}
+          {#if animal.Health}<div><strong>Gesundheit:</strong> {animal.Health}</div>{/if}
         </div>
-        <div class="cv-image-wrapper">
-          {#if animal.Portrait}
-            <img class="cv-img" alt="null" src={getImageSrc(animal.Portrait, 'medium')}>
-          {/if}
-          <div class="bubbles"></div>
-        </div>
-        <div class="cv-description">
-          <span class="short-description">{animal.Description}</span>
-        </div>
+        <div class="cv-description">{animal.Description}</div>
+        {#if animal.Portrait}
+          <img class="cv-img" alt={animal.Name} src={getImageSrc(animal.Portrait, 'medium')}>
+        {/if}
       </div>
-      <div class="sui flex-x gap-3"><a href="/kontakt"><button
-        class="primary">Jetzt bewerben</button></a></div>
+      <div class="cv-actions sui flex-x wrap gap-2">
+        <a href="/kontakt"><button class="primary">Jetzt bewerben</button></a>
+        {#if animal.PatronsNeeded}
+          <a href="/kontakt"><button class="primary">Pate werden</button></a>
+        {/if}
+      </div>
     </div>
-  </div><br>
+  </div>
 </div>
+
+<style>
+  .cv-title {
+    margin-bottom: 1.5rem;
+  }
+
+  .back-link {
+    color: var(--themable-bg-accent-3, #ff8a80);
+    text-decoration: none;
+    font-size: 0.9em;
+    line-height: 1;
+  }
+
+  .cv {
+    margin: 0 2rem 2rem;
+  }
+
+  .cv-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    background: var(--themable-bg-accent-3, #ff8a80);
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.5rem;
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 0 12px #0000001f;
+  }
+
+  .cv-body {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: color-mix(in srgb, var(--themable-bg-accent-2, #ffdbb3) 60%, #fff);
+    border-radius: 0 12px 12px 12px;
+    box-shadow: 0 0 12px #0000001f;
+  }
+
+  .cv-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 300px;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .cv-attributes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .cv-attributes,
+  .cv-description {
+    line-height: 1.6;
+  }
+
+  .cv-img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+
+  @media (max-width: 900px) {
+    .cv {
+      margin: 0 0 2rem;
+    }
+
+    .cv-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .cv-img {
+      grid-row: 1;
+      max-width: 400px;
+    }
+  }
+</style>
