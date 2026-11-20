@@ -91,7 +91,7 @@
     align-items: center;
     gap: 0.75rem;
     padding: 1rem 1.5rem;
-    background: var(--themable-bg-accent-3, #ff8a80);
+    background: var(--themable-bg-accent-2, #ff8a80);
     color: #fff;
     font-weight: bold;
     font-size: 1.5rem;
@@ -105,7 +105,7 @@
     flex-direction: column;
     gap: 1.5rem;
     padding: 1.5rem;
-    background: color-mix(in srgb, var(--themable-bg-accent-2, #ffdbb3) 60%, #fff);
+    background: var(--themable-bg-accent-1);
     border-radius: 0 12px 12px 12px;
     box-shadow: 0 0 12px #0000001f;
   }
