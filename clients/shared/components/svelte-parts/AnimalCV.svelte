@@ -91,7 +91,7 @@
     align-items: center;
     gap: 0.75rem;
     padding: 1rem 1.5rem;
-    background: var(--themable-bg-accent-2, #ff8a80);
+    background: var(--c-primary);
     color: #fff;
     font-weight: bold;
     font-size: 1.5rem;
