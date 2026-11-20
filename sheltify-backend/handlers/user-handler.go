@@ -10,16 +10,8 @@ import (
 )
 
 func GetUsers(w http.ResponseWriter, r *http.Request) {
-
-	currentUser := services.UserFromRequest(r)
-
-	if currentUser == nil || currentUser.Role != "SUPERADMIN" {
-		forbiddenResponse(w, r, "Only SUPERADMIN can retrieve users")
-		return
-	}
-
 	users := []shtypes.User{}
-	repository.GetUsers(currentUser.TenantID, &users)
+	repository.GetUsers(&users)
 	okResponse(w, users)
 }
 

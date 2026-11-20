@@ -68,7 +68,7 @@ func UserAlreadyExistsForTenantAndEmail(email string, tenant string) (bool, erro
 	return count > 0, nil
 }
 
-func GetUsers(tenant string, out *[]shtypes.User) error {
+func GetUsers(out *[]shtypes.User) error {
 
 	if err := db.Find(out).Error; err != nil {
 		return err

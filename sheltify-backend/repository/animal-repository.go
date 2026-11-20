@@ -32,7 +32,7 @@ func GetFilteredAnimals(filter AnimalsFilter, tenant string) (*[]shtypes.Animal,
 
 	if filter.Names != "" {
 		names := strings.Split(filter.Names, "-")
-		query.Where("name IN ?", names)
+		query = query.Where("name IN ?", names)
 	}
 
 	if filter.AnimalKind != "" {

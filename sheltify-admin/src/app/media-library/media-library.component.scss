@@ -65,4 +65,6 @@
   background: $neutral200;
   width: 175px;
   min-width: 175px;
+  overflow-y: auto;
+  contain: size;
 }

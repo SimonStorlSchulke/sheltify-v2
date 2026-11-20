@@ -2,3 +2,4 @@
 uploads/
 /__debug_bin*
 .env
+*.exe

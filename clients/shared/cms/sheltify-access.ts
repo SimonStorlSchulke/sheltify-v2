@@ -78,7 +78,6 @@ export class SheltifyAccess {
     blogEntries.sort((a, b) => a.ID.localeCompare(b.ID));
 
     return blogEntries.map(entry => {
-    console.log("entry.Titleentry.Titleentry.Titleentry.Titleentry.Titleentry.Titleentry.Titleentry.Titleentry.Title", encodeURIComponent(entry.Title));
       return {
         params: {
           title: this.encodeTitle(entry.Title),
