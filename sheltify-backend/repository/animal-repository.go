@@ -36,7 +36,7 @@ func GetFilteredAnimals(filter AnimalsFilter, tenant string) (*[]shtypes.Animal,
 	}
 
 	if filter.AnimalKind != "" {
-		query = query.Where("type = ?", filter.AnimalKind)
+		query = query.Where("animal_kind = ?", filter.AnimalKind)
 	}
 
 	if filter.Gender != "" {

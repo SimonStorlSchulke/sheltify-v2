@@ -130,9 +130,10 @@ export class SheltifyAccess {
   async getFilteredAnimals(filter: AnimalsFilter): Promise<CmsAnimal[]> {
     let query = ``;
 
-    if (filter.AnimalKind) query += `kind=${filter.AnimalKind}&`;
+    if (filter.AnimalKind) query += `animalKind=${filter.AnimalKind}&`;
     if (filter.MaxNumber) query += `maxNumber=${filter.MaxNumber}&`;
-    if (filter.StatusInclude[0]) query += `status=${filter.StatusInclude.join(';')}&`;
+    if (filter.StatusInclude[0]) query += `statusInclude=${filter.StatusInclude.join(';')}&`;
+    if (filter.StatusExclude[0]) query += `statusExclude=${filter.StatusExclude.join(';')}&`;
     if (filter.AgeRange[0]) query += `ageMin=${filter.AgeRange[0]}&`;
     if (filter.AgeRange[1]) query += `ageMax=${filter.AgeRange[1]}&`;
     if (filter.SizeRange[0]) query += `sizeMin=${filter.SizeRange[0]}&`;
