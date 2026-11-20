@@ -61,6 +61,9 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
   filesHovered = signal<boolean>(false);
   pendingUploadsNumber = signal<number>(0);
 
+  readonly pageSize = 100;
+  currentPage = signal<number>(0);
+
   isPicker = false;
   preselectedImage?: CmsImage;
 
@@ -292,7 +295,27 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
     }
   }
 
+  getPageCount(totalImages: number): number {
+    return Math.max(1, Math.ceil(totalImages / this.pageSize));
+  }
+
+  getClampedPage(totalImages: number): number {
+    return Math.min(this.currentPage(), this.getPageCount(totalImages) - 1);
+  }
+
+  getPagedImages(images: CmsImage[]): CmsImage[] {
+    const start = this.getClampedPage(images.length) * this.pageSize;
+    return images.slice(start, start + this.pageSize);
+  }
+
+  goToPage(page: number, totalImages: number, list?: HTMLElement) {
+    const clamped = Math.max(0, Math.min(page, this.getPageCount(totalImages) - 1));
+    this.currentPage.set(clamped);
+    if (list) list.scrollTop = 0;
+  }
+
   toggleTag(e: Event, tagId: string) {
+    this.currentPage.set(0);
     const checked = (e.target as HTMLInputElement).checked;
     const previousTags = this.selectedTags();
     if(!checked) {
@@ -304,6 +327,7 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
   }
 
   toggleAnimal(e: Event, animal: CmsAnimal) {
+    this.currentPage.set(0);
     const checked = (e.target as HTMLInputElement).checked;
     const previousTags = this.selectedAnimals();
     if(!checked) {

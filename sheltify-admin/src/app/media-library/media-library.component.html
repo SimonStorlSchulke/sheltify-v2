@@ -35,12 +35,15 @@
       </div>
 
       @if (images) {
-        <div class="sui flex-x gap-2 wrap list dropzone" [class.files-hovered]="filesHovered()"
+        @let pagedImages = getPagedImages(images);
+        @let pageCount = getPageCount(images.length);
+        @let page = getClampedPage(images.length);
+        <div #list class="sui flex-x gap-2 wrap list dropzone" [class.files-hovered]="filesHovered()"
              [class.with-picker]="true">
-          @for (image of images; track image.ID) {
+          @for (image of pagedImages; track image.ID) {
             <app-media-entry
               [attr.data-testid]="'media-entry-' + image.Title"
-              (click)="toggleSelect(image.ID, $event, images)"
+              (click)="toggleSelect(image.ID, $event, pagedImages)"
               (dblclick)="dblClickSelectImage(image)"
               [media]="editedImages().get(image.ID) ?? image"
               [selected]="selectedImageIds().has(image.ID)"
@@ -48,6 +51,16 @@
             />
           }
         </div>
+
+        @if (pageCount > 1) {
+          <div class="pagination sui flex-x gap-1" data-testid="media-pagination">
+            <button class="secondary" data-testid="btn-page-prev" [disabled]="page === 0"
+                    (click)="goToPage(page - 1, images.length, list)">‹ Zurück</button>
+            <span>Seite {{ page + 1 }} von {{ pageCount }} ({{ images.length }} Bilder)</span>
+            <button class="secondary" data-testid="btn-page-next" [disabled]="page >= pageCount - 1"
+                    (click)="goToPage(page + 1, images.length, list)">Weiter ›</button>
+          </div>
+        }
 
         @if (isPicker) {
           <div class="sui flex-x gap-1 jc-end">
