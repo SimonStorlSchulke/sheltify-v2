@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, inject
 import { FormsModule } from '@angular/forms';
 import { LoaderService } from '@app/layout/loader/loader.service';
 import { FileDropDirective } from '@app/media-library/file-drop.directive';
+import { TextInputComponent } from '@app/forms/text-input/text-input.component';
 import { ImageEditorComponent } from '@app/media-library/image-editor/image-editor.component';
 import { MediaEntryComponent } from '@app/media-library/media-entry/media-entry.component';
 import { UnusedMediafilesComponent } from '@app/media-library/unused-mediafiles/unused-mediafiles.component';
@@ -38,6 +39,7 @@ class MediaSelectionPipe implements PipeTransform {
     TagComponent,
     FileDropDirective,
     ImageEditorComponent,
+    TextInputComponent,
   ],
   templateUrl: './media-library.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
@@ -63,6 +65,7 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
 
   readonly pageSize = 100;
   currentPage = signal<number>(0);
+  searchQuery = signal<string>("");
 
   isPicker = false;
   preselectedImage?: CmsImage;
@@ -293,6 +296,25 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
     if(this.isModal) {
       this.finishSubject.next([image]);
     }
+  }
+
+  onSearchChange(query: string) {
+    this.searchQuery.set(query);
+    this.currentPage.set(0);
+  }
+
+  filterImages(images: CmsImage[], query: string): CmsImage[] {
+    const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    if (terms.length === 0) return images;
+
+    return images.filter(image => {
+      const haystack = [
+        image.Title,
+        ...(image.MediaTags ?? []).map(tag => tag.Name),
+        ...(image.TaggedAnimals ?? []).map(animal => animal.Name),
+      ].join(" ").toLowerCase();
+      return terms.every(term => haystack.includes(term));
+    });
   }
 
   getPageCount(totalImages: number): number {

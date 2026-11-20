@@ -28,16 +28,22 @@
 
     <div class="sui flex-y gap-2 grow-1 py-3">
       <h1>Medien</h1>
-      <div class="sui flex-x gap-2">
-        <button class="primary" data-testid="btn-upload-images" (click)="uploadImages()">Hochladen</button>
-        <button class="red" data-testid="btn-delete-images" (click)="deleteSelectedImages()">Löschen</button>
-        <button class="primary secondary" data-testid="btn-update-unused-images" (click)="updateUnusedMediaFiles()">unverwendete Bilder suchen</button>
+      <div class="sui flex-x gap-2 ai-center jc-space-between">
+        <app-text-input class="search-input" data-testid="input-search-images" idName="media-search" label=""
+                        placeholder="Suche nach Titel, Tags oder Tieren..."
+                        [twoWayModel]="searchQuery()" (twoWayModelChange)="onSearchChange($event ?? '')"/>
+        <div class="sui flex-x gap-2">
+          <button class="primary" data-testid="btn-upload-images" (click)="uploadImages()">Hochladen</button>
+          <button class="red" data-testid="btn-delete-images" (click)="deleteSelectedImages()">Löschen</button>
+          <button class="primary secondary" data-testid="btn-update-unused-images" (click)="updateUnusedMediaFiles()">unverwendete Bilder suchen</button>
+        </div>
       </div>
 
       @if (images) {
-        @let pagedImages = getPagedImages(images);
-        @let pageCount = getPageCount(images.length);
-        @let page = getClampedPage(images.length);
+        @let filteredImages = filterImages(images, searchQuery());
+        @let pagedImages = getPagedImages(filteredImages);
+        @let pageCount = getPageCount(filteredImages.length);
+        @let page = getClampedPage(filteredImages.length);
         <div #list class="sui flex-x gap-2 wrap list dropzone" [class.files-hovered]="filesHovered()"
              [class.with-picker]="true">
           @for (image of pagedImages; track image.ID) {
@@ -55,10 +61,10 @@
         @if (pageCount > 1) {
           <div class="pagination sui flex-x gap-1" data-testid="media-pagination">
             <button class="secondary" data-testid="btn-page-prev" [disabled]="page === 0"
-                    (click)="goToPage(page - 1, images.length, list)">‹ Zurück</button>
-            <span>Seite {{ page + 1 }} von {{ pageCount }} ({{ images.length }} Bilder)</span>
+                    (click)="goToPage(page - 1, filteredImages.length, list)">‹ Zurück</button>
+            <span>Seite {{ page + 1 }} von {{ pageCount }} ({{ filteredImages.length }} Bilder)</span>
             <button class="secondary" data-testid="btn-page-next" [disabled]="page >= pageCount - 1"
-                    (click)="goToPage(page + 1, images.length, list)">Weiter ›</button>
+                    (click)="goToPage(page + 1, filteredImages.length, list)">Weiter ›</button>
           </div>
         }
 
