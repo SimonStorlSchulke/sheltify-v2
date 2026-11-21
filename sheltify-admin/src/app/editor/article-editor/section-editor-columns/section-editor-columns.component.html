@@ -44,7 +44,7 @@
                 ><app-bt-icon name="GripVertical" size="s"/> verschieben</button>
                 <!-- Recreated after editing, because web component renderers don't notice mutations. -->
                 @for (version of [previewVersion()]; track version) {
-                  <app-section-renderer [section]="columnSection"/>
+                  <app-section-renderer style="pointer-events: none" [section]="columnSection"/>
                 }
               </div>
 
