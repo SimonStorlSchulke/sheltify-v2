@@ -12,6 +12,7 @@ func initRoutes(r *chi.Mux) {
 	r.Post("/admin/api/login", handlers.Login)
 
 	rPublicApi := chi.NewRouter()
+	rPublicApi.Use(handlers.StripInternalNotes)
 	publicRoutes(rPublicApi)
 	r.Mount("/api/{tenant}", rPublicApi)
 
