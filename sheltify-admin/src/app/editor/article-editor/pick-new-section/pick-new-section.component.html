@@ -1,23 +1,33 @@
-<div class="sui flex-y gap-1">
-  <div class="sui flex-x gap-2">
-    <div class="sui flex-y gap-1">
-      <h3>Sektionstypen</h3>
-      @for (sectionType of SectionTypes; track sectionType) {
-        <button class="secondary" [attr.data-testid]="'btn-add-section-' + sectionType" (click)="finishWith(sectionType)">{{ sectionLabels.get(sectionType) ?? sectionType }}</button>
-      }
-    </div>
-
-    <div class="sui flex-y gap-1 ai-start">
-      <h3>Speziell für {{tenantName()}}</h3>
-      @if (tenantsSpecialSections(); as tenantsSpecialSections) {
-        @for (specialSectionName of Object.keys(tenantsSpecialSections); track $index) {
-          <button (click)="pickSpecialSection(specialSectionName)" class="secondary">{{ specialSectionName }}</button>
+<div class="pick-new-section sui flex-y gap-2">
+  @for (group of sectionGroups; track group.label) {
+    <section>
+      <h3>{{ group.label }}</h3>
+      <div class="section-grid">
+        @for (sectionType of group.types; track sectionType) {
+          <button class="secondary section-tile" [attr.data-testid]="'btn-add-section-' + sectionType" (click)="finishWith(sectionType)">
+            <app-bt-icon [name]="iconFor(sectionType)" size="ml"/>
+            <span>{{ sectionLabels.get(sectionType) ?? sectionType }}</span>
+          </button>
         }
-      }
-    </div>
+      </div>
+    </section>
+  }
+
+  @if (specialSectionNames().length > 0) {
+    <section>
+      <h3>Speziell für {{ tenantName() }}</h3>
+      <div class="section-grid">
+        @for (specialSectionName of specialSectionNames(); track specialSectionName) {
+          <button class="secondary section-tile" (click)="pickSpecialSection(specialSectionName)">
+            <app-bt-icon name="Stars" size="ml"/>
+            <span>{{ specialSectionName }}</span>
+          </button>
+        }
+      </div>
+    </section>
+  }
+
+  <div class="sui flex-x jc-end">
+    <button (click)="cancel()">Abbrechen</button>
   </div>
-
-  <br>
-  <button (click)="cancel()">Abbrechen</button>
 </div>
-

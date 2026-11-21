@@ -7,7 +7,6 @@ import { ImagePickerSingleComponent } from '@app/forms/image-picker-single/image
 import { NumberInputComponent } from '@app/forms/number-input/number-input.component';
 import { RadioButtonsInputComponent } from '@app/forms/radio-buttons-input/radio-buttons-input.component';
 import { TextInputModalComponent } from '@app/forms/text-input-modal/text-input-modal.component';
-import { TextInputComponent } from '@app/forms/text-input/text-input.component';
 import { AnimalService } from '@app/services/animal.service';
 import { AskSaveService } from '@app/services/ask-save.service';
 import { CmsRequestService } from '@app/services/cms-request.service';
@@ -24,7 +23,6 @@ import { CmsAnimal } from 'sheltify-lib/dist/cms-types';
     RadioButtonsInputComponent,
     ImagePickerSingleComponent,
     RouterLink,
-    TextInputComponent,
     BtIconComponent,
     NumberInputComponent
   ],
