@@ -25,6 +25,13 @@ func TriggerAstroSiteBuild(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Build the search index for the freshly built site.
+	pagefindCmd := exec.Command("npx", "pagefind", "--site", "/var/www/sheltify/client-"+user.TenantID) //todo: ugly hardcoded path...
+	pagefindCmd.Stdout = w
+	pagefindCmd.Stderr = os.Stderr
+	pagefindCmd.Dir = "../clients" // pagefind is a dependency of the clients package
+	pagefindErr := pagefindCmd.Run()
+
 	tenantonfig, err := repository.GetConfigByTenantId(user.TenantID)
 
 	if err == nil {
@@ -38,6 +45,11 @@ func TriggerAstroSiteBuild(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		internalServerErrorResponse(w, r, "Seite wurde gebaut, Tenantconfiguration könnte aber nicht gespeichert werden")
+		return
+	}
+
+	if pagefindErr != nil {
+		internalServerErrorResponse(w, r, "Seite wurde gebaut, Suchindex konnte aber nicht erstellt werden. Bitte Administrator melden. Fehler: "+pagefindErr.Error())
 		return
 	}
 
