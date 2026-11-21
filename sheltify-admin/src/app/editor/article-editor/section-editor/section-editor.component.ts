@@ -61,7 +61,7 @@ export class SectionEditorComponent {
   }
 
   enterMoveMode() {
-    this.articleEditorService.enterMoveMode(this.rowIndex(), this.section())
+    this.articleEditorService.enterMoveMode(this.section())
   }
 
   deleteSection() {

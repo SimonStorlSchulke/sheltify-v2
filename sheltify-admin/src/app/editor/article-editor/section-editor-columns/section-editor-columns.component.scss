@@ -141,6 +141,61 @@
   }
 }
 
+// Move mode - same look as the gaps in article-editor.component.scss
+.dragMode {
+  cursor: crosshair !important;
+
+  .move-to-row {
+    background: $primary-h3;
+    opacity: 1;
+
+    &:hover {
+      background: $primary;
+      cursor: crosshair !important;
+    }
+  }
+
+  .section-preview {
+    cursor: crosshair;
+
+    &:hover {
+      outline: none;
+    }
+  }
+
+  .preview-move-button {
+    display: none !important;
+  }
+}
+
+.section-preview {
+  position: relative;
+
+  .preview-move-button {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    opacity: 0;
+    cursor: grab;
+    transition: opacity 0.15s;
+  }
+
+  &:hover .preview-move-button,
+  .preview-move-button:focus-visible {
+    opacity: 1;
+  }
+
+  &.is-moved {
+    opacity: 0.45;
+    outline: 2px dashed $primary;
+    outline-offset: 2px;
+  }
+}
+
 .column-sections {
   padding: 12px;
   flex-grow: 1;

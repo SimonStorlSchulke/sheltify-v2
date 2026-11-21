@@ -5,6 +5,7 @@
   <button class="small unstyled icon-button" title="Sektion löschen" aria-label="Sektion löschen" (click)="deletedSection.emit()">
     <app-bt-icon name="Trash" size="ms"/>
   </button>
+  <button class="small" title="Sektion verschieben: danach auf eine Lücke klicken" (click)="move.emit()">Verschieben</button>
   <button class="small" title="Änderungen verwerfen" (click)="discard.emit()">Verwerfen</button>
   <button class="small primary" title="Fertig (Esc)" (click)="done.emit()">Fertig</button>
 </header>

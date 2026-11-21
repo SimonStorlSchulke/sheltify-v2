@@ -1,8 +1,10 @@
 import { Dialog, DialogRef } from '@angular/cdk/dialog';
 import { Component, input, inject, ChangeDetectionStrategy, signal, DestroyRef, TemplateRef, viewChild, ViewContainerRef } from '@angular/core';
 import { SectionRendererComponent } from '@app/section-renderer/section-renderer.component';
-import { Section, SectionColumns, SectionType } from 'sheltify-lib/article-types';
+import { Section, SectionColumns } from 'sheltify-lib/article-types';
+import { ArticleEditorService, typesNotAllowedInColumns } from '@app/editor/article-editor/article-editor.service';
 import { createEmptySection } from '@app/editor/article-editor/article-section.factory';
+import { AskSaveService } from '@app/services/ask-save.service';
 import { PickNewSectionComponent } from '@app/editor/article-editor/pick-new-section/pick-new-section.component';
 import { SectionEditorColumnSectionsComponent } from '@app/editor/article-editor/section-editor/section-editor-column-sections/section-editor-column-sections.component';
 import { CheckboxInputComponent } from '@app/forms/checkbox-input/checkbox-input.component';
@@ -12,9 +14,6 @@ import { ModalService } from '@app/services/modal.service';
 import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
 
 const maxColumns = 4;
-
-/** Section types that cannot be placed inside a column. */
-const typesNotAllowedInColumns: SectionType[] = ['columns', 'animal-list', 'animal-updates'];
 
 interface EditedSection {
   section: Section;
@@ -40,6 +39,8 @@ interface EditedSection {
 export class SectionEditorColumnsComponent {
   private readonly alertService = inject(AlertService);
   private modalService = inject(ModalService);
+  private askSaveService = inject(AskSaveService);
+  readonly articleEditorService = inject(ArticleEditorService);
 
   readonly maxColumns = maxColumns;
 
@@ -91,7 +92,32 @@ export class SectionEditorColumnsComponent {
     });
   }
 
+  /** Same principle as for top level sections: press "verschieben", release on a gap. */
+  startMove(section: Section, event: MouseEvent) {
+    event.stopPropagation();
+    event.preventDefault();
+    this.articleEditorService.enterMoveMode(section);
+  }
+
+  startMoveFromDialog() {
+    const section = this.editedSection()?.section;
+    if (!section) return;
+    this.closeEditor();
+    this.articleEditorService.enterMoveMode(section);
+  }
+
+  moveToColumnRow(iCol: number, iRow: number) {
+    if (!this.articleEditorService.movedItem()) return;
+    const target = this.section().Content.Columns[iCol].Sections;
+    if (this.articleEditorService.moveMovedSectionTo(target, iRow, this.section())) {
+      this.askSaveService.markDirty();
+    }
+    // timeout so the click following this mouseup doesn't open the section picker
+    setTimeout(() => this.articleEditorService.exitMoveMode(), 1);
+  }
+
   async addSectionAtRow(iCol: number, iRow: number) {
+    if (this.articleEditorService.movedItem()) return;
     const sectionPickReturn = await this.modalService.openFinishable(PickNewSectionComponent, {
       excludedTypes: typesNotAllowedInColumns,
     });
@@ -113,6 +139,7 @@ export class SectionEditorColumnsComponent {
   }
 
   editSection(section: Section) {
+    if (this.articleEditorService.movedItem()) return;
     if (this.editedSection()?.section === section) return;
     this.openEditor(section, false);
   }

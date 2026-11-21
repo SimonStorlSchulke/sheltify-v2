@@ -43,5 +43,6 @@ export class SectionEditorColumnSectionsComponent {
   deletedSection = output();
   done = output();
   discard = output();
+  move = output();
   readonly sectionLabels = sectionLabels;
 }

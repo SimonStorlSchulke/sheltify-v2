@@ -1,4 +1,4 @@
-import { Component, DestroyRef, effect, input, model, OnInit, Renderer2, signal, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, DestroyRef, effect, input, model, OnInit, Renderer2, signal, inject, ChangeDetectionStrategy, ChangeDetectorRef, HostListener } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { AskSaveService } from '@app/services/ask-save.service';
@@ -64,6 +64,13 @@ export class ArticleEditorComponent implements OnInit {
 
   ngOnInit() {
     this.saveArticle()?.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((saveOptions) => this.save(saveOptions));
+
+    // Keep the moved section (or the columns section it landed in) selected after a move.
+    this.articleEditorService.sectionMoved.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(rowSection => {
+      const row = this.articleEditorService.article()?.Structure.Rows.indexOf(rowSection) ?? -1;
+      // timeout so the deselect in section-editor.component doesn't trigger after the select
+      setTimeout(() => this.editedRow.set(row), 0);
+    });
   }
 
   async addSectionAtRow(row: number) {
@@ -113,6 +120,11 @@ export class ArticleEditorComponent implements OnInit {
     await lastValueFrom(this.cmsRequestService.saveArticle(article));
   }
 
+  @HostListener('document:keydown.escape')
+  cancelMoveMode() {
+    if (this.articleEditorService.movedItem()) this.articleEditorService.exitMoveMode();
+  }
+
   exitMoveMode() {
     setTimeout(() => {
       this.articleEditorService.exitMoveMode();
@@ -120,21 +132,14 @@ export class ArticleEditorComponent implements OnInit {
   }
 
   moveToNewRow(rowTo: number) {
-    if (!this.articleEditorService.article()) return;
-    const movedItem = this.articleEditorService.movedItem();
-    if (!movedItem) return;
-    const article = this.articleEditorService.article()!;
+    const article = this.articleEditorService.article();
+    if (!article || !this.articleEditorService.movedItem()) return;
 
-    let rowFrom = this.articleEditorService.movedItem()!.row;
-
-    if (rowFrom < rowTo) {
-      rowTo--;
+    // The moved section may come from the article rows or from inside a columns section.
+    if (this.articleEditorService.moveMovedSectionTo(article.Structure.Rows, rowTo)) {
+      this.askSaveService.markDirty();
     }
-
-    article.Structure.Rows.splice(rowFrom, 1);
-    article.Structure.Rows.splice(rowTo, 0, movedItem.sectionRef);
     this.exitMoveMode();
-    this.askSaveService.markDirty();
   }
 
   colorFill(color: string | undefined) {
