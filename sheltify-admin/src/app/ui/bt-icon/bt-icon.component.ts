@@ -26,6 +26,23 @@ import {
   bootstrapTable,
   bootstrapTrash,
   bootstrapExclamation,
+  bootstrapTypeH1,
+  bootstrapTextParagraph,
+  bootstrapCodeSlash,
+  bootstrapDashLg,
+  bootstrapLayoutThreeColumns,
+  bootstrapImages,
+  bootstrapCameraVideo,
+  bootstrapWindowFullscreen,
+  bootstrapFileEarmarkArrowDown,
+  bootstrapHouseHeart,
+  bootstrapChatQuote,
+  bootstrapMegaphone,
+  bootstrapUiChecks,
+  bootstrapNewspaper,
+  bootstrapPersonBadge,
+  bootstrapStars,
+  bootstrapGrid,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
@@ -58,6 +75,23 @@ export type IconName =
   | 'Table'
   | 'Trash'
   | 'Exclamation'
+  | 'TypeH1'
+  | 'TextParagraph'
+  | 'CodeSlash'
+  | 'DashLg'
+  | 'LayoutThreeColumns'
+  | 'Images'
+  | 'CameraVideo'
+  | 'WindowFullscreen'
+  | 'FileEarmarkArrowDown'
+  | 'HouseHeart'
+  | 'ChatQuote'
+  | 'Megaphone'
+  | 'UiChecks'
+  | 'Newspaper'
+  | 'PersonBadge'
+  | 'Stars'
+  | 'Grid'
 
 @Component({
   selector: 'app-bt-icon',
@@ -94,6 +128,23 @@ export type IconName =
       bootstrapTable,
       bootstrapTrash,
       bootstrapExclamation,
+      bootstrapTypeH1,
+      bootstrapTextParagraph,
+      bootstrapCodeSlash,
+      bootstrapDashLg,
+      bootstrapLayoutThreeColumns,
+      bootstrapImages,
+      bootstrapCameraVideo,
+      bootstrapWindowFullscreen,
+      bootstrapFileEarmarkArrowDown,
+      bootstrapHouseHeart,
+      bootstrapChatQuote,
+      bootstrapMegaphone,
+      bootstrapUiChecks,
+      bootstrapNewspaper,
+      bootstrapPersonBadge,
+      bootstrapStars,
+      bootstrapGrid,
     }
   )]
 })
