@@ -1,49 +1,70 @@
-<app-checkbox-input idName="fulLWidth" label="Ganze Breite einnehmen" explanation="Nutzt die ganze Breite des Bildschirms und lässt keinen Rand an den Seiten" [(twoWayModel)]="section().Content.FullWidth"/>
-<br>
+@let edited = editedSection();
+@let columns = section().Content.Columns;
 
-@if(editedSection(); as editedSectionVal) {
-  <div class="column-section-editor">
-    <app-section-editor-column-sections
-      class="sui card flex-y"
-      [section]="editedSectionVal.section"
-      (apply)="applyEditedSection(editedSectionVal.iCol, editedSectionVal.iRow)"
-      (deletedSection)="deleteSection(editedSectionVal.iCol, editedSectionVal.iRow)"
-    />
-  </div>
-}
+<div class="columns-editor">
+  <div class="columns-area">
+    <app-checkbox-input idName="fulLWidth" label="Ganze Breite einnehmen" explanation="Nutzt die ganze Breite des Bildschirms und lässt keinen Rand an den Seiten" [(twoWayModel)]="section().Content.FullWidth"/>
 
-<div class="columns sui flex-x">
-  @for (column of section().Content.Columns; track column) {
-    @let iCol = $index;
-    <div class="column" [style.flex]="`${column.Grow} 1 0px`">
+    <div class="columns">
+      @for (column of columns; track column) {
+        @let iCol = $index;
+        <div class="column" [style.flex]="`${column.Grow} 1 0px`">
 
-      <div class="column-header sui p-1 flex-x gap-2 ai-center">
-        <b>Platz</b>
-        <app-number-input idName="grow" label="" [(twoWayModel)]="column.Grow"/>
-        <div class="button-group">
-          <button class="small"><app-bt-icon (click)="moveColumnLeft(iCol)" name="ChevronLeft"/></button>
-          <button class="small"><app-bt-icon (click)="moveColumnRight(iCol)" name="ChevronRight"/></button>
-          <button class="small"><app-bt-icon (click)="deleteColumn($index)" name="X"/></button>
-        </div>
-      </div>
-
-      <div class="column-sections">
-        <div (click)="addSectionAtRow(iCol, 0)" [attr.data-testid]="'row-selector-' + $index + 1" class="move-to-row"></div>
-
-        @for (section of column.Sections; track section) {
-          @let iRow = $index;
-          <div class="section-preview themable article" (click)="editSection(section, iCol, iRow)">
-            <app-section-renderer [section]="section"/>
+          <div class="column-header">
+            <div class="width-control" title="Anteil dieser Spalte an der Gesamtbreite">
+              <b>Breite</b>
+              <app-number-input idName="grow" label="" [(twoWayModel)]="column.Grow"/>
+              <span class="width-percent">{{ widthPercent(column.Grow) }}&nbsp;%</span>
+            </div>
+            <div class="button-group">
+              <button class="small" title="Spalte nach links" aria-label="Spalte nach links" [disabled]="$first" (click)="moveColumn(iCol, -1)"><app-bt-icon name="ChevronLeft" size="s"/></button>
+              <button class="small" title="Spalte nach rechts" aria-label="Spalte nach rechts" [disabled]="$last" (click)="moveColumn(iCol, 1)"><app-bt-icon name="ChevronRight" size="s"/></button>
+              <button class="small" title="Spalte entfernen" aria-label="Spalte entfernen" (click)="deleteColumn(iCol)"><app-bt-icon name="X" size="s"/></button>
+            </div>
           </div>
 
-          <div (click)="addSectionAtRow(iCol, iRow + 1)" [attr.data-testid]="'row-selector-' + $index + 1" class="move-to-row"></div>
-        }
-      </div>
+          <div class="column-sections">
+            <div (click)="addSectionAtRow(iCol, 0)" [attr.data-testid]="'col-' + iCol + '-row-selector-0'" class="move-to-row" title="Sektion hier einfügen"></div>
+
+            @for (columnSection of column.Sections; track columnSection) {
+              @let iRow = $index;
+              <div
+                class="section-preview themable article"
+                [class.is-edited]="edited?.section === columnSection"
+                title="Klicken zum Bearbeiten"
+                (click)="editSection(columnSection)"
+              >
+                <!-- Recreated after editing, because web component renderers don't notice mutations. -->
+                @for (version of [previewVersion()]; track version) {
+                  <app-section-renderer [section]="columnSection"/>
+                }
+              </div>
+
+              <div (click)="addSectionAtRow(iCol, iRow + 1)" [attr.data-testid]="'col-' + iCol + '-row-selector-' + (iRow + 1)" class="move-to-row" title="Sektion hier einfügen"></div>
+            }
+          </div>
+        </div>
+      }
+      @if (columns.length < maxColumns) {
+        <button (click)="addColumn()" class="add-column secondary small" title="Spalte hinzufügen" aria-label="Spalte hinzufügen">
+          <app-bt-icon name="Plus"/>
+        </button>
+      }
     </div>
-  }
-  <button (click)="addColumn()" class="add-column secondary small sui flex-x ai-center">
-    <app-bt-icon class="" name="Plus"/>
-  </button>
+  </div>
+
 </div>
 
-
+<!-- Opened as CDK dialog, see openEditor() -->
+<ng-template #sectionDialog>
+  @if (editedSection(); as editedVal) {
+    <div class="section-dialog">
+      <app-section-editor-column-sections
+        [section]="editedVal.section"
+        (done)="closeEditor()"
+        (discard)="discardEdit()"
+        (deletedSection)="deleteEditedSection()"
+      />
+    </div>
+  }
+</ng-template>

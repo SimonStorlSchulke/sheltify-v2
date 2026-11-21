@@ -1,5 +1,5 @@
 <div class="pick-new-section sui flex-y gap-2">
-  @for (group of sectionGroups; track group.label) {
+  @for (group of visibleGroups(); track group.label) {
     <section>
       <h3>{{ group.label }}</h3>
       <div class="section-grid">

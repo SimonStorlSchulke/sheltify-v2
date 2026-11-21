@@ -1,34 +1,105 @@
 @use "colors" as *;
 @use "sass:color";
 
+:host {
+  display: block;
+}
+
+.columns-area {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+// Content of the CDK dialog (template is declared here, so these styles apply).
+// Size of the dialog itself: .modal-mobile-fullscreen in styling/modals.scss
+.section-dialog {
+  max-height: min(90dvh, 1000px);
+  overflow-y: auto;
+  background: $neutral0;
+}
+
+@media (max-width: 700px) {
+  .section-dialog {
+    max-height: 100dvh;
+    height: 100dvh;
+  }
+}
+
+.columns {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
 .column {
-  border-left: 1px solid #ccc;
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid $neutral200;
+  margin: 0 -1px -1px 0;
   min-height: 150px;
+
   .section-preview {
     cursor: pointer;
+    border-radius: 4px;
+
     &:hover {
       outline: 1px solid $primary;
       outline-offset: -1px;
     }
-  }
 
-  &:last-of-type {
-    border-right: 2px solid $primary-h5;
+    &.is-edited {
+      outline: 2px solid $primary;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 6px color.adjust($primary, $alpha: -0.85);
+    }
   }
-
 }
 
 .column-header {
-  button {
-    height: 32px;
-  }
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 12px;
+  padding: 6px 8px;
   background: $primary-h5;
+
+  .width-control {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    app-number-input {
+      width: 64px;
+    }
+  }
+
+  .width-percent {
+    color: $neutral700;
+    font-size: 0.85em;
+    min-width: 3.5em;
+  }
+
+  .button-group {
+    display: flex;
+  }
+
+  button {
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+  }
 }
 
 .add-column {
-  border-radius: 0 4px 4px 0;
+  border-radius: 0 6px 6px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
 }
 
 .move-to-row {
@@ -38,6 +109,7 @@
   height: 34px;
   cursor: pointer;
   outline-offset: -2px;
+  border-radius: 4px;
 
   &:only-of-type {
     outline: 2px dashed color.mix($primary, transparent, 50%);
@@ -48,11 +120,14 @@
   &:only-of-type:after {
     content: "Erste Sektion hinzufügen";
     position: absolute;
-    width: 95%;
-    top: 35px;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
     text-align: center;
     color: $primary;
-    font-size: 20px;
+    font-size: 1.1rem;
     box-sizing: border-box;
   }
 
@@ -68,26 +143,5 @@
 
 .column-sections {
   padding: 12px;
-}
-
-.column-section-editor {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  top: 0px;
-  left: 0px;
-  background: #00000077;
-  z-index: 2000;
-  width: 100%;
-  height: 100%;
-  min-height: fit-content;
-
-  app-section-editor-column-sections {
-    box-shadow: none;
-    width: calc(100% - 100px);
-    min-height: calc(100% - 100px);
-    margin: 50px;
-  }
+  flex-grow: 1;
 }

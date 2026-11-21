@@ -41,6 +41,7 @@ import { sectionLabels } from '@app/services/article-renderer';
 export class SectionEditorColumnSectionsComponent {
   section = input.required<Section>();
   deletedSection = output();
-  apply = output();
+  done = output();
+  discard = output();
   readonly sectionLabels = sectionLabels;
 }

@@ -48,6 +48,15 @@ export class PickNewSectionComponent extends FinishableDialog<SectionType | Sect
 
   sectionLabels = sectionLabels;
 
+  /** Set via ModalService inputs, e.g. to hide types that are not supported inside columns. */
+  excludedTypes: SectionType[] = [];
+
+  visibleGroups(): SectionGroup[] {
+    return this.sectionGroups
+      .map(group => ({ ...group, types: group.types.filter(type => !this.excludedTypes.includes(type)) }))
+      .filter(group => group.types.length > 0);
+  }
+
   private tenantConfigurationService = inject(TenantConfigurationService);
   tenantsSpecialSections = signal<SpecialArticleSections | undefined>(undefined);
   specialSectionNames = computed(() => Object.keys(this.tenantsSpecialSections() ?? {}));

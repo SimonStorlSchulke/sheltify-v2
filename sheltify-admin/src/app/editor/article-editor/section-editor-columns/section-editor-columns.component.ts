@@ -1,6 +1,7 @@
-import { Component, input, inject, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Dialog, DialogRef } from '@angular/cdk/dialog';
+import { Component, input, inject, ChangeDetectionStrategy, signal, DestroyRef, TemplateRef, viewChild, ViewContainerRef } from '@angular/core';
 import { SectionRendererComponent } from '@app/section-renderer/section-renderer.component';
-import { Section, SectionColumns } from 'sheltify-lib/article-types';
+import { Section, SectionColumns, SectionType } from 'sheltify-lib/article-types';
 import { createEmptySection } from '@app/editor/article-editor/article-section.factory';
 import { PickNewSectionComponent } from '@app/editor/article-editor/pick-new-section/pick-new-section.component';
 import { SectionEditorColumnSectionsComponent } from '@app/editor/article-editor/section-editor/section-editor-column-sections/section-editor-column-sections.component';
@@ -11,6 +12,17 @@ import { ModalService } from '@app/services/modal.service';
 import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
 
 const maxColumns = 4;
+
+/** Section types that cannot be placed inside a column. */
+const typesNotAllowedInColumns: SectionType[] = ['columns', 'animal-list', 'animal-updates'];
+
+interface EditedSection {
+  section: Section;
+  /** State before editing started, restored on "Verwerfen". */
+  snapshot: Section;
+  /** Section was just added - "Verwerfen" removes it again. */
+  isNew: boolean;
+}
 
 @Component({
   selector: 'app-section-editor-columns',
@@ -29,73 +41,138 @@ export class SectionEditorColumnsComponent {
   private readonly alertService = inject(AlertService);
   private modalService = inject(ModalService);
 
-  section = input.required<SectionColumns>();
-  editedSection = signal<{ section: Section, iCol: number, iRow: number } | undefined>(undefined);
+  readonly maxColumns = maxColumns;
 
-  deleteColumn(index: number) {
-    this.section().Content.Columns.splice(index, 1);
+  section = input.required<SectionColumns>();
+  editedSection = signal<EditedSection | undefined>(undefined);
+
+  /** Bumped to recreate the column previews after editing (see template). */
+  previewVersion = signal(0);
+
+  private readonly dialog = inject(Dialog);
+  private readonly viewContainerRef = inject(ViewContainerRef);
+  private readonly sectionDialog = viewChild.required<TemplateRef<unknown>>('sectionDialog');
+  private dialogRef?: DialogRef<unknown, unknown>;
+
+  constructor() {
+    inject(DestroyRef).onDestroy(() => this.dialogRef?.close());
   }
 
-  deleteSection(iColumn: number, iRow: number) {
-    this.section().Content.Columns[iColumn].Sections.splice(iRow, 1);
-    this.editedSection.set(undefined);
+  widthPercent(grow: number): number {
+    const total = this.section().Content.Columns.reduce((sum, col) => sum + (col.Grow || 0), 0);
+    return total > 0 ? Math.round((grow || 0) / total * 100) : 0;
+  }
+
+  async deleteColumn(iCol: number) {
+    const column = this.section().Content.Columns[iCol];
+    if (column.Sections.length > 0) {
+      const answer = await this.alertService.openAlert(
+        'Spalte wirklich entfernen?',
+        `Die Spalte enthält ${column.Sections.length} Sektion(en), die ebenfalls entfernt werden.`,
+        ['nein', 'ja'],
+      );
+      if (answer !== 'ja') return;
+    }
+    const edited = this.editedSection();
+    if (edited && column.Sections.includes(edited.section)) {
+      this.closeEditor();
+    }
+    this.section().Content.Columns.splice(iCol, 1);
   }
 
   addColumn() {
-    if(this.section().Content.Columns.length >= maxColumns){
+    if (this.section().Content.Columns.length >= maxColumns) {
       this.alertService.openAlert(`Maximal ${maxColumns} Spalten möglich`, '');
       return;
     }
     this.section().Content.Columns.push({
       Sections: [],
       Grow: 1,
-    })
+    });
   }
 
   async addSectionAtRow(iCol: number, iRow: number) {
-
-    const sectionPickReturn = await this.modalService.openFinishable(PickNewSectionComponent);
+    const sectionPickReturn = await this.modalService.openFinishable(PickNewSectionComponent, {
+      excludedTypes: typesNotAllowedInColumns,
+    });
     if (!sectionPickReturn) return;
 
-    let sectionRef: Section;
-    if(typeof sectionPickReturn == 'string') {
-      sectionRef = createEmptySection(sectionPickReturn);
-    } else {
-      sectionRef = sectionPickReturn;
-    }
+    const sectionRef: Section = typeof sectionPickReturn == 'string'
+      ? createEmptySection(sectionPickReturn)
+      : sectionPickReturn;
 
     this.section().Content.Columns[iCol].Sections.splice(iRow, 0, sectionRef);
-    this.editedSection.set({section: sectionRef, iCol, iRow});
-
-    //setTimeout(() => this.editSectionAtPosition(rowId, 0), 0);
+    this.openEditor(sectionRef, true);
   }
 
-  moveColumnRight(iColumn: number) {
+  moveColumn(iColumn: number, direction: -1 | 1) {
     const columns = this.section().Content.Columns;
-
-    if (iColumn < 0 || iColumn >= columns.length - 1) {
-      return;
-    }
-
-    [columns[iColumn], columns[iColumn + 1]] = [columns[iColumn + 1], columns[iColumn]];
+    const target = iColumn + direction;
+    if (target < 0 || target >= columns.length) return;
+    [columns[iColumn], columns[target]] = [columns[target], columns[iColumn]];
   }
 
-  moveColumnLeft(iColumn: number) {
-    const columns = this.section().Content.Columns;
-
-    if (iColumn <= 0 || iColumn >= columns.length) {
-      return;
-    }
-
-    [columns[iColumn], columns[iColumn - 1]] = [columns[iColumn - 1], columns[iColumn]];
+  editSection(section: Section) {
+    if (this.editedSection()?.section === section) return;
+    this.openEditor(section, false);
   }
 
-  editSection(section: Section, iCol: number, iRow: number) {
-    this.editedSection.set({section, iCol, iRow});
+  private openEditor(section: Section, isNew: boolean) {
+    this.editedSection.set({ section, snapshot: structuredClone(section), isNew });
+    if (this.dialogRef) return;
+
+    this.dialogRef = this.dialog.open(this.sectionDialog(), {
+      panelClass: 'modal-mobile-fullscreen',
+      viewContainerRef: this.viewContainerRef,
+      autoFocus: 'dialog',
+      ariaLabel: 'Sektion bearbeiten',
+    });
+    // Esc and backdrop click close the dialog and keep the (live applied) changes.
+    this.dialogRef.closed.subscribe(() => {
+      this.dialogRef = undefined;
+      if (this.editedSection()) this.closeEditor();
+    });
   }
 
-  applyEditedSection(iCol: number, iRow: number) {
-    this.section().Content.Columns[iCol].Sections[iRow] = structuredClone(this.editedSection()?.section)!;
+  closeEditor() {
     this.editedSection.set(undefined);
+    this.previewVersion.update(v => v + 1);
+    this.dialogRef?.close();
+  }
+
+  discardEdit() {
+    const edited = this.editedSection();
+    if (!edited) return;
+    const position = this.findSection(edited.section);
+    if (position) {
+      const sections = this.section().Content.Columns[position.iCol].Sections;
+      if (edited.isNew) {
+        sections.splice(position.iRow, 1);
+      } else {
+        sections[position.iRow] = edited.snapshot;
+      }
+    }
+    this.closeEditor();
+  }
+
+  async deleteEditedSection() {
+    const edited = this.editedSection();
+    if (!edited) return;
+    const answer = await this.alertService.openAlert('Sektion wirklich entfernen?', '', ['nein', 'ja']);
+    if (answer !== 'ja') return;
+    const position = this.findSection(edited.section);
+    if (position) {
+      this.section().Content.Columns[position.iCol].Sections.splice(position.iRow, 1);
+    }
+    this.closeEditor();
+  }
+
+  private findSection(section: Section): { iCol: number, iRow: number } | undefined {
+    const columns = this.section().Content.Columns;
+    for (let iCol = 0; iCol < columns.length; iCol++) {
+      const iRow = columns[iCol].Sections.indexOf(section);
+      if (iRow >= 0) return { iCol, iRow };
+    }
+    return undefined;
   }
 }

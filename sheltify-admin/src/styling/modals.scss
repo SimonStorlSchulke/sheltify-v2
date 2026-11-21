@@ -33,6 +33,18 @@
   padding: 0;
 }
 
+.modal-mobile-fullscreen {
+  width: min(960px, calc(100vw - 48px));
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px #00000040;
+
+  @media (max-width: 700px) {
+    width: 100vw;
+    border-radius: 0;
+  }
+}
+
 .modal-toast {
   padding: 0;
   position: fixed !important;
