@@ -94,8 +94,16 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
     });
   }
 
+  /**
+   * Animals the user is currently editing (set by the animal editor). Image pickers pass them as
+   * `preselectedAnimals`, so the library opened from there starts filtered to their images.
+   */
+  static readonly contextAnimals = signal<CmsAnimal[]>([]);
+
   isPicker = false;
   preselectedImage?: CmsImage;
+  /** e.g. the animals of the animal editor the library was opened from */
+  preselectedAnimals?: CmsAnimal[];
 
   private refreshImages = signal(0);
 
@@ -130,6 +138,9 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
 
   async ngOnInit() {
     this.setPreselectedImage();
+    if (this.preselectedAnimals?.length) {
+      this.selectedAnimals.set([...this.preselectedAnimals]);
+    }
     await this.checkUnusedMediaFilesOnceAWeek();
     this.tagsService.updateAvailableTags();
   }

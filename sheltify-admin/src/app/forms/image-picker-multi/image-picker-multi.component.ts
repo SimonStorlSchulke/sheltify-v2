@@ -1,8 +1,10 @@
 import { Component, inject, model, ChangeDetectionStrategy } from '@angular/core';
+import { ModalService } from '@app/services/modal.service';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { CmsImage } from 'sheltify-lib/cms-types';
 import { InputBaseComponent } from '@app/forms/input-base.component';
-import { ModalPresenter } from '@app/services/modal.presenter';
+import { ImageEditorComponent } from '@app/media-library/image-editor/image-editor.component';
+import { MediaLibraryComponent } from '@app/media-library/media-library.component';
 import { CmsImageDirective } from '@app/ui/cms-image.directive';
 import { bootstrapCardImage, bootstrapPlus } from '@ng-icons/bootstrap-icons'
 
@@ -17,11 +19,14 @@ import { bootstrapCardImage, bootstrapPlus } from '@ng-icons/bootstrap-icons'
 export class ImagePickerMultiComponent extends InputBaseComponent {
   twoWayModel = model<CmsImage[]>([]);
 
-  private modalPresenter = inject(ModalPresenter);
+  private modalService = inject(ModalService);
 
   async addImage() {
     this.markDirty();
-    const images = await this.modalPresenter.openMediaLibrary();
+    const images = await this.modalService.openFinishable(MediaLibraryComponent, {
+      isPicker: true,
+      preselectedAnimals: MediaLibraryComponent.contextAnimals(),
+    }, 'modal-fullscreen');
     if(!images) return;
     this.twoWayModel.set([...this.twoWayModel()!, ...images]);
   }
@@ -48,6 +53,6 @@ export class ImagePickerMultiComponent extends InputBaseComponent {
   }
 
   editImage(image: CmsImage) {
-    this.modalPresenter.openImageEditor(image);
+    this.modalService.openFinishable(ImageEditorComponent, {openedAsModalImage: image});
   }
 }

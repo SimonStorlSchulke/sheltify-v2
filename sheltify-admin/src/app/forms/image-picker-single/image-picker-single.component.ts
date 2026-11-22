@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, input, model } from '@angular/core';
+import { ModalService } from '@app/services/modal.service';
 import { InputBaseComponent } from '@app/forms/input-base.component';
-import { ModalPresenter } from '@app/services/modal.presenter';
+import { ImageEditorComponent } from '@app/media-library/image-editor/image-editor.component';
+import { MediaLibraryComponent } from '@app/media-library/media-library.component';
 import { BtIconComponent } from "@app/ui/bt-icon/bt-icon.component";
 import { CmsImageDirective } from '@app/ui/cms-image.directive';
 import { bootstrapCardImage } from '@ng-icons/bootstrap-icons'
@@ -20,16 +22,20 @@ export class ImagePickerSingleComponent extends InputBaseComponent {
   cropped = input(false);
   small = input(false);
 
-  private modalPresenter = inject(ModalPresenter);
+  private modalService = inject(ModalService);
 
   async pickImage() {
     this.markDirty();
-    const portraits = await this.modalPresenter.openMediaLibrary(this.twoWayModel());
+    const portraits = await this.modalService.openFinishable(MediaLibraryComponent, {
+      isPicker: true,
+      preselectedImage: this.twoWayModel(),
+      preselectedAnimals: MediaLibraryComponent.contextAnimals(),
+    }, 'modal-fullscreen');
     if(!portraits) return;
     this.twoWayModel.set(portraits[0]);
   }
 
   async editImage() {
-    this.modalPresenter.openImageEditor(this.twoWayModel()!)
+    await this.modalService.openFinishable(ImageEditorComponent, {openedAsModalImage: this.twoWayModel()!});
   }
 }

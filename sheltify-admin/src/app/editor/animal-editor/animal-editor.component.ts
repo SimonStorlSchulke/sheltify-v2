@@ -1,4 +1,4 @@
-import { Component, input, inject, output, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, input, inject, output, ChangeDetectionStrategy, OnInit, effect, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { Log } from '@app/services/log';
@@ -18,6 +18,7 @@ import { AlertService } from '@app/services/alert.service';
 import { AnimalService } from '@app/services/animal.service';
 import { AskSaveService } from '@app/services/ask-save.service';
 import { ModalService } from '@app/services/modal.service';
+import { MediaLibraryComponent } from '@app/media-library/media-library.component';
 import { TenantConfigurationService } from '@app/services/tenant-configuration.service';
 import { AnimalPickerDialogComponent } from '@app/ui/animal-picker-dialog/animal-picker-dialog.component';
 import { LastEditedComponent } from '@app/ui/last-edited/last-edited.component';
@@ -66,6 +67,15 @@ export class AnimalEditorComponent implements OnInit {
 
   constructor() {
     this.askSaveService.triggerSave$.pipe(takeUntilDestroyed()).subscribe(() => this.saveFromUI());
+
+    // The media library opened from here (portrait, image sections in the article) starts
+    // filtered to the images of this animal - or of all animals sharing its article.
+    effect(() => {
+      const animal = this.animal();
+      const animalsInArticle = animal?.ArticleID ? this.animalService.animalsByArticleID()[animal.ArticleID] : undefined;
+      MediaLibraryComponent.contextAnimals.set(animal ? (animalsInArticle?.length ? animalsInArticle : [animal]) : []);
+    });
+    inject(DestroyRef).onDestroy(() => MediaLibraryComponent.contextAnimals.set([]));
   }
 
   async ngOnInit() {
