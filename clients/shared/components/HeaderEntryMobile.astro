@@ -5,90 +5,105 @@ interface Props {
   startPageName: string,
 }
 const {entry, startPageName} = Astro.props;
+const title = entry.title.replaceAll(' und ', ' & ') || startPageName;
 ---
 
 {
   /*if*/ entry.children.length == 0 ?
-  <a href={entry.link} class="sui px-2 py-3">{entry.title.replaceAll(' und ', ' & ') || startPageName}</a>
+  <a href={entry.link} class="mobile-entry">{title}</a>
 
   /*else*/:
-  <div class="sui px-2 py-3 dropdown-container">
-    {/*if*/ entry.link ?
-        <a href={entry.link}>
-          {entry.title}
-        </a>
-      /*else*/ :
-      <span>{entry.title}</span>
-    }
-
-    {entry.children?.length > 0 &&
-      <button class="dropdown-button">O</button>
-    }
-
-    <div class="dropdown-content">
-      <div class="entries">
-        {entry.children.map(entry => (
-          <a href={entry.link}>{entry.title.replaceAll(' und ', ' & ')}</a>
-        ))}
-      </div>
+  <div class="mobile-group">
+    <div class="mobile-group-row">
+      {/*if*/ entry.link ?
+        <a href={entry.link} class="mobile-entry">{title}</a>
+        /*else*/ :
+        <span class="mobile-entry">{title}</span>
+      }
+      <button class="mobile-group-toggle" type="button" aria-expanded="false" aria-label={`Unterseiten von ${title} anzeigen`}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
     </div>
 
+    <div class="mobile-subentries">
+      {entry.children.map(child => (
+        <a href={child.link} class="mobile-entry mobile-subentry">{child.title.replaceAll(' und ', ' & ')}</a>
+      ))}
+    </div>
   </div>
 }
 
 <style lang="scss">
-  a:hover, a.active {
-    color: var(--c-primary);
+  .mobile-entry {
+    display: block;
+    flex-grow: 1;
+    padding: 14px 20px;
+    color: inherit;
+    text-decoration: none;
+
+    &:hover, &.active {
+      color: var(--c-primary);
+    }
+  }
+
+  a.mobile-entry:active {
+    background: #0000000a;
+  }
+
+  .mobile-group-row {
+    display: flex;
+    align-items: center;
+  }
+
+  .mobile-group-toggle {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    margin: 0 8px 0 0;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: inherit;
     cursor: pointer;
-  }
 
-  .dropdown-container {
-    .dropdown-button {
-      cursor: pointer;
+    &:hover {
+      background: #0000000d;
     }
 
-    .dropdown-content {
-      height: 0;
-      overflow: hidden;
-      pointer-events: none;
-      transition: opacity 0.1s;
-      z-index: 1;
-      margin-top: -1px;
-
-      .entries {
-
-        // triangle
-        &::before {
-          content: "";
-          width: 0;
-          height: 0;
-          margin-left: 30px;
-          border-left: 10px solid transparent;
-          border-right: 10px solid transparent;
-
-          border-bottom: 10px solid #fff;
-        }
-
-        background-color: #fff;
-        display: flex;
-        flex-direction: column;
-        box-shadow: 0 5px 6px #0003;
-        overflow: hidden;
-
-        a {
-          padding: 8px 12px;
-        }
-      }
-    }
-
-    &.open .dropdown-content {
-      height: auto;
-      pointer-events: all;
+    svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: transform 0.2s;
     }
   }
 
-  .dropdown-container:hover .dropdown-content {
-    opacity: 1;
-    pointer-events: all;
+  .mobile-subentries {
+    display: none;
+    flex-direction: column;
+    padding-bottom: 6px;
+    background: #00000006;
+  }
+
+  .mobile-subentry {
+    padding: 10px 20px 10px 36px;
+    font-size: 0.95em;
+  }
+
+  .mobile-group:global(.open) {
+    .mobile-subentries {
+      display: flex;
+    }
+
+    .mobile-group-toggle svg {
+      transform: rotate(180deg);
+    }
   }
 </style>

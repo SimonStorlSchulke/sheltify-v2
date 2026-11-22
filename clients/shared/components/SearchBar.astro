@@ -13,7 +13,6 @@ const { isMobile } = Astro.props;
   aria-expanded="false"
 >
   <span style="filter: saturate(0) contrast(2)">🔍</span>
-  {isMobile && <span>Suchen</span>}
 </button>
 
 <style is:global>
@@ -24,9 +23,12 @@ const { isMobile } = Astro.props;
     }
 
     .search-toggle-mobile {
-        width: auto;
-        display: flex;
-        gap: 8px;
-        align-items: center;
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        margin: 0;
+        padding: 0;
+        border-radius: 50%;
     }
 </style>
