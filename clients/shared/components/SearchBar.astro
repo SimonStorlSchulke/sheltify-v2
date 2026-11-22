@@ -12,23 +12,49 @@ const { isMobile } = Astro.props;
   aria-label="Suche öffnen"
   aria-expanded="false"
 >
-  <span style="filter: saturate(0) contrast(2)">🔍</span>
+  <svg
+    width="32"
+    height="32"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2.25"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <circle cx="11" cy="11" r="7" />
+    <line x1="16.5" y1="16.5" x2="21" y2="21" />
+  </svg>
 </button>
 
 <style is:global>
     .search-toggle {
-        width: 64px;
+        display: inline-grid;
+        place-items: center;
+        width: 44px;
         margin-right: 8px;
+        padding: 0;
+        background: none;
+        border: none;
+        box-shadow: none;
+        color: inherit;
         cursor: pointer;
+        transition: color 0.15s ease;
+    }
+
+    .search-toggle:hover,
+    .search-toggle:focus-visible {
+        background: none;
+        color: var(--c-primary);
     }
 
     .search-toggle-mobile {
         display: grid;
-        place-items: center;
         width: 44px;
         height: 44px;
         margin: 0;
-        padding: 0;
         border-radius: 50%;
     }
 </style>
