@@ -2,8 +2,12 @@
   --header-height: 64px;
 }
 
-.themable.header {
+nav.themable.header {
   box-shadow: none;
   font-weight: 300;
   font-size: 1.15rem;
+
+  .menu {
+    justify-content: center;
+  }
 }

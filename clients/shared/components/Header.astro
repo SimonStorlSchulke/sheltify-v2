@@ -2,6 +2,7 @@
 import { cms } from "@shared/cms/sheltify-access";
 import HeaderEntryMobile from '@shared/components/HeaderEntryMobile.astro';
 import SearchBar from "@shared/components/SearchBar.astro";
+import SearchPanel from "@shared/components/SearchPanel.astro";
 import CmsImg from "@shared/components/ui/CmsImg.astro";
 import { createPageStructure } from "sheltify-lib/page-structure.ts";
 import HeaderEntry from "./HeaderEntry.astro";
@@ -42,9 +43,9 @@ const logo = (await cms.tenantConfig).LogoHeader;
     {menu.map((item) => <HeaderEntryMobile entry={item} startPageName="Home" />)}
   </div>
 </nav>
-<div class="themable search-results sui flex-y gap-2"/>
+<SearchPanel/>
 
-<style lang="scss">
+<style is:global lang="scss">
   nav.desktop {
     display: flex;
     align-items: center;
@@ -71,7 +72,7 @@ const logo = (await cms.tenantConfig).LogoHeader;
       height: 100%;
     }
 
-    .logo :global(img) {
+    .logo img {
       height: 90%;
     }
 
