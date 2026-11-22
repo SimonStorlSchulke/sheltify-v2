@@ -1,9 +1,10 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, computed, CUSTOM_ELEMENTS_SCHEMA, ElementRef, HostListener, input, model, TemplateRef, ViewChild, ViewContainerRef, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, effect, CUSTOM_ELEMENTS_SCHEMA, ElementRef, HostListener, input, model, TemplateRef, ViewChild, ViewContainerRef, inject, ChangeDetectionStrategy, ApplicationRef } from '@angular/core';
 import { AskSaveService } from '@app/services/ask-save.service';
 import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
 import { Section } from 'sheltify-lib/article-types';
 import { ArticleEditorService } from '@app/editor/article-editor/article-editor.service';
+import { runLayoutTransition } from '@app/editor/article-editor/layout-transition';
 import { SectionEditorAllSectionsComponent } from '@app/editor/article-editor/section-editor/section-editor-all-sections/section-editor-all-sections.component';
 import { SectionRendererComponent } from '@app/section-renderer/section-renderer.component';
 import { AlertService } from '@app/services/alert.service';
@@ -27,6 +28,7 @@ export class SectionEditorComponent {
   private elementRef = inject(ElementRef);
   private alertService = inject(AlertService);
   private askSaveService = inject(AskSaveService);
+  private appRef = inject(ApplicationRef);
 
   section = input.required<Section>();
   rowIndex = input.required<number>();
@@ -47,6 +49,17 @@ export class SectionEditorComponent {
     this.outletRef.clear();
     this.outletRef.createEmbeddedView(this.previewRef);
   }
+
+  // Re-render the preview whenever this section stops being edited (clicking outside or
+  // selecting another section), because web component renderers don't notice mutations.
+  private wasEdited = false;
+  private readonly rerenderAfterEditing = effect(() => {
+    const isEdited = this.editedRow() === this.rowIndex();
+    if (this.wasEdited && !isEdited && this.outletRef) {
+      this.triggerRerender();
+    }
+    this.wasEdited = isEdited;
+  });
 
   copySection() {
     this.articleEditorService.copiedSection.set(this.section());
@@ -97,7 +110,14 @@ export class SectionEditorComponent {
       return;
     }
 
-    this.editedRow.set(-1);
-    this.triggerRerender();
+    // Clicked another section: selecting it closes this one in the same step (article-editor
+    // clickSection), so the layout changes only once.
+    if (target.closest('app-section-editor')) {
+      return;
+    }
+
+    // keep what was clicked in place while this section shrinks back to its preview
+    // (the preview is re-rendered by rerenderAfterEditing)
+    runLayoutTransition(this.appRef, () => this.editedRow.set(-1), target);
   }
 }

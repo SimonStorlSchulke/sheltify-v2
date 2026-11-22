@@ -1,4 +1,4 @@
-import { Component, DestroyRef, effect, input, model, OnInit, Renderer2, signal, inject, ChangeDetectionStrategy, ChangeDetectorRef, HostListener } from '@angular/core';
+import { Component, DestroyRef, effect, input, model, OnInit, Renderer2, signal, inject, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, ApplicationRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { AskSaveService } from '@app/services/ask-save.service';
@@ -10,6 +10,7 @@ import { Section } from 'sheltify-lib/dist/article-types';
 import { createEmptyArticle } from '@app/cms-types/cms-type.factory';
 import { ArticleEditorService } from '@app/editor/article-editor/article-editor.service';
 import { createEmptySection } from '@app/editor/article-editor/article-section.factory';
+import { runLayoutTransition } from '@app/editor/article-editor/layout-transition';
 import { PickNewSectionComponent } from '@app/editor/article-editor/pick-new-section/pick-new-section.component';
 import { SectionEditorComponent } from '@app/editor/article-editor/section-editor/section-editor.component';
 import { TextInputComponent } from '@app/forms/text-input/text-input.component';
@@ -36,6 +37,7 @@ export class ArticleEditorComponent implements OnInit {
   private tenantConfigurationService = inject(TenantConfigurationService);
   private cdRef = inject(ChangeDetectorRef);
   private askSaveService = inject(AskSaveService);
+  private appRef = inject(ApplicationRef);
 
 
   showUpdateNote = input<boolean>(false);
@@ -147,14 +149,19 @@ export class ArticleEditorComponent implements OnInit {
     this.askSaveService.markDirty();
   }
 
-  clickSection(section: Section, row: number) {
+  clickSection(section: Section, row: number, event: MouseEvent) {
     const selectedColor = this.selectedFillColor();
     if (selectedColor !== undefined) {
       section.BackgroundColor = selectedColor;
       this.selectedFillColor.set(undefined);
     } else {
+      const clickedSection = event.currentTarget as Element;
       // wrap in timeout so the deselect in section-editor.component doesn't trigger after the select
-      setTimeout(() => this.editedRow.set(row), 0);
+      setTimeout(() => {
+        if (this.editedRow() === row) return;
+        // opening this section also closes the previous one - keep the clicked section in place
+        runLayoutTransition(this.appRef, () => this.editedRow.set(row), clickedSection);
+      }, 0);
     }
   }
 

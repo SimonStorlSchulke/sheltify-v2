@@ -119,8 +119,11 @@ body {
   overflow: auto;
   max-width: 1300px;
 
+  // As high as the scroll area: when a section editor opens or closes, the clicked section
+  // can always be kept at its position on screen (layout-transition.ts), even at the end.
   .overscroll {
-    height: 500px;
+    flex-shrink: 0;
+    height: calc(100dvh - 80px);
   }
 }
 
