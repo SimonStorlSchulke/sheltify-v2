@@ -6,7 +6,7 @@
       <button data-testid="btn-new-page" class="primary" (click)="newPage().then(created => created && layout.mobileOpen.set(true))">Neue Seite</button>
     </div>
     <br>
-    <div class="list">
+    <div class="list" style="max-width: 300px;">
       @for (group of pageTree(); track group.category) {
         <div class="group-row">
           @if (group.page; as page) {

@@ -147,47 +147,6 @@ button.paypal:hover, .article-button.paypal:hover {
 .themable.article .themable-bg-accent-3 {
   background: var(--themable-bg-accent-3);
 }
-.themable.article button {
-  outline: none;
-  border: none;
-  border-radius: 32px;
-  font-family: "more-sugar", system-ui;
-  font-weight: 400;
-  padding: 8px 16px;
-  transition: background-color 0.35s, color 0.35s;
-  cursor: pointer;
-}
-.themable.article button.lg {
-  font-size: 32px;
-}
-.themable.article button.primary {
-  background: var(--c-primary);
-  color: #fff;
-}
-.themable.article button.primary:hover {
-  background: var(--c-primary-h1);
-}
-.themable.article button.secondary {
-  background: #fff;
-  outline: 3px solid var(--c-primary);
-  color: #424242;
-}
-.themable.article button.secondary:hover {
-  background: var(--c-primary-h2);
-}
-.themable.article button.paypal {
-  background: linear-gradient(-70deg, rgb(86, 86, 233) 57px, var(--c-cto) 58px);
-  color: #fff;
-  padding-right: 12px;
-  transition: filter 0.25s;
-}
-.themable.article button.paypal img {
-  width: 2.2rem;
-  height: 2.2rem;
-}
-.themable.article button.paypal:hover {
-  filter: saturate(1.5);
-}
 .themable.article .section-separator-x hr {
   height: 30px;
   position: absolute;
