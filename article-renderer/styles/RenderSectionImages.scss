@@ -88,7 +88,7 @@
       width: 100%;
 
       // keep in sync with gridTileMinWidth in RenderSectionImages.svelte
-      &.small { --grid-tile-min: 200px; }
+      &.small { --grid-tile-min: 230px; }
       &.medium { --grid-tile-min: 320px; }
       &.large { --grid-tile-min: 480px; }
 
