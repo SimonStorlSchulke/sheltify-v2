@@ -54,6 +54,83 @@
     left: 10px;
   }
 }
+.themable.article button,
+button, .article-button {
+  outline: none;
+  border: none;
+  border-radius: 32px;
+  font-family: "Quicksand", "Helvetica", sans-serif;
+  font-weight: 200;
+  padding: 8px 16px;
+  transition: background-color 0.35s, color 0.35s;
+  cursor: pointer;
+}
+.themable.article button:disabled,
+button:disabled, .article-button:disabled {
+  opacity: 0.7;
+  background: var(--c-primary-desaturated) !important;
+  pointer-events: none;
+}
+.themable.article button.lg,
+button.lg, .article-button.lg {
+  font-size: 32px;
+}
+.themable.article button.sm,
+button.sm, .article-button.sm {
+  padding: 4px 12px;
+  height: 34px;
+}
+.themable.article button.primary, .themable.article button.paypal,
+button.primary,
+button.paypal, .article-button.primary, .article-button.paypal {
+  background: var(--c-primary);
+  color: #fff;
+}
+.themable.article button.primary:hover, .themable.article button.paypal:hover,
+button.primary:hover,
+button.paypal:hover, .article-button.primary:hover, .article-button.paypal:hover {
+  background: var(--c-primary-h);
+  color: #000;
+}
+.themable.article button.secondary,
+button.secondary, .article-button.secondary {
+  background: #aaa096;
+  color: #fff;
+}
+.themable.article button.secondary:hover,
+button.secondary:hover, .article-button.secondary:hover {
+  background: #ffdb7e;
+  color: #000;
+}
+.themable.article button.cto,
+button.cto, .article-button.cto {
+  background: var(--c-cto);
+  color: #fff;
+}
+.themable.article button.cto:hover,
+button.cto:hover, .article-button.cto:hover {
+  background-color: color-mix(in lab, var(--c-cto) 80%, #fff);
+  color: #000;
+}
+.themable.article button.paypal,
+button.paypal, .article-button.paypal {
+  color: #fff;
+  padding-left: 48px;
+  background: url("/paypal.png") center, linear-gradient(100deg, #5656e9 44px, var(--c-primary) 44px);
+  background-size: 32px, 100%;
+  background-repeat: no-repeat, repeat;
+  background-position: 8px 4px, 0 0;
+}
+.themable.article button.paypal img,
+button.paypal img, .article-button.paypal img {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+.themable.article button.paypal:hover,
+button.paypal:hover, .article-button.paypal:hover {
+  filter: saturate(1.5);
+}
+
 :root {
   --section-gap-x: min(50px, 5dvw);
   --section-gap-y: 50px;
