@@ -1,5 +1,5 @@
 .themable.article button,
-button {
+button, .article-button {
   outline: none;
   border: none;
   border-radius: 32px;
@@ -24,7 +24,7 @@ button {
     height: 34px;
   }
 
-  &.primary {
+  &.primary, &.paypal {
     background: var(--c-primary);
     color: #fff;
 
@@ -41,6 +41,34 @@ button {
     &:hover {
       background: #ffdb7e;
       color: #000;
+    }
+  }
+
+  &.cto {
+    background: var(--c-cto);
+    color: #fff;
+
+    &:hover {
+      background-color: color-mix(in lab, var(--c-cto) 80%, #fff);
+      color: #000;
+    }
+  }
+
+  &.paypal {
+    color: #fff;
+    padding-left: 48px;
+    background: url("/paypal.png") center, linear-gradient(100deg, #5656E9FF 44px, var(--c-primary) 44px);
+    background-size: 32px, 100%;
+    background-repeat: no-repeat, repeat;
+    background-position: 8px 4px, 0 0;
+
+    img {
+      width: 2.2rem;
+      height: 2.2rem;
+    }
+
+    &:hover {
+      filter: saturate(1.5);
     }
   }
 }

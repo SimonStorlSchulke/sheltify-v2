@@ -3,6 +3,7 @@
   --c-primary-desaturated: #cfa170;
   --c-primary-h: #ffdbb3;
   --c-accent: #e4ded8;
+  --c-cto: #ff2f40;
   --padding-article: 64px;
   --themable-bg-accent-1: #e4ded8;
   --themable-bg-accent-2: #ffdbb3;
@@ -30,11 +31,34 @@
   font-size: 1.2rem;
 }
 
+@media (max-width: 600px) {
+  .themable.animal-card {
+    width: 100%;
+    height: auto;
+  }
+  .themable.animal-card img {
+    display: block;
+    width: 100%;
+    height: 150px;
+  }
+  .themable.animal-card .name-row {
+    padding-bottom: 0.1rem;
+    padding-top: 0.1rem;
+  }
+  .themable.animal-card .name-row span {
+    padding: 2px;
+  }
+  .themable.animal-card .bubbles {
+    top: 10px;
+    bottom: auto;
+    left: 10px;
+  }
+}
 :root {
   --section-gap-x: min(50px, 5dvw);
   --section-gap-y: 50px;
   --hero-height: 650px;
-  --hero-top-height: 400px;
+  --hero-top-height: 450px;
 }
 
 .themable.article .themable-bg-accent-1 {
@@ -45,6 +69,47 @@
 }
 .themable.article .themable-bg-accent-3 {
   background: var(--themable-bg-accent-3);
+}
+.themable.article button {
+  outline: none;
+  border: none;
+  border-radius: 32px;
+  font-family: "more-sugar", system-ui;
+  font-weight: 400;
+  padding: 8px 16px;
+  transition: background-color 0.35s, color 0.35s;
+  cursor: pointer;
+}
+.themable.article button.lg {
+  font-size: 32px;
+}
+.themable.article button.primary {
+  background: var(--c-primary);
+  color: #fff;
+}
+.themable.article button.primary:hover {
+  background: var(--c-primary-h1);
+}
+.themable.article button.secondary {
+  background: #fff;
+  outline: 3px solid var(--c-primary);
+  color: #424242;
+}
+.themable.article button.secondary:hover {
+  background: var(--c-primary-h2);
+}
+.themable.article button.paypal {
+  background: linear-gradient(-70deg, rgb(86, 86, 233) 57px, var(--c-cto) 58px);
+  color: #fff;
+  padding-right: 12px;
+  transition: filter 0.25s;
+}
+.themable.article button.paypal img {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+.themable.article button.paypal:hover {
+  filter: saturate(1.5);
 }
 .themable.article .section-separator-x hr {
   height: 30px;
@@ -75,12 +140,12 @@
   content: "";
   display: block;
   height: 100px;
-  background: #fff;
+  background: #f6f6f6;
   position: absolute;
   z-index: 1;
   width: 100%;
   transform: skew(0deg, -2deg);
-  top: 350px;
+  top: 400px;
 }
 .themable.article .section-hero h1 {
   font-weight: 800;

@@ -16,9 +16,9 @@ import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './button-link-dialog.component.scss',
 })
-export class ButtonLinkDialogComponent extends FinishableDialog<{ url: string, buttonTye: 'primary' | 'secondary' | 'cto' }>{
+export class ButtonLinkDialogComponent extends FinishableDialog<{ url: string, buttonTye: 'primary' | 'secondary' | 'cto' | 'paypal' }>{
   url = model<string>( '');
-  buttonType: 'primary' | 'secondary' | 'cto' = 'primary';
+  buttonType: 'primary' | 'secondary' | 'cto' | 'paypal' = 'primary';
 
   submit() {
     this.finishWith({
