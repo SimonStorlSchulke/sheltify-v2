@@ -1,5 +1,13 @@
 .section-text {
   p {
     min-height: 1rem;
+    margin: 0 0 10px;
+  }
+
+  // no extra space at the end of the section
+  > :last-child,
+  section-text > :last-child,
+  li:last-child > p:last-child {
+    margin-bottom: 0;
   }
 }

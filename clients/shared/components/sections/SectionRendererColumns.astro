@@ -9,6 +9,7 @@ import RenderSectionAnimalUpdates from 'article-renderer/components/RenderSectio
 import RenderSectionFile from 'article-renderer/components/RenderSectionFile.svelte';
 import RenderSectionHero from 'article-renderer/components/RenderSectionHero.svelte';
 import RenderSectionVideo from 'article-renderer/components/RenderSectionVideo.svelte';
+import RenderSectionTeamMember from 'article-renderer/components/RenderSectionTeamMember.svelte';
 
 interface Props {
   section: SectionColumns,
@@ -50,6 +51,9 @@ const {section, allAnimalsByArticle} = Astro.props;
           break;
         case 'animal-updates':
           comp = <RenderSectionAnimalUpdates section={section} allAnimalsByArticle={allAnimalsByArticle}/>;
+          break;
+        case 'team-member':
+          comp = <RenderSectionTeamMember section={section}/>;
           break;
         default:
           comp = <div>Sektionstyp nicht unterstützt</div>;
