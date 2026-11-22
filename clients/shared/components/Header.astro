@@ -13,7 +13,9 @@ const pages = (await cms.getPages())
 
 const menu = [...createPageStructure(pages).values()];
 const startPage = menu.find((item) => item.link == "/");
-const logo = (await cms.tenantConfig).LogoHeader;
+const tenantConfig = await cms.tenantConfig;
+const logo = tenantConfig.LogoHeader;
+const logoMobile = tenantConfig.LogoSmall ?? logo;
 ---
 
 <nav class="themable header desktop">
@@ -31,7 +33,7 @@ const logo = (await cms.tenantConfig).LogoHeader;
 <nav class="themable header mobile" aria-label="Hauptmenü">
   <div class="mobile-topbar">
     <a class="logo" href={startPage && "/"}>
-      {logo && <CmsImg img={logo} size="medium" refetch={false} />}
+      {logoMobile && <CmsImg img={logoMobile} size="medium" refetch={false} />}
     </a>
     <div class="mobile-actions">
       <SearchBar isMobile={true} />

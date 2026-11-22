@@ -10,6 +10,10 @@
     <form class="sui flex-y gap-2 grow-1 pr-1 pb-3 pt-1">
       <div [class]="rowClass">
         <app-image-picker-single [cropped]="true" label="Logo" idName="logo" [(twoWayModel)]="options.LogoHeader"/>
+        <app-image-picker-single
+          [cropped]="true" label="Logo klein" idName="logo-small" [(twoWayModel)]="options.LogoSmall"
+          explanation="Optionales, kompakteres Logo (z.B. nur das Symbol oder eine schmale Variante). Wird in der mobilen Ansicht im Header anstelle des normalen Logos angezeigt. Ohne Auswahl wird das normale Logo verwendet."
+        />
         <div class="sui flex-y gap-2 grow-1">
           <app-text-input class="sui grow-1" idName="name" label="Name" [(twoWayModel)]="options.Name"/>
           <app-text-input class="sui grow-1" idName="siteUrl" label="Webseiten-Url" [(twoWayModel)]="options.SiteUrl"/>

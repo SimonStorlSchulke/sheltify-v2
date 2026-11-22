@@ -157,6 +157,8 @@ export type CmsTenantConfiguration = CmsType & {
   LinkYoutube: string;
   LogoHeaderID?: string;
   LogoHeader?: CmsImage;
+  LogoSmallID?: string;
+  LogoSmall?: CmsImage;
   LastBuild?: SqlNullTime;
   NeedsRebuild: boolean;
   AnimalFeatureWhere: boolean;

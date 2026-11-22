@@ -71,6 +71,9 @@ func SaveTenantConfiguration(w http.ResponseWriter, r *http.Request) {
 	if config.LogoHeader != nil {
 		config.LogoHeaderID = &config.LogoHeader.ID //TODO.. ugly
 	}
+	if config.LogoSmall != nil {
+		config.LogoSmallID = &config.LogoSmall.ID
+	}
 
 	if repository.SaveTenantConfiguration(config) != nil {
 		internalServerErrorResponse(w, r, "Could not save tenant configuration")

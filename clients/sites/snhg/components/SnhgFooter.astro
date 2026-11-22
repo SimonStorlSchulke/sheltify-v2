@@ -4,7 +4,7 @@ import { cms } from "@shared/cms/sheltify-access"
 const config = await cms.tenantConfig;
 ---
 
-<div data-pagefind-ignore class="snhg-footer">
+<div data-pagefind-ignore class="snhg-footer article">
   <div class="sui wrapper flex-y gap-4 ai-center py-4">
     <a href="https://www.gesetze-im-internet.de/tierschg/__11.html" target="_blank" rel="noopener" class="p11-link">
       Zertifiziert nach §11 Tierschutzgesetz
@@ -17,6 +17,7 @@ const config = await cms.tenantConfig;
         <br>
         <br>
         <b>Vorsitz</b>
+        <br>
         {(config.Chairmanship??"").split('\n').map(line => (
           <>{line}<br/></>
         ))}
@@ -36,6 +37,16 @@ const config = await cms.tenantConfig;
         {(config.IBAN??"").split('\n').map(line => (
           <>{line}<br/></>
         ))}
+
+        {config.LinkPaypal &&
+          <div>
+            <br>
+            <span>...Oder bequem per PayPal</span>
+            <br>
+            <a href={config.LinkPaypal} target="_blank"><button class="paypal">PayPal</button></a>
+          </div>
+        }
+
       </div>
       <div>
         <h2>Soziale Netzwerke</h2>
@@ -48,7 +59,13 @@ const config = await cms.tenantConfig;
 <style lang="scss">
   .snhg-footer {
     background: var(--c-accent);
-    font-size: 0.8rem;
+    color: #454545;
+
+    h2 {
+      font-family: Poppins, system-ui;
+      font-size: 24px;
+      font-weight: normal;
+    }
 
     .logo {
       height: 180px;

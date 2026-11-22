@@ -152,12 +152,12 @@ func FindUnlinkedMediaFiles(tenant string) ([]shtypes.MediaFile, error) {
 	err := db.
 		Joins("LEFT JOIN animals a ON a.portrait_id = media_files.id").
 		Joins("LEFT JOIN team_members t ON t.portrait_id = media_files.id").
-		Joins("LEFT JOIN tenant_configurations tc ON tc.logo_header_id = media_files.id").
+		Joins("LEFT JOIN tenant_configurations tc ON tc.logo_header_id = media_files.id OR tc.logo_small_id = media_files.id").
 		Joins("LEFT JOIN blog_entries be ON be.thumbnail_id = media_files.id").
 		Where("media_files.tenant_id = ?", tenant).
 		Where("a.portrait_id IS NULL").
 		Where("t.portrait_id IS NULL").
-		Where("tc.logo_header_id IS NULL").
+		Where("tc.id IS NULL").
 		Where("be.thumbnail_id IS NULL").
 		Find(&mediaFiles).Error
 

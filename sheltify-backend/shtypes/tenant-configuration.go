@@ -32,6 +32,8 @@ type TenantConfiguration struct {
 	LastModifiedBy            string
 	LogoHeader                *MediaFile `gorm:"->"`
 	LogoHeaderID              *string
+	LogoSmall                 *MediaFile `gorm:"->"` // logo for the mobile header
+	LogoSmallID               *string
 	AnimalFeatureWhere        bool
 	AnimalFeaturePatrons      bool
 	AnimalFeatureRace         bool
