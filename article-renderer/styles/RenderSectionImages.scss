@@ -80,6 +80,34 @@
       }
     }
 
+    // equally sized square tiles in centered, evenly filled rows. The component sets
+    // --grid-tile-width and the max-width of .grid-rows (see gridLayout); until the
+    // width is measured, the minimum tile width per size is used.
+    // Always takes the full width, also as flex item (e.g. inside a column section).
+    &.grid {
+      width: 100%;
+
+      // keep in sync with gridTileMinWidth in RenderSectionImages.svelte
+      &.small { --grid-tile-min: 200px; }
+      &.medium { --grid-tile-min: 320px; }
+      &.large { --grid-tile-min: 480px; }
+
+      .grid-rows {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        margin-inline: auto;
+      }
+
+      img {
+        width: var(--grid-tile-width, min(var(--grid-tile-min), 100%));
+        aspect-ratio: 1;
+        margin-bottom: 0;
+        object-fit: cover;
+      }
+    }
+
 
   }
 

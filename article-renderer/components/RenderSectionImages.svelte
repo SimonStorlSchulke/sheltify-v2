@@ -22,6 +22,30 @@
   const size = $derived(() => section.Content.Size);
   const layout = $derived(() => section.Content.Layout);
 
+  /** Minimum tile width per size for the "grid" layout, in px. */
+  const gridTileMinWidth = { small: 200, medium: 320, large: 480 };
+  const gridGap = 8;
+  let gridWidth = $state(0);
+
+  /**
+   * Layout of the "grid" layout: the tile width is chosen so that as many tiles as
+   * fit fill the full width. The images are then spread over the rows as evenly as
+   * possible (e.g. 12 images with room for 7: 2x6 instead of 7+5) and the rows are
+   * centered, so few images do not get stretched to huge tiles.
+   */
+  const gridLayout = $derived.by(() => {
+    const count = images().length;
+    if (!gridWidth || !count) return null;
+    const minWidth = gridTileMinWidth[size()] ?? gridTileMinWidth.medium;
+    const maxColumns = Math.max(1, Math.floor((gridWidth + gridGap) / (minWidth + gridGap)));
+    const tileWidth = Math.min(gridWidth, (gridWidth - (maxColumns - 1) * gridGap) / maxColumns);
+    const rows = Math.ceil(count / maxColumns);
+    const columns = Math.ceil(count / rows);
+    // +1px so rounding never pushes the last tile of a row into the next one
+    const rowWidth = columns * tileWidth + (columns - 1) * gridGap + 1;
+    return { tileWidth, rowWidth };
+  });
+
   let intervalId: number;
 
   onMount(() => {
@@ -96,6 +120,22 @@
         <span class="carousel-counter">{shownId + 1} / {images().length}</span>
       {/if}
     {/if}
+  </div>
+{:else if layout() === "grid"}
+  <div class={`image-grid count-${images().length} grid ${size()}`} bind:clientWidth={gridWidth}>
+    <div
+      class="grid-rows"
+      style={gridLayout ? `--grid-tile-width: ${gridLayout.tileWidth}px; max-width: ${gridLayout.rowWidth}px;` : undefined}
+    >
+      {#each images() as image, index}
+        <img
+          role="none"
+          onclick={() => openLightBox(index)}
+          src={getImageSrc(image, size())}
+          alt={image.Description || image.Title}
+        />
+      {/each}
+    </div>
   </div>
 {:else if layout() === "horizontal" || layout() === "vertical"}
   <div class={`image-grid count-${images().length} ${layout()} ${size()}`}>

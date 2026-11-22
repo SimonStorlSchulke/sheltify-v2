@@ -96,7 +96,7 @@ export type SectionImages = {
   BackgroundColor: string,
   Content: {
     Size: 'small' | 'medium' | 'large',
-    Layout: 'vertical' | 'horizontal' | 'gallery' | 'single',
+    Layout: 'vertical' | 'horizontal' | 'grid' | 'gallery' | 'single',
     MediaFiles: CmsImage[],
     Link?: string,
   },
