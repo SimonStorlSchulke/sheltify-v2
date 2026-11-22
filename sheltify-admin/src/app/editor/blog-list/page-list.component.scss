@@ -1,5 +1,21 @@
 @use 'colors' as *;
 
+// sub page, e.g. "Hündinnen" below "Hunde"
+.list-entry.sub-entry {
+  padding-left: 24px;
+}
+
+// group without its own page - only its sub pages exist
+.list-entry.missing-parent {
+  cursor: default;
+  color: $neutral500;
+  font-style: italic;
+
+  &:hover {
+    color: $neutral500;
+  }
+}
+
 .page-entry {
   cursor: pointer;
   &:hover {

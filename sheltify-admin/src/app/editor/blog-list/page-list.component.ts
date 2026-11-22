@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ActivatedRouteSnapshot, ResolveFn, Router } from '@angular/router';
 import { createNewPage } from '@app/cms-types/cms-type.factory';
@@ -12,6 +12,13 @@ import { PagesService } from '@app/services/pages.service';
 import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
 import { catchError, firstValueFrom, of } from 'rxjs';
 import { CmsPage } from 'sheltify-lib/cms-types';
+
+interface PageGroup {
+  label: string;
+  /** missing if there is no page for the group itself (e.g. only "Hunde/Hündinnen", but no "Hunde") */
+  page?: CmsPage;
+  children: { label: string, page: CmsPage }[];
+}
 
 export const pageResolver: ResolveFn<CmsPage | undefined> = (
   route: ActivatedRouteSnapshot
@@ -54,6 +61,28 @@ export class PageListComponent {
   }
 
   selectedPage = signal<CmsPage | null>(null);
+
+  /**
+   * Pages grouped like the site header (sheltify-lib createPageStructure): "Hunde/Hündinnen" is
+   * listed below "Hunde". Groups keep the order of their first page. A group whose own page
+   * doesn't exist has no `page` and is shown greyed out.
+   */
+  pageTree = computed(() => {
+    const groups = new Map<string, PageGroup>();
+    for (const page of this.pagesService.pages()) {
+      const [category, ...rest] = page.Path.split('/');
+      if (!groups.has(category)) {
+        groups.set(category, { label: category || 'Startseite', children: [] });
+      }
+      const group = groups.get(category)!;
+      if (rest.length === 0) {
+        group.page = page;
+      } else {
+        group.children.push({ label: rest.join('/'), page });
+      }
+    }
+    return [...groups.values()];
+  });
 
   async newPage() {
     const page = createNewPage();

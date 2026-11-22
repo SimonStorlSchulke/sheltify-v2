@@ -7,14 +7,26 @@
     </div>
     <br>
     <div class="list">
-      @let pages = pagesService.pages();
-      @for (page of pages; track $index) {
-        <a [class.selected]="selectedPage()?.ID == pages[$index].ID" class="list-entry"(click)="toPage(page.Path); layout.mobileOpen.set(true)">
-          {{page.Path || 'Startseite' }}
-          @if(!page.PublishedAt?.Valid) {
-            <app-bt-icon style="display: inline-block" class="sui ml-1" name="PencilFill" size="s" />
-          }
-        </a>
+      @for (group of pageTree(); track group.label) {
+        @if (group.page; as page) {
+          <a [class.selected]="selectedPage()?.ID == page.ID" class="list-entry" (click)="toPage(page.Path); layout.mobileOpen.set(true)">
+            {{ group.label }}
+            @if (!page.PublishedAt?.Valid) {
+              <app-bt-icon style="display: inline-block" class="sui ml-1" name="PencilFill" size="s" />
+            }
+          </a>
+        } @else {
+          <span class="list-entry missing-parent" [title]="'Es gibt keine Seite „' + group.label + '“ - im Header ist dieser Punkt nicht anklickbar'">{{ group.label }}</span>
+        }
+
+        @for (child of group.children; track child.page.ID) {
+          <a [class.selected]="selectedPage()?.ID == child.page.ID" class="list-entry sub-entry" [title]="child.page.Path" (click)="toPage(child.page.Path); layout.mobileOpen.set(true)">
+            {{ child.label }}
+            @if (!child.page.PublishedAt?.Valid) {
+              <app-bt-icon style="display: inline-block" class="sui ml-1" name="PencilFill" size="s" />
+            }
+          </a>
+        }
       }
     </div>
 
