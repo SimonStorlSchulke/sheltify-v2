@@ -3,21 +3,42 @@
     <div class="sui flex-x gap-2">
       <h1>Seiten</h1>
       <div class="sui grow-1"></div>
-      <button data-testid="btn-new-page" class="primary" (click)="newPage(); layout.mobileOpen.set(true)">Neue Seite</button>
+      <button data-testid="btn-new-page" class="primary" (click)="newPage().then(created => created && layout.mobileOpen.set(true))">Neue Seite</button>
     </div>
     <br>
     <div class="list">
-      @for (group of pageTree(); track group.label) {
-        @if (group.page; as page) {
-          <a [class.selected]="selectedPage()?.ID == page.ID" class="list-entry" (click)="toPage(page.Path); layout.mobileOpen.set(true)">
-            {{ group.label }}
-            @if (!page.PublishedAt?.Valid) {
-              <app-bt-icon style="display: inline-block" class="sui ml-1" name="PencilFill" size="s" />
+      @for (group of pageTree(); track group.category) {
+        <div class="group-row">
+          @if (group.page; as page) {
+            <a [class.selected]="selectedPage()?.ID == page.ID" class="list-entry" (click)="toPage(page.Path); layout.mobileOpen.set(true)">
+              {{ group.label }}
+              @if (!page.PublishedAt?.Valid) {
+                <app-bt-icon style="display: inline-block" class="sui ml-1" name="PencilFill" size="s" />
+              }
+            </a>
+          } @else {
+            <span class="list-entry missing-parent" [title]="'Es gibt keine Seite „' + group.label + '“ - im Header ist dieser Punkt nicht anklickbar'">{{ group.label }}</span>
+          }
+
+          <div class="group-actions">
+            @if (!group.page) {
+              <button
+                class="small secondary create-group-page"
+                [title]="'Seite „' + group.label + '“ erstellen'"
+                (click)="createGroupPage(group.category).then(created => created && layout.mobileOpen.set(true))"
+              >erstellen</button>
             }
-          </a>
-        } @else {
-          <span class="list-entry missing-parent" [title]="'Es gibt keine Seite „' + group.label + '“ - im Header ist dieser Punkt nicht anklickbar'">{{ group.label }}</span>
-        }
+            <!-- the start page can't have sub pages -->
+            @if (group.category !== '') {
+              <button
+                class="small unstyled add-sub-page"
+                [title]="'Neue Unterseite von „' + group.label + '“'"
+                [attr.aria-label]="'Neue Unterseite von „' + group.label + '“'"
+                (click)="newPage(group.category + '/').then(created => created && layout.mobileOpen.set(true))"
+              ><app-bt-icon name="Plus" size="ms"/></button>
+            }
+          </div>
+        </div>
 
         @for (child of group.children; track child.page.ID) {
           <a [class.selected]="selectedPage()?.ID == child.page.ID" class="list-entry sub-entry" [title]="child.page.Path" (click)="toPage(child.page.Path); layout.mobileOpen.set(true)">

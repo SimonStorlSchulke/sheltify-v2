@@ -14,6 +14,8 @@ import { catchError, firstValueFrom, of } from 'rxjs';
 import { CmsPage } from 'sheltify-lib/cms-types';
 
 interface PageGroup {
+  /** first part of the path, '' for the start page */
+  category: string;
   label: string;
   /** missing if there is no page for the group itself (e.g. only "Hunde/Hündinnen", but no "Hunde") */
   page?: CmsPage;
@@ -72,7 +74,7 @@ export class PageListComponent {
     for (const page of this.pagesService.pages()) {
       const [category, ...rest] = page.Path.split('/');
       if (!groups.has(category)) {
-        groups.set(category, { label: category || 'Startseite', children: [] });
+        groups.set(category, { category, label: category || 'Startseite', children: [] });
       }
       const group = groups.get(category)!;
       if (rest.length === 0) {
@@ -84,9 +86,36 @@ export class PageListComponent {
     return [...groups.values()];
   });
 
-  async newPage() {
+  /**
+   * Asks for the path of a new page and creates it.
+   * @param pathPrefix prefilled start of the path, e.g. "Hunde/" for a new sub page of "Hunde"
+   */
+  async newPage(pathPrefix = ''): Promise<boolean> {
+    const input = await this.modalService.openFinishable(TextInputModalComponent, {
+      label: pathPrefix
+        ? `Pfad für die neue Unterseite von „${pathPrefix.replace(/\/$/, '')}“ eingeben - dieser darf nur Buchstaben, Zahlen, - und / enthalten.`
+        : 'Pfad für die Seite eingeben - dieser darf nur Buchstaben, Zahlen, - und / enthalten.',
+      presetText: pathPrefix,
+    });
+    // cancelled - previously this created a page with an empty path (the start page)
+    if (input === undefined) return false;
+
+    const path = input.trim().replace(/\/+$/, '');
+    if (pathPrefix && (path === '' || path === pathPrefix.replace(/\/$/, ''))) {
+      this.alertService.openAlert('Kein Name für die Unterseite', `Bitte hinter „${pathPrefix}“ einen Namen eingeben.`);
+      return false;
+    }
+    return this.createPage(path);
+  }
+
+  /** Creates the page for a group that only has sub pages so far (e.g. "Hunde" for "Hunde/Hündinnen"). */
+  async createGroupPage(category: string): Promise<boolean> {
+    return this.createPage(category);
+  }
+
+  private async createPage(path: string): Promise<boolean> {
     const page = createNewPage();
-    page.Path = await this.modalService.openFinishable(TextInputModalComponent, {label: 'Pfad für die Seite eingeben - dieser darf nur Buchstaben, Zahlen, - und / enthalten.'}) ?? '';
+    page.Path = path;
 
     if (page.Path.includes('&')) {
       this.alertService.openAlert("Pfad kann kein '&' Zeichen enthalten", "Es wurde durch 'und' ersetzt. In der Titelleiste wird trotzdem '&' angezeigt")
@@ -96,12 +125,13 @@ export class PageListComponent {
     // this should really be done in the backend but ¯\_(ツ)_/¯
     if(this.pagesService.pages().some(foundPage => foundPage.Path === page.Path)) {
       this.alertService.openAlert('Seite mit diesem Pfad existiert bereits', '')
-      return;
+      return false;
     }
 
     const savedPage = await firstValueFrom(this.cmsRequestService.savePage(page));
     await this.toPage(savedPage.Path);
     this.pagesService.reloadPages();
+    return true;
   }
 
   async toPage(path: string) {
