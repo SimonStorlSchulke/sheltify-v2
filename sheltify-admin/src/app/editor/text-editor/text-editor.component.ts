@@ -1,4 +1,4 @@
-import { Component, model, OnInit, output, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, effect, model, OnInit, output, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { EditorView } from 'prosemirror-view';
 import { toggleMark } from 'prosemirror-commands';
@@ -105,6 +105,15 @@ export class TextEditorComponent implements OnInit {
   ngOnInit() {
     this.html = this.htmlModel();
   }
+
+  // The component may be reused for a different section (e.g. after switching pages),
+  // so the editor content has to follow the model, not only its initial value.
+  private readonly syncHtmlFromModel = effect(() => {
+    const html = this.htmlModel();
+    if (html !== this.html) {
+      this.html = html;
+    }
+  });
 
   async addButtonLink(event: MouseEvent) {
     event.preventDefault();
