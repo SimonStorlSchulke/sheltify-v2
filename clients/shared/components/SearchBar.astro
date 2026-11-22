@@ -4,141 +4,29 @@ interface Props {
 }
 
 const { isMobile } = Astro.props;
-
 ---
 
-{isMobile ?
-  <div class="sui flex-x">
-
-<span style="filter: saturate(0) contrast(2)">🔍</span>
-<input class="seaarch-bar" type="text" placeholder="Suchen...">
-</div>
-  :
-<button class="search-toggle">
+<button
+  class:list={['search-toggle', { 'search-toggle-mobile': isMobile }]}
+  type="button"
+  aria-label="Suche öffnen"
+  aria-expanded="false"
+>
   <span style="filter: saturate(0) contrast(2)">🔍</span>
-  <input class="search-bar" type="text" placeholder="Suchen...">
-
+  {isMobile && <span>Suchen</span>}
 </button>
-  }
-
-<script is:inline>
-
-  const isDevMode = window.location.href.includes('://localhost:');
-
-  if (isDevMode) {
-      const mockEntry = (title) => ({
-        data: () => ({
-          url: '/',
-          meta: {title},
-          excerpt: (title + ' ').repeat(22),
-        })
-      })
-    window.pagefind = {
-      search: () => ({
-        results: [
-          mockEntry('Start'),
-          mockEntry('Hund'),
-          mockEntry('Katze'),
-          mockEntry('Maus'),
-          mockEntry('Elefant'),
-          mockEntry('Pinguin'),
-          mockEntry('Brot'),
-        ]
-      })
-    }
-  }
-
-  initSearch();
-
-  function initSearch() {
-    const searchBar = document.querySelector('.search-bar');
-    const searchResults = () => document.querySelector('.search-results');
-    searchBar?.addEventListener('input', async (e) => {
-      // only load the pagefind script once
-      if (e.target.dataset.loaded !== 'true' && !isDevMode) {
-        e.target.dataset.loaded = 'true'
-        // load the pagefind script
-        window.pagefind = await import("/pagefind/pagefind.js");
-        window.pagefind.options({
-          excerptLength: 15,
-        });
-      }
-
-      const searchValue = e.target.value;
-
-      searchResults().innerHTML = '';
-
-      if (searchValue.length < 3) return;
-
-      // search the index using the input value
-      const search = await window.pagefind.search(e.target.value);
-
-      const results = await Promise.all(
-        search.results.slice(0, 10).map(result => result.data())
-      );
-
-      // add the new results
-      for (const result of results) {
-        searchResults().innerHTML += `
-          <a href="${result.url}">
-            <h3>${result.meta.title}</h3>
-            <p>${result.excerpt}</p>
-          </a>`
-      }
-    });
-
-    document.querySelector('.search-toggle').addEventListener('click', (e) => {
-      searchBar.focus();
-    })
-  }
-</script>
 
 <style is:global>
     .search-toggle {
         width: 64px;
         margin-right: 8px;
         cursor: pointer;
-        .search-results, .search-bar {
-            display: none;
-        }
-
-        &:focus-within {
-
-            .search-results, .search-bar {
-                display: flex;
-            }
-        }
     }
 
-    .search-bar {
-        position: fixed;
-        top: var(--header-height);
-        right: 0;
-        height: 32px;
-        z-index: 10;
-    }
-
-    .search-results {
-        cursor: default;
-        text-align: start;
-        position: fixed;
-        background: #fff;
-        top: calc(var(--header-height));
-        /* outline: 1px solid #000; */
-        width: min(600px, 100%);
-        box-sizing: border-box;
-        right: 0;
-        padding: 48px 16px;
-        max-height: calc(100dvh - var(--header-height));
-        overflow-y: auto;
-        box-shadow: 0 0 12px #0000003d;
-        z-index: 10000;
-        a:hover h3 {
-            color: var(--c-primary);
-        }
-
-        &:empty {
-            display: none !important;
-        }
+    .search-toggle-mobile {
+        width: auto;
+        display: flex;
+        gap: 8px;
+        align-items: center;
     }
 </style>

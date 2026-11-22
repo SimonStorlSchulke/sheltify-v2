@@ -1,0 +1,156 @@
+<div class="themable search-panel" role="dialog" aria-label="Suche" hidden>
+  <input class="search-bar" type="search" placeholder="Suchen..." aria-label="Suchbegriff" autocomplete="off">
+  <div class="themable search-results sui flex-y gap-2"></div>
+</div>
+
+<script is:inline>
+  (() => {
+    const isDevMode = window.location.href.includes('://localhost:');
+
+    if (isDevMode) {
+      const mockEntry = (title) => ({
+        data: () => ({
+          url: '/',
+          meta: {title},
+          excerpt: (title + ' ').repeat(22),
+        })
+      })
+      window.pagefind = {
+        search: () => ({
+          results: [
+            mockEntry('Start'),
+            mockEntry('Hund'),
+            mockEntry('Katze'),
+            mockEntry('Maus'),
+            mockEntry('Elefant'),
+            mockEntry('Pinguin'),
+            mockEntry('Brot'),
+          ]
+        })
+      }
+    }
+
+    const panel = document.querySelector('.search-panel');
+    const searchBar = panel.querySelector('.search-bar');
+    const searchResults = panel.querySelector('.search-results');
+    const toggles = document.querySelectorAll('.search-toggle');
+    let pagefindLoaded = isDevMode;
+    let latestSearch = 0;
+
+    function open() {
+      panel.hidden = false;
+      toggles.forEach(t => t.setAttribute('aria-expanded', 'true'));
+      searchBar.focus();
+      searchBar.select();
+    }
+
+    function close() {
+      if (panel.hidden) return;
+      panel.hidden = true;
+      toggles.forEach(t => t.setAttribute('aria-expanded', 'false'));
+    }
+
+    toggles.forEach(toggle => toggle.addEventListener('click', () => {
+      panel.hidden ? open() : close();
+    }));
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') close();
+    });
+
+    // close when clicking outside of the panel (and outside of the toggle buttons)
+    document.addEventListener('pointerdown', (e) => {
+      const target = e.target;
+      if (panel.contains(target) || [...toggles].some(t => t.contains(target))) return;
+      close();
+    });
+
+    searchBar.addEventListener('input', async () => {
+      const searchId = ++latestSearch;
+      const searchValue = searchBar.value.trim();
+
+      if (searchValue.length < 3) {
+        searchResults.innerHTML = '';
+        return;
+      }
+
+      // only load the pagefind script once
+      if (!pagefindLoaded) {
+        pagefindLoaded = true;
+        window.pagefind = await import("/pagefind/pagefind.js");
+        window.pagefind.options({
+          excerptLength: 15,
+        });
+      }
+
+      // search the index using the input value
+      const search = await window.pagefind.search(searchValue);
+      const results = await Promise.all(
+        search.results.slice(0, 10).map(result => result.data())
+      );
+
+      // a newer search was started in the meantime
+      if (searchId !== latestSearch) return;
+
+      searchResults.innerHTML = results.length
+        ? results.map(result => `
+          <a href="${result.url}">
+            <h3>${result.meta.title}</h3>
+            <p>${result.excerpt}</p>
+          </a>`).join('')
+        : '<p class="search-no-results">Keine Ergebnisse</p>';
+    });
+  })();
+</script>
+
+<style is:global>
+    .search-panel {
+        position: fixed;
+        top: var(--header-height);
+        right: 0;
+        z-index: 10000;
+        width: min(600px, 100%);
+        max-height: calc(100dvh - var(--header-height));
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        background: #fff;
+        box-shadow: 0 0 12px #0000003d;
+        text-align: start;
+
+        &[hidden] {
+            display: none;
+        }
+    }
+
+    .search-bar {
+        flex-shrink: 0;
+        margin: 16px;
+        padding: 10px 14px;
+        font: inherit;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+
+        &:focus {
+            outline: 2px solid var(--c-primary);
+            outline-offset: -1px;
+        }
+    }
+
+    .search-results {
+        overflow-y: auto;
+        padding: 0 16px 24px;
+
+        a:hover h3 {
+            color: var(--c-primary);
+        }
+
+        &:empty {
+            display: none !important;
+        }
+    }
+
+    .search-no-results {
+        opacity: 0.7;
+    }
+</style>
