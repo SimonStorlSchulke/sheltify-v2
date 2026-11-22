@@ -146,9 +146,9 @@ export type CmsTenantConfiguration = CmsType & {
   DefaultAnimalKind: string;
   CmsShowAnimalKindSelector: boolean;
   Address: string;
+  Chairmanship: string;
   PhoneNumber: string;
   Email: string;
-  ArticleCss: string;
   IBAN: string;
   LinkPaypal: string;
   LinkFacebook: string;

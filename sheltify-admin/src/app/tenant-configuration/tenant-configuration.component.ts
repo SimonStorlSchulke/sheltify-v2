@@ -47,7 +47,7 @@ export class TenantConfigurationComponent implements OnInit {
         Name: '',
         SiteUrl: '',
         Address: '',
-        ArticleCss: '',
+        Chairmanship: '',
         CmsShowAnimalKindSelector: true,
         DefaultAnimalKind: '',
         Email: '',

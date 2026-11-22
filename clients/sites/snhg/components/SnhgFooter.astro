@@ -17,12 +17,13 @@ const config = await cms.tenantConfig;
         <br>
         <br>
         <b>Vorsitz</b>
-        <br>
-        TODO
+        {(config.Chairmanship??"").split('\n').map(line => (
+          <>{line}<br/></>
+        ))}
         <br><br>
         <b>Vereinssitz</b>
         <br>
-        {config.Address.split('\n').map(line => (
+        {(config.Address??"").split('\n').map(line => (
           <>{line}<br/></>
         ))}
         <br>
@@ -32,11 +33,9 @@ const config = await cms.tenantConfig;
       </div>
       <div>
         <h2>Spendenkonto</h2>
-        {config.Name}
-        <br>
-        IBAN: {config.IBAN}
-        <br>
-        BIC: TODO
+        {(config.IBAN??"").split('\n').map(line => (
+          <>{line}<br/></>
+        ))}
       </div>
       <div>
         <h2>Soziale Netzwerke</h2>

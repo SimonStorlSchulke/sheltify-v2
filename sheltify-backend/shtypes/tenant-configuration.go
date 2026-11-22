@@ -15,10 +15,9 @@ type TenantConfiguration struct {
 	SiteUrl                   string
 	CmsShowAnimalKindSelector bool
 	Address                   string
+	Chairmanship              string
 	PhoneNumber               string
 	Email                     string
-	ArticleCss                string
-	IBAN                      string
 	LinkPaypal                string
 	LinkFacebook              string
 	LinkInstagram             string
@@ -39,8 +38,8 @@ type TenantConfiguration struct {
 	AnimalShowUpdatesForDays  int
 	LastBuild                 sql.NullTime
 	NeedsRebuild              bool
-	
-	SpecialArticleSections    map[string][]SpecialArticleSectionField `gorm:"serializer:json"`
+
+	SpecialArticleSections map[string][]SpecialArticleSectionField `gorm:"serializer:json"`
 
 	AnimalFilterConfigForAnimalKind map[string]AnimalFilterConfiguration `gorm:"serializer:json"`
 }
