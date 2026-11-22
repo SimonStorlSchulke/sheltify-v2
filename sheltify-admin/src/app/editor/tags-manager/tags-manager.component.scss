@@ -1,25 +1,163 @@
 @use "colors" as *;
-.new-tag {
-  #color {
-    height: 44px;
-    border: none;
-    outline: none;
-    background: none;
-    padding: 0;
+@use "sass:color";
+
+.tags-manager {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: min(520px, calc(100vw - 64px));
+}
+
+.tm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  h2 {
     margin: 0;
-  }
-
-  app-text-input {
-    width: 220px;
-  }
-
-  button {
-    height: 43px;
   }
 }
 
-#tags-list {
-  max-height: calc(100dvh - 500px);
-  min-height: calc(100dvh - 800px);
+.tm-close,
+.tm-delete {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+
+  &:hover {
+    background: color.adjust($primary, $alpha: -0.85);
+  }
+}
+
+.tm-delete:hover {
+  background: $alert-bg;
+  color: $alert;
+}
+
+.tm-label {
+  font-weight: 600;
+}
+
+.tm-create {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 10px;
+  background: $neutral0;
+  box-shadow: 0 1px 4px #0000001a;
+}
+
+.tm-create-row {
+  display: flex;
+  gap: 8px;
+
+  .tm-input {
+    flex-grow: 1;
+    min-width: 0;
+  }
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+  }
+}
+
+.tm-input {
+  padding: 8px 10px;
+  border: 1px solid $neutral400;
+  border-radius: 8px;
+  font: inherit;
+
+  &:focus {
+    outline: 2px solid $primary;
+  }
+}
+
+.tm-colors {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.tm-swatch {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid #fff !important;
+  box-shadow: 0 0 0 1px #00000033;
+  cursor: pointer;
+
+  &.active {
+    box-shadow: 0 0 0 2px $primary-d2;
+  }
+}
+
+.tm-custom-color {
+  background: conic-gradient(#f87171, #fbbf24, #4ade80, #60a5fa, #c084fc, #f87171);
+  color: #fff;
+
+  input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+}
+
+.tm-hint {
+  color: $alert;
+}
+
+.tm-list-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tm-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tm-search {
+  width: 180px;
+}
+
+// wrapping row of tags, each with its own delete button
+.tm-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  max-height: min(50dvh, 420px);
   overflow-y: auto;
+}
+
+.tm-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+
+  .tm-delete {
+    width: 24px;
+    height: 24px;
+    color: $neutral600;
+  }
+}
+
+.tm-empty {
+  color: $neutral600;
+  font-style: italic;
 }

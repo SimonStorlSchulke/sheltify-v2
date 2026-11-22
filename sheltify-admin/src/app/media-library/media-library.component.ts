@@ -14,6 +14,7 @@ import { CmsRequestService } from '@app/services/cms-request.service';
 import { ImageConverterService } from '@app/services/image-converter.service';
 import { FinishableDialog, ModalService } from '@app/services/modal.service';
 import { TagsService } from '@app/services/tags.service';
+import { TagsManagerComponent } from '@app/editor/tags-manager/tags-manager.component';
 import { TagComponent } from '@app/ui/tag/tag.component';
 import pLimit from 'p-limit';
 import { lastValueFrom, map, Observable } from 'rxjs';
@@ -66,6 +67,32 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
   readonly pageSize = 100;
   currentPage = signal<number>(0);
   searchQuery = signal<string>("");
+
+  /** Search in the tags & animals filter list (selected entries stay visible) */
+  filterQuery = signal<string>("");
+
+  visibleTags = computed(() => {
+    const query = this.filterQuery().trim().toLowerCase();
+    const selected = this.selectedTags();
+    return this.tagsService.availableTags()
+      .filter(tag => !query || selected.includes(tag.ID) || tag.Name.toLowerCase().includes(query));
+  });
+
+  visibleAnimals = computed(() => {
+    const query = this.filterQuery().trim().toLowerCase();
+    const selectedIds = new Set(this.selectedAnimals().map(animal => animal.ID));
+    return this.animalService.animals()
+      .filter(animal => !query || selectedIds.has(animal.ID) || animal.Name?.toLowerCase().includes(query));
+  });
+
+  openTagsManager() {
+    const dialogRef = this.modalService.open(TagsManagerComponent);
+    // a deleted tag must not stay selected as filter
+    dialogRef.closed.subscribe(() => {
+      const existingIds = new Set(this.tagsService.availableTags().map(tag => tag.ID));
+      this.selectedTags.update(ids => ids.filter(id => existingIds.has(id)));
+    });
+  }
 
   isPicker = false;
   preselectedImage?: CmsImage;

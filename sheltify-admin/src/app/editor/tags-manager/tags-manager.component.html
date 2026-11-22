@@ -1,23 +1,82 @@
-<div class="sui flex-y gap-2">
-  <h2>Tags verwalten</h2>
+<div class="tags-manager">
+  <header class="tm-header">
+    <h2>Tags verwalten</h2>
+    <button class="unstyled tm-close" (click)="close()" aria-label="Schließen" title="Schließen"><app-bt-icon name="X" size="ms"/></button>
+  </header>
 
-  <div class="sui flex-x ai-end new-tag">
-    <app-text-input #newTagName idName="new-tag" label="Neuer Tag" placeholder="...Name & Farbe eingeben"/>
-    <input #newTagColor type="color" value="#aaeeff" name="color" id="color">
-    <button
-      (click)="createTag(newTagName.twoWayModel() ?? '', newTagColor.value); newTagName.twoWayModel.set('')"
-      class="secondary small"
-      [disabled]="newTagName.twoWayModel() == ''"
-    >
-      + Hinzufügen
-    </button>
-  </div>
+  <!-- new tag -->
+  <section class="tm-create">
+    <label class="tm-label" for="new-tag-name">Neuer Tag</label>
+    <div class="tm-create-row">
+      <input
+        id="new-tag-name"
+        class="tm-input"
+        type="text"
+        placeholder="Name des Tags"
+        autocomplete="off"
+        [value]="newName()"
+        (input)="newName.set($any($event.target).value)"
+        (keydown.enter)="createTag()"
+      >
+      <button class="primary" [disabled]="!canCreate()" (click)="createTag()">
+        <app-bt-icon name="Plus" size="s"/> Hinzufügen
+      </button>
+    </div>
 
-  <div class="sui flex-y gap-1" id="tags-list">
-      @for (tag of tagsService.availableTags(); track tag.ID) {
-        <div class="sui flex-x gap-1 ai-center"><button (click)="deleteTag(tag.ID)" class="secondary small">X</button><app-tag [tag]="tag"/></div>
+    <div class="tm-colors" role="radiogroup" aria-label="Farbe">
+      @for (color of tagColors; track color) {
+        <button
+          class="unstyled tm-swatch"
+          role="radio"
+          [attr.aria-checked]="newColor() === color"
+          [attr.aria-label]="'Farbe ' + color"
+          [class.active]="newColor() === color"
+          [style.background]="color"
+          (click)="newColor.set(color)"
+        ></button>
       }
-  </div>
+      <label class="tm-swatch tm-custom-color" [class.active]="!tagColors.includes(newColor())" title="Eigene Farbe">
+        <input type="color" [value]="newColor()" (input)="newColor.set($any($event.target).value)" aria-label="Eigene Farbe">
+        <app-bt-icon name="PaintBucket" size="s"/>
+      </label>
+    </div>
 
-  <button class="primary" (click)="close()">Ok</button>
+    @if (nameExists()) {
+      <span class="tm-hint">Ein Tag mit diesem Namen gibt es schon.</span>
+    }
+  </section>
+
+  <!-- existing tags -->
+  <section class="tm-list-section">
+    <div class="tm-list-header">
+      <span class="tm-label">Vorhandene Tags ({{ tagsService.availableTags().length }})</span>
+      @if (tagsService.availableTags().length > 8) {
+        <input
+          class="tm-input tm-search"
+          type="search"
+          placeholder="Suchen"
+          aria-label="Tags suchen"
+          [value]="search()"
+          (input)="search.set($any($event.target).value)"
+        >
+      }
+    </div>
+
+    <div class="tm-list">
+      @for (tag of filteredTags(); track tag.ID) {
+        <div class="tm-item">
+          <app-tag [tag]="tag"/>
+          <button class="unstyled tm-delete" (click)="deleteTag(tag)" [title]="'„' + tag.Name + '“ löschen'" [attr.aria-label]="'„' + tag.Name + '“ löschen'">
+            <app-bt-icon name="X" size="s"/>
+          </button>
+        </div>
+      } @empty {
+        <span class="tm-empty">{{ search() ? 'Keine passenden Tags' : 'Noch keine Tags angelegt' }}</span>
+      }
+    </div>
+  </section>
+
+  <div class="sui flex-x jc-end">
+    <button class="primary" (click)="close()">Fertig</button>
+  </div>
 </div>
