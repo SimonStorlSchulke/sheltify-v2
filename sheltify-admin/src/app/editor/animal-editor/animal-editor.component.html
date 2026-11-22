@@ -45,6 +45,7 @@
               <app-checkbox-input idName="castrated" label="Kastriert" [(nullBoolModel)]="animal.Castrated"/>
               <app-date-picker idName="birthday" label="Geboren ca." mode="SqlNullTime" [(twoWayModelSqlNullTime)]="animal.Birthday"/>
               <app-number-input idName="size" label="Schulterhöhe in cm" [(twoWayModel)]="animal.ShoulderHeightCm"/>
+              <app-number-input idName="weight" label="Gewicht in kg" [stepSize]="0.25" [max]="200" [(twoWayModel)]="animal.WeightKg"/>
             </div>
 
             <div class="sui flex-x gap-3">

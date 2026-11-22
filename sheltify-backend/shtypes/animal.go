@@ -9,7 +9,7 @@ type Animal struct {
 	Name             string
 	SubTitle         string
 	Birthday         sql.NullTime
-	WeightKg         uint
+	WeightKg         float64
 	ShoulderHeightCm uint
 	Castrated        sql.NullBool
 	Gender           string

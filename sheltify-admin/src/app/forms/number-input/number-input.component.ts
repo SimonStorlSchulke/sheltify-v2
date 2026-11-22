@@ -19,7 +19,7 @@ export class NumberInputComponent extends InputBaseComponent {
   onInput(event: Event) {
     this.markDirty();
     const numberString = (event.target as HTMLInputElement).value;
-    const value = numberString ? parseInt(numberString) : undefined;
+    const value = numberString ? parseFloat(numberString) : undefined;
     this.twoWayModel.set(value);
   }
 

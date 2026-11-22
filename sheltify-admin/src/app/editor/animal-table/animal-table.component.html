@@ -96,7 +96,7 @@
                     <app-date-picker [editedId]="animal.ID" [idName]="animal.ID + '-birthday'" label="" mode="SqlNullTime" [(twoWayModelSqlNullTime)]="animal.Birthday"/>
                   }
                   @case ('weight') {
-                    <app-number-input [editedId]="animal.ID" [idName]="animal.ID + '-weight'" label="" [(twoWayModel)]="animal.WeightKg"/>
+                    <app-number-input [editedId]="animal.ID" [idName]="animal.ID + '-weight'" label="" [stepSize]="0.25" [max]="200" [(twoWayModel)]="animal.WeightKg"/>
                   }
                   @case ('shoulderHeight') {
                     <app-number-input [editedId]="animal.ID" [idName]="animal.ID + '-shoulderheight'" label="" [(twoWayModel)]="animal.ShoulderHeightCm"/>
