@@ -259,7 +259,7 @@ export class CmsRequestService {
 
   triggerBuild() {
     return this.httpClient.get(CmsRequestService.adminApiUrl + 'trigger-build', {
-      timeout: 10000,
+      timeout: 100000,
       responseType: 'text',
       headers: {
         Authorization: `Bearer ${this.authService.bearer}`,
