@@ -1,61 +1,105 @@
 @use "colors" as *;
 @use "sass:color";
 
+$gap-hover: color.mix($primary, transparent, 50%);
+
 :host {
   display: block;
+  container-type: inline-size;
 }
 
-.columns-area {
-  min-width: 0;
+.toolbar {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px 24px;
+  margin-bottom: 12px;
 }
 
-// Content of the CDK dialog (template is declared here, so these styles apply).
-// Size of the dialog itself: .modal-mobile-fullscreen in styling/modals.scss
-.section-dialog {
-  max-height: min(90dvh, 1000px);
-  overflow-y: auto;
-  background: $neutral0;
+.toolbar-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 4px;
 }
 
-@media (max-width: 700px) {
-  .section-dialog {
-    max-height: 100dvh;
-    height: 100dvh;
+.presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+// Mini preview of the column ratio
+.preset {
+  display: flex;
+  gap: 2px;
+  width: 44px;
+  height: 26px;
+  padding: 3px;
+  border: 1px solid $neutral200 !important;
+  border-radius: 6px;
+  background: $neutral0 !important;
+  cursor: pointer;
+
+  span {
+    flex-basis: 0;
+    border-radius: 2px;
+    background: $neutral400;
+  }
+
+  &:hover {
+    border-color: $primary !important;
+  }
+
+  &.active {
+    border-color: $primary !important;
+    background: $primary-h10 !important;
+
+    span {
+      background: $primary;
+    }
+  }
+}
+
+.add-column {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+
+  .count {
+    opacity: 0.6;
+    font-size: 0.85em;
   }
 }
 
 .columns {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
+  display: grid;
+  grid-template-columns: var(--grid-columns);
+  gap: 12px;
+}
+
+// Not enough room for the real ratio: wrap into two columns, then one.
+@container (max-width: 760px) {
+  .columns.many {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container (max-width: 420px) {
+  .columns,
+  .columns.many {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 .column {
-  min-width: 160px;
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  min-height: 160px;
   border: 1px solid $neutral200;
-  margin: 0 -1px -1px 0;
-  min-height: 150px;
-
-  .section-preview {
-    cursor: pointer;
-    border-radius: 4px;
-
-    &:hover {
-      outline: 1px solid $primary;
-      outline-offset: -1px;
-    }
-
-    &.is-edited {
-      outline: 2px solid $primary;
-      outline-offset: 2px;
-      box-shadow: 0 0 0 6px color.adjust($primary, $alpha: -0.85);
-    }
-  }
+  border-radius: 8px;
+  background: $neutral0;
 }
 
 .column-header {
@@ -63,130 +107,96 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 6px 12px;
-  padding: 6px 8px;
-  background: $primary-h5;
+  gap: 4px;
+  padding: 4px 6px;
+  border-bottom: 1px solid $neutral200;
+  border-radius: 8px 8px 0 0;
+  background: $neutral100;
+}
 
-  .width-control {
-    display: flex;
-    align-items: center;
-    gap: 6px;
+.width-stepper,
+.column-actions {
+  display: flex;
+  align-items: center;
+}
 
-    app-number-input {
-      width: 64px;
-    }
+.width-percent {
+  min-width: 3.2em;
+  text-align: center;
+  font-size: 0.85em;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  cursor: pointer;
+
+  &:hover {
+    background: $primary-h10;
+    color: $primary-d2;
   }
 
-  .width-percent {
-    color: $neutral700;
-    font-size: 0.85em;
-    min-width: 3.5em;
-  }
-
-  .button-group {
-    display: flex;
-  }
-
-  button {
-    height: 30px;
-    display: inline-flex;
-    align-items: center;
+  &.danger:hover {
+    background: $alert-bg;
+    color: $alert;
   }
 }
 
-.add-column {
-  border-radius: 0 6px 6px 0;
+.column-sections {
+  flex-grow: 1;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 36px;
+  flex-direction: column;
+  padding: 4px 10px 10px;
 }
 
 .move-to-row {
-  color: #fff;
-  font-size: 10px;
-  padding: 12px;
-  height: 34px;
+  height: 24px;
   cursor: pointer;
-  outline-offset: -2px;
-  border-radius: 4px;
-
-  &:only-of-type {
-    outline: 2px dashed color.mix($primary, transparent, 50%);
-    position: relative;
-    height: 100px;
-  }
-
-  &:only-of-type:after {
-    content: "Erste Sektion hinzufügen";
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-    text-align: center;
-    color: $primary;
-    font-size: 1.1rem;
-    box-sizing: border-box;
-  }
 
   &:hover {
-    background-image: url("/assets/icons/plus.svg");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 24px;
-    opacity: 0.4;
-    outline: 2px dashed color.mix($primary, transparent, 50%);
+    outline: 2px dashed $gap-hover;
+    outline-offset: -2px;
+    background: url("/assets/icons/plus.svg") center / 16px no-repeat;
   }
 }
 
-// Move mode - same look as the gaps in article-editor.component.scss
-.dragMode {
-  cursor: crosshair !important;
+.empty-column {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 120px;
+  margin-top: 6px;
+  border: 2px dashed $gap-hover !important;
+  border-radius: 8px;
+  color: $primary;
+  cursor: pointer;
 
-  .move-to-row {
-    background: $primary-h3;
-    opacity: 1;
-
-    &:hover {
-      background: $primary;
-      cursor: crosshair !important;
-    }
-  }
-
-  .section-preview {
-    cursor: crosshair;
-
-    &:hover {
-      outline: none;
-    }
-  }
-
-  .preview-move-button {
-    display: none !important;
+  &:hover {
+    background: $primary-h10 !important;
   }
 }
 
 .section-preview {
   position: relative;
+  cursor: pointer;
 
-  .preview-move-button {
-    position: absolute;
-    top: 6px;
-    right: 6px;
-    z-index: 2;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    opacity: 0;
-    cursor: grab;
-    transition: opacity 0.15s;
+  &:hover {
+    outline: 1px solid $primary;
+    outline-offset: 2px;
   }
 
-  &:hover .preview-move-button,
-  .preview-move-button:focus-visible {
-    opacity: 1;
+  &.is-edited {
+    outline: 2px solid $primary;
+    outline-offset: 2px;
   }
 
   &.is-moved {
@@ -196,7 +206,44 @@
   }
 }
 
-.column-sections {
-  padding: 12px;
-  flex-grow: 1;
+.preview-move-button {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 2;
+  background: $neutral0 !important;
+  box-shadow: 0 1px 4px #0003;
+  cursor: grab;
+  opacity: 0;
+  transition: opacity 0.15s;
+
+  .section-preview:hover &,
+  &:focus-visible {
+    opacity: 1;
+  }
+}
+
+// Move mode - same look as the gaps in article-editor.component.scss
+.dragMode {
+  cursor: crosshair;
+
+  .move-to-row,
+  .empty-column {
+    background: $primary-h3 !important;
+    cursor: crosshair;
+
+    &:hover {
+      background: $primary !important;
+      color: #fff;
+    }
+  }
+
+  .section-preview {
+    cursor: crosshair;
+    outline: none;
+  }
+
+  .preview-move-button {
+    display: none;
+  }
 }

@@ -5,7 +5,7 @@
   --section-gap-x: min(50px, 5dvw);
   --section-gap-y: 50px;
   --hero-height: 650px;
-  --hero-top-height: 400px;
+  --hero-top-height: 450px;
 }
 
 .themable.article {
@@ -59,12 +59,12 @@
         content: "";
         display: block;
         height: 100px;
-        background: #fff;
+        background: #f6f6f6;
         position: absolute;
         z-index: 1;
         width: 100%;
         transform: skew(0deg, -2deg);
-        top: 350px;
+        top: 400px;
       }
     }
 

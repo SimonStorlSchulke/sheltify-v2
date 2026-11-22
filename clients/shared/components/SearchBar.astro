@@ -26,7 +26,7 @@ const { isMobile } = Astro.props;
   const isDevMode = window.location.href.includes('://localhost:');
 
   if (isDevMode) {
-      const mockEntry= (title) => ({
+      const mockEntry = (title) => ({
         data: () => ({
           url: '/',
           meta: {title},
@@ -37,13 +37,12 @@ const { isMobile } = Astro.props;
       search: () => ({
         results: [
           mockEntry('Start'),
-          {
-              data: () => ({
-              url: '/',
-              meta: {title: 'Start'},
-              excerpt: 'startseite '
-              })
-          },
+          mockEntry('Hund'),
+          mockEntry('Katze'),
+          mockEntry('Maus'),
+          mockEntry('Elefant'),
+          mockEntry('Pinguin'),
+          mockEntry('Brot'),
         ]
       })
     }

@@ -1,5 +1,6 @@
 ---
 import type { SectionColumns } from 'sheltify-lib/article-types.ts';
+import type { CmsAnimal } from 'sheltify-lib/cms-types.ts';
 import RenderSectionTitle from 'article-renderer/components/RenderSectionTitle.svelte';
 import RenderSectionText from 'article-renderer/components/RenderSectionText.svelte';
 import RenderSectionAnimalList from 'article-renderer/components/RenderSectionAnimalList.svelte';
@@ -10,10 +11,11 @@ import RenderSectionHero from 'article-renderer/components/RenderSectionHero.sve
 import RenderSectionVideo from 'article-renderer/components/RenderSectionVideo.svelte';
 
 interface Props {
-  section: SectionColumns
+  section: SectionColumns,
+  allAnimalsByArticle?: Record<string, CmsAnimal[]>,
 }
 
-const {section} = Astro.props;
+const {section, allAnimalsByArticle} = Astro.props;
 ---
 <div class="column-row sui flex-x">
 {
@@ -23,7 +25,7 @@ const {section} = Astro.props;
       let comp;
       switch (section.SectionType) {
         case 'text':
-          comp = <RenderSectionText section={section}/>;
+          comp = <RenderSectionText section={section} allAnimalsByArticle={allAnimalsByArticle}/>;
           break;
         case 'title':
           comp = <RenderSectionTitle section={section}/>
@@ -38,7 +40,7 @@ const {section} = Astro.props;
           comp = <RenderSectionVideo section={section} client:visible/>;
           break;
         case 'animal-list':
-          comp = <RenderSectionAnimalList section={section}/>;
+          comp = <RenderSectionAnimalList section={section} allAnimalsByArticle={allAnimalsByArticle}/>;
           break;
         case 'image':
           comp = <RenderSectionImages section={section} client:load/>;
@@ -47,7 +49,7 @@ const {section} = Astro.props;
           comp = <RenderSectionFile section={section} client:load/>;
           break;
         case 'animal-updates':
-          comp = <RenderSectionAnimalUpdates section={section}/>;
+          comp = <RenderSectionAnimalUpdates section={section} allAnimalsByArticle={allAnimalsByArticle}/>;
           break;
         default:
           comp = <div>Sektionstyp nicht unterstützt</div>;

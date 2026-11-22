@@ -94,7 +94,7 @@ async function populateDynamicData() {
         let comp;
         switch (section.SectionType) {
           case 'text':
-            comp = <RenderSectionText section={section}/>;
+            comp = <RenderSectionText section={section} allAnimalsByArticle={allAnimalsByArticle}/>;
             break;
           case 'title':
             comp = <RenderSectionTitle section={section}/>
@@ -118,7 +118,7 @@ async function populateDynamicData() {
             comp = <RenderSectionFile section={section} client:load/>;
             break;
           case 'columns':
-            comp = <SectionRendererColumns section={section}/>;
+            comp = <SectionRendererColumns section={section} allAnimalsByArticle={allAnimalsByArticle}/>;
             break;
           case 'form':
             comp = <RenderSectionForm section={section} submitUrl={cms.formSubmitUrl} client:visible/>;

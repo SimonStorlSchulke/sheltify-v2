@@ -70,8 +70,6 @@
     }
 
     .inline-icon {
-        vertical-align: baseline;
-        transform: translateY(-0.125em);
         margin-right: clamp(8px, 0.25em, 10px);
     }
 </style>

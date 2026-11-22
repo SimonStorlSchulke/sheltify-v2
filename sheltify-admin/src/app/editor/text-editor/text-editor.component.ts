@@ -18,6 +18,9 @@ const myLink: MarkSpec = {
     title: { default: null },
     class: { default: null },
     rel: { default: null },
+    // ID of the linked entity, e.g. the animal for animal links (class "animal-link"), which the
+    // article-renderer turns into the link to the animal's article. Only declared attrs are kept by ProseMirror.
+    dataId: { default: null },
   },
   inclusive: false,
   parseDOM: [
@@ -30,11 +33,13 @@ const myLink: MarkSpec = {
           class: dom.getAttribute("class"),
           rel: dom.getAttribute("rel"),
           title: dom.getAttribute("title"),
+          dataId: dom.getAttribute("dataId"),
         };
       },
     },
   ],
   toDOM: (mark: Mark, inline: boolean): DOMOutputSpec => {
+    // null attributes are not rendered
     return ["a", mark.attrs, 0];
   },
 };
@@ -142,10 +147,11 @@ export class TextEditorComponent implements OnInit {
 
 
     toggleMark(view.state.schema.marks['link'], {
-      href: '', // filled in by articleRenderer
+      href: '', // filled in by the article-renderer (resolveAnimalLinks)
       class: `animal-link`,
+      dataId: animal.ID,
       rel: "noopener noreferrer",
-      title: animal.ID,
+      title: animal.Name,
     })(view.state, view.dispatch);
 
 

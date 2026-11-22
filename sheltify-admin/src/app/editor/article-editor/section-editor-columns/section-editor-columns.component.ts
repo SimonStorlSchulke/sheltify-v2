@@ -8,12 +8,19 @@ import { AskSaveService } from '@app/services/ask-save.service';
 import { PickNewSectionComponent } from '@app/editor/article-editor/pick-new-section/pick-new-section.component';
 import { SectionEditorColumnSectionsComponent } from '@app/editor/article-editor/section-editor/section-editor-column-sections/section-editor-column-sections.component';
 import { CheckboxInputComponent } from '@app/forms/checkbox-input/checkbox-input.component';
-import { NumberInputComponent } from '@app/forms/number-input/number-input.component';
 import { AlertService } from '@app/services/alert.service';
 import { ModalService } from '@app/services/modal.service';
 import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
 
 const maxColumns = 4;
+const maxGrow = 12;
+
+/** Common column ratios offered in the toolbar, by number of columns. */
+const layoutPresets: Record<number, number[][]> = {
+  2: [[1, 1], [2, 1], [1, 2], [3, 1], [1, 3]],
+  3: [[1, 1, 1], [2, 1, 1], [1, 2, 1], [1, 1, 2]],
+  4: [[1, 1, 1, 1], [2, 1, 1, 2], [1, 2, 2, 1]],
+};
 
 interface EditedSection {
   section: Section;
@@ -26,7 +33,6 @@ interface EditedSection {
 @Component({
   selector: 'app-section-editor-columns',
   imports: [
-    NumberInputComponent,
     BtIconComponent,
     SectionEditorColumnSectionsComponent,
     CheckboxInputComponent,
@@ -59,6 +65,34 @@ export class SectionEditorColumnsComponent {
     inject(DestroyRef).onDestroy(() => this.dialogRef?.close());
   }
 
+  readonly maxGrow = maxGrow;
+
+  presets(): number[][] {
+    return layoutPresets[this.section().Content.Columns.length] ?? [];
+  }
+
+  isActivePreset(preset: number[]): boolean {
+    const grows = this.section().Content.Columns.map(col => col.Grow || 0);
+    // Same ratio, e.g. [2, 4] matches [1, 2]
+    return grows.length === preset.length && grows.every((grow, i) => grow * preset[0] === preset[i] * grows[0]);
+  }
+
+  applyPreset(preset: number[]) {
+    this.section().Content.Columns.forEach((col, i) => col.Grow = preset[i]);
+    this.askSaveService.markDirty();
+  }
+
+  changeGrow(iCol: number, delta: number) {
+    const column = this.section().Content.Columns[iCol];
+    column.Grow = Math.min(maxGrow, Math.max(1, Math.round(column.Grow || 1) + delta));
+    this.askSaveService.markDirty();
+  }
+
+  /** Grid columns matching the real column ratios, e.g. "minmax(0, 2fr) minmax(0, 5fr)". */
+  gridTemplate(): string {
+    return this.section().Content.Columns.map(col => `minmax(0, ${col.Grow || 1}fr)`).join(' ') || '1fr';
+  }
+
   widthPercent(grow: number): number {
     const total = this.section().Content.Columns.reduce((sum, col) => sum + (col.Grow || 0), 0);
     return total > 0 ? Math.round((grow || 0) / total * 100) : 0;
@@ -79,6 +113,7 @@ export class SectionEditorColumnsComponent {
       this.closeEditor();
     }
     this.section().Content.Columns.splice(iCol, 1);
+    this.askSaveService.markDirty();
   }
 
   addColumn() {
@@ -90,6 +125,7 @@ export class SectionEditorColumnsComponent {
       Sections: [],
       Grow: 1,
     });
+    this.askSaveService.markDirty();
   }
 
   /** Same principle as for top level sections: press "verschieben", release on a gap. */
@@ -136,6 +172,7 @@ export class SectionEditorColumnsComponent {
     const target = iColumn + direction;
     if (target < 0 || target >= columns.length) return;
     [columns[iColumn], columns[target]] = [columns[target], columns[iColumn]];
+    this.askSaveService.markDirty();
   }
 
   editSection(section: Section) {

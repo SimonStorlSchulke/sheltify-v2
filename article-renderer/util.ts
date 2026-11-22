@@ -18,6 +18,39 @@ export function getAnimalLink(animal: CmsAnimal, allAnimalsByArticle: Record<str
   return `/tierartikel/${names}`;
 }
 
+/**
+ * Sets the href of animal links (`<a class="animal-link" dataId="...">`, inserted
+ * via "Tierlink" in the text editor) to the article of the animal, see getAnimalLink.
+ * Links to unknown animals lose their href, so they render as plain text.
+ * Without allAnimalsByArticle (preview in CMS UI) the html is returned unchanged.
+ */
+export function resolveAnimalLinks(html: string, allAnimalsByArticle: Record<string, CmsAnimal[]> | undefined): string {
+  if (!allAnimalsByArticle || !html?.includes('animal-link')) return html;
+
+  const animalsById = new Map(Object.values(allAnimalsByArticle).flat().map(animal => [animal.ID, animal]));
+
+  return html.replace(/<a\b[^>]*>/g, tag => {
+    if (!/\bclass="[^"]*\banimal-link\b/.test(tag)) return tag;
+
+    // Older animal links stored the ID in the title attribute
+    const animalId = getAttribute(tag, 'dataId') ?? getAttribute(tag, 'title');
+    const animal = animalId ? animalsById.get(animalId) : undefined;
+    const link = animal ? getAnimalLink(animal, allAnimalsByArticle) : null;
+
+    const withoutHref = tag.replace(/\shref="[^"]*"/, '');
+    return link ? withoutHref.replace(/^<a\b/, `<a href="${escapeAttribute(link)}"`) : withoutHref;
+  });
+}
+
+/** Case-insensitive like HTML: the browser serializes "dataId" as "dataid". */
+function getAttribute(tag: string, name: string): string | undefined {
+  return tag.match(new RegExp(`\\s${name}="([^"]*)"`, 'i'))?.[1];
+}
+
+function escapeAttribute(value: string): string {
+  return value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+}
+
 export async function downloadFile(file: CmsImage) {
   // TODO replace with default download once deployed
   const response = await fetch(config.uploadsUrl + file.ID);

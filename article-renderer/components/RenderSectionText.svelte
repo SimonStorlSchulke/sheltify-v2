@@ -7,7 +7,12 @@
 
 <script lang="ts">
   import type { SectionText } from "sheltify-lib/article-types";
-  let { section }: { section: SectionText } = $props();
+  import type { CmsAnimal } from "sheltify-lib/cms-types";
+  import { resolveAnimalLinks } from "../util";
+
+  let { section, allAnimalsByArticle }: { section: SectionText, allAnimalsByArticle?: Record<string, CmsAnimal[]> } = $props();
+
+  const html = $derived(resolveAnimalLinks(section.Content.Html, allAnimalsByArticle));
 </script>
 
-{@html section.Content.Html}
+{@html html}

@@ -5,8 +5,12 @@
 @use "animal-card";
 @use "buttons";
 @use "colors";
-
+@use "cv";
 
 :root {
   --wrapper-width: min(1250px, 100dvw - var(--padding-article));
+}
+
+main {
+  background: #f6f6f6;
 }
