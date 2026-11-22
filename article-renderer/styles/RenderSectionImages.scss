@@ -144,33 +144,114 @@
 
   }
 
-  .carousel-button {
+  // Buttons explicitly reset typical site button styles (padding, borders, sizes).
+  .image-carousel .carousel-button {
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
     z-index: 2;
-
-    width: 42px;
-    height: 42px;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
     border: none;
     border-radius: 50%;
-
-    background: rgb(0 0 0 / 50%);
-    color: white;
-    font-size: 1.5rem;
+    background: rgb(255 255 255 / 85%);
+    color: #1d1d1f;
+    box-shadow: 0 2px 12px rgb(0 0 0 / 25%);
+    backdrop-filter: blur(6px);
     cursor: pointer;
+    opacity: 0;
+    transform: translateY(-50%) scale(0.9);
+    transition: opacity 0.2s, transform 0.2s, background 0.2s;
+
+    svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.25;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    &.previous { left: 12px; }
+    &.next { right: 12px; }
+
+    &:hover {
+      background: #fff;
+    }
+
+    &:focus-visible {
+      opacity: 1;
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+    }
   }
 
-  .carousel-button.previous {
-    left: 0.75rem;
+  .image-carousel:hover .carousel-button {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
   }
 
-  .carousel-button.next {
-    right: 0.75rem;
+  // touch devices have no hover - always show the buttons
+  @media (hover: none) {
+    .image-carousel .carousel-button {
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
+    }
   }
 
-  .carousel-button:hover {
-    background: rgb(0 0 0 / 70%);
+  .carousel-dots {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    z-index: 2;
+    display: flex;
+    gap: 6px;
+    padding: 6px 8px;
+    border-radius: 999px;
+    background: rgb(0 0 0 / 30%);
+    backdrop-filter: blur(6px);
+    transform: translateX(-50%);
+  }
+
+  .image-carousel .carousel-dot {
+    width: 8px;
+    height: 8px;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 55%);
+    box-shadow: none;
+    cursor: pointer;
+    transition: width 0.25s, background 0.25s;
+
+    &:hover {
+      background: rgb(255 255 255 / 85%);
+    }
+
+    &.active {
+      width: 22px;
+      background: #fff;
+    }
+  }
+
+  .carousel-counter {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    z-index: 2;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgb(0 0 0 / 45%);
+    color: #fff;
+    font-size: 0.8rem;
+    font-variant-numeric: tabular-nums;
   }
 
 

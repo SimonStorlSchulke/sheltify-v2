@@ -11,6 +11,9 @@
   import { getImageSrc } from '../util';
   import { onMount } from "svelte";
 
+  /** With more images the dots get too long - a counter is shown instead. */
+  const maxDots = 12;
+
   let {section}: { section: SectionImages } = $props();
 
   let lightBox: LightBox;
@@ -25,7 +28,7 @@
     if (layout() !== "gallery") return;
 
     intervalId = setInterval(() => {
-      carouselNext();
+      showSlide(shownId + 1, false);
     }, 5000);
 
     return () => clearInterval(intervalId);
@@ -33,72 +36,27 @@
 
   let shownId: number = $state(0);
 
-  let description = $derived(() => {
-    const counter = `${(shownId ?? 0) + 1} / ${images.length}`;
-    if (shownId === undefined || images()[shownId].Description === '') return counter;
-    const description = images()[shownId].Description;
-    if (description.length <= 150) return `${counter}<br>${description}`;
-    return `${counter}<br>${images()[shownId].Description.substring(0, 150)}...`;
-  })
-
-  function carouselNext(e?: MouseEvent, cancelInterval = true) {
+  /** Shows slide `index` (wraps around). Manual navigation stops the autoplay. */
+  function showSlide(index: number, cancelInterval = true, e?: Event) {
     e?.stopPropagation();
     if (cancelInterval) {
       clearInterval(intervalId);
     }
-    shownId = (shownId + 1) % images().length;
-  }
-
-  function carouselPrevious(e?: MouseEvent, cancelInterval = true) {
-    e?.stopPropagation();
-    if (cancelInterval) {
-      clearInterval(intervalId);
-    }
-    shownId = (shownId - 1 + images().length) % images().length;
+    const count = images().length;
+    shownId = (index + count) % count;
   }
 
   function openLightBox(id: number) {
-    console.log("EXX")
     if(layout() == "single" && section.Content.Link) {
       return;
     }
     lightBox.open(id);
-  }
-
-  function onKeyDown(e: KeyboardEvent) {
-    if (shownId === undefined) return;
-    if (e.key == 'a' || e.key === 'ArrowLeft') previous();
-    if (e.key == 'd' || e.key === 'ArrowRight') next();
-  }
-
-  function next(e?: MouseEvent) {
-    e?.stopPropagation();
-    if (shownId! >= images().length - 1) {
-      shownId = 0;
-      return;
-    }
-    shownId! += 1;
-  }
-
-  function previous(e?: MouseEvent) {
-    e?.stopPropagation();
-    if (shownId! <= 0) {
-      shownId = images().length - 1;
-      return;
-    }
-    shownId! -= 1;
-    console.log(shownId)
   }
 </script>
 
 
 {#if layout() === "gallery"}
   <div class="image-carousel">
-    <button
-      class="carousel-button previous"
-      onclick={carouselPrevious}>
-      ‹
-    </button>
     <div class="viewport">
       <div
         class="track"
@@ -113,14 +71,34 @@
         {/each}
       </div>
     </div>
-    <button
-      class="carousel-button next"
-      onclick={carouselNext}>
-      ›
-    </button>
+
+    {#if images().length > 1}
+      <button class="carousel-button previous" onclick={(e) => showSlide(shownId - 1, true, e)} aria-label="Vorheriges Bild">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+      </button>
+      <button class="carousel-button next" onclick={(e) => showSlide(shownId + 1, true, e)} aria-label="Nächstes Bild">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+
+      {#if images().length <= maxDots}
+        <div class="carousel-dots">
+          {#each images() as image, index}
+            <button
+              class="carousel-dot"
+              class:active={index === shownId}
+              onclick={(e) => showSlide(index, true, e)}
+              aria-label={`Bild ${index + 1}`}
+              aria-current={index === shownId}
+            ></button>
+          {/each}
+        </div>
+      {:else}
+        <span class="carousel-counter">{shownId + 1} / {images().length}</span>
+      {/if}
+    {/if}
   </div>
 {:else if layout() === "horizontal" || layout() === "vertical"}
-  <div class={`image-grid count-${images.length} ${layout()} ${size()}`}>
+  <div class={`image-grid count-${images().length} ${layout()} ${size()}`}>
     {#each images() as image, index}
       <img
         role="none"
@@ -131,7 +109,7 @@
     {/each}
   </div>
 {:else}
-  <div class={`image-single count-${images.length} ${layout()} ${size()}`}>
+  <div class={`image-single count-${images().length} ${layout()} ${size()}`}>
     {#if section.Content.Link}
       <a href={section.Content.Link} rel="noopener noreferrer">
         <img
@@ -151,5 +129,3 @@
 {/if}
 
 <LightBox images={images()} bind:this={lightBox} />
-
-<svelte:window on:keydown={onKeyDown}/>
