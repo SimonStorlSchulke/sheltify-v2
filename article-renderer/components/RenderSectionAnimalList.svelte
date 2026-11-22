@@ -14,7 +14,7 @@
 
 </script>
 
-<div class="sui flex-x gap-2 wrap">
+<div class="animal-list sui flex-x gap-2 wrap">
   {#each section.TempFoundAnimals as animal }
     <a href={getAnimalLink(animal, allAnimalsByArticle)}>
       <AnimalCard animal={animal} />

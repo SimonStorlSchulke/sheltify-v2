@@ -21,3 +21,31 @@
     font-size: 1.2rem;
   }
 }
+
+@media (max-width: 600px) {
+  .themable.animal-card {
+    width: 100%;
+    height: auto;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 150px;
+    }
+
+    .name-row {
+      padding-bottom: 0.1rem;
+      padding-top: 0.1rem;
+
+      span {
+        padding: 2px;
+      }
+    }
+
+    .bubbles {
+      top: 10px;
+      bottom: auto;
+      left: 10px;
+    }
+  }
+}

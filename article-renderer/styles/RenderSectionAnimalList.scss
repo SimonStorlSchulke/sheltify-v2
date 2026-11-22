@@ -1,3 +1,14 @@
-.section-animal-list {
+@media (max-width: 600px) {
+  .section-animal-list .animal-list {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 12px;
+    width: 100%;
 
+    > a {
+      display: block;
+      width: 100%;
+    }
+  }
 }
