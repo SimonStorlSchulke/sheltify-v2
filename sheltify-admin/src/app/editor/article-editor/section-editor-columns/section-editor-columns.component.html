@@ -5,28 +5,6 @@
 <div class="columns-editor" [class.dragMode]="moved">
   <div class="toolbar">
     <app-checkbox-input idName="fulLWidth" label="Ganze Breite" explanation="Nutzt die ganze Breite des Bildschirms und lässt keinen Rand an den Seiten" [(twoWayModel)]="section().Content.FullWidth"/>
-
-    @if (presets().length > 1) {
-      <div class="layout-control">
-        <span class="toolbar-label">Aufteilung</span>
-        <div class="presets">
-          @for (preset of presets(); track preset.join(':')) {
-            <button
-              class="preset unstyled"
-              [class.active]="isActivePreset(preset)"
-              [title]="'Aufteilung ' + preset.join(' : ')"
-              [attr.aria-label]="'Aufteilung ' + preset.join(' : ')"
-              (click)="applyPreset(preset)"
-            >
-              @for (ratio of preset; track $index) {
-                <span [style.flex-grow]="ratio"></span>
-              }
-            </button>
-          }
-        </div>
-      </div>
-    }
-
     <button class="small secondary add-column" [disabled]="columns.length >= maxColumns" (click)="addColumn()" title="Spalte hinzufügen">
       <app-bt-icon name="Plus" size="s"/> Spalte <span class="count">{{ columns.length }}/{{ maxColumns }}</span>
     </button>

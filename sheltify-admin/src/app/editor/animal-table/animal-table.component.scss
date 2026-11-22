@@ -1,12 +1,55 @@
 @use "colors" as *;
 
+.table-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.table-search {
+  width: min(280px, 100%);
+}
+
+.column-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(560px, calc(100vw - 80px));
+
+  h2 {
+    margin: 0;
+  }
+
+  .column-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px 24px;
+  }
+
+  .column-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  .column-picker-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 8px;
+  }
+}
+
 .table-wrapper {
   overflow: auto;
-  max-height: calc(100dvh - 150px);
+  max-height: calc(100dvh - 170px);
 }
 
 table {
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   box-shadow: 4px 4px 8px $neutral200;
 }
 
@@ -14,20 +57,86 @@ th, td {
   text-align: left;
   background: #fff;
   padding: 4px 8px;
-  border: 1px solid $neutral400;
-
-
+  border-right: 1px solid $neutral400;
+  border-bottom: 1px solid $neutral400;
+  vertical-align: middle;
 }
 
-tr {
-  &:nth-child(even) {
-    td {
-      background: #f8f8f8;
-    }
+th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: $neutral100;
+  white-space: nowrap;
+  border-top: 1px solid $neutral400;
+}
+
+.name-column {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  border-left: 1px solid $neutral400;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+th.name-column {
+  z-index: 3;
+}
+
+tr:nth-child(even) td {
+  background: #f8f8f8;
+}
+
+.sort-button, .long-text {
+  border: none !important;
+  background: none !important;
+}
+
+.sort-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+
+  &:hover {
+    color: $primary;
   }
 }
 
-.animal-description {
-  max-width: 200px;
+.sort-indicator {
+  min-width: 1em;
+  font-size: 0.8em;
+  color: $primary;
+}
+
+.long-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-width: 240px;
+  min-width: 140px;
+  padding: 0;
+  text-align: left;
   cursor: pointer;
+
+  &:hover {
+    color: $primary;
+  }
+}
+
+.cell-race, .cell-subTitle, .cell-homeFoundText, .cell-where, .cell-patrons {
+  min-width: 160px;
+}
+
+.cell-weight, .cell-shoulderHeight, .cell-priority {
+  min-width: 90px;
+}
+
+.cell-homeFoundStatus {
+  min-width: 290px;
 }

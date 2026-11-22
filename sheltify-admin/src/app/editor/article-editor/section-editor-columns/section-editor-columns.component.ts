@@ -15,13 +15,6 @@ import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
 const maxColumns = 4;
 const maxGrow = 12;
 
-/** Common column ratios offered in the toolbar, by number of columns. */
-const layoutPresets: Record<number, number[][]> = {
-  2: [[1, 1], [2, 1], [1, 2], [3, 1], [1, 3]],
-  3: [[1, 1, 1], [2, 1, 1], [1, 2, 1], [1, 1, 2]],
-  4: [[1, 1, 1, 1], [2, 1, 1, 2], [1, 2, 2, 1]],
-};
-
 interface EditedSection {
   section: Section;
   /** State before editing started, restored on "Verwerfen". */
@@ -66,21 +59,6 @@ export class SectionEditorColumnsComponent {
   }
 
   readonly maxGrow = maxGrow;
-
-  presets(): number[][] {
-    return layoutPresets[this.section().Content.Columns.length] ?? [];
-  }
-
-  isActivePreset(preset: number[]): boolean {
-    const grows = this.section().Content.Columns.map(col => col.Grow || 0);
-    // Same ratio, e.g. [2, 4] matches [1, 2]
-    return grows.length === preset.length && grows.every((grow, i) => grow * preset[0] === preset[i] * grows[0]);
-  }
-
-  applyPreset(preset: number[]) {
-    this.section().Content.Columns.forEach((col, i) => col.Grow = preset[i]);
-    this.askSaveService.markDirty();
-  }
 
   changeGrow(iCol: number, delta: number) {
     const column = this.section().Content.Columns[iCol];

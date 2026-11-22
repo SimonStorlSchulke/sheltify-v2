@@ -3,65 +3,175 @@
     <h1>Tiertabelle</h1>
     <button class="primary" (click)="saveEditedAnimals()" [disabled]="!askSaveService.dirty()">Speichern</button>
   </div>
-  <button (click)="newAnimal()" class="primary sui flex-x gap-2" style="width: 170px"><app-bt-icon name="Plus"/>Neues Tier</button>
+
+  <div class="table-toolbar">
+    <button (click)="newAnimal()" class="primary sui flex-x gap-2"><app-bt-icon name="Plus"/>Neues Tier</button>
+
+    <button class="secondary" (click)="openColumnPicker()">Spalten ({{ visibleColumns().length }}/{{ availableColumns().length }})</button>
+
+    <!-- plain input instead of app-text-input: searching must not mark the page as unsaved -->
+    <input
+      class="table-search"
+      type="search"
+      placeholder="Suche"
+      aria-label="Tiere nach Name suchen"
+      [value]="search()"
+      (input)="search.set($any($event.target).value)"
+    >
+  </div>
+
+  <!-- Opened as modal, see openColumnPicker() -->
+  <ng-template #columnPicker>
+    <div class="column-picker">
+      <h2>Spalten</h2>
+      <div class="column-options">
+        @for (column of availableColumns(); track column.key) {
+          <label class="column-option">
+            <input type="checkbox" [checked]="isColumnVisible(column.key)" (change)="toggleColumn(column.key, $any($event.target).checked)">
+            {{ column.label }}
+          </label>
+        }
+      </div>
+      <div class="column-picker-actions">
+        <button (click)="resetColumns()">Standard wiederherstellen</button>
+        <button class="primary" (click)="closeColumnPicker()">Fertig</button>
+      </div>
+    </div>
+  </ng-template>
+
   <div class="table-wrapper">
     <table>
       <thead>
-      <th>Name</th>
-      <th>Bild</th>
-      <th>Geschlecht</th>
-      <th>Schulterhöhe (cm)</th>
-      <th>Beschreibung</th>
-      <th>Vermittlungsstatus</th>
-      <th>Kastriert</th>
-      <th>Status</th>
-      <th></th>
+        <tr>
+          <th class="name-column">
+            <button class="sort-button unstyled" (click)="toggleSort('name')" title="Nach Name sortieren">
+              Name <span class="sort-indicator">{{ sortIndicator('name') }}</span>
+            </button>
+          </th>
+          @for (column of visibleColumns(); track column.key) {
+            <th>
+              @if (isSortable(column.key)) {
+                <button class="sort-button unstyled" (click)="toggleSort(column.key)" [title]="'Nach ' + column.label + ' sortieren'">
+                  {{ column.label }} <span class="sort-indicator">{{ sortIndicator(column.key) }}</span>
+                </button>
+              } @else {
+                {{ column.label }}
+              }
+            </th>
+          }
+          <th></th>
+        </tr>
       </thead>
 
       <tbody>
         @for (animal of animalList(); track animal.ID) {
           <tr>
-            <td>{{ animal.Name }}</td>
-            <td><app-image-picker-single [editedId]="animal.ID" [idName]="animal.Name + '-bild'" label="" [(twoWayModel)]="animal.Portrait" [small]="true" [cropped]="true"/></td>
-            <td>
-              <app-radio-buttons-input
-                [editedId]="animal.ID"
-                [idName]="animal.Name + '-gender'" label=""
-                [(twoWayModel)]="animal.Gender"
-                [options]="['male', 'female']"
-                [optionTranslations]="['M', 'W']"
-              />
-            </td>
-            <td><app-number-input [editedId]="animal.ID" [idName]="animal.Name + '-shoulderheight'" label="" [(twoWayModel)]="animal.ShoulderHeightCm"/></td>
-            <td class="animal-description" (click)="editDescription(animal)"><span>{{animal.Description.slice(0, 120)}} ...</span></td>
-            <td>
-              <app-radio-buttons-input
-                [editedId]="animal.ID"
-                [idName]="animal.Name + '-vermittlungsstatus'" label=""
-                [(twoWayModel)]="animal.HomeFoundStatus"
-                [options]="['no', 'reserved', 'yes']"
-                [optionTranslations]="['unvermittelt', 'reserviert', 'Zuhause gefunden']"
-              />
-            </td>
-            <td>
-              <app-checkbox-input [editedId]="animal.ID" [idName]="animal.Name + '-kastriert'" label="" [(nullBoolModel)]="animal.Castrated"/>
-            </td>
-            <td>
-              <div class="sui flex-x gap-1">
-                @for(animalStatus of animalStati(); track $index) {
-                  @let isStatisActive = animal.Status.split(',').includes(animalStatus);
-                  <button
-                    (click)="setStatus(animal, animalStatus, !isStatisActive)"
-                    [class]="isStatisActive ? 'primary' : 'white'">
-                    {{ animalStatus }}
-                  </button>
+            <td class="name-column">{{ animal.Name }}</td>
+
+            @for (column of visibleColumns(); track column.key) {
+              <td [class]="'cell-' + column.key">
+                @switch (column.key) {
+                  @case ('portrait') {
+                    <app-image-picker-single [editedId]="animal.ID" [idName]="animal.ID + '-bild'" label="" [(twoWayModel)]="animal.Portrait" [small]="true" [cropped]="true"/>
+                  }
+                  @case ('animalKind') {
+                    <app-select-input [editedId]="animal.ID" [idName]="animal.ID + '-kind'" label="" [(twoWayModel)]="animal.AnimalKind" [options]="animalKinds()"/>
+                  }
+                  @case ('race') {
+                    <app-text-input [editedId]="animal.ID" [idName]="animal.ID + '-race'" label="" [(twoWayModel)]="animal.Race"/>
+                  }
+                  @case ('subTitle') {
+                    <app-text-input [editedId]="animal.ID" [idName]="animal.ID + '-subtitle'" label="" [(twoWayModel)]="animal.SubTitle"/>
+                  }
+                  @case ('gender') {
+                    <app-radio-buttons-input
+                      [editedId]="animal.ID"
+                      [idName]="animal.ID + '-gender'" label=""
+                      [(twoWayModel)]="animal.Gender"
+                      [options]="['male', 'female']"
+                      [optionTranslations]="['M', 'W']"
+                    />
+                  }
+                  @case ('birthday') {
+                    <app-date-picker [editedId]="animal.ID" [idName]="animal.ID + '-birthday'" label="" mode="SqlNullTime" [(twoWayModelSqlNullTime)]="animal.Birthday"/>
+                  }
+                  @case ('weight') {
+                    <app-number-input [editedId]="animal.ID" [idName]="animal.ID + '-weight'" label="" [(twoWayModel)]="animal.WeightKg"/>
+                  }
+                  @case ('shoulderHeight') {
+                    <app-number-input [editedId]="animal.ID" [idName]="animal.ID + '-shoulderheight'" label="" [(twoWayModel)]="animal.ShoulderHeightCm"/>
+                  }
+                  @case ('castrated') {
+                    <app-checkbox-input [editedId]="animal.ID" [idName]="animal.ID + '-kastriert'" label="" [(nullBoolModel)]="animal.Castrated"/>
+                  }
+                  @case ('freeRoamer') {
+                    @if (animal.AnimalKind == 'Katze') {
+                      <app-checkbox-input [editedId]="animal.ID" [idName]="animal.ID + '-freeroamer'" label="" [(nullBoolModel)]="animal.FreeRoamer"/>
+                    } @else {
+                      <span class="text-meta">–</span>
+                    }
+                  }
+                  @case ('description') {
+                    <button class="long-text unstyled" (click)="editLongText(animal, 'Description', 'Beschreibung eingeben')" title="Bearbeiten">{{ animal.Description || '–' }}</button>
+                  }
+                  @case ('health') {
+                    <button class="long-text unstyled" (click)="editLongText(animal, 'Health', 'Gesundheit eingeben')" title="Bearbeiten">{{ animal.Health || '–' }}</button>
+                  }
+                  @case ('internalNote') {
+                    <button class="long-text unstyled" (click)="editLongText(animal, 'InternalNote', 'Kommentar (intern) eingeben')" title="Bearbeiten">{{ animal.InternalNote || '–' }}</button>
+                  }
+                  @case ('homeFoundStatus') {
+                    <app-radio-buttons-input
+                      [editedId]="animal.ID"
+                      [idName]="animal.ID + '-vermittlungsstatus'" label=""
+                      [(twoWayModel)]="animal.HomeFoundStatus"
+                      (twoWayModelChange)="onHomeFoundStatusChange(animal, $event)"
+                      [options]="['no', 'reserved', 'yes']"
+                      [optionTranslations]="['unvermittelt', 'reserviert', 'Zuhause gefunden']"
+                    />
+                  }
+                  @case ('homeFoundAt') {
+                    <app-date-picker [editedId]="animal.ID" [idName]="animal.ID + '-homefoundat'" label="" mode="SqlNullTime" [(twoWayModelSqlNullTime)]="animal.HomeFoundAt"/>
+                  }
+                  @case ('homeFoundText') {
+                    <app-text-input [editedId]="animal.ID" [idName]="animal.ID + '-homefoundtext'" label="" [placeholder]="animal.Name" [(twoWayModel)]="animal.HomeFoundText"/>
+                  }
+                  @case ('status') {
+                    <div class="sui flex-x gap-1">
+                      @for (animalStatus of animalStati(); track $index) {
+                        @let isStatusActive = animal.Status.split(',').includes(animalStatus);
+                        <button
+                          class="small"
+                          (click)="setStatus(animal, animalStatus, !isStatusActive)"
+                          [class]="isStatusActive ? 'small primary' : 'small white'">
+                          {{ animalStatus }}
+                        </button>
+                      }
+                    </div>
+                  }
+                  @case ('where') {
+                    <app-text-input [editedId]="animal.ID" [idName]="animal.ID + '-where'" label="" [(twoWayModel)]="animal.Where"/>
+                  }
+                  @case ('noAdoption') {
+                    <app-checkbox-input [editedId]="animal.ID" [idName]="animal.ID + '-noadoption'" label="" [(twoWayModel)]="animal.NoAdoption"/>
+                  }
+                  @case ('patronsNeeded') {
+                    <app-checkbox-input [editedId]="animal.ID" [idName]="animal.ID + '-patronsneeded'" label="" [(twoWayModel)]="animal.PatronsNeeded"/>
+                  }
+                  @case ('patrons') {
+                    <app-text-input [editedId]="animal.ID" [idName]="animal.ID + '-patrons'" label="" [(twoWayModel)]="animal.Patrons"/>
+                  }
+                  @case ('priority') {
+                    <app-number-input [editedId]="animal.ID" [idName]="animal.ID + '-priority'" label="" [(twoWayModel)]="animal.Priority"/>
+                  }
                 }
-              </div>
-            </td>
+              </td>
+            }
+
             <td>
               <div class="sui flex-y gap-1">
                 <a [routerLink]="'/tiere/' + animal.ID" class="link"><button class="secondary small">Artikel bearbeiten</button></a>
-                <a class="link"><button class="secondary small">Löschen</button></a>
+                <button class="secondary small" (click)="deleteAnimal(animal)">Löschen</button>
               </div>
             </td>
           </tr>

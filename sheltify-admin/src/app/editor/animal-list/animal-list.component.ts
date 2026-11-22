@@ -5,7 +5,6 @@ import { ActivatedRoute, ActivatedRouteSnapshot, ResolveFn, Router } from '@angu
 import { createNewAnimal } from '@app/cms-types/cms-type.factory';
 import { RadioButtonsInputComponent } from '@app/forms/radio-buttons-input/radio-buttons-input.component';
 import { TextInputModalComponent } from '@app/forms/text-input-modal/text-input-modal.component';
-import { TextInputComponent } from '@app/forms/text-input/text-input.component';
 import { LeftSidebarLayoutComponent } from '@app/layout/left-sidebar-layout/left-sidebar-layout.component';
 import { AnimalService } from '@app/services/animal.service';
 import { ModalService } from '@app/services/modal.service';
@@ -29,7 +28,6 @@ export const animalResolver: ResolveFn<CmsAnimal> = (route: ActivatedRouteSnapsh
     DatePipe,
     AnimalEditorComponent,
     CmsImageDirective,
-    TextInputComponent,
     BtIconComponent,
     LeftSidebarLayoutComponent,
     RadioButtonsInputComponent,

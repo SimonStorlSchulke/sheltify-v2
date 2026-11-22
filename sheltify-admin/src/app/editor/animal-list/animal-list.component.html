@@ -11,7 +11,14 @@
       <app-radio-buttons-input idName="selectedAnimalKind" [(twoWayModel)]="selectedAnimalKind" label="" [options]="animalKinds()" />
     }
 
-    <app-text-input idName="filter" placeholder="Suche" label="" [(twoWayModel)]="search"/>
+    <input
+      class="animal-search"
+      type="search"
+      placeholder="Suche"
+      aria-label="Tiere nach Name suchen"
+      [value]="search()"
+      (input)="search.set($any($event.target).value)"
+    >
 
     <div class="animals list sui flex-x ai-start wrap gap-4">
       <table>
