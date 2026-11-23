@@ -72,9 +72,13 @@ const {section, allAnimalsByArticle} = Astro.props;
     flex: 0 0 20px;
     gap: var(--section-gap-x);
     min-width: 300px;
+    flex-wrap: wrap;
   }
 
   .column {
     gap: var(--section-gap-y);
+    // Spalten umbrechen, sobald sie schmaler als 280px würden (mobil untereinander)
+    min-width: min(280px, 100%);
+    max-width: 100%;
   }
 </style>
