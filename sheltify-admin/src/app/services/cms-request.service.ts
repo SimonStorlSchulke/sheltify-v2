@@ -257,6 +257,14 @@ export class CmsRequestService {
     return lastValueFrom(this.patch<CmsImage>(`media`, image));
   }
 
+  async bulkUpdateMediaTags(mediaIds: string[], addTagIds: string[], removeTagIds: string[]): Promise<CmsImage[]> {
+    return lastValueFrom(this.patch<CmsImage[]>(`media/tags`, {
+      MediaIDs: mediaIds,
+      AddTagIDs: addTagIds,
+      RemoveTagIDs: removeTagIds,
+    }));
+  }
+
   triggerBuild() {
     return this.httpClient.get(CmsRequestService.adminApiUrl + 'trigger-build', {
       timeout: 100000,

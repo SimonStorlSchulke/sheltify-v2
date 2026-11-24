@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"mime/multipart"
 	"net/http"
@@ -403,6 +404,38 @@ func SaveMedia(w http.ResponseWriter, r *http.Request) {
 		logger.Saved(r, media.ID)
 		okResponse(w, media)
 	}
+}
+
+type bulkMediaTagsRequest struct {
+	MediaIDs     []string
+	AddTagIDs    []string
+	RemoveTagIDs []string
+}
+
+func BulkUpdateMediaTags(w http.ResponseWriter, r *http.Request) {
+	user := services.UserFromRequest(r)
+	if user == nil || user.TenantID == "" {
+		forbiddenResponse(w, r, "users tenant could not be determined")
+		return
+	}
+
+	var req bulkMediaTagsRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		badRequestResponse(w, r, "Invalid request payload: "+err.Error())
+		return
+	}
+	if len(req.MediaIDs) == 0 || len(req.AddTagIDs)+len(req.RemoveTagIDs) == 0 {
+		badRequestResponse(w, r, "Keine Medien oder Tags angegeben")
+		return
+	}
+
+	media, err := repository.BulkUpdateMediaTags(req.MediaIDs, req.AddTagIDs, req.RemoveTagIDs, user.TenantID)
+	if err != nil {
+		internalServerErrorResponse(w, r, "Could not update media tags: "+err.Error())
+		return
+	}
+	logger.Saved(r, strings.Join(req.MediaIDs, ","))
+	okResponse(w, media)
 }
 
 // returns media files that are not hard-linked to any database entry. This does NOT yet mean they can safely be deleted,

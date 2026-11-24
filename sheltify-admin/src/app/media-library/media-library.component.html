@@ -130,6 +130,32 @@
         <app-image-editor class="card" [image]="image!" (editedImage)="addEditedImage($event)"/>
       } @else if (selection.selected!.length > 0) {
         <h2>{{ selectedImageIds().size }} Elemente</h2>
+        <div class="bulk-tags sui flex-y gap-1 card">
+          <span class="sui flex-x gap-2">
+            <b>Tags zuweisen</b>
+            <a class="link" (click)="openTagsManager()">Tags verwalten</a>
+          </span>
+          <ng-select
+            data-testid="select-bulk-tags"
+            [notFoundText]="'keine'"
+            [ngModel]="bulkTagIds()"
+            (ngModelChange)="bulkTagIds.set($event)"
+            [multiple]="true"
+            placeholder="...Tags auswählen"
+          >
+            @for (tag of tagsService.availableTags(); track tag.ID) {
+              <ng-option [value]="tag.ID">
+                <app-tag [tag]="tag"/>
+              </ng-option>
+            }
+          </ng-select>
+          <div class="sui flex-x gap-1">
+            <button class="primary small" data-testid="btn-bulk-add-tags" [disabled]="bulkTagIds().length === 0"
+                    (click)="applyTagsToSelection('add')">Allen hinzufügen</button>
+            <button class="secondary small" data-testid="btn-bulk-remove-tags" [disabled]="bulkTagIds().length === 0"
+                    (click)="applyTagsToSelection('remove')">Von allen entfernen</button>
+          </div>
+        </div>
       }
     </div>
   }

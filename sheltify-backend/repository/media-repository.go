@@ -3,6 +3,9 @@ package repository
 import (
 	"fmt"
 	"sheltify-backend/shtypes"
+
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 func CreateMediaFileMeta(media *shtypes.MediaFile) error {
@@ -141,6 +144,65 @@ func SaveMedia(media *shtypes.MediaFile) error {
 		return err
 	}
 	return nil
+}
+
+// Adds and removes tags on multiple media files of a tenant in a single transaction and returns the updated media files
+func BulkUpdateMediaTags(mediaIds []string, addTagIds []string, removeTagIds []string, tenant string) ([]shtypes.MediaFile, error) {
+	var mediaFiles []shtypes.MediaFile
+
+	err := db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Where("id IN ? AND tenant_id = ?", mediaIds, tenant).Find(&mediaFiles).Error; err != nil {
+			return err
+		}
+		if len(mediaFiles) != len(mediaIds) {
+			return fmt.Errorf("one or more media files not found")
+		}
+
+		var addTags, removeTags []shtypes.Tag
+		if len(addTagIds) > 0 {
+			if err := tx.Where("id IN ? AND tenant_id = ?", addTagIds, tenant).Find(&addTags).Error; err != nil {
+				return err
+			}
+			if len(addTags) != len(addTagIds) {
+				return fmt.Errorf("one or more tags not found")
+			}
+		}
+		if len(removeTagIds) > 0 {
+			if err := tx.Where("id IN ? AND tenant_id = ?", removeTagIds, tenant).Find(&removeTags).Error; err != nil {
+				return err
+			}
+		}
+
+		if len(addTags) > 0 {
+			rows := make([]map[string]any, 0, len(mediaFiles)*len(addTags))
+			for _, m := range mediaFiles {
+				for _, t := range addTags {
+					rows = append(rows, map[string]any{"media_file_id": m.ID, "tag_id": t.ID})
+				}
+			}
+			if err := tx.Table("media_file_tags").Clauses(clause.OnConflict{DoNothing: true}).Create(&rows).Error; err != nil {
+				return err
+			}
+		}
+		if len(removeTags) > 0 {
+			ids := make([]string, len(removeTags))
+			for i, t := range removeTags {
+				ids[i] = t.ID
+			}
+			if err := tx.Exec("DELETE FROM media_file_tags WHERE media_file_id IN ? AND tag_id IN ?", mediaIds, ids).Error; err != nil {
+				return err
+			}
+		}
+
+		return tx.Preload("MediaTags").Preload("TaggedAnimals").
+			Where("id IN ? AND tenant_id = ?", mediaIds, tenant).
+			Find(&mediaFiles).Error
+	})
+
+	if err != nil {
+		return nil, err
+	}
+	return mediaFiles, nil
 }
 
 // returns media files that are not hard-linked to any database entry. This does NOT yet mean they can safely be deleted,

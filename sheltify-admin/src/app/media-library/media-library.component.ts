@@ -18,6 +18,7 @@ import { TagsManagerComponent } from '@app/editor/tags-manager/tags-manager.comp
 import { TagComponent } from '@app/ui/tag/tag.component';
 import pLimit from 'p-limit';
 import { lastValueFrom, map, Observable } from 'rxjs';
+import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { CmsAnimal, CmsImage } from 'sheltify-lib/cms-types';
 
 @Pipe({name: "mediaSelection", pure: true})
@@ -41,6 +42,8 @@ class MediaSelectionPipe implements PipeTransform {
     FileDropDirective,
     ImageEditorComponent,
     TextInputComponent,
+    NgSelectComponent,
+    NgOptionComponent,
   ],
   templateUrl: './media-library.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
@@ -322,6 +325,30 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
 
   addEditedImage(image: CmsImage) {
     this.editedImages.update(map => map.set(image.ID, image));
+  }
+
+  /** Tags picked in the sidebar to add to / remove from all selected images */
+  bulkTagIds = signal<string[]>([]);
+
+  async applyTagsToSelection(mode: 'add' | 'remove') {
+    const tagIds = this.bulkTagIds();
+    const mediaIds = Array.from(this.selectedImageIds());
+    if (tagIds.length === 0 || mediaIds.length === 0) return;
+
+    const loaderText = 'Tags werden gespeichert...';
+    this.loaderService.setLoading(loaderText);
+    try {
+      const saved = await this.cmsRequestSv.bulkUpdateMediaTags(
+        mediaIds,
+        mode === 'add' ? tagIds : [],
+        mode === 'remove' ? tagIds : [],
+      );
+      saved?.forEach(image => this.addEditedImage(image));
+      this.bulkTagIds.set([]);
+    } finally {
+      this.loaderService.unsetLoading(loaderText);
+      this.refreshImages.update(i => i + 1);
+    }
   }
 
   pickImages(selectedIds: Set<string>, images: CmsImage[]) {

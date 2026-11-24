@@ -82,6 +82,7 @@ func adminRoutes(r *chi.Mux) {
 	r.Post("/files", handlers.UploadFiles)
 	r.Post("/media", handlers.SaveMedia)
 	r.Patch("/media", handlers.SaveMedia)
+	r.Patch("/media/tags", handlers.BulkUpdateMediaTags)
 	r.Get("/media/unlinked", handlers.FindUnlinkedMediaFiles)
 	r.Delete("/media", handlers.DeleteMedia)
 
