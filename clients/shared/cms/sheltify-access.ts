@@ -201,6 +201,7 @@ export class SheltifyAccess {
       headers: this.headers,
     });
     if (!res.ok) {
+      console.trace(`Failed to fetch ${path}: ${res.status} ${res.statusText}`)
       throw new Error(`Failed to fetch ${path}: ${res.status} ${res.statusText}`);
     }
     const data = await res.json();
