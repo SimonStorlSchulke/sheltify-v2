@@ -118,6 +118,12 @@
     <br>
 
     @if (animal.ArticleID) {
+      @if (otherAnimalsInArticle().length > 0) {
+        <div class="sui flex-x ai-center gap-2 wrap mt-2">
+          <span>Artikel geteilt mit {{ otherAnimalNamesInArticle() }}</span>
+          <button data-testid="btn-unlink-article" (click)="unlinkArticle()" class="secondary small">Vom Artikel trennen</button>
+        </div>
+      }
       <app-article-editor [showUpdateNote]="true" [articleId]="animal.ArticleID ?? ''" [saveArticle]="saveArticle$" class="sui flex-y grow-1 mt-2"/>
     } @else {
       <div class="sui flex-x gap-2">

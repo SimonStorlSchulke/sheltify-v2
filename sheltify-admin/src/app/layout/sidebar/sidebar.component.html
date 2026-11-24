@@ -21,7 +21,7 @@
   <div class="sui flex-y gap-2 buttons">
     <app-user-menu/>
 
-    <button class="{{ tenantConfigurationService.needsRebuild() ? 'primary' : 'secondary' }} sui mb-2 only-wide" (click)="triggerBuild()">
+    <button [disabled]="building()" class="{{ tenantConfigurationService.needsRebuild() ? 'primary' : 'secondary' }} sui mb-2 only-wide" (click)="triggerBuild()">
       <span>
         @if (building()) {
           wird gebaut...

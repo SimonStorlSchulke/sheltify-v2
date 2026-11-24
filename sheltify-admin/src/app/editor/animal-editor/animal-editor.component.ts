@@ -1,11 +1,11 @@
-import { Component, input, inject, output, ChangeDetectionStrategy, OnInit, effect, DestroyRef } from '@angular/core';
+import { Component, input, inject, output, ChangeDetectionStrategy, OnInit, effect, DestroyRef, computed } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { Log } from '@app/services/log';
 import { firstValueFrom, lastValueFrom, Subject } from 'rxjs';
 import { CmsArticle } from 'sheltify-lib/article-types';
 import { createEmptyArticle } from '@app/cms-types/cms-type.factory';
-import { CmsAnimal, SqlNullTimeNow } from 'sheltify-lib/cms-types';
+import { CmsAnimal, SqlNullTimeNow, SqlNullTimeNull } from 'sheltify-lib/cms-types';
 import { SaveAnimalComponent } from '@app/editor/animal-editor/save-animal/save-animal.component';
 import { ArticleEditorComponent } from '@app/editor/article-editor/article-editor.component';
 import { CheckboxInputComponent } from '@app/forms/checkbox-input/checkbox-input.component';
@@ -116,6 +116,44 @@ export class AnimalEditorComponent implements OnInit {
     const savedArticle = await firstValueFrom(this.cmsRequestService.saveArticle(article));
     this.animal()!.ArticleID = savedArticle.ID;
     this.save();
+  }
+
+  /** Other animals sharing the article of this animal. Only those can be unlinked from the article. */
+  otherAnimalsInArticle = computed(() => {
+    const animal = this.animal();
+    if (!animal?.ArticleID) return [];
+    return (this.animalService.animalsByArticleID()[animal.ArticleID] ?? []).filter(a => a.ID !== animal.ID);
+  });
+
+  otherAnimalNamesInArticle = computed(() => this.otherAnimalsInArticle().map(a => a.Name).join(', '));
+
+  async unlinkArticle() {
+    const animal = this.animal();
+    const others = this.otherAnimalsInArticle();
+    if (!animal?.ArticleID || others.length === 0) return;
+
+    const isPublished = !!animal.PublishedAt?.Valid;
+    const answer = await this.alertService.openAlert(
+      'Tier vom Artikel trennen?',
+      `${animal.Name} wird vom Artikel getrennt, der Artikel bleibt für ${this.otherAnimalNamesInArticle()} bestehen.`,
+      ['ja', 'nein'],
+    );
+    if (answer !== 'ja') return;
+
+    // persist pending changes of the article before this editor loses it
+    this.saveArticle$.next({pushUpdate: false, updateNote: ''});
+
+    const {ArticleID, Article, PublishedAt} = animal;
+    animal.ArticleID = undefined;
+    animal.Article = undefined;
+    if (isPublished) animal.PublishedAt = SqlNullTimeNull();
+
+    try {
+      const savedAnimal = await this.animalService.save(animal);
+      if (savedAnimal) this.saved.emit(savedAnimal);
+    } catch {
+      Object.assign(animal, {ArticleID, Article, PublishedAt});
+    }
   }
 
   async assignExistingArticle() {
