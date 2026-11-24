@@ -1,4 +1,4 @@
-@if (image().NonImage) {
+@if (image()?.NonImage) {
   {{ image().Title }}
 } @else {
   <div class="img-container" [class.focus-mode]="editFocusMode">

@@ -11,6 +11,8 @@ esbuild
         compilerOptions: {
         customElement: true,
        },
+        // components are rendered once, so capturing only the initial prop value is intended
+        filterWarnings: (warning) => warning.code !== "state_referenced_locally",
       }),
     ],
     logLevel: "info",

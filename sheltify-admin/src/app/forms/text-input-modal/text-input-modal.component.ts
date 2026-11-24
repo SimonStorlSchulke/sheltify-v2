@@ -16,11 +16,15 @@ export class TextInputModalComponent extends FinishableDialog<string>{
   presetText = '';
   long = false;
 
-  inputElement = viewChild<ElementRef<HTMLInputElement>>('input');
+  inputElement = viewChild<ElementRef<HTMLInputElement | HTMLTextAreaElement>>('input');
 
   @HostListener('window:keyup.enter', ['$event'])
   submit(_: Event) {
     if(this.long) return;
+    this.finishWithInputValue();
+  }
+
+  finishWithInputValue() {
     this.finishWith(this.inputElement()?.nativeElement.value ?? '');
   }
 }
