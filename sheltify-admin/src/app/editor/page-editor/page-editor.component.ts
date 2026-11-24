@@ -1,4 +1,4 @@
-import { Component, computed, input, output, inject, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Component, computed, model, output, inject, ChangeDetectionStrategy, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CmsRequestService } from '@app/services/cms-request.service';
 import { ExplainerComponent } from '@app/ui/explainer/explainer.component';
@@ -44,7 +44,7 @@ export class PageEditorComponent {
   private alertService = inject(AlertService);
   private askSaveService = inject(AskSaveService);
   updatePath = signal(0);
-  page = input.required<CmsPage>();
+  page = model.required<CmsPage>();
   saveArticle$ = new Subject<undefined>();
   deleted = output();
 
@@ -77,8 +77,12 @@ export class PageEditorComponent {
   }
 
   async togglePublished() {
-    const savedPage = await this.pagesService.togglePublished(this.page()!);
-    this.page().PublishedAt = savedPage?.PublishedAt;
+    const savedPage = await this.pagesService.togglePublished(this.page());
+    if (!savedPage) return;
+    this.page.update(page => {
+      page.PublishedAt = savedPage.PublishedAt;
+      return structuredClone(page);
+    });
   }
 
   async delete() {

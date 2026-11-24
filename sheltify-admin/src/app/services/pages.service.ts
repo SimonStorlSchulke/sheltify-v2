@@ -40,7 +40,9 @@ export class PagesService {
   async togglePublished(page: CmsPage) {
     const pageToSave = structuredClone(page);
     togglePublishedAt(pageToSave);
-    return await firstValueFrom(this.cmsRequestService.savePage(pageToSave));
+    const savedPage = await firstValueFrom(this.cmsRequestService.savePage(pageToSave));
+    if (savedPage) this.reloadPages();
+    return savedPage;
   }
 }
 

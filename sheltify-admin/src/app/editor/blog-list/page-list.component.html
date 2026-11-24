@@ -53,6 +53,6 @@
 
   </div>
   @if (selectedPage(); as page) {
-    <app-page-editor (deleted)="onDeleted(); layout.mobileOpen.set(false)" [page]="page" class="content"/>
+    <app-page-editor (deleted)="onDeleted(); layout.mobileOpen.set(false)" [page]="page" (pageChange)="selectedPage.set($event)" class="content"/>
   }
 </app-left-sidebar-layout>
