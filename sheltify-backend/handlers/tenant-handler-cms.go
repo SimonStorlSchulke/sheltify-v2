@@ -7,18 +7,37 @@ import (
 	"sheltify-backend/shtypes"
 )
 
+func GetTenants(w http.ResponseWriter, r *http.Request) {
+	if !CheckSuperUserRole(w, r) {
+		return
+	}
+
+	configs, err := repository.GetAllTenantConfigurations()
+	if err != nil {
+		internalServerErrorResponse(w, r, "Could not retrieve tenants")
+		return
+	}
+	okResponse(w, configs)
+}
+
 func CreateTenant(w http.ResponseWriter, r *http.Request) {
+	if !CheckSuperUserRole(w, r) {
+		return
+	}
+
 	ID := r.FormValue("ID")
 	Name := r.FormValue("Name")
 	SiteUrl := r.FormValue("SiteUrl")
 
 	if ID == "" || Name == "" || SiteUrl == "" {
 		badRequestResponse(w, r, "ID, Name and SiteUrl are required")
+		return
 	}
 
 	_, err := repository.CreateTenant(ID)
 	if err != nil {
-		internalServerErrorResponse(w, r, "Could not create tenant")
+		internalServerErrorResponse(w, r, "Could not create tenant: "+err.Error())
+		return
 	}
 
 	tenantConfig := &shtypes.TenantConfiguration{
@@ -31,6 +50,7 @@ func CreateTenant(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		internalServerErrorResponse(w, r, "Could not create tenant configuration")
+		return
 	}
 
 	createdResponse(w, tenantConfig)

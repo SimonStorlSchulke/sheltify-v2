@@ -23,7 +23,7 @@
 
 </script>
 <div class="placeholder"></div>
-<div class="auswahl sui flex-x">
+<div class="auswahl sui flex-x w-100">
   <a class:active={Aktiv === 'Hunde'} href="/Tiere/Hunde">
     <Image img={imgHunde} size={'medium'}/>
     <div class="overlay"><h3 class="sui bold px-2">Hunde</h3></div>

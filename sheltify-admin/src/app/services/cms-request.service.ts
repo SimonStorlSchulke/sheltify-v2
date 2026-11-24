@@ -288,6 +288,17 @@ export class CmsRequestService {
     return this.delete(`forms/submitted?ids=${ids.join(',')}`)
   }
 
+  getTenants(): Observable<CmsTenantConfiguration[]> {
+    return this.get<CmsTenantConfiguration[]>(`${CmsRequestService.adminApiUrl}tenants`);
+  }
+
+  createTenant(id: string, name: string, siteUrl: string): Observable<CmsTenantConfiguration> {
+    const url = `${CmsRequestService.adminApiUrl}create-tenant`;
+    const body = new URLSearchParams({ ID: id, Name: name, SiteUrl: siteUrl }).toString();
+    return this.httpClient.post<CmsTenantConfiguration>(url, body, this.options('application/x-www-form-urlencoded'))
+      .pipe(this.handleRequest(url, 'Erstellen erfolgreich'));
+  }
+
   getUsers(): Observable<CmsUser[]> {
     return this.get<CmsUser[]>(`${CmsRequestService.adminApiUrl}users`);
   }

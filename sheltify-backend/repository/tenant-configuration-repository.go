@@ -11,6 +11,14 @@ func CreateTenant(id string) (*shtypes.Tenant, error) {
 	return &tenant, nil
 }
 
+func GetAllTenantConfigurations() ([]shtypes.TenantConfiguration, error) {
+	configs := []shtypes.TenantConfiguration{}
+	if err := db.Order("tenant_id").Find(&configs).Error; err != nil {
+		return nil, err
+	}
+	return configs, nil
+}
+
 func GetConfigByTenantId(tenantId string) (*shtypes.TenantConfiguration, error) {
 	var config shtypes.TenantConfiguration
 	if err := db.Preload("LogoHeader").Preload("LogoSmall").Where("tenant_id = ?", tenantId).First(&config).Error; err != nil {

@@ -56,6 +56,7 @@ func publicRoutes(r *chi.Mux) {
 
 func adminRoutes(r *chi.Mux) {
 	r.Get("/configuration", handlers.GetTenantConfigurationCms)
+	r.Get("/tenants", handlers.GetTenants)
 	r.Post("/create-tenant", handlers.CreateTenant)
 	r.Post("/create-user", handlers.Register)
 
