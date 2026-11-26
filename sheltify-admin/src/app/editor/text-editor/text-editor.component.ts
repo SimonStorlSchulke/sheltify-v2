@@ -11,6 +11,7 @@ import { CmsRequestService } from '@app/services/cms-request.service';
 import { ModalService } from '@app/services/modal.service';
 import { marks as defaultMarks, nodes as defaultNodes, Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
 import { AnimalPickerDialogComponent } from '@app/ui/animal-picker-dialog/animal-picker-dialog.component';
+import { TENANT_PLACEHOLDER_FIELDS, TenantPlaceholderKey, tenantPlaceholder } from 'sheltify-lib/tenant-placeholders';
 
 const myLink: MarkSpec = {
   attrs: {
@@ -70,6 +71,8 @@ export class TextEditorComponent implements OnInit {
   private askSaveService = inject(AskSaveService);
 
   editor: Editor;
+
+  readonly tenantPlaceholderFields = TENANT_PLACEHOLDER_FIELDS;
 
   htmlModel = model<string>('');
   html: string = "";
@@ -156,6 +159,18 @@ export class TextEditorComponent implements OnInit {
 
 
     view.focus();
+  }
+
+  /** Inserts a placeholder like "{{Address}}" at the cursor, which the article-renderer replaces with the tenant configuration value. */
+  insertTenantPlaceholder(select: HTMLSelectElement) {
+    const key = select.value as TenantPlaceholderKey;
+    select.value = '';
+    if (!key) return;
+
+    const view: EditorView = this.editor.view;
+    view.dispatch(view.state.tr.insertText(tenantPlaceholder(key)));
+    view.focus();
+    this.markDirty();
   }
 
   onChange(value: string) {

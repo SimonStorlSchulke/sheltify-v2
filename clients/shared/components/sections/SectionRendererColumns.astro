@@ -1,6 +1,6 @@
 ---
 import type { SectionColumns } from 'sheltify-lib/article-types.ts';
-import type { CmsAnimal } from 'sheltify-lib/cms-types.ts';
+import type { CmsAnimal, CmsTenantConfiguration } from 'sheltify-lib/cms-types.ts';
 import RenderSectionTitle from 'article-renderer/components/RenderSectionTitle.svelte';
 import RenderSectionText from 'article-renderer/components/RenderSectionText.svelte';
 import RenderSectionAnimalList from 'article-renderer/components/RenderSectionAnimalList.svelte';
@@ -14,9 +14,10 @@ import RenderSectionTeamMember from 'article-renderer/components/RenderSectionTe
 interface Props {
   section: SectionColumns,
   allAnimalsByArticle?: Record<string, CmsAnimal[]>,
+  tenantConfig?: CmsTenantConfiguration,
 }
 
-const {section, allAnimalsByArticle} = Astro.props;
+const {section, allAnimalsByArticle, tenantConfig} = Astro.props;
 ---
 <div class="column-row sui flex-x">
 {
@@ -26,7 +27,7 @@ const {section, allAnimalsByArticle} = Astro.props;
       let comp;
       switch (section.SectionType) {
         case 'text':
-          comp = <RenderSectionText section={section} allAnimalsByArticle={allAnimalsByArticle}/>;
+          comp = <RenderSectionText section={section} allAnimalsByArticle={allAnimalsByArticle} tenantConfig={tenantConfig}/>;
           break;
         case 'title':
           comp = <RenderSectionTitle section={section}/>

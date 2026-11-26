@@ -22,7 +22,6 @@
         </div>
         <div class="sui flex-y gap-2 grow-1">
           <app-text-input class="sui grow-1" idName="name" label="Name" [(twoWayModel)]="options.Name"/>
-          <app-text-input class="sui grow-1" idName="siteUrl" label="Webseiten-Url" [(twoWayModel)]="options.SiteUrl"/>
           <app-text-input [long]="true" class="sui grow-1" idName="name" label="Adresse" [(twoWayModel)]="options.Address"/>
         </div>
       </div>
@@ -49,8 +48,11 @@
 
     @if(isAdmin) {
       <h2>Administration</h2>
+      <app-text-input class="sui grow-1" idName="siteUrl" label="Webseiten-Url" [(twoWayModel)]="options.SiteUrl"/>
+      <br>
       <app-text-input [(twoWayModel)]="options.BlogCategories" idName="blog-categories" label="Blogkategorien"
                       explanation="Kommaseparierte Liste an Blogkategorien (z.B. Neuigkeiten,Veranstaltungen,Wissenswertes)"/>
+
       <br>
       <h3>Tierdatenpflege</h3>
       <form class="sui flex-y gap-2 grow-1 pr-1 pb-3 pt-1">

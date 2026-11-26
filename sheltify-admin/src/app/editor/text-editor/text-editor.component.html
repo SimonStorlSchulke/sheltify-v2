@@ -19,4 +19,11 @@
   <button type="button" class="small primary sui mx-1" (mousedown)="addAnimalLink($event)">
     Tierlink
   </button>
+  <select class="small tenant-placeholder-select" title="Feld aus der Vereinskonfiguration einfügen. Es wird auf der Webseite durch den aktuellen Wert ersetzt."
+          (change)="insertTenantPlaceholder($any($event.target))">
+    <option value="">Vereinsfeld einfügen</option>
+    @for (field of tenantPlaceholderFields; track field.key) {
+      <option [value]="field.key">{{ field.label }}</option>
+    }
+  </select>
 </ng-template>

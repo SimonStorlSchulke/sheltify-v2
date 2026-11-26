@@ -1,8 +1,9 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, input, ChangeDetectionStrategy, inject } from '@angular/core';
 import { RenderTrustedHtmlComponent } from '@app/section-renderer/render-html/render-trusted-html.component';
 import { Section } from 'sheltify-lib/article-types';
 import { CmsRequestService } from '@app/services/cms-request.service';
+import { TenantConfigurationService } from '@app/services/tenant-configuration.service';
 
 @Component({
   selector: 'app-section-renderer',
@@ -15,4 +16,6 @@ import { CmsRequestService } from '@app/services/cms-request.service';
 export class SectionRendererComponent {
   section = input.required<Section>();
   uploadsUrl = CmsRequestService.publicApiUrl + 'uploads/';
+  /** used by the text section to show the values of placeholders like "{{Address}}" */
+  tenantConfig = inject(TenantConfigurationService).config;
 }

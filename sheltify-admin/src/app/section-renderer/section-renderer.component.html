@@ -25,7 +25,7 @@
     }
     @case ('text') {
       <!--suppress AngularUndefinedBinding -->
-      <section-text [section]="sectionVal"/>
+      <section-text [section]="sectionVal" [tenantConfig]="tenantConfig()"/>
     }
     @case ('image') {
       <!--suppress AngularUndefinedBinding -->

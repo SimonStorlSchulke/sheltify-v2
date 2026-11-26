@@ -55,6 +55,7 @@ if (title) {
 const allAnimals = await cms.animals;
 const allAnimalsByArticle = animalsByArticleId(allAnimals);
 const publishedAnimals = await cms.getPublishedAnimals();
+const tenantConfig = await cms.tenantConfig;
 
 await populateDynamicData();
 
@@ -94,7 +95,7 @@ async function populateDynamicData() {
         let comp;
         switch (section.SectionType) {
           case 'text':
-            comp = <RenderSectionText section={section} allAnimalsByArticle={allAnimalsByArticle}/>;
+            comp = <RenderSectionText section={section} allAnimalsByArticle={allAnimalsByArticle} tenantConfig={tenantConfig}/>;
             break;
           case 'title':
             comp = <RenderSectionTitle section={section}/>
@@ -118,7 +119,7 @@ async function populateDynamicData() {
             comp = <RenderSectionFile section={section} client:load/>;
             break;
           case 'columns':
-            comp = <SectionRendererColumns section={section} allAnimalsByArticle={allAnimalsByArticle}/>;
+            comp = <SectionRendererColumns section={section} allAnimalsByArticle={allAnimalsByArticle} tenantConfig={tenantConfig}/>;
             break;
           case 'form':
             comp = <RenderSectionForm section={section} submitUrl={cms.formSubmitUrl} client:visible/>;
