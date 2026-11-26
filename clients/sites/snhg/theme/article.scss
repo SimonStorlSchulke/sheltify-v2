@@ -1,6 +1,7 @@
 @use "colors";
 @use "animal-card";
 @use "buttons";
+@use "font";
 
 :root {
   --section-gap-x: min(50px, 5dvw);
@@ -10,6 +11,10 @@
 }
 
 .themable.article {
+  font-size: 1.1rem;
+  color: var(--c-text);
+  font-family: 'Quicksand', 'Helvetica', sans-serif;
+  font-weight: 400;
 
   .themable-bg-accent-1 {
     background: var(--themable-bg-accent-1);

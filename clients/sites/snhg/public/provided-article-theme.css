@@ -4,6 +4,7 @@
   --c-primary-h: #ffdbb3;
   --c-accent: #e4ded8;
   --c-cto: #ff2f40;
+  --c-text: #454545;
   --padding-article: 64px;
   --themable-bg-accent-1: #e4ded8;
   --themable-bg-accent-2: #ffdbb3;
@@ -54,7 +55,9 @@
     left: 10px;
   }
 }
-.themable.article button, .themable.article .article-button {
+.themable.article button,
+.themable.article .article-button,
+.snhg-footer button {
   outline: none;
   border: none;
   border-radius: 32px;
@@ -67,43 +70,67 @@
   margin-top: 4px;
   margin-bottom: 4px;
 }
-.themable.article button:disabled, .themable.article .article-button:disabled {
+.themable.article button:disabled,
+.themable.article .article-button:disabled,
+.snhg-footer button:disabled {
   opacity: 0.7;
   background: var(--c-primary-desaturated) !important;
   pointer-events: none;
 }
-.themable.article button.lg, .themable.article .article-button.lg {
+.themable.article button.lg,
+.themable.article .article-button.lg,
+.snhg-footer button.lg {
   font-size: 32px;
 }
-.themable.article button.sm, .themable.article .article-button.sm {
+.themable.article button.sm,
+.themable.article .article-button.sm,
+.snhg-footer button.sm {
   padding: 4px 12px;
   height: 34px;
 }
-.themable.article button.primary, .themable.article button.paypal, .themable.article .article-button.primary, .themable.article .article-button.paypal {
+.themable.article button.primary, .themable.article button.paypal,
+.themable.article .article-button.primary,
+.themable.article .article-button.paypal,
+.snhg-footer button.primary,
+.snhg-footer button.paypal {
   background: var(--c-primary);
   color: #fff;
 }
-.themable.article button.primary:hover, .themable.article button.paypal:hover, .themable.article .article-button.primary:hover, .themable.article .article-button.paypal:hover {
+.themable.article button.primary:hover, .themable.article button.paypal:hover,
+.themable.article .article-button.primary:hover,
+.themable.article .article-button.paypal:hover,
+.snhg-footer button.primary:hover,
+.snhg-footer button.paypal:hover {
   background: var(--c-primary-h);
   color: #000;
 }
-.themable.article button.secondary, .themable.article .article-button.secondary {
+.themable.article button.secondary,
+.themable.article .article-button.secondary,
+.snhg-footer button.secondary {
   background: #aaa096;
   color: #fff;
 }
-.themable.article button.secondary:hover, .themable.article .article-button.secondary:hover {
+.themable.article button.secondary:hover,
+.themable.article .article-button.secondary:hover,
+.snhg-footer button.secondary:hover {
   background: #ffdb7e;
   color: #000;
 }
-.themable.article button.cto, .themable.article .article-button.cto {
+.themable.article button.cto,
+.themable.article .article-button.cto,
+.snhg-footer button.cto {
   background: var(--c-cto);
   color: #fff;
 }
-.themable.article button.cto:hover, .themable.article .article-button.cto:hover {
+.themable.article button.cto:hover,
+.themable.article .article-button.cto:hover,
+.snhg-footer button.cto:hover {
   background-color: color-mix(in lab, var(--c-cto) 80%, #fff);
   color: #000;
 }
-.themable.article button.paypal, .themable.article .article-button.paypal {
+.themable.article button.paypal,
+.themable.article .article-button.paypal,
+.snhg-footer button.paypal {
   color: #fff;
   padding-left: 48px;
   background: url("/paypal.png") center, linear-gradient(100deg, #5656e9 44px, var(--c-primary) 44px);
@@ -111,14 +138,48 @@
   background-repeat: no-repeat, repeat;
   background-position: 8px 4px, 0 0;
 }
-.themable.article button.paypal img, .themable.article .article-button.paypal img {
+.themable.article button.paypal img,
+.themable.article .article-button.paypal img,
+.snhg-footer button.paypal img {
   width: 2.2rem;
   height: 2.2rem;
 }
-.themable.article button.paypal:hover, .themable.article .article-button.paypal:hover {
+.themable.article button.paypal:hover,
+.themable.article .article-button.paypal:hover,
+.snhg-footer button.paypal:hover {
   filter: saturate(1.5);
 }
 
+@font-face {
+  font-display: swap;
+  font-family: "Poppins";
+  font-weight: 400;
+  src: url("/poppins-v24-latin-regular.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* quicksand-regular - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Quicksand";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/quicksand-v37-latin-regular.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* quicksand-500 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Quicksand";
+  font-style: normal;
+  font-weight: 500;
+  src: url("/quicksand-v37-latin-500.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* quicksand-700 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Quicksand";
+  font-style: normal;
+  font-weight: 700;
+  src: url("/quicksand-v37-latin-700.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
 :root {
   --section-gap-x: min(50px, 5dvw);
   --section-gap-y: 50px;
@@ -126,6 +187,12 @@
   --hero-top-height: 450px;
 }
 
+.themable.article {
+  font-size: 1.1rem;
+  color: var(--c-text);
+  font-family: "Quicksand", "Helvetica", sans-serif;
+  font-weight: 400;
+}
 .themable.article .themable-bg-accent-1 {
   background: var(--themable-bg-accent-1);
 }

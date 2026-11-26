@@ -7,6 +7,11 @@
 @use "colors";
 @use "cv";
 
+body {
+  font-family: 'Quicksand', 'Helvetica', sans-serif;
+  font-weight: 400;
+}
+
 :root {
   --wrapper-width: min(1250px, 100dvw - var(--padding-article));
 }
