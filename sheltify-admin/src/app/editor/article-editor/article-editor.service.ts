@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { CmsArticle, Section, SectionType } from 'sheltify-lib/article-types';
 import { createEmptyArticle } from '@app/cms-types/cms-type.factory';
 import { AlertService } from '@app/services/alert.service';
+import { AuthService } from '@app/services/auth.service';
 import { sectionLabels } from '@app/services/article-renderer';
 
 /** Section types that cannot be placed inside a column. */
@@ -11,11 +12,50 @@ export const typesNotAllowedInColumns: SectionType[] = ['columns', 'animal-list'
 @Service()
 export class ArticleEditorService {
   private alertService = inject(AlertService);
+  private authService = inject(AuthService);
 
   article = signal<CmsArticle | undefined>(createEmptyArticle());
   /** Section currently being moved. Works for top level rows and sections inside columns. */
   movedItem = signal<{ sectionRef: Section } | null>(null);
-  copiedSection = signal<Section | null>(null);
+  private readonly copiedSectionState = signal<Section | null>(this.readCopiedSection());
+  readonly copiedSection = this.copiedSectionState.asReadonly();
+
+  constructor() {
+    window.addEventListener('storage', (event) => {
+      if (event.key === null || event.key === this.copiedSectionStorageKey()) {
+        this.copiedSectionState.set(this.readCopiedSection());
+      }
+    });
+  }
+
+  setCopiedSection(section: Section | null) {
+    const key = this.copiedSectionStorageKey();
+    if (section) {
+      const json = JSON.stringify(section);
+      try {
+        localStorage.setItem(key, json);
+      } catch {
+        // storage full/unavailable: the clipboard still works in this tab
+      }
+      this.copiedSectionState.set(JSON.parse(json));
+    } else {
+      localStorage.removeItem(key);
+      this.copiedSectionState.set(null);
+    }
+  }
+
+  private copiedSectionStorageKey() {
+    return `copiedSection-${this.authService.getTenantID()}`;
+  }
+
+  private readCopiedSection(): Section | null {
+    try {
+      const stored = localStorage.getItem(this.copiedSectionStorageKey());
+      return stored ? JSON.parse(stored) as Section : null;
+    } catch {
+      return null;
+    }
+  }
 
   /**
    * Emits the top level row section that should be selected after a move:

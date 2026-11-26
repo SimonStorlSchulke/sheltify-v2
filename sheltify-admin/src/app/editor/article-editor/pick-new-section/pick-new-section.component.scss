@@ -1,7 +1,11 @@
 @use "colors" as *;
 
 .pick-new-section {
-  min-width: min(640px, 90vw);
+  // 32px panel padding (.modal-lg) + 16px breathing room on each side
+  width: min(640px, calc(100vw - 64px));
+  max-height: calc(100dvh - 64px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 
   h3 {
     margin: 0 0 8px 0;
@@ -10,12 +14,24 @@
     letter-spacing: 0.06em;
     color: $neutral700;
   }
+
+  > .jc-end {
+    position: sticky;
+    bottom: 0;
+    padding-top: 8px;
+    background: $neutral100;
+  }
 }
 
 .section-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
   gap: 8px;
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+    gap: 6px;
+  }
 }
 
 .section-tile {
@@ -25,6 +41,15 @@
   justify-content: center;
   gap: 6px;
   min-height: 84px;
+  min-width: 0;
   text-align: center;
   line-height: 1.2;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+
+  @media (max-width: 480px) {
+    min-height: 72px;
+    padding: 6px 4px;
+    font-size: 0.9em;
+  }
 }

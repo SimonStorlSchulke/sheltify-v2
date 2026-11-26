@@ -183,6 +183,6 @@ export class ArticleEditorComponent implements OnInit {
   cancelPaste(event: MouseEvent) {
     event.preventDefault();
     event.stopPropagation();
-    this.articleEditorService.copiedSection.set(null)
+    this.articleEditorService.setCopiedSection(null)
   }
 }

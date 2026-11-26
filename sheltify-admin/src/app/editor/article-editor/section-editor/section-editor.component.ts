@@ -62,12 +62,12 @@ export class SectionEditorComponent {
   });
 
   copySection() {
-    this.articleEditorService.copiedSection.set(this.section());
+    this.articleEditorService.setCopiedSection(this.section());
     this.alertService.openToast('Sektion kann nun über den "Einfügen" Knopf beim Hover zwischen den Sektionen wieder eingefügt werden (auch in anderen Artikeln).', 'Kopiert')
   }
 
   cutSection() {
-    this.articleEditorService.copiedSection.set(this.section());
+    this.articleEditorService.setCopiedSection(this.section());
     this.alertService.openToast('Sektion kann nun über den "Einfügen" Knopf beim Hover zwischen den Sektionen wieder eingefügt werden (auch in anderen Artikeln).', 'Ausgeschnitten');
     this.articleEditorService.deleteSection(this.rowIndex(), false);
     this.askSaveService.markDirty();
