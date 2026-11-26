@@ -3,3 +3,12 @@
   max-height: 70dvh;
   overflow-y: auto;
 }
+
+.animal-picker-search {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  width: 100%;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+}

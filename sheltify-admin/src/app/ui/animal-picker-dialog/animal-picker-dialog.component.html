@@ -1,8 +1,21 @@
+@if (animals.length > 0) {
+  <input
+    class="animal-picker-search"
+    type="search"
+    placeholder="Suche"
+    aria-label="Tiere nach Name suchen"
+    data-testid="input-animal-picker-search"
+    cdkFocusInitial
+    [value]="search()"
+    (input)="search.set($any($event.target).value)"
+  >
+}
+
 @if(byArticle) {
-  @for (entry of animalsByArticleID(); track $index) {
+  @for (entry of filteredAnimalsByArticle(); track entry.title) {
     <div class="sui my-1 flex-x ai-center jc-space-between gap-2">
-      <span>{{entry[1].title}}</span>
-      <button [attr.data-testid]="'btn-select-animalarticle-' + entry[1].title" class="small" (click)="finishWith(entry[1].animals[0])">auswählen ></button>
+      <span>{{entry.title}}</span>
+      <button [attr.data-testid]="'btn-select-animalarticle-' + entry.title" class="small" (click)="finishWith(entry.animals[0])">auswählen ></button>
     </div>
   } @empty {
     <ng-container [ngTemplateOutlet]="empty"/>
@@ -10,7 +23,7 @@
 }
 
 @else {
-  @for (entry of animals; track $index) {
+  @for (entry of filteredAnimals(); track $index) {
     <div class="sui my-1 flex-x ai-center jc-space-between gap-2">
       <span>{{entry.Name}}</span>
       <button [attr.data-testid]="'btn-select-animalarticle-' + entry.Name" class="small" (click)="finishWith(entry)">auswählen ></button>
@@ -21,7 +34,11 @@
 }
 
 <ng-template #empty>
-  <p>Keine Tiere entsprechen den Anforderungen</p>
-  <br>
-  <button class="secondary" (click)="cancel()">Ok</button>
+  @if (search().trim()) {
+    <p>Keine Tiere gefunden für „{{ search().trim() }}“</p>
+  } @else {
+    <p>Keine Tiere entsprechen den Anforderungen</p>
+    <br>
+    <button class="secondary" (click)="cancel()">Ok</button>
+  }
 </ng-template>
