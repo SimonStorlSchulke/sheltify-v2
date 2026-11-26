@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Sheltify Admin: paw with a pen -->
+  <rect width="64" height="64" rx="14" fill="#ffffff"/>
+
+  <!-- paw -->
+  <g fill="#8a5a44">
+    <ellipse cx="11.5" cy="26" rx="4.6" ry="6.2" transform="rotate(-25 11.5 26)"/>
+    <ellipse cx="20.5" cy="15.5" rx="5" ry="6.8" transform="rotate(-8 20.5 15.5)"/>
+    <ellipse cx="32" cy="15.5" rx="5" ry="6.8" transform="rotate(8 32 15.5)"/>
+    <ellipse cx="41" cy="26" rx="4.6" ry="6.2" transform="rotate(25 41 26)"/>
+    <path d="M26.2 29.5c6.2 0 9.3 5.2 12.4 10.4 2.6 4.4.4 9.6-4.6 9.4-3-.1-4.8-1.6-7.8-1.6s-4.8 1.5-7.8 1.6c-5 .2-7.2-5-4.6-9.4 3.1-5.2 6.2-10.4 12.4-10.4z"/>
+  </g>
+
+  <!-- pen, drawn pointing down and rotated so the tip points to the lower left -->
+  <g transform="translate(47 39) rotate(40)" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">
+    <path d="M-4.5 -19h9v27l-4.5 9-4.5-9z" fill="#8a5a44"/>
+    <!-- white separators for the cap and the sharpened tip -->
+    <path d="M-4.5 -13.5h9M-4.5 8h9" stroke-width="1.6" stroke-linejoin="miter"/>
+    <path d="M-1.6 13.2h3.2" stroke-width="1.2"/>
+  </g>
+</svg>
