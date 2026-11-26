@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TagComponent } from './tag.component';
 
 describe('TagComponent', () => {
-  let component: TagComponent;
   let fixture: ComponentFixture<TagComponent>;
 
   beforeEach(async () => {
@@ -13,11 +12,11 @@ describe('TagComponent', () => {
     .compileComponents();
 
     fixture = TestBed.createComponent(TagComponent);
-    component = fixture.componentInstance;
+    fixture.componentRef.setInput('tag', { ID: '1', Name: 'Notfall', Color: '#ff0000' });
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('shows the tag name', () => {
+    expect((fixture.nativeElement as HTMLElement).textContent?.trim()).toBe('Notfall');
   });
 });

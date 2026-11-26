@@ -34,6 +34,8 @@ type TenantConfiguration struct {
 	LogoHeaderID              *string
 	LogoSmall                 *MediaFile `gorm:"->"` // logo for the mobile header
 	LogoSmallID               *string
+	Favicon                   *MediaFile `gorm:"->"` // browser tab icon of the website
+	FaviconID                 *string
 	AnimalFeatureWhere        bool
 	AnimalFeaturePatrons      bool
 	AnimalFeatureRace         bool

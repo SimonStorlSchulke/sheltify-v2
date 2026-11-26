@@ -159,6 +159,8 @@ export type CmsTenantConfiguration = CmsType & {
   LogoHeader?: CmsImage;
   LogoSmallID?: string;
   LogoSmall?: CmsImage;
+  FaviconID?: string;
+  Favicon?: CmsImage;
   LastBuild?: SqlNullTime;
   NeedsRebuild: boolean;
   AnimalFeatureWhere: boolean;

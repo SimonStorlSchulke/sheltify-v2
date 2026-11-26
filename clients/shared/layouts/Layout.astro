@@ -3,13 +3,19 @@ import "../../../sheltify-lib/sui/_index.scss";
 import "@shared/styling/reset.scss"
 import { cms } from '@shared/cms/sheltify-access.ts';
 import type { SeoData } from "@shared/types/seo-data";
+import { getImageSrc } from '@shared/cms/cms-image.ts';
+import { isSvgImage } from 'sheltify-lib/image-utils.ts';
 
 interface Props {
   seo: SeoData;
 }
 
 const {seo} = Astro.props;
-const siteName = (await cms.tenantConfig).Name;
+const tenantConfig = await cms.tenantConfig;
+const siteName = tenantConfig.Name;
+const favicon = tenantConfig.Favicon;
+const faviconHref = favicon ? getImageSrc(favicon, 'small') : '/favicon.svg';
+const faviconType = !favicon || isSvgImage(favicon) ? 'image/svg+xml' : 'image/webp';
 const pageTitle = seo.title ? (seo.title + ' | ' + siteName) : siteName;
 // Mark the browser tab in "astro dev", so dev and production are easy to tell apart.
 const title = import.meta.env.DEV ? 'DEV ' + pageTitle : pageTitle;
@@ -19,7 +25,7 @@ const title = import.meta.env.DEV ? 'DEV ' + pageTitle : pageTitle;
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width"/>
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+  <link rel="icon" type={faviconType} href={faviconHref}/>
   <meta name="generator" content={Astro.generator}/>
   <title>{title}</title>
   <og:description content={seo.description ?? ''}/>

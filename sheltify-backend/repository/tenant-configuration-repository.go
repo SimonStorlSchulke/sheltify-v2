@@ -21,7 +21,7 @@ func GetAllTenantConfigurations() ([]shtypes.TenantConfiguration, error) {
 
 func GetConfigByTenantId(tenantId string) (*shtypes.TenantConfiguration, error) {
 	var config shtypes.TenantConfiguration
-	if err := db.Preload("LogoHeader").Preload("LogoSmall").Where("tenant_id = ?", tenantId).First(&config).Error; err != nil {
+	if err := db.Preload("LogoHeader").Preload("LogoSmall").Preload("Favicon").Where("tenant_id = ?", tenantId).First(&config).Error; err != nil {
 		return nil, err
 	}
 	return &config, nil

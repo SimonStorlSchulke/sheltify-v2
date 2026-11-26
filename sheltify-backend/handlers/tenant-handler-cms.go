@@ -94,6 +94,11 @@ func SaveTenantConfiguration(w http.ResponseWriter, r *http.Request) {
 	if config.LogoSmall != nil {
 		config.LogoSmallID = &config.LogoSmall.ID
 	}
+	if config.Favicon != nil {
+		config.FaviconID = &config.Favicon.ID
+	} else {
+		config.FaviconID = nil
+	}
 
 	if repository.SaveTenantConfiguration(config) != nil {
 		internalServerErrorResponse(w, r, "Could not save tenant configuration")
