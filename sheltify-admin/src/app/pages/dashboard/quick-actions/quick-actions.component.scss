@@ -1,0 +1,12 @@
+@use "colors" as *;
+
+button, .site-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.site-link {
+  padding: 0 8px;
+  color: $primary-d1;
+}

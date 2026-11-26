@@ -1,0 +1,26 @@
+<h2 class="sui mb-1">Zu erledigen</h2>
+
+<div class="sui flex-y gap-2">
+  @for (item of items(); track item.key) {
+    @let isExpanded = expanded().has(item.key);
+    <div class="group">
+      <div class="sui flex-x gap-1 ai-center">
+        <span class="count">{{ item.animals.length }}</span>
+        <strong>{{ item.label }}</strong>
+      </div>
+      <span class="text-meta hint">{{ item.hint }}</span>
+      <div class="sui flex-x wrap gap-1 animals">
+        @for (animal of isExpanded ? item.animals : item.animals.slice(0, collapsedAmount); track animal.ID) {
+          <a class="sui tag" [routerLink]="['/tiere', animal.ID]">{{ animal.Name || 'ohne Namen' }}</a>
+        }
+        @if (item.animals.length > collapsedAmount) {
+          <button class="unstyled more" (click)="toggle(item.key)">
+            {{ isExpanded ? 'weniger anzeigen' : '+ ' + (item.animals.length - collapsedAmount) + ' weitere' }}
+          </button>
+        }
+      </div>
+    </div>
+  } @empty {
+    <i>Alles erledigt – keine offenen Punkte.</i>
+  }
+</div>

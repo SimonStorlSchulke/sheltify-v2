@@ -3,6 +3,7 @@ import { Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { CmsRequestService } from '@app/services/cms-request.service';
+import { isFormUnread } from '../dashboard-stats';
 
 @Component({
   selector: 'app-recent-forms',
@@ -13,4 +14,5 @@ import { CmsRequestService } from '@app/services/cms-request.service';
 export class RecentFormsComponent {
   private cmsRequestService = inject(CmsRequestService);
   forms = toSignal(this.cmsRequestService.getRecentSubmittedForms());
+  isUnread = isFormUnread;
 }

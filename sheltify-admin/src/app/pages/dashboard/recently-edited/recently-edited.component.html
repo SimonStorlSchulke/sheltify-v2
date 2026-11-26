@@ -1,11 +1,3 @@
-  @if (authService.user$ | async; as user) {
-    <h1>{{ tenantConfigurationService.config()?.Name }}</h1>
-    <h2>Hallo {{ user.Name }}!</h2>
-  }
-
-  <br>
-  <br>
-
   <h2 class="sui mb-1">Zuletzt bearbeitete Tiere</h2>
   @if (lastModifiedAnimals | async; as animals) {
     <div class="sui flex-y gap-1">

@@ -1,13 +1,19 @@
 @let formsValue = forms();
 
-<h2 class="sui mb-1">Formulare</h2>
+<div class="sui flex-x jc-space-between ai-center mb-1">
+  <h2>Formulare</h2>
+  <a routerLink="/formulare" class="text-meta">alle anzeigen</a>
+</div>
 <div class="sui flex-y">
   @if (formsValue) {
-    @for (form of formsValue; track $index) {
-      <a [routerLink]="['formulare', form.ID]" class="sui flex-x gap-2 list-entry">
+    @for (form of formsValue; track form.ID) {
+      <a [routerLink]="['/formulare', form.ID]" class="sui flex-x gap-2 ai-center list-entry" [class.unread]="isUnread(form)">
+        @if (isUnread(form)) {
+          <span class="badge" title="noch nicht gelesen">neu</span>
+        }
         <span>{{ form.Type }}</span>
-        <span>{{ form.SenderMail }}</span>
-        <span>{{ form.CreatedAt | date : "dd.MM.yyyy - HH:mm" }}</span>
+        <span class="mail" [title]="form.SenderMail">{{ form.SenderMail }}</span>
+        <span class="text-meta date">{{ form.CreatedAt | date : "dd.MM.yyyy - HH:mm" }}</span>
       </a>
     } @empty {
       <i>Keine Formulare in den letzten 14 Tagen</i>

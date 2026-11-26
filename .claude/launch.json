@@ -4,8 +4,23 @@
     {
       "name": "snhg",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["--prefix", "clients", "run", "snhg"],
+      "runtimeArgs": [
+        "--prefix",
+        "clients",
+        "run",
+        "snhg"
+      ],
       "port": 4202
+    },
+    {
+      "name": "sheltify-admin",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "sheltify-admin",
+        "start"
+      ],
+      "port": 4201
     }
   ]
 }

@@ -1,0 +1,81 @@
+@use "colors" as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 12px;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: $text;
+  text-decoration: none;
+
+  .value {
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1.1;
+    color: $primary-d2;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .label {
+    font-weight: 500;
+  }
+
+  .hint {
+    font-size: var(--fontsize-small-2);
+  }
+
+  &.highlight {
+    outline: 2px solid $accent;
+
+    .value {
+      color: $accent;
+    }
+  }
+}
+
+a.tile:hover {
+  background: $neutral100;
+}
+
+.breakdowns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.bars {
+  display: grid;
+  grid-template-columns: max-content 1fr max-content;
+  align-items: center;
+  gap: 6px 10px;
+}
+
+.bar-track {
+  height: 10px;
+  background: $neutral150;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.bar {
+  display: block;
+  height: 100%;
+  background: $primary;
+  border-radius: 5px;
+}
+
+.bar-count {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}

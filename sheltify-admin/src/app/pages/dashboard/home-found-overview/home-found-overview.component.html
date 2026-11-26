@@ -1,0 +1,34 @@
+<h2 class="sui mb-1">Vermittlungen</h2>
+
+@if (hasAny()) {
+  <div class="chart" role="img" [attr.aria-label]="'Vermittlungen pro Jahr'">
+    @for (entry of perYear(); track entry.label) {
+      <div class="column" [title]="entry.count + ' Vermittlungen ' + entry.label">
+        <span class="column-count">{{ entry.count }}</span>
+        <span class="column-bar" [style.height.%]="entry.ratio * 100"></span>
+        <span class="column-label">{{ entry.label }}</span>
+      </div>
+    }
+  </div>
+}
+
+<h3 class="sui mb-1 mt-2">Zuletzt ein Zuhause gefunden</h3>
+<div class="sui flex-y gap-1">
+  @for (animal of recent(); track animal.ID) {
+    <a [routerLink]="['/tiere', animal.ID]" class="sui flex-x gap-2 ai-center list-entry">
+      <div class="img-wrapper">
+        @if (animal.Portrait) {
+          <img [cmsImage]="animal.Portrait" cmsImageSize="thumbnail" class="sui thumbnail">
+        } @else {
+          <div><ng-icon name="bootstrapCardImage" size="2rem" color="#888"/></div>
+        }
+      </div>
+      <div>
+        <span>{{ animal.Name }}</span><br>
+        <span class="text-meta">am {{ animal.HomeFoundAt.Time | date: 'dd.MM.yyyy' }}</span>
+      </div>
+    </a>
+  } @empty {
+    <i>Noch keine Vermittlungen eingetragen.</i>
+  }
+</div>

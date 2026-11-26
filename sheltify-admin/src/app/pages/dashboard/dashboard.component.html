@@ -1,10 +1,20 @@
-<div class="sui p-3 flex-y gap-3">
-<app-recently-edited/>
+<div class="dashboard sui p-3 flex-y gap-3">
+  <header class="sui flex-y gap-2">
+    <div>
+      <h1>{{ tenantConfigurationService.config()?.Name }}</h1>
+      @if (authService.user$ | async; as user) {
+        <h2>{{ greeting }}, {{ user.Name }}!</h2>
+      }
+    </div>
+    <app-quick-actions/>
+  </header>
 
-<!--
-<app-featured-animals/>
--->
-  <app-recent-forms/>
+  <app-animal-stats/>
+
+  <div class="columns">
+    <section class="card"><app-attention-list/></section>
+    <section class="card"><app-recent-forms/></section>
+    <section class="card"><app-recently-edited/></section>
+    <section class="card"><app-home-found-overview/></section>
+  </div>
 </div>
-
-

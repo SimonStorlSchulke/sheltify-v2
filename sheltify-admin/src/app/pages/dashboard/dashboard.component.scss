@@ -1,9 +1,16 @@
 @use "colors" as *;
 
-.portrait-wrapper {
-  img {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
+.dashboard {
+  max-width: 1400px;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 16px;
+  align-items: start;
+
+  @media (max-width: 500px) {
+    grid-template-columns: 1fr;
   }
 }

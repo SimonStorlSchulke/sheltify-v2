@@ -1,0 +1,26 @@
+@use "colors" as *;
+
+.unread {
+  font-weight: 600;
+}
+
+.badge {
+  padding: 0 6px;
+  border-radius: 10px;
+  background: $accent;
+  color: #fff;
+  font-size: var(--fontsize-small-2);
+  font-weight: 600;
+}
+
+.date {
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+.mail {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
