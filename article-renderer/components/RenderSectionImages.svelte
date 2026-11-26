@@ -90,7 +90,7 @@
           <img
             role="none"
             alt={image.Description || image.Title}
-            src={getImageSrc(image, size())} onclick={() => openLightBox(index)}
+            src={getImageSrc(image, 'large')} onclick={() => openLightBox(index)}
           />
         {/each}
       </div>
@@ -168,4 +168,4 @@
   </div>
 {/if}
 
-<LightBox images={images()} previewSize={size()} bind:this={lightBox} />
+<LightBox images={images()} previewSize={layout() === 'gallery' ? 'large' : size()} bind:this={lightBox} />
