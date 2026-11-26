@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { CmsImage, CmsImagesSize } from 'sheltify-lib/cms-types';
-import { CmsRequestService } from '@app/services/cms-request.service';
+import { getImageFormatUrl } from '@app/services/article-renderer';
 
 @Pipe({
   name: 'cmsImageTTTT',
@@ -22,20 +22,6 @@ export class CmsImagePipe implements PipeTransform {
     if (image == null) {
       return 'https://herzenshunde-strapi-prod.azurewebsites.net/uploads/paw_e60a248111.svg'; //TODO
     }
-    const availableSize = this.getLargestAvailableSize(requestedSize, image);
-    return `${CmsRequestService.publicApiUrl}uploads/${image.ID}_${availableSize}.webp`;
-  }
-
-  private getLargestAvailableSize(requestedSize: CmsImagesSize, image: CmsImage): CmsImagesSize {
-    const sizeOrder: CmsImagesSize[] = ['thumbnail', 'small', 'medium', 'large', 'xlarge'];
-
-    const requestedIndex = sizeOrder.indexOf(requestedSize);
-    const availableIndex = sizeOrder.indexOf(image.LargestAvailableSize);
-
-    if (availableIndex <= requestedIndex) {
-      return image.LargestAvailableSize;
-    } else {
-      return sizeOrder[requestedIndex];
-    }
+    return getImageFormatUrl(image, requestedSize);
   }
 }

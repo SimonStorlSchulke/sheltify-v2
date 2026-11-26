@@ -1,10 +1,9 @@
 import { config } from './config';
 import { CmsAnimal, CmsImage, CmsImagesSize } from 'sheltify-lib/cms-types';
-import { getLargestAvailableImageSize } from 'sheltify-lib/image-utils';
+import { getImageFileName } from 'sheltify-lib/image-utils';
 
 export function getImageSrc(image: CmsImage, requestedSize: CmsImagesSize): string {
-  const availableSize = getLargestAvailableImageSize(requestedSize, image);
-  return `${config.uploadsUrl}${image.ID}_${availableSize}.webp`;
+  return `${config.uploadsUrl}${getImageFileName(image, requestedSize)}`;
 }
 
 export function getAnimalLink(animal: CmsAnimal, allAnimalsByArticle: Record<string, CmsAnimal[]> | undefined) {

@@ -1,5 +1,12 @@
 package shtypes
 
+import "strings"
+
+// svgs are stored unconverted as <ID>.svg instead of scaled webps
+func IsSvgFileName(fileName string) bool {
+	return strings.HasSuffix(strings.ToLower(fileName), ".svg")
+}
+
 type MediaFile struct {
 	CmsType
 	NonImage             bool

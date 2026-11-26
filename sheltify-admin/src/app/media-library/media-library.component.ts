@@ -271,7 +271,7 @@ export class MediaLibraryComponent extends FinishableDialog<CmsImage[]> implemen
       const uploadPromises = Array.from(files).map(file =>
         limit(async () => {
           console.log(`Uploading`, files);
-          const scaledImages = await this.imageConverterService.generateAllSizes(file);
+          const scaledImages = await this.imageConverterService.prepareUpload(file);
           console.log("Scaled", file.name);
           const cmsImage = await lastValueFrom(
             this.cmsRequestSv.uploadScaledImage(scaledImages,

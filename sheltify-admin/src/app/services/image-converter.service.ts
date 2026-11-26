@@ -1,4 +1,5 @@
 import { Service, signal } from '@angular/core';
+import { isSvgFileName } from 'sheltify-lib/image-utils';
 
 @Service()
 export class ImageConverterService {
@@ -11,6 +12,19 @@ export class ImageConverterService {
     ["large", 1280],
     ["xlarge", 1920],
   ];
+
+  /** Files to upload for an image: svgs are uploaded unconverted, other images as scaled webps */
+  async prepareUpload(image: File): Promise<{size: string, blob: Blob}[]> {
+    if (this.isSvg(image)) {
+      return [{size: 'svg', blob: image}];
+    }
+    return this.generateAllSizes(image);
+  }
+
+  isSvg(file: File): boolean {
+    // must match the backend, which identifies svgs by their file name
+    return isSvgFileName(file.name);
+  }
 
   async generateAllSizes(image: File) {
     const img = new Image();

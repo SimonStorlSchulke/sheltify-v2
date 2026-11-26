@@ -1,8 +1,9 @@
 import { cms } from '@shared/cms/sheltify-access.ts';
 import type { CmsImage, CmsImagesSize } from 'sheltify-lib/cms-types.ts';
+import { isSvgImage } from 'sheltify-lib/image-utils.ts';
 
 export function getImageSrc(image: CmsImage, requestedSize: CmsImagesSize): string {
-  if(image.OriginalFileName.endsWith('.svg')) {
+  if(isSvgImage(image)) {
     return `${cms.uploadsUrl}${image.ID}.svg`;
   }
   const availableSize = getLargestAvailableImageSize(requestedSize, image);

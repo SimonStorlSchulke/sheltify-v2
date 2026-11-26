@@ -201,6 +201,17 @@ func UploadScaledWebps(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	svgFile, _, svgErr := r.FormFile("svg")
+	if svgErr == nil {
+		defer svgFile.Close()
+		entity.LargestAvailableSize = "xlarge"
+	}
+
+	if (svgErr == nil) != shtypes.IsSvgFileName(entity.OriginalFileName) {
+		badRequestResponse(w, r, "FileName must end with .svg exactly when an svg is uploaded")
+		return
+	}
+
 	if err1 != nil || err2 != nil {
 		badRequestResponse(w, r, "FocusX and FocusY must be numbers")
 		return
@@ -246,6 +257,14 @@ func UploadScaledWebps(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+
+	if svgErr == nil {
+		if err = services.StoreMultiPartFile(svgFile, filepath.Join("uploads", uuid+".svg")); err != nil {
+			internalServerErrorResponse(w, r, err.Error())
+			repository.DeleteMediaFileMeta(uuid, user.TenantID)
+			return
+		}
+	}
 	logger.Created(r, uuid)
 	createdResponse(w, entity)
 }
@@ -269,7 +288,28 @@ func ReplaceWebps(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if fileName := r.FormValue("FileName"); fileName != "" {
+		entity.OriginalFileName = fileName
+	}
+
+	svgFile, _, svgErr := r.FormFile("svg")
+	if svgErr == nil {
+		defer svgFile.Close()
+	}
+	if (svgErr == nil) != shtypes.IsSvgFileName(entity.OriginalFileName) {
+		badRequestResponse(w, r, "FileName must end with .svg exactly when an svg is uploaded")
+		return
+	}
+
 	services.DeleteUploadsWithPrefix(id)
+
+	if svgErr == nil {
+		entity.LargestAvailableSize = "xlarge"
+		if err = services.StoreMultiPartFile(svgFile, filepath.Join("uploads", id+".svg")); err != nil {
+			internalServerErrorResponse(w, r, err.Error())
+			return
+		}
+	}
 
 	for _, sizeLabel := range sizeNames {
 		uploadedFile, _, err := r.FormFile(sizeLabel)

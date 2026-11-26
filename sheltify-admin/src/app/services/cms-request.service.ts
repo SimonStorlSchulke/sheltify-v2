@@ -366,12 +366,15 @@ export class CmsRequestService {
       .pipe(this.handleRequest(url));
   }
 
-  replaceScaledImage(files: { size: string; blob: Blob; }[], imageId: string): Observable<CmsImage> {
+  replaceScaledImage(files: { size: string; blob: Blob; }[], imageId: string, fileName?: string): Observable<CmsImage> {
     const url = CmsRequestService.adminApiUrl + `media/replace-scaled/${imageId}`;
     const data = new FormData();
 
     for (const file of files) {
       data.append(file.size, file.blob);
+    }
+    if (fileName) {
+      data.append('FileName', fileName);
     }
 
     const options = {

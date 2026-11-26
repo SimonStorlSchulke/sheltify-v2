@@ -16,6 +16,7 @@ import { TagComponent } from '@app/ui/tag/tag.component';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { lastValueFrom } from 'rxjs';
 import { CmsImage, CmsImagesSize } from 'sheltify-lib/cms-types';
+import { isSvgImage } from 'sheltify-lib/image-utils';
 
 @Component({
   selector: 'app-image-editor',
@@ -109,6 +110,8 @@ export class ImageEditorComponent extends FinishableDialog<CmsImage> implements 
     this.image().FocusY = y;
   }
 
+  isSvgImage = isSvgImage;
+
   getSizeString(size: CmsImagesSize): string {
     return new Map<CmsImagesSize, string>([
       ['thumbnail', 'winzig'],
@@ -144,11 +147,11 @@ export class ImageEditorComponent extends FinishableDialog<CmsImage> implements 
 
   async onFilesDropped(files: FileList) {
     this.loaderService.setLoading('Bilder hochladen...');
-    const imageTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/svg"]);
+    const imageTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/svg+xml"]);
 
     if(imageTypes.has(files[0].type)) {
-      const scaledImages = await this.imageConverterService.generateAllSizes(files[0]);
-      const img = await lastValueFrom(this.cmsRequestSv.replaceScaledImage(scaledImages, this.image().ID));
+      const scaledImages = await this.imageConverterService.prepareUpload(files[0]);
+      const img = await lastValueFrom(this.cmsRequestSv.replaceScaledImage(scaledImages, this.image().ID, files[0].name));
       this.editedImage.emit(img);
     } else {
       this.alertService.openAlert("Falsches Dateiformat", "Nur JPG, PNG, WEBP und SVG Bilder werden unterstützt");
