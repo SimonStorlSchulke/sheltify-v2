@@ -44,7 +44,15 @@
           <app-checkbox-input idName="show-in-footer" label="Im Footer verlinken" [(twoWayModel)]="page().LinkInFooter"/>
         </div>
         </div>
-        <app-text-input class="sui grow-1" idName="description" label="Beschreibung (SEO)" [(twoWayModel)]="page().Description" [long]="true"/>
+        <app-text-input
+          class="sui grow-1"
+          idName="description"
+          label="Beschreibung (SEO)"
+          [long]="true"
+          [maxLength]="160"
+          [(twoWayModel)]="page().Description"
+          explanation="Kurze Zusammenfassung des Seiteninhalts, die von Suchmaschinen wie Google in den Suchergebnissen unter dem Titel angezeigt wird. Sie wird auch beim Teilen der Seite in sozialen Netzwerken als Vorschautext verwendet. Empfohlen sind etwa 120 bis 160 Zeichen, die den Inhalt treffend beschreiben und zum Klicken anregen."
+        />
       </div>
         <app-last-edited [entry]="page()"/>
     </form>
