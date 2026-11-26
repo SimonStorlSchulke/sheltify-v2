@@ -1,8 +1,12 @@
 <script lang="ts">
-  import type { CmsImage } from 'sheltify-lib/cms-types';
+  import type { CmsImage, CmsImagesSize } from 'sheltify-lib/cms-types';
   import { getImageSrc } from '../../util';
 
-  let { images }: { images: CmsImage[] } = $props();
+  /**
+   * previewSize: the size the images are already loaded in on the page - it is shown
+   * (scaled up) while the large version loads.
+   */
+  let { images, previewSize }: { images: CmsImage[], previewSize?: CmsImagesSize } = $props();
 
   const minScale = 1;
   const maxScale = 5;
@@ -10,6 +14,7 @@
 
   let lightboxOpen = $state(false);
   let shownId: number = $state(0);
+  let largeLoaded = $state(false);
 
   // zoom & pan
   let scale = $state(1);
@@ -29,9 +34,26 @@
     return { destroy: () => node.remove() };
   }
 
-  export function open(id: number) {
-    shownId = id;
+  /** Shows image `id` (wraps around), starting with the preview until the large version is loaded. */
+  function show(id: number) {
+    const newId = (id + images.length) % images.length;
+    if (newId !== shownId) largeLoaded = false;
+    shownId = newId;
     resetZoom();
+  }
+
+  function onLargeLoaded() {
+    largeLoaded = true;
+  }
+
+  // cached images may already be complete before the load listener is attached
+  $effect(() => {
+    if (imageElement?.complete && imageElement.naturalWidth > 0) largeLoaded = true;
+  });
+
+  export function open(id: number) {
+    largeLoaded = false;
+    show(id);
     lightboxOpen = true;
     document.documentElement.style.overflow = 'hidden';
   }
@@ -43,14 +65,12 @@
 
   export function next(e?: Event) {
     e?.stopPropagation();
-    shownId = (shownId + 1) % images.length;
-    resetZoom();
+    show(shownId + 1);
   }
 
   export function previous(e?: Event) {
     e?.stopPropagation();
-    shownId = (shownId - 1 + images.length) % images.length;
-    resetZoom();
+    show(shownId - 1);
   }
 
   // --- zoom ------------------------------------------------------------------
@@ -236,11 +256,23 @@
       role="none"
     >
       {#key shownId}
+        {#if previewSize && !largeLoaded}
+          <img
+            class="lightbox-preview"
+            src={getImageSrc(image, previewSize)}
+            alt=""
+            aria-hidden="true"
+            draggable="false"
+            style={`transform: translate(${tx}px, ${ty}px) scale(${scale});`}
+          >
+        {/if}
         <img
+          class="lightbox-image"
           bind:this={imageElement}
           src={getImageSrc(image, 'xlarge')}
           alt={image.Description || image.Title}
           draggable="false"
+          onload={onLargeLoaded}
           style={`transform: translate(${tx}px, ${ty}px) scale(${scale});`}
         >
       {/key}
