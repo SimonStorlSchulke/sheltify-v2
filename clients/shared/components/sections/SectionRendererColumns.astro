@@ -61,7 +61,9 @@ const {section, allAnimalsByArticle, tenantConfig} = Astro.props;
           break;
         }
 
-      return <div class={`section-${section.SectionType} sui flex-x wrap`}>{comp}</div>;
+      // text is rendered without a wrapping element, so a flex container would put its paragraphs side by side
+      const layoutClasses = section.SectionType == 'text' ? '' : ' flex-x wrap';
+      return <div class={`section-${section.SectionType} sui${layoutClasses}`}>{comp}</div>;
       })
     return <div style={`flex: ${column.Grow} 1 0px`}  class="column">{sections}</div>
     })

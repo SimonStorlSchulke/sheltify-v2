@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "snhg",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "clients", "run", "snhg"],
+      "port": 4202
+    }
+  ]
+}
