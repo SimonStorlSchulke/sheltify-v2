@@ -51,14 +51,38 @@
   onMount(() => {
     if (layout() !== "gallery") return;
 
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        galleryNearViewport = true;
+        observer.disconnect();
+      }
+    }, {rootMargin: '500px'});
+    if (gallery) observer.observe(gallery);
+
     intervalId = setInterval(() => {
       showSlide(shownId + 1, false);
     }, 5000);
 
-    return () => clearInterval(intervalId);
+    return () => {
+      clearInterval(intervalId);
+      observer.disconnect();
+    };
   });
 
   let shownId: number = $state(0);
+
+  /**
+   * Gallery slides outside the viewport are lazy loaded. Lazy images clipped by the track
+   * only load when they slide in, so once the gallery is near the viewport the
+   * neighbors of the shown slide are loaded eagerly.
+   */
+  let galleryNearViewport = $state(false);
+  let gallery: HTMLDivElement | undefined = $state();
+  function galleryLoading(index: number): 'lazy' | 'eager' {
+    const count = images().length;
+    const distance = Math.abs(index - shownId);
+    return galleryNearViewport && Math.min(distance, count - distance) <= 1 ? 'eager' : 'lazy';
+  }
 
   /** Shows slide `index` (wraps around). Manual navigation stops the autoplay. */
   function showSlide(index: number, cancelInterval = true, e?: Event) {
@@ -80,7 +104,7 @@
 
 
 {#if layout() === "gallery"}
-  <div class="image-carousel">
+  <div class="image-carousel" bind:this={gallery}>
     <div class="viewport">
       <div
         class="track"
@@ -90,6 +114,7 @@
           <img
             role="none"
             alt={image.Description || image.Title}
+            loading={galleryLoading(index)}
             src={getImageSrc(image, 'large')} onclick={() => openLightBox(index)}
           />
         {/each}
@@ -131,6 +156,7 @@
         <img
           role="none"
           onclick={() => openLightBox(index)}
+          loading="lazy"
           src={getImageSrc(image, size())}
           alt={image.Description || image.Title}
         />
@@ -143,6 +169,7 @@
       <img
         role="none"
         onclick={() => openLightBox(index)}
+        loading="lazy"
         src={getImageSrc(image, size())}
         alt={image.Description || image.Title}
       />
@@ -153,6 +180,7 @@
     {#if section.Content.Link}
       <a href={section.Content.Link} rel="noopener noreferrer">
         <img
+          loading="lazy"
           src={getImageSrc(images()[0], size())}
           alt={images()[0].Description || images()[0].Title}
         />
@@ -161,6 +189,7 @@
       <img
         role="none"
         onclick={() => openLightBox(0)}
+        loading="lazy"
         src={getImageSrc(images()[0], size())}
         alt={images()[0].Description || images()[0].Title}
       />

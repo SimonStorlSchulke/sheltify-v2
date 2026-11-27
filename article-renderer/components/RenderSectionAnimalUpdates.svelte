@@ -19,7 +19,7 @@
     <a href={getAnimalLink(animals[0], allAnimalsByArticle)} class="sui update-entry flex-x">
       {#each animals as animal}
         {#if animal.Portrait}
-        <img src={getImageSrc(animal.Portrait, 'small')} class="sui card-image" />
+        <img loading="lazy" src={getImageSrc(animal.Portrait, 'small')} class="sui card-image" />
         {/if}
       {/each}
       <div class="sui flex-y gap-1 p-2">

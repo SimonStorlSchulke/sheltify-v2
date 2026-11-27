@@ -1,9 +1,9 @@
 import { config } from './config';
 import { CmsAnimal, CmsImage, CmsImagesSize } from 'sheltify-lib/cms-types';
-import { getImageFileName } from 'sheltify-lib/image-utils';
+import { getImagePath } from 'sheltify-lib/image-utils';
 
 export function getImageSrc(image: CmsImage, requestedSize: CmsImagesSize): string {
-  return `${config.uploadsUrl}${getImageFileName(image, requestedSize)}`;
+  return `${config.uploadsUrl}${getImagePath(image, requestedSize)}`;
 }
 
 export function getAnimalLink(animal: CmsAnimal, allAnimalsByArticle: Record<string, CmsAnimal[]> | undefined) {

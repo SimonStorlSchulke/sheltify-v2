@@ -25,6 +25,10 @@ func FileServer(r chi.Router, path string, root http.FileSystem) {
 			// prevent scripts inside uploaded svgs from running when the file is opened directly
 			w.Header().Set("Content-Security-Policy", "default-src 'none'; style-src 'unsafe-inline'; img-src data:; sandbox")
 		}
+		if r.URL.Query().Has("v") {
+			// versioned urls (?v=<last change>, see getImagePath in sheltify-lib) change whenever the file is replaced
+			w.Header().Set("Cache-Control", "public, max-age=31536000, immutable")
+		}
 		fs := http.StripPrefix(pathPrefix, http.FileServer(root))
 		fs.ServeHTTP(w, r)
 	})

@@ -63,6 +63,8 @@
         size="xlarge"
         cssClass="hero-img"
         contain={true}
+        loading="eager"
+        fetchpriority={index === 0 ? 'high' : undefined}
         cssStyle={`transform: translateX(${index * 100}%)`}
       />
     {/each}
@@ -72,6 +74,7 @@
       size="xlarge"
       cssClass="hero-img"
       contain={true}
+      loading="eager"
       cssStyle={`transform: translateX(${section.Content.MediaFiles.length * 100}%)`}
     />
   </div>

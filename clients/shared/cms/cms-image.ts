@@ -1,30 +1,13 @@
 import { cms } from '@shared/cms/sheltify-access.ts';
 import type { CmsImage, CmsImagesSize } from 'sheltify-lib/cms-types.ts';
-import { isSvgImage } from 'sheltify-lib/image-utils.ts';
+import { getImagePath } from 'sheltify-lib/image-utils.ts';
 
 export function getImageSrc(image: CmsImage, requestedSize: CmsImagesSize): string {
-  if(isSvgImage(image)) {
-    return `${cms.uploadsUrl}${image.ID}.svg`;
-  }
-  const availableSize = getLargestAvailableImageSize(requestedSize, image);
-  return `${cms.uploadsUrl}${image.ID}_${availableSize}.webp`;
+  return `${cms.uploadsUrl}${getImagePath(image, requestedSize)}`;
 }
 
 export function getSvgSrc(image: CmsImage): string {
   return `${cms.uploadsUrl}${image.ID}`;
-}
-
-export function getLargestAvailableImageSize(requestedSize: CmsImagesSize, image: CmsImage): CmsImagesSize {
-  const sizeOrder: CmsImagesSize[] = ['thumbnail', 'small', 'medium', 'large', 'xlarge'];
-
-  const requestedIndex = sizeOrder.indexOf(requestedSize);
-  const availableIndex = sizeOrder.indexOf(image.LargestAvailableSize);
-
-  if (availableIndex <= requestedIndex) {
-    return image.LargestAvailableSize;
-  } else {
-    return sizeOrder[requestedIndex];
-  }
 }
 
 function isCmsImage(obj: any): obj is CmsImage {

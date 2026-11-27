@@ -52,7 +52,7 @@
 
 <div class={`themable image-grid count-${images.length} ${layout} ${size}`}>
   {#each images as image, index}
-    <img onclick={() => openLightBox(index)} src={getImageSrc(image, 'xlarge')} alt={image.Description || image.Title}>
+    <img onclick={() => openLightBox(index)} loading="lazy" src={getImageSrc(image, 'xlarge')} alt={image.Description || image.Title}>
   {/each}
 </div>
 

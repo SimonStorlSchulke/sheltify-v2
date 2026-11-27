@@ -19,16 +19,24 @@ const faviconType = !favicon || isSvgImage(favicon) ? 'image/svg+xml' : 'image/w
 const pageTitle = seo.title ? (seo.title + ' | ' + siteName) : siteName;
 // Mark the browser tab in "astro dev", so dev and production are easy to tell apart.
 const title = import.meta.env.DEV ? 'DEV ' + pageTitle : pageTitle;
+// pages without a description maintained in the cms still get one (search engines show it in results)
+const description = seo.description?.trim() || (seo.title ? `${seo.title} – ${siteName}` : siteName);
+// images are loaded from the cms, so connect to it early
+const uploadsOrigin = new URL(cms.uploadsUrl).origin;
 ---
 <!doctype html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="preconnect" href={uploadsOrigin}/>
   <link rel="icon" type={faviconType} href={faviconHref}/>
   <meta name="generator" content={Astro.generator}/>
   <title>{title}</title>
-  <og:description content={seo.description ?? ''}/>
+  <meta name="description" content={description}/>
+  <meta property="og:title" content={pageTitle}/>
+  <meta property="og:description" content={description}/>
+  {seo.imageUrl && <meta property="og:image" content={seo.imageUrl}/>}
 </head>
 <body>
 <slot/>

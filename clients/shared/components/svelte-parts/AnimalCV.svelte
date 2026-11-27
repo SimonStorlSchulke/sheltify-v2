@@ -53,7 +53,7 @@
         </div>
         <div class="cv-description">{animal.Description}</div>
         {#if animal.Portrait}
-          <img class="cv-img" alt={animal.Name} src={getImageSrc(animal.Portrait, 'medium')}>
+          <img class="cv-img" loading="lazy" alt={animal.Name} src={getImageSrc(animal.Portrait, 'medium')}>
         {/if}
       </div>
       <div class="cv-actions sui flex-x wrap gap-2">

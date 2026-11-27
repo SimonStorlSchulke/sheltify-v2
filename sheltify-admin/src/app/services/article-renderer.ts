@@ -1,7 +1,7 @@
 import { CmsRequestService } from '@app/services/cms-request.service';
 import { SectionType } from 'sheltify-lib/article-types';
 import { CmsImage, CmsImagesSize } from 'sheltify-lib/cms-types';
-import { getImageFileName } from 'sheltify-lib/image-utils';
+import { getImagePath } from 'sheltify-lib/image-utils';
 
 export const sectionLabels = new Map<SectionType, string>([
   ['title', 'Überschrift'],
@@ -23,7 +23,7 @@ export const sectionLabels = new Map<SectionType, string>([
 ]);
 
 export function getImageFormatUrl(image: CmsImage, requestedSize: CmsImagesSize): string {
-  return `${CmsRequestService.publicApiUrl}uploads/${getImageFileName(image, requestedSize)}`;
+  return `${CmsRequestService.publicApiUrl}uploads/${getImagePath(image, requestedSize)}`;
 }
 
 export function getLargestAvailableImageSize(requestedSize: CmsImagesSize, image: CmsImage): CmsImagesSize {
