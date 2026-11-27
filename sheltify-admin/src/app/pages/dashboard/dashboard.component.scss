@@ -4,6 +4,14 @@
   max-width: 1400px;
 }
 
+.site-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  align-self: flex-start;
+  color: $primary-d1;
+}
+
 .columns {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));

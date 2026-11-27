@@ -1,23 +1,21 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
-import { AnimalStatsComponent } from '@app/pages/dashboard/animal-stats/animal-stats.component';
+import { Component, ChangeDetectionStrategy, computed, inject } from '@angular/core';
 import { AttentionListComponent } from '@app/pages/dashboard/attention-list/attention-list.component';
 import { HomeFoundOverviewComponent } from '@app/pages/dashboard/home-found-overview/home-found-overview.component';
-import { QuickActionsComponent } from '@app/pages/dashboard/quick-actions/quick-actions.component';
 import { RecentFormsComponent } from '@app/pages/dashboard/recent-forms/recent-forms.component';
 import { RecentlyEditedComponent } from '@app/pages/dashboard/recently-edited/recently-edited.component';
 import { AnimalService } from '@app/services/animal.service';
 import { AuthService } from '@app/services/auth.service';
 import { TenantConfigurationService } from '@app/services/tenant-configuration.service';
+import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
 
 @Component({
   selector: 'app-dashboard',
   imports: [
     AsyncPipe,
-    AnimalStatsComponent,
     AttentionListComponent,
     HomeFoundOverviewComponent,
-    QuickActionsComponent,
+    BtIconComponent,
     RecentlyEditedComponent,
     RecentFormsComponent,
   ],
@@ -30,6 +28,7 @@ export class DashboardComponent {
   authService = inject(AuthService);
 
   readonly greeting = greetingFor(new Date());
+  readonly siteUrl = computed(() => this.tenantConfigurationService.config()?.SiteUrl || undefined);
 
   constructor() {
     // the animal service is a singleton and might hold stale data from an earlier visit

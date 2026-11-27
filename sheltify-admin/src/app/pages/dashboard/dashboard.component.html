@@ -6,10 +6,12 @@
         <h2>{{ greeting }}, {{ user.Name }}!</h2>
       }
     </div>
-    <app-quick-actions/>
+    @if (siteUrl(); as url) {
+      <a class="site-link" [href]="url" target="_blank" rel="noopener">
+        <app-bt-icon name="BoxArrowUpRight" size="s"/> Website öffnen
+      </a>
+    }
   </header>
-
-  <app-animal-stats/>
 
   <div class="columns">
     <section class="card"><app-attention-list/></section>
