@@ -13,10 +13,16 @@
     }
   </header>
 
-  <div class="columns">
-    <section class="card"><app-attention-list/></section>
-    <section class="card"><app-recent-forms/></section>
-    <section class="card"><app-recently-edited/></section>
-    <section class="card"><app-home-found-overview/></section>
+  <div class="layout">
+    <div class="main">
+      <section class="card"><app-attention-list/></section>
+      <div class="pair">
+        <section class="card"><app-recent-forms/></section>
+        <section class="card"><app-home-found-overview/></section>
+      </div>
+    </div>
+    <aside class="side">
+      <section class="card"><app-recently-edited/></section>
+    </aside>
   </div>
 </div>

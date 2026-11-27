@@ -12,13 +12,27 @@
   color: $primary-d1;
 }
 
-.columns {
+.layout {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
   gap: 16px;
   align-items: start;
 
-  @media (max-width: 500px) {
+  @media (max-width: 900px) {
     grid-template-columns: 1fr;
   }
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.pair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  align-items: start;
 }
