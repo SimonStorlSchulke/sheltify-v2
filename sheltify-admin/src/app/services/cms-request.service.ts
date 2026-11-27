@@ -16,7 +16,7 @@ import { LoaderService } from '@app/layout/loader/loader.service';
 import { AlertService } from '@app/services/alert.service';
 import { AuthService, CmsUser } from './auth.service';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map, timer, tap, OperatorFunction, lastValueFrom, Subject, firstValueFrom } from 'rxjs';
+import { Observable, map, timer, tap, OperatorFunction, lastValueFrom, Subject, firstValueFrom, defer } from 'rxjs';
 
 
 export type CollectionResult<T> = {
@@ -461,12 +461,16 @@ export class CmsRequestService {
     message: string = "",
   ): OperatorFunction<T, T> {
     const loadTimerMs = 300;
-    return (source: Observable<T>): Observable<T> => {
-      const loaderText = (new URL(url, window.location.origin).pathname);
-
-      let timerSub = timer(loadTimerMs)
+    const loaderText = (new URL(url, window.location.origin).pathname);
+    // defer: start the loader timer per subscription, not when the observable is built
+    return (source: Observable<T>): Observable<T> => defer(() => {
+      let loaderShown = false;
+      const timerSub = timer(loadTimerMs)
         .subscribe({
-          next: () => this.loaderService.setLoading(loaderText),
+          next: () => {
+            loaderShown = true;
+            this.loaderService.setLoading(loaderText);
+          },
         });
 
       return source.pipe(
@@ -486,12 +490,12 @@ export class CmsRequestService {
             );
           },
           finalize: () => {
-            this.loaderService.unsetLoading(loaderText)
             timerSub.unsubscribe();
+            if (loaderShown) this.loaderService.unsetLoading(loaderText);
           },
         })
       );
-    }
+    });
   }
 }
 

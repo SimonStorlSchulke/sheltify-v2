@@ -1,7 +1,7 @@
 @if (loaderSv.loadingInfos().size > 0) {
 <div class="loading-overlay">
   <div class="sui loader"></div>
-  @for (loader of loaderSv.loadingInfos(); track $index) {
+  @for (loader of loaderSv.loadingInfos(); track loader) {
     {{loader}}
   }
 </div>

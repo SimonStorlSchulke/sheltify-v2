@@ -149,13 +149,16 @@ export class ImageEditorComponent extends FinishableDialog<CmsImage> implements 
     this.loaderService.setLoading('Bilder hochladen...');
     const imageTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/svg+xml"]);
 
-    if(imageTypes.has(files[0].type)) {
-      const scaledImages = await this.imageConverterService.prepareUpload(files[0]);
-      const img = await lastValueFrom(this.cmsRequestSv.replaceScaledImage(scaledImages, this.image().ID, files[0].name));
-      this.editedImage.emit(img);
-    } else {
-      this.alertService.openAlert("Falsches Dateiformat", "Nur JPG, PNG, WEBP und SVG Bilder werden unterstützt");
+    try {
+      if(imageTypes.has(files[0].type)) {
+        const scaledImages = await this.imageConverterService.prepareUpload(files[0]);
+        const img = await lastValueFrom(this.cmsRequestSv.replaceScaledImage(scaledImages, this.image().ID, files[0].name));
+        this.editedImage.emit(img);
+      } else {
+        this.alertService.openAlert("Falsches Dateiformat", "Nur JPG, PNG, WEBP und SVG Bilder werden unterstützt");
+      }
+    } finally {
+      this.loaderService.unsetLoading('Bilder hochladen...');
     }
-    this.loaderService.unsetLoading('Bilder hochladen...');
   }
 }
