@@ -1,10 +1,10 @@
 <div class="container sui p-3">
   <h1 class="title">Einloggen</h1>
 
-  <div class="sui flex-y gap-2">
+  <form class="sui flex-y gap-2" (submit)="$event.preventDefault(); onLogin(userIdInput.value, passwordInput.value)">
     <div class="sui form-field">
       <div class="sui has-icons-left has-icons-right">
-        <input id="username" #userIdInput class="input" type="text" placeholder="Nutzername">
+        <input id="username" #userIdInput class="input" type="text" placeholder="Nutzername" autocomplete="username">
         <span class="icon is-small is-left">
       <i class="fas fa-envelope"></i>
     </span>
@@ -16,7 +16,7 @@
 
     <div class="sui form-field">
       <div class="sui form-control has-icons-left has-icons-right">
-        <input #passwordInput id="password" class="input" type="password" placeholder="Passwort">
+        <input #passwordInput id="password" class="input" type="password" placeholder="Passwort" autocomplete="current-password">
         <span class="icon is-small is-left">
       <i class="fas fa-envelope"></i>
     </span>
@@ -27,8 +27,8 @@
     </div>
 
     <div>
-     <button id="login" (click)="onLogin(userIdInput.value, passwordInput.value)" class="button primary">login</button>
+     <button id="login" type="submit" class="button primary">login</button>
     </div>
-  </div>
+  </form>
 </div>
 
