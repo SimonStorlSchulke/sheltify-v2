@@ -1,4 +1,4 @@
-@let edited = editedSection();
+@let edited = editDialog.edited();
 @let columns = section().Content.Columns;
 @let moved = articleEditorService.movedItem()?.sectionRef;
 
@@ -76,15 +76,16 @@
 </div>
 
 <ng-template #sectionDialog>
-  @if (editedSection(); as editedVal) {
-    <div class="section-dialog">
-      <app-section-editor-column-sections
-        [section]="editedVal.section"
-        (done)="closeEditor()"
-        (discard)="discardEdit()"
-        (move)="startMoveFromDialog()"
-        (deletedSection)="deleteEditedSection()"
-      />
-    </div>
+  @if (editDialog.edited(); as editedVal) {
+    <app-section-editor-panel
+      class="section-dialog"
+      [label]="sectionLabels.get(editedVal.section.SectionType) ?? 'Sektion'"
+      (done)="editDialog.close()"
+      (discard)="editDialog.discard()"
+      (move)="startMoveFromDialog()"
+      (deletedSection)="deleteEditedSection()"
+    >
+      <app-section-editor-column-sections [section]="editedVal.section"/>
+    </app-section-editor-panel>
   }
 </ng-template>

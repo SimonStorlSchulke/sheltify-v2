@@ -1,61 +1,49 @@
 @let sectionVal = section();
 
-<header class="panel-header">
-  <b class="panel-title">{{ sectionLabels.get(sectionVal.SectionType) ?? 'Sektion' }}</b>
-  <button class="small unstyled icon-button" title="Sektion löschen" aria-label="Sektion löschen" (click)="deletedSection.emit()">
-    <app-bt-icon name="Trash" size="ms"/>
-  </button>
-  <button class="small" title="Sektion verschieben: danach auf eine Lücke klicken" (click)="move.emit()">Verschieben</button>
-  <button class="small" title="Änderungen verwerfen" (click)="discard.emit()">Verwerfen</button>
-  <button class="small primary" title="Fertig (Esc)" (click)="done.emit()">Fertig</button>
-</header>
-
-<div class="panel-body">
-  @switch (sectionVal.SectionType) {
-    @case ('title') {
-      <app-section-editor-title [section]="sectionVal"/>
-    }
-    @case ('text') {
-      <app-section-editor-text [section]="sectionVal"/>
-    }
-    @case ('image') {
-      <app-section-editor-images [section]="sectionVal"/>
-    }
-    @case ('hero') {
-      <app-section-editor-hero [section]="sectionVal"/>
-    }
-    @case ('animal-list') {
-      <p>Nicht unterstützt im Spalten-Layout</p>
-    }
-    @case ('animal-updates') {
-      <p>Nicht unterstützt im Spalten-Layout</p>
-    }
-    @case ('html') {
-      <app-section-editor-html [section]="sectionVal"/>
-    }
-    @case ('video') {
-      <app-section-editor-video [section]="sectionVal"/>
-    }
-    @case ('form') {
-      <app-section-editor-form [section]="sectionVal"/>
-    }
-    @case ('file') {
-      <app-section-editor-file [section]="sectionVal"/>
-    }
-    @case ('home-found') {
-      <app-section-editor-home-found [section]="sectionVal"/>
-    }
-    @case ('home-found-feedback') {
-      <app-section-editor-home-found-feedback [section]="sectionVal"/>
-    }
-    @case ('blogs') {
-      <app-section-editor-blogs [section]="sectionVal"/>
-    }
-    @case ('special') {
-      <app-section-editor-special [section]="sectionVal"/>
-    }
-    @case ('team-member') {
-      <app-section-editor-team-member [section]="sectionVal"/>
-    }
+@switch (sectionVal.SectionType) {
+  @case ('title') {
+    <app-section-editor-title [section]="sectionVal"/>
   }
-</div>
+  @case ('text') {
+    <app-section-editor-text [section]="sectionVal"/>
+  }
+  @case ('image') {
+    <app-section-editor-images [section]="sectionVal"/>
+  }
+  @case ('hero') {
+    <app-section-editor-hero [section]="sectionVal"/>
+  }
+  @case ('animal-list') {
+    <p>Nicht unterstützt im Spalten-Layout</p>
+  }
+  @case ('animal-updates') {
+    <p>Nicht unterstützt im Spalten-Layout</p>
+  }
+  @case ('html') {
+    <app-section-editor-html [section]="sectionVal"/>
+  }
+  @case ('video') {
+    <app-section-editor-video [section]="sectionVal"/>
+  }
+  @case ('form') {
+    <app-section-editor-form [section]="sectionVal"/>
+  }
+  @case ('file') {
+    <app-section-editor-file [section]="sectionVal"/>
+  }
+  @case ('home-found') {
+    <app-section-editor-home-found [section]="sectionVal"/>
+  }
+  @case ('home-found-feedback') {
+    <app-section-editor-home-found-feedback [section]="sectionVal"/>
+  }
+  @case ('blogs') {
+    <app-section-editor-blogs [section]="sectionVal"/>
+  }
+  @case ('special') {
+    <app-section-editor-special [section]="sectionVal"/>
+  }
+  @case ('team-member') {
+    <app-section-editor-team-member [section]="sectionVal"/>
+  }
+}

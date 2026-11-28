@@ -1,4 +1,6 @@
-<div class="sui flex-y grow-1 article-container card" [class.dragMode]="articleEditorService.movedItem()">
+@let moved = articleEditorService.movedItem()?.sectionRef;
+
+<div class="sui flex-y grow-1 article-container card" [class.dragMode]="moved" [class.fillMode]="selectedFillColor() !== undefined">
 <span class="sui flex-x jc-end grow-1 gap-2">
   @if (!saveArticle()) {
     <button data-testid="btn-save-article" class="grow-1 primary" (click)="save({pushUpdate: false, updateNote: ''})">Speichern</button>
@@ -25,42 +27,42 @@
       data-testid="row-selector-0"
       class="move-to-row"
     >
-      @if (articleEditorService.copiedSection(); as copied) {
-        <div class="button-group paste-button sui flex-x">
-          <button (click)="pasteSectionAtRow($event, 0)" class="secondary">
-            {{ sectionLabels.get(copied.SectionType) }} Einfügen
-          </button>
-          <button (click)="cancelPaste($event)" class="secondary"><app-bt-icon name="X" size="s" /></button>
-        </div>
-      }
+      <ng-container *ngTemplateOutlet="pasteButton; context: { $implicit: 0 }"/>
     </div>
 
     @for (section of article.Structure.Rows; track section) {
-
-      <app-section-editor
-        (click)="clickSection(section, $index, $event)"
-        [(editedRow)]="editedRow"
-        [editable]="selectedFillColor() == undefined"
-        [section]="section"
-        [rowIndex]="$index"
-      />
+      <div
+        class="section-preview themable article"
+        [class.is-moved]="moved === section"
+        [attr.data-testid]="'section-preview-' + $index"
+        title="Klicken zum Bearbeiten"
+        (click)="clickSection(section)"
+      >
+        <div class="preview-badge">
+          <span class="preview-label">{{ sectionLabel(section) }}</span>
+          <button
+            class="preview-move-button icon-button unstyled"
+            title="Verschieben: drücken und auf einer Lücke loslassen oder danach auf eine Lücke klicken"
+            aria-label="Sektion verschieben"
+            (mousedown)="startMove(section, $event)"
+            (click)="$event.stopPropagation()"
+          ><app-bt-icon name="GripVertical" size="s"/></button>
+        </div>
+        <!-- Recreated after editing, because web component renderers don't notice mutations. -->
+        @for (version of [previewVersion(section)]; track version) {
+          <app-section-renderer [section]="section"/>
+        }
+      </div>
 
       @let sectionAfter = article.Structure.Rows[$index + 1];
       <div
         (click)="addSectionAtRow($index + 1)"
         (mouseup)="moveToNewRow($index + 1)"
-        [attr.data-testid]="'row-selector-' + $index + 1"
+        [attr.data-testid]="'row-selector-' + ($index + 1)"
         class="move-to-row"
         [class]="'mt-' + sectionAfter?.BackgroundColor + ' ' + 'mb-' + section.BackgroundColor"
       >
-        @if (articleEditorService.copiedSection(); as copied) {
-          <div class="button-group paste-button sui flex-x">
-            <button (click)="pasteSectionAtRow($event, $index + 1)" class="secondary">
-              {{ sectionLabels.get(copied.SectionType) }} Einfügen
-            </button>
-            <button (click)="cancelPaste($event)" class="secondary"><app-bt-icon name="X" size="s" /></button>
-          </div>
-        }
+        <ng-container *ngTemplateOutlet="pasteButton; context: { $implicit: $index + 1 }"/>
       </div>
     }
   }
@@ -97,7 +99,7 @@
   }
 </div>
 
-<ng-template let-rowIndex>
+<ng-template #pasteButton let-rowIndex>
   @if (articleEditorService.copiedSection(); as copied) {
     <div class="button-group paste-button sui flex-x">
       <button (click)="pasteSectionAtRow($event, rowIndex)" class="secondary">
@@ -105,5 +107,23 @@
       </button>
       <button (click)="cancelPaste($event)" class="secondary"><app-bt-icon name="X" size="s" /></button>
     </div>
+  }
+</ng-template>
+
+<ng-template #sectionDialog>
+  @if (editDialog.edited(); as edited) {
+    <app-section-editor-panel
+      class="section-dialog"
+      [label]="sectionLabel(edited.section)"
+      [clipboard]="true"
+      (done)="editDialog.close()"
+      (discard)="editDialog.discard()"
+      (move)="startMoveFromDialog()"
+      (copy)="copyEditedSection()"
+      (cut)="cutEditedSection()"
+      (deletedSection)="deleteEditedSection()"
+    >
+      <app-section-editor-all-sections [section]="edited.section" (triggerRerender)="rerenderPreview(edited.section)"/>
+    </app-section-editor-panel>
   }
 </ng-template>

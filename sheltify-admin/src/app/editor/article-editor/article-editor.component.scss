@@ -57,6 +57,81 @@
   }
 }
 
+// --------------------------------------
+// Section previews - clicking one opens its editor in a dialog
+// --------------------------------------
+.section-preview {
+  position: relative;
+  cursor: pointer;
+
+  // links, forms and web components in the preview must not catch the click
+  app-section-renderer {
+    pointer-events: none;
+  }
+
+  &:hover {
+    outline: 1px solid $primary;
+  }
+
+  &.is-moved {
+    opacity: 0.45;
+    outline: 2px dashed $primary;
+  }
+}
+
+@media (hover: none) {
+  .section-preview {
+    outline: 1px solid $neutral150;
+  }
+}
+
+// Section type and move grip, shown on hover at the top edge of the preview
+.preview-badge {
+  position: absolute;
+  top: 6px;
+  right: 12px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 2px 2px 10px;
+  border-radius: 999px;
+  background: $neutral0;
+  box-shadow: 0 1px 6px #00000026;
+  opacity: 0;
+  transition: opacity 0.15s;
+
+  .section-preview:hover &,
+  &:focus-within {
+    opacity: 1;
+  }
+
+  .preview-label {
+    color: $primary;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+}
+
+.preview-move-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  cursor: grab;
+
+  &:hover {
+    background: $primary-h10;
+    color: $primary-d2;
+  }
+}
+
+.fillMode .section-preview {
+  cursor: copy;
+}
+
 // Drag mode
 .dragMode {
   cursor: crosshair !important;
@@ -69,6 +144,18 @@
       background: $primary;
       cursor: crosshair !important;
     }
+  }
+
+  .section-preview {
+    cursor: crosshair;
+
+    &:not(.is-moved) {
+      outline: none;
+    }
+  }
+
+  .preview-badge {
+    display: none;
   }
 }
 

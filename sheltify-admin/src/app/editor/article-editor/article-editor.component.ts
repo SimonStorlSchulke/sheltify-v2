@@ -1,4 +1,5 @@
-import { Component, DestroyRef, effect, input, model, OnInit, Renderer2, signal, inject, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, ApplicationRef } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { Component, DestroyRef, effect, input, OnInit, Renderer2, signal, inject, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, TemplateRef, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { AskSaveService } from '@app/services/ask-save.service';
@@ -10,19 +11,32 @@ import { Section } from 'sheltify-lib/dist/article-types';
 import { createEmptyArticle } from '@app/cms-types/cms-type.factory';
 import { ArticleEditorService } from '@app/editor/article-editor/article-editor.service';
 import { createEmptySection } from '@app/editor/article-editor/article-section.factory';
-import { runLayoutTransition } from '@app/editor/article-editor/layout-transition';
 import { PickNewSectionComponent } from '@app/editor/article-editor/pick-new-section/pick-new-section.component';
-import { SectionEditorComponent } from '@app/editor/article-editor/section-editor/section-editor.component';
+import { SectionEditDialog } from '@app/editor/article-editor/section-edit-dialog';
+import { SectionEditorAllSectionsComponent } from '@app/editor/article-editor/section-editor/section-editor-all-sections/section-editor-all-sections.component';
+import { SectionEditorPanelComponent } from '@app/editor/article-editor/section-editor/section-editor-panel/section-editor-panel.component';
 import { TextInputComponent } from '@app/forms/text-input/text-input.component';
+import { SectionRendererComponent } from '@app/section-renderer/section-renderer.component';
+import { AlertService } from '@app/services/alert.service';
 import { sectionLabels } from '@app/services/article-renderer';
 import { CmsRequestService } from '@app/services/cms-request.service';
 import { ModalService } from '@app/services/modal.service';
 import { TenantConfigurationService } from '@app/services/tenant-configuration.service';
 import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
 
+const copiedToast = 'Sektion kann nun über den "Einfügen" Knopf beim Hover zwischen den Sektionen wieder eingefügt werden (auch in anderen Artikeln).';
+
 @Component({
   selector: 'app-article-editor',
-  imports: [FormsModule, SectionEditorComponent, TextInputComponent, BtIconComponent],
+  imports: [
+    FormsModule,
+    NgTemplateOutlet,
+    TextInputComponent,
+    BtIconComponent,
+    SectionRendererComponent,
+    SectionEditorPanelComponent,
+    SectionEditorAllSectionsComponent,
+  ],
   providers: [provideIcons({bootstrapGripVertical, bootstrapX, bootstrapPlus, bootstrapEye})],
   templateUrl: './article-editor.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
@@ -37,7 +51,7 @@ export class ArticleEditorComponent implements OnInit {
   private tenantConfigurationService = inject(TenantConfigurationService);
   private cdRef = inject(ChangeDetectorRef);
   private askSaveService = inject(AskSaveService);
-  private appRef = inject(ApplicationRef);
+  private alertService = inject(AlertService);
 
 
   showUpdateNote = input<boolean>(false);
@@ -46,9 +60,18 @@ export class ArticleEditorComponent implements OnInit {
   saveArticle = input<Observable<{updateNote: string, pushUpdate: boolean} | undefined>>();
 
   selectedFillColor = signal<string | undefined>(undefined);
-  editedRow = model<number | undefined>(undefined);
   colorPickerExpanded = signal<boolean>(false);
 
+  private readonly sectionDialog = viewChild.required<TemplateRef<unknown>>('sectionDialog');
+  readonly editDialog = new SectionEditDialog({
+    template: this.sectionDialog,
+    findList: () => this.articleEditorService.article()?.Structure.Rows,
+    afterClose: section => this.rerenderPreview(section),
+  });
+
+  /** Per section counter, bumped to recreate its preview (see template). */
+  private readonly previewVersions = new WeakMap<Section, number>();
+  private readonly previewVersionsChanged = signal(0);
 
   constructor() {
 
@@ -66,13 +89,21 @@ export class ArticleEditorComponent implements OnInit {
 
   ngOnInit() {
     this.saveArticle()?.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((saveOptions) => this.save(saveOptions));
+  }
 
-    // Keep the moved section (or the columns section it landed in) selected after a move.
-    this.articleEditorService.sectionMoved.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(rowSection => {
-      const row = this.articleEditorService.article()?.Structure.Rows.indexOf(rowSection) ?? -1;
-      // timeout so the deselect in section-editor.component doesn't trigger after the select
-      setTimeout(() => this.editedRow.set(row), 0);
-    });
+  sectionLabel(section: Section): string {
+    if (section.SectionType == 'special') return section.Content.Type;
+    return sectionLabels.get(section.SectionType) ?? section.SectionType;
+  }
+
+  previewVersion(section: Section): number {
+    this.previewVersionsChanged();
+    return this.previewVersions.get(section) ?? 0;
+  }
+
+  rerenderPreview(section: Section) {
+    this.previewVersions.set(section, (this.previewVersions.get(section) ?? 0) + 1);
+    this.previewVersionsChanged.update(v => v + 1);
   }
 
   async addSectionAtRow(row: number) {
@@ -93,24 +124,9 @@ export class ArticleEditorComponent implements OnInit {
     article.Structure.Rows.splice(row, 0, sectionRef);
 
     this.exitMoveMode();
-    this.editedRow.set(row);
     this.cdRef.markForCheck();
     this.askSaveService.markDirty();
-  }
-
-  private addGlobalStyle(css: string) {
-    const tenantId = this.tenantConfigurationService.config()?.TenantID;
-    if(tenantId) {
-      const id = `style-${this.tenantConfigurationService.config()?.TenantID}`;
-      const elementExists = !!document.getElementById(id);
-      if(elementExists) return;
-      const link = document.createElement( "link" );
-      link.id = id;
-      link.href = css;
-      link.type = "text/css";
-      link.rel = "stylesheet";
-      this.renderer.appendChild(document.head, link);
-    }
+    this.editDialog.open(sectionRef, true);
   }
 
   async save(saveOptions: { updateNote: string, pushUpdate: boolean } | undefined) {
@@ -133,6 +149,20 @@ export class ArticleEditorComponent implements OnInit {
     }, 1);
   }
 
+  /** Press the grip of a preview, release on a gap (or click a gap afterwards). */
+  startMove(section: Section, event: MouseEvent) {
+    event.stopPropagation();
+    event.preventDefault();
+    this.articleEditorService.enterMoveMode(section);
+  }
+
+  startMoveFromDialog() {
+    const section = this.editDialog.edited()?.section;
+    if (!section) return;
+    this.editDialog.close();
+    this.articleEditorService.enterMoveMode(section);
+  }
+
   moveToNewRow(rowTo: number) {
     const article = this.articleEditorService.article();
     if (!article || !this.articleEditorService.movedItem()) return;
@@ -149,20 +179,38 @@ export class ArticleEditorComponent implements OnInit {
     this.askSaveService.markDirty();
   }
 
-  clickSection(section: Section, row: number, event: MouseEvent) {
+  clickSection(section: Section) {
+    if (this.articleEditorService.movedItem()) return;
     const selectedColor = this.selectedFillColor();
     if (selectedColor !== undefined) {
       section.BackgroundColor = selectedColor;
       this.selectedFillColor.set(undefined);
     } else {
-      const clickedSection = event.currentTarget as Element;
-      // wrap in timeout so the deselect in section-editor.component doesn't trigger after the select
-      setTimeout(() => {
-        if (this.editedRow() === row) return;
-        // opening this section also closes the previous one - keep the clicked section in place
-        runLayoutTransition(this.appRef, () => this.editedRow.set(row), clickedSection);
-      }, 0);
+      this.editDialog.open(section);
     }
+  }
+
+  copyEditedSection() {
+    const section = this.editDialog.edited()?.section;
+    if (!section) return;
+    this.articleEditorService.setCopiedSection(section);
+    this.editDialog.close();
+    this.alertService.openToast(copiedToast, 'Kopiert');
+  }
+
+  cutEditedSection() {
+    const section = this.editDialog.remove();
+    if (!section) return;
+    this.articleEditorService.setCopiedSection(section);
+    this.askSaveService.markDirty();
+    this.alertService.openToast(copiedToast, 'Ausgeschnitten');
+  }
+
+  async deleteEditedSection() {
+    const answer = await this.alertService.openAlert('Sektion wirklich entfernen?', '', ['nein', 'ja']);
+    if (answer !== 'ja') return;
+    this.editDialog.remove();
+    this.askSaveService.markDirty();
   }
 
   pasteSectionAtRow(event: MouseEvent, row: number) {

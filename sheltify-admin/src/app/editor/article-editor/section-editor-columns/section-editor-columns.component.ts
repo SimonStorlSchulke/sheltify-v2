@@ -1,9 +1,10 @@
-import { Dialog, DialogRef } from '@angular/cdk/dialog';
-import { Component, input, inject, ChangeDetectionStrategy, signal, DestroyRef, TemplateRef, viewChild, ViewContainerRef } from '@angular/core';
+import { Component, input, inject, ChangeDetectionStrategy, signal, TemplateRef, viewChild } from '@angular/core';
 import { SectionRendererComponent } from '@app/section-renderer/section-renderer.component';
 import { Section, SectionColumns } from 'sheltify-lib/article-types';
 import { ArticleEditorService, typesNotAllowedInColumns } from '@app/editor/article-editor/article-editor.service';
 import { createEmptySection } from '@app/editor/article-editor/article-section.factory';
+import { SectionEditDialog } from '@app/editor/article-editor/section-edit-dialog';
+import { SectionEditorPanelComponent } from '@app/editor/article-editor/section-editor/section-editor-panel/section-editor-panel.component';
 import { AskSaveService } from '@app/services/ask-save.service';
 import { PickNewSectionComponent } from '@app/editor/article-editor/pick-new-section/pick-new-section.component';
 import { SectionEditorColumnSectionsComponent } from '@app/editor/article-editor/section-editor/section-editor-column-sections/section-editor-column-sections.component';
@@ -11,23 +12,17 @@ import { CheckboxInputComponent } from '@app/forms/checkbox-input/checkbox-input
 import { AlertService } from '@app/services/alert.service';
 import { ModalService } from '@app/services/modal.service';
 import { BtIconComponent } from '@app/ui/bt-icon/bt-icon.component';
+import { sectionLabels } from '@app/services/article-renderer';
 
 const maxColumns = 4;
 const maxGrow = 12;
-
-interface EditedSection {
-  section: Section;
-  /** State before editing started, restored on "Verwerfen". */
-  snapshot: Section;
-  /** Section was just added - "Verwerfen" removes it again. */
-  isNew: boolean;
-}
 
 @Component({
   selector: 'app-section-editor-columns',
   imports: [
     BtIconComponent,
     SectionEditorColumnSectionsComponent,
+    SectionEditorPanelComponent,
     CheckboxInputComponent,
     SectionRendererComponent,
   ],
@@ -42,21 +37,19 @@ export class SectionEditorColumnsComponent {
   readonly articleEditorService = inject(ArticleEditorService);
 
   readonly maxColumns = maxColumns;
+  readonly sectionLabels = sectionLabels;
 
   section = input.required<SectionColumns>();
-  editedSection = signal<EditedSection | undefined>(undefined);
 
   /** Bumped to recreate the column previews after editing (see template). */
   previewVersion = signal(0);
 
-  private readonly dialog = inject(Dialog);
-  private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly sectionDialog = viewChild.required<TemplateRef<unknown>>('sectionDialog');
-  private dialogRef?: DialogRef<unknown, unknown>;
-
-  constructor() {
-    inject(DestroyRef).onDestroy(() => this.dialogRef?.close());
-  }
+  readonly editDialog = new SectionEditDialog({
+    template: this.sectionDialog,
+    findList: section => this.section().Content.Columns.find(column => column.Sections.includes(section))?.Sections,
+    afterClose: () => this.previewVersion.update(v => v + 1),
+  });
 
   readonly maxGrow = maxGrow;
 
@@ -86,9 +79,9 @@ export class SectionEditorColumnsComponent {
       );
       if (answer !== 'ja') return;
     }
-    const edited = this.editedSection();
+    const edited = this.editDialog.edited();
     if (edited && column.Sections.includes(edited.section)) {
-      this.closeEditor();
+      this.editDialog.close();
     }
     this.section().Content.Columns.splice(iCol, 1);
     this.askSaveService.markDirty();
@@ -114,9 +107,9 @@ export class SectionEditorColumnsComponent {
   }
 
   startMoveFromDialog() {
-    const section = this.editedSection()?.section;
+    const section = this.editDialog.edited()?.section;
     if (!section) return;
-    this.closeEditor();
+    this.editDialog.close();
     this.articleEditorService.enterMoveMode(section);
   }
 
@@ -142,7 +135,8 @@ export class SectionEditorColumnsComponent {
       : sectionPickReturn;
 
     this.section().Content.Columns[iCol].Sections.splice(iRow, 0, sectionRef);
-    this.openEditor(sectionRef, true);
+    this.askSaveService.markDirty();
+    this.editDialog.open(sectionRef, true);
   }
 
   moveColumn(iColumn: number, direction: -1 | 1) {
@@ -155,66 +149,13 @@ export class SectionEditorColumnsComponent {
 
   editSection(section: Section) {
     if (this.articleEditorService.movedItem()) return;
-    if (this.editedSection()?.section === section) return;
-    this.openEditor(section, false);
-  }
-
-  private openEditor(section: Section, isNew: boolean) {
-    this.editedSection.set({ section, snapshot: structuredClone(section), isNew });
-    if (this.dialogRef) return;
-
-    this.dialogRef = this.dialog.open(this.sectionDialog(), {
-      panelClass: 'modal-mobile-fullscreen',
-      viewContainerRef: this.viewContainerRef,
-      autoFocus: 'dialog',
-      ariaLabel: 'Sektion bearbeiten',
-    });
-    // Esc and backdrop click close the dialog and keep the (live applied) changes.
-    this.dialogRef.closed.subscribe(() => {
-      this.dialogRef = undefined;
-      if (this.editedSection()) this.closeEditor();
-    });
-  }
-
-  closeEditor() {
-    this.editedSection.set(undefined);
-    this.previewVersion.update(v => v + 1);
-    this.dialogRef?.close();
-  }
-
-  discardEdit() {
-    const edited = this.editedSection();
-    if (!edited) return;
-    const position = this.findSection(edited.section);
-    if (position) {
-      const sections = this.section().Content.Columns[position.iCol].Sections;
-      if (edited.isNew) {
-        sections.splice(position.iRow, 1);
-      } else {
-        sections[position.iRow] = edited.snapshot;
-      }
-    }
-    this.closeEditor();
+    this.editDialog.open(section);
   }
 
   async deleteEditedSection() {
-    const edited = this.editedSection();
-    if (!edited) return;
     const answer = await this.alertService.openAlert('Sektion wirklich entfernen?', '', ['nein', 'ja']);
     if (answer !== 'ja') return;
-    const position = this.findSection(edited.section);
-    if (position) {
-      this.section().Content.Columns[position.iCol].Sections.splice(position.iRow, 1);
-    }
-    this.closeEditor();
-  }
-
-  private findSection(section: Section): { iCol: number, iRow: number } | undefined {
-    const columns = this.section().Content.Columns;
-    for (let iCol = 0; iCol < columns.length; iCol++) {
-      const iRow = columns[iCol].Sections.indexOf(section);
-      if (iRow >= 0) return { iCol, iRow };
-    }
-    return undefined;
+    this.editDialog.remove();
+    this.askSaveService.markDirty();
   }
 }

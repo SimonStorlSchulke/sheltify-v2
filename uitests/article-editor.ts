@@ -15,19 +15,24 @@ export class ArticleEditor extends CmsPage {
         await this.page.getByTestId('btn-add-section-' + type).click();
     }
 
-    getSectionEditor(row: number) {
-        return this.page.locator('app-section-editor').nth(row);
+    /** The section editor dialog - opens after adding a section or clicking its preview. */
+    getSectionEditor() {
+        return this.page.locator('app-section-editor-panel');
     }
 
-    getSectionPreview(row: number, column: number) {
-        return this.page.getByTestId(`section-preview-${row}-${column}`);
+    async finishSectionEditing() {
+        await this.getSectionEditor().getByTestId('btn-section-done').click();
+    }
+
+    getSectionPreview(row: number) {
+        return this.page.getByTestId(`section-preview-${row}`);
     }
 
     async save() {
         await this.page.getByTestId('btn-save-article').click();
     }
 
-    expectTextInPreview(row: number, column: number, text: string) {
-        return expect(this.getSectionPreview(row, column)).toContainText(text);
+    expectTextInPreview(row: number, text: string) {
+        return expect(this.getSectionPreview(row)).toContainText(text);
     }
 }

@@ -1,0 +1,17 @@
+<header class="panel-header">
+  <b class="panel-title">{{ label() }}</b>
+  <button class="small unstyled icon-button" title="Sektion löschen" aria-label="Sektion löschen" data-testid="btn-section-delete" (click)="deletedSection.emit()">
+    <app-bt-icon name="Trash" size="ms"/>
+  </button>
+  @if (clipboard()) {
+    <button class="small" title="Sektion kopieren, um sie an anderer Stelle einzufügen" (click)="copy.emit()">Kopieren</button>
+    <button class="small" title="Sektion ausschneiden, um sie an anderer Stelle einzufügen" (click)="cut.emit()">Ausschneiden</button>
+  }
+  <button class="small" title="Sektion verschieben: danach auf eine Lücke klicken" (click)="move.emit()">Verschieben</button>
+  <button class="small" title="Änderungen verwerfen" data-testid="btn-section-discard" (click)="discard.emit()">Verwerfen</button>
+  <button class="small primary" title="Fertig (Esc)" data-testid="btn-section-done" (click)="done.emit()">Fertig</button>
+</header>
+
+<div class="panel-body">
+  <ng-content/>
+</div>
