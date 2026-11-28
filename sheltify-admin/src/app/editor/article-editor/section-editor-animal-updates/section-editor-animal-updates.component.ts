@@ -1,8 +1,8 @@
 import { Component, input, OnDestroy, OnInit, output, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { debounceTime, firstValueFrom, Subject, Subscription } from 'rxjs';
+import { debounceTime, Subject, Subscription } from 'rxjs';
 import { SectionAnimalUpdates } from 'sheltify-lib/article-types';
-import { animalsByArticleId } from 'sheltify-lib/dist/animal-util';
+import { loadSectionTempData } from '@app/editor/article-editor/section-temp-data';
 import { NumberInputComponent } from '@app/forms/number-input/number-input.component';
 import { SelectInputComponent } from '@app/forms/select-input/select-input.component';
 import { CmsRequestService } from '@app/services/cms-request.service';
@@ -34,7 +34,7 @@ export class SectionEditorAnimalUpdatesComponent implements OnInit, OnDestroy {
   }
 
   async updateAnimals() {
-    this.section().TempAnimalsByArticle = animalsByArticleId(await firstValueFrom(this.cmsRequestService.getAnimalUpdates(this.section().Content.days)));
+    await loadSectionTempData(this.section(), this.cmsRequestService);
     this.triggerRerender.emit();
   }
 

@@ -3,7 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { AlertService } from '@app/services/alert.service';
 import { CmsRequestService } from '@app/services/cms-request.service';
 import { TenantConfigurationService } from '@app/services/tenant-configuration.service';
-import { debounceTime, firstValueFrom, Subject, Subscription } from 'rxjs';
+import { debounceTime, Subject, Subscription } from 'rxjs';
+import { loadSectionTempData } from '@app/editor/article-editor/section-temp-data';
 import { SectionHomeFoundFeedback } from 'sheltify-lib/article-types';
 import { DatePickerComponent } from '@app/forms/date-picker/date-picker.component';
 
@@ -36,7 +37,7 @@ export class SectionEditorHomeFoundFeedbackComponent {
   }
 
   async updateTempData() {
-    this.section().TempData = (await firstValueFrom(this.cmsRequestService.getHomeFoundEntries()));
+    await loadSectionTempData(this.section(), this.cmsRequestService);
     this.triggerRerender.emit();
   }
 }

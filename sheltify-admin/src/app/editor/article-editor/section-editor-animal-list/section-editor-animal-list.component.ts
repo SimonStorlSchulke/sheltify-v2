@@ -6,13 +6,14 @@ import { AlertService } from '@app/services/alert.service';
 import { TenantConfigurationService } from '@app/services/tenant-configuration.service';
 import { CmsImageDirective } from '@app/ui/cms-image.directive';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
-import { debounceTime, firstValueFrom, Subject, Subscription } from 'rxjs';
+import { debounceTime, Subject, Subscription } from 'rxjs';
 import { SectionAnimalList } from 'sheltify-lib/article-types';
 import { NumberInputComponent } from '@app/forms/number-input/number-input.component';
 import { RangeInputComponent } from '@app/forms/range-input/range-input.component';
 import { SelectInputComponent } from '@app/forms/select-input/select-input.component';
 import { CmsRequestService } from '@app/services/cms-request.service';
 import { CmsAnimal } from 'sheltify-lib/dist/cms-types';
+import { loadSectionTempData } from '@app/editor/article-editor/section-temp-data';
 
 @Component({
   selector: 'app-section-editor-animal-list',
@@ -49,10 +50,7 @@ export class SectionEditorAnimalListComponent implements OnInit, OnDestroy {
   }
 
   async updateAnimals() {
-    this.section().TempFoundAnimals =
-      await firstValueFrom(
-        this.cmsRequestService.getFilteredAnimals(this.section().Content)
-      );
+    await loadSectionTempData(this.section(), this.cmsRequestService);
 
     this.rebuildLists();
     this.triggerRerender.emit();

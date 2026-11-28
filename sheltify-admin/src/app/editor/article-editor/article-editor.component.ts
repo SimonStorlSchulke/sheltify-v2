@@ -13,6 +13,7 @@ import { ArticleEditorService } from '@app/editor/article-editor/article-editor.
 import { createEmptySection } from '@app/editor/article-editor/article-section.factory';
 import { PickNewSectionComponent } from '@app/editor/article-editor/pick-new-section/pick-new-section.component';
 import { SectionEditDialog } from '@app/editor/article-editor/section-edit-dialog';
+import { loadSectionTempData } from '@app/editor/article-editor/section-temp-data';
 import { SectionEditorAllSectionsComponent } from '@app/editor/article-editor/section-editor/section-editor-all-sections/section-editor-all-sections.component';
 import { SectionEditorPanelComponent } from '@app/editor/article-editor/section-editor/section-editor-panel/section-editor-panel.component';
 import { TextInputComponent } from '@app/forms/text-input/text-input.component';
@@ -84,6 +85,8 @@ export class ArticleEditorComponent implements OnInit {
       }
       const article = await lastValueFrom(this.cmsRequestService.getArticle(articleId));
       this.articleEditorService.article.set(article);
+      // the previews of dynamic sections (animal lists, ...) need their data - the editors aren't open yet
+      article.Structure.Rows.forEach(section => this.loadTempData(section));
     });
   }
 
@@ -99,6 +102,10 @@ export class ArticleEditorComponent implements OnInit {
   previewVersion(section: Section): number {
     this.previewVersionsChanged();
     return this.previewVersions.get(section) ?? 0;
+  }
+
+  private async loadTempData(section: Section) {
+    if (await loadSectionTempData(section, this.cmsRequestService)) this.rerenderPreview(section);
   }
 
   rerenderPreview(section: Section) {
@@ -223,6 +230,7 @@ export class ArticleEditorComponent implements OnInit {
 
     let sectionRef = structuredClone(this.articleEditorService.copiedSection()!);
     article.Structure.Rows.splice(row, 0, sectionRef);
+    this.loadTempData(sectionRef);
     this.askSaveService.markDirty();
   }
 
