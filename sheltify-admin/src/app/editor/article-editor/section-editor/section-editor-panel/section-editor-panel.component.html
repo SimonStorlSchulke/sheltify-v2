@@ -1,15 +1,22 @@
+<!-- same order and icons as the hover buttons of the previews in article-editor -->
 <header class="panel-header">
   <b class="panel-title">{{ label() }}</b>
-  <button class="small unstyled icon-button" title="Sektion löschen" aria-label="Sektion löschen" data-testid="btn-section-delete" (click)="deletedSection.emit()">
-    <app-bt-icon name="Trash" size="ms"/>
+  <button class="icon-text" aria-label="Sektion verschieben" title="Sektion verschieben: danach auf eine Lücke klicken" (click)="move.emit()">
+    <app-bt-icon name="GripVertical" size="s"/><span class="button-text">Verschieben</span>
   </button>
   @if (clipboard()) {
-    <button class="small" title="Sektion kopieren, um sie an anderer Stelle einzufügen" (click)="copy.emit()">Kopieren</button>
-    <button class="small" title="Sektion ausschneiden, um sie an anderer Stelle einzufügen" (click)="cut.emit()">Ausschneiden</button>
+    <button class="icon-text" aria-label="Sektion kopieren" title="Sektion kopieren, um sie an anderer Stelle einzufügen" (click)="copy.emit()">
+      <app-bt-icon name="Copy" size="s"/><span class="button-text">Kopieren</span>
+    </button>
+    <button class="icon-text" aria-label="Sektion ausschneiden" title="Sektion ausschneiden, um sie an anderer Stelle einzufügen" (click)="cut.emit()">
+      <app-bt-icon name="Scissors" size="s"/><span class="button-text">Ausschneiden</span>
+    </button>
   }
-  <button class="small" title="Sektion verschieben: danach auf eine Lücke klicken" (click)="move.emit()">Verschieben</button>
-  <button class="small" title="Änderungen verwerfen" data-testid="btn-section-discard" (click)="discard.emit()">Verwerfen</button>
-  <button class="small primary" title="Fertig (Esc)" data-testid="btn-section-done" (click)="done.emit()">Fertig</button>
+  <button class="icon-text" title="Sektion löschen" aria-label="Sektion löschen" data-testid="btn-section-delete" (click)="deletedSection.emit()"><span class="button-text">Löschen</span>
+    <app-bt-icon name="Trash" size="ms"/>
+  </button>
+  <span class="separator"></span>
+  <button class="primary" title="Fertig (Esc)" data-testid="btn-section-done" (click)="done.emit()">Fertig</button>
 </header>
 
 <div class="panel-body">

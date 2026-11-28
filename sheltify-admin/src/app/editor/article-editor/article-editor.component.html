@@ -38,15 +38,23 @@
         title="Klicken zum Bearbeiten"
         (click)="clickSection(section)"
       >
-        <div class="preview-badge">
+        <div class="preview-badge" (click)="$event.stopPropagation()">
           <span class="preview-label">{{ sectionLabel(section) }}</span>
           <button
-            class="preview-move-button icon-button unstyled"
+            class="preview-button move icon-button unstyled"
             title="Verschieben: drücken und auf einer Lücke loslassen oder danach auf eine Lücke klicken"
             aria-label="Sektion verschieben"
             (mousedown)="startMove(section, $event)"
-            (click)="$event.stopPropagation()"
           ><app-bt-icon name="GripVertical" size="s"/></button>
+          <button class="preview-button icon-button unstyled" title="Kopieren" aria-label="Sektion kopieren" (click)="copySection(section)">
+            <app-bt-icon name="Copy" size="s"/>
+          </button>
+          <button class="preview-button icon-button unstyled" title="Ausschneiden" aria-label="Sektion ausschneiden" (click)="cutSection(section)">
+            <app-bt-icon name="Scissors" size="s"/>
+          </button>
+          <button class="preview-button danger icon-button unstyled" title="Löschen" aria-label="Sektion löschen" (click)="deleteSection(section)">
+            <app-bt-icon name="Trash" size="s"/>
+          </button>
         </div>
         <!-- Recreated after editing, because web component renderers don't notice mutations. -->
         @for (version of [previewVersion(section)]; track version) {
@@ -117,11 +125,10 @@
       [label]="sectionLabel(edited.section)"
       [clipboard]="true"
       (done)="editDialog.close()"
-      (discard)="editDialog.discard()"
       (move)="startMoveFromDialog()"
-      (copy)="copyEditedSection()"
-      (cut)="cutEditedSection()"
-      (deletedSection)="deleteEditedSection()"
+      (copy)="copySection(edited.section)"
+      (cut)="cutSection(edited.section)"
+      (deletedSection)="deleteSection(edited.section)"
     >
       <app-section-editor-all-sections [section]="edited.section" (triggerRerender)="rerenderPreview(edited.section)"/>
     </app-section-editor-panel>

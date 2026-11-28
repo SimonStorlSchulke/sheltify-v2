@@ -113,18 +113,27 @@
   }
 }
 
-.preview-move-button {
+.preview-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  cursor: grab;
+  cursor: pointer;
+
+  &.move {
+    cursor: grab;
+  }
 
   &:hover {
     background: $primary-h10;
     color: $primary-d2;
+  }
+
+  &.danger:hover {
+    background: $alert-bg;
+    color: $alert;
   }
 }
 

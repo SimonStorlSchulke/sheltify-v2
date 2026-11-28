@@ -67,7 +67,11 @@ export class ArticleEditorComponent implements OnInit {
   readonly editDialog = new SectionEditDialog({
     template: this.sectionDialog,
     findList: () => this.articleEditorService.article()?.Structure.Rows,
-    afterClose: section => this.rerenderPreview(section),
+    // reload dynamic data: a filter change may still be debounced in the (now destroyed) editor
+    afterClose: async section => {
+      await loadSectionTempData(section, this.cmsRequestService);
+      this.rerenderPreview(section);
+    },
   });
 
   /** Per section counter, bumped to recreate its preview (see template). */
@@ -133,7 +137,7 @@ export class ArticleEditorComponent implements OnInit {
     this.exitMoveMode();
     this.cdRef.markForCheck();
     this.askSaveService.markDirty();
-    this.editDialog.open(sectionRef, true);
+    this.editDialog.open(sectionRef);
   }
 
   async save(saveOptions: { updateNote: string, pushUpdate: boolean } | undefined) {
@@ -197,26 +201,35 @@ export class ArticleEditorComponent implements OnInit {
     }
   }
 
-  copyEditedSection() {
-    const section = this.editDialog.edited()?.section;
+  copySection(section: Section | undefined) {
     if (!section) return;
     this.articleEditorService.setCopiedSection(section);
-    this.editDialog.close();
+    if (this.editDialog.edited()?.section === section) this.editDialog.close();
     this.alertService.openToast(copiedToast, 'Kopiert');
   }
 
-  cutEditedSection() {
-    const section = this.editDialog.remove();
+  cutSection(section: Section | undefined) {
     if (!section) return;
     this.articleEditorService.setCopiedSection(section);
-    this.askSaveService.markDirty();
+    this.removeSection(section);
     this.alertService.openToast(copiedToast, 'Ausgeschnitten');
   }
 
-  async deleteEditedSection() {
+  async deleteSection(section: Section | undefined) {
+    if (!section) return;
     const answer = await this.alertService.openAlert('Sektion wirklich entfernen?', '', ['nein', 'ja']);
     if (answer !== 'ja') return;
-    this.editDialog.remove();
+    this.removeSection(section);
+  }
+
+  private removeSection(section: Section) {
+    if (this.editDialog.edited()?.section === section) {
+      this.editDialog.remove();
+    } else {
+      const rows = this.articleEditorService.article()?.Structure.Rows;
+      const index = rows?.indexOf(section) ?? -1;
+      if (index >= 0) rows!.splice(index, 1);
+    }
     this.askSaveService.markDirty();
   }
 

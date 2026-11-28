@@ -43,10 +43,12 @@ export class SectionEditorAnimalListComponent implements OnInit, OnDestroy {
 
   updateSubscription?: Subscription;
 
-  async ngOnInit() {
+  ngOnInit() {
+    this.tenantConfigurationService.animalStati().then(stati => this.animalStati = stati);
     this.updateSubscription = this.onInput.pipe(debounceTime(600)).subscribe(() => this.updateAnimals());
-    this.updateAnimals();
-    this.animalStati = (await this.tenantConfigurationService.animalStati());
+    // usually already loaded together with the article (and reloaded when the editor closes)
+    if (this.section().TempFoundAnimals?.length) this.rebuildLists();
+    else this.updateAnimals();
   }
 
   async updateAnimals() {
@@ -67,10 +69,11 @@ export class SectionEditorAnimalListComponent implements OnInit, OnDestroy {
   protected backAnimals: CmsAnimal[] = [];
 
   private rebuildLists() {
-    const allAnimals = this.section().TempFoundAnimals;
+    const allAnimals = this.section().TempFoundAnimals ?? [];
 
-    const frontIds = this.section().Content.AnimalIdsFront;
-    const backIds = this.section().Content.AnimalIdsBack;
+    // missing in older articles
+    const frontIds = this.section().Content.AnimalIdsFront ?? [];
+    const backIds = this.section().Content.AnimalIdsBack ?? [];
 
     const animalMap = new Map(allAnimals.map(a => [a.ID, a]));
 
@@ -103,8 +106,8 @@ export class SectionEditorAnimalListComponent implements OnInit, OnDestroy {
   }
 
   protected drop(event: CdkDragDrop<CmsAnimal[]>) {
-    const front = [...this.section().Content.AnimalIdsFront];
-    const back = [...this.section().Content.AnimalIdsBack];
+    const front = [...this.section().Content.AnimalIdsFront ?? []];
+    const back = [...this.section().Content.AnimalIdsBack ?? []];
 
     const getIds = (list: string) => {
       switch (list) {

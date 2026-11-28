@@ -4,6 +4,8 @@ import { Section, SectionColumns } from 'sheltify-lib/article-types';
 import { ArticleEditorService, typesNotAllowedInColumns } from '@app/editor/article-editor/article-editor.service';
 import { createEmptySection } from '@app/editor/article-editor/article-section.factory';
 import { SectionEditDialog } from '@app/editor/article-editor/section-edit-dialog';
+import { loadSectionTempData } from '@app/editor/article-editor/section-temp-data';
+import { CmsRequestService } from '@app/services/cms-request.service';
 import { SectionEditorPanelComponent } from '@app/editor/article-editor/section-editor/section-editor-panel/section-editor-panel.component';
 import { AskSaveService } from '@app/services/ask-save.service';
 import { PickNewSectionComponent } from '@app/editor/article-editor/pick-new-section/pick-new-section.component';
@@ -34,6 +36,7 @@ export class SectionEditorColumnsComponent {
   private readonly alertService = inject(AlertService);
   private modalService = inject(ModalService);
   private askSaveService = inject(AskSaveService);
+  private cmsRequestService = inject(CmsRequestService);
   readonly articleEditorService = inject(ArticleEditorService);
 
   readonly maxColumns = maxColumns;
@@ -48,7 +51,10 @@ export class SectionEditorColumnsComponent {
   readonly editDialog = new SectionEditDialog({
     template: this.sectionDialog,
     findList: section => this.section().Content.Columns.find(column => column.Sections.includes(section))?.Sections,
-    afterClose: () => this.previewVersion.update(v => v + 1),
+    afterClose: async section => {
+      await loadSectionTempData(section, this.cmsRequestService);
+      this.previewVersion.update(v => v + 1);
+    },
   });
 
   readonly maxGrow = maxGrow;
@@ -136,7 +142,7 @@ export class SectionEditorColumnsComponent {
 
     this.section().Content.Columns[iCol].Sections.splice(iRow, 0, sectionRef);
     this.askSaveService.markDirty();
-    this.editDialog.open(sectionRef, true);
+    this.editDialog.open(sectionRef);
   }
 
   moveColumn(iColumn: number, direction: -1 | 1) {

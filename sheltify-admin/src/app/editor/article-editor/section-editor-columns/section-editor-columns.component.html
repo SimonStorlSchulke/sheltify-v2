@@ -81,7 +81,6 @@
       class="section-dialog"
       [label]="sectionLabels.get(editedVal.section.SectionType) ?? 'Sektion'"
       (done)="editDialog.close()"
-      (discard)="editDialog.discard()"
       (move)="startMoveFromDialog()"
       (deletedSection)="deleteEditedSection()"
     >

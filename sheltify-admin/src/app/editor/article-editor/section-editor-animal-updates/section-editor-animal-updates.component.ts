@@ -30,7 +30,8 @@ export class SectionEditorAnimalUpdatesComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.updateSubscription = this.onInput.pipe(debounceTime(1000)).subscribe(() => this.updateAnimals());
-    this.updateAnimals();
+    // usually already loaded together with the article (and reloaded when the editor closes)
+    if (!Object.keys(this.section().TempAnimalsByArticle ?? {}).length) this.updateAnimals();
   }
 
   async updateAnimals() {

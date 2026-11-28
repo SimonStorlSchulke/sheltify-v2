@@ -33,7 +33,8 @@ export class SectionEditorHomeFoundFeedbackComponent {
 
   async ngOnInit() {
     this.updateSubscription = this.onInput.pipe(debounceTime(600)).subscribe(() => this.updateTempData());
-    this.updateTempData();
+    // usually already loaded together with the article (and reloaded when the editor closes)
+    if (!this.section().TempData?.length) this.updateTempData();
   }
 
   async updateTempData() {

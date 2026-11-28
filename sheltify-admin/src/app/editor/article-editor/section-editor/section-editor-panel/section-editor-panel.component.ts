@@ -16,7 +16,6 @@ export class SectionEditorPanelComponent {
 
   deletedSection = output();
   done = output();
-  discard = output();
   move = output();
   copy = output();
   cut = output();

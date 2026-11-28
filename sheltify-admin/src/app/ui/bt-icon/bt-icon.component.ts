@@ -43,6 +43,8 @@ import {
   bootstrapPersonBadge,
   bootstrapStars,
   bootstrapGrid,
+  bootstrapScissors,
+  bootstrapCopy,
 } from '@ng-icons/bootstrap-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
@@ -92,6 +94,8 @@ export type IconName =
   | 'PersonBadge'
   | 'Stars'
   | 'Grid'
+  | 'Scissors'
+  | 'Copy'
 
 @Component({
   selector: 'app-bt-icon',
@@ -145,6 +149,8 @@ export type IconName =
       bootstrapPersonBadge,
       bootstrapStars,
       bootstrapGrid,
+      bootstrapScissors,
+      bootstrapCopy,
     }
   )]
 })

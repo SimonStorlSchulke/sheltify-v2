@@ -2,23 +2,14 @@ import { Dialog, DialogRef } from '@angular/cdk/dialog';
 import { DestroyRef, inject, signal, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Section } from 'sheltify-lib/article-types';
 
-export interface EditedSection {
-  section: Section;
-  /** State before editing started, restored on "Verwerfen". */
-  snapshot: Section;
-  /** Section was just added - "Verwerfen" removes it again. */
-  isNew: boolean;
-}
-
 /**
  * Edits one section at a time in a dialog. Changes are applied live to the section,
- * "Verwerfen" restores the state from before the dialog was opened.
- * Esc and backdrop click close the dialog and keep the changes.
+ * "Fertig", Esc and backdrop click close the dialog.
  *
  * Must be created in an injection context (e.g. as a component field).
  */
 export class SectionEditDialog {
-  readonly edited = signal<EditedSection | undefined>(undefined);
+  readonly edited = signal<{ section: Section } | undefined>(undefined);
 
   private readonly dialog = inject(Dialog);
   private readonly viewContainerRef = inject(ViewContainerRef);
@@ -36,9 +27,9 @@ export class SectionEditDialog {
     inject(DestroyRef).onDestroy(() => this.dialogRef?.close());
   }
 
-  open(section: Section, isNew = false) {
+  open(section: Section) {
     if (this.edited()?.section === section) return;
-    this.edited.set({ section, snapshot: structuredClone(section), isNew });
+    this.edited.set({ section });
     if (this.dialogRef) return;
 
     this.dialogRef = this.dialog.open(this.options.template(), {
@@ -62,22 +53,6 @@ export class SectionEditDialog {
     this.edited.set(undefined);
     dialogRef?.close();
     if (edited) this.options.afterClose?.(edited.section);
-  }
-
-  /** Ends editing and restores the state from before (removes the section if it was just added). */
-  discard() {
-    const edited = this.edited();
-    if (!edited) return;
-    const list = this.options.findList(edited.section);
-    if (list) {
-      const index = list.indexOf(edited.section);
-      if (edited.isNew) {
-        list.splice(index, 1);
-      } else {
-        list[index] = edited.snapshot;
-      }
-    }
-    this.close();
   }
 
   /** Ends editing and removes the edited section. Returns it, e.g. for "Ausschneiden". */
